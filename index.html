@@ -297,6 +297,40 @@ function redactSecrets(text){return String(text==null?'':text)
   .replace(/([?&](?:api[_-]?key|access[_-]?token|refresh[_-]?token|token|password|secret|key)=)[^&\s"']+/gi,'$1[redacted]')
   .replace(/((?:api[_-]?key|access[_-]?token|refresh[_-]?token|secret|password|credential)\s*[:=]\s*)["']?[^"',}\s]+["']?/gi,'$1[redacted]');}
 function asksForSecret(q){return /\b(show|reveal|print|dump|list|extract|give|tell|what(?:'s| is)?)\b[\s\S]{0,100}\b(secrets?|tokens?|api[\s_-]*keys?|passwords?|credentials?|env(?:ironment)? variables?|private keys?|local paths?|home director(?:y|ies)|usernames?)\b/i.test(q);}
+function normQuestion(q){return String(q||'').toLowerCase()
+  .replace(/\bwhat\s+i\s+th\s+is\b/g,'what is this')
+  .replace(/\bwhats\b/g,"what is")
+  .replace(/\bth\s+is\b/g,'this')
+  .replace(/\s+/g,' ')
+  .trim();}
+function isProjectAboutQuestion(q){const n=normQuestion(q);return /\b(project|repo|repository|mission control|site|lab)\b/.test(n)&&/\b(what|about|overview|purpose|explain|does|do|is this)\b/.test(n);}
+function projectAboutAnswer(){
+  const s=DATA||{},counts=s.counts||{};
+  return `This is Monterey Bay AI Lab Mission Control: a public snapshot of a multi-hazard coastal warning research project.
+
+What the project is about:
+- It builds and audits warning models for rare coastal water-quality events.
+- The two claimable pillars are statewide California beach-bacteria exceedance warning and domoic-acid / HAB next-visit warning.
+- MBARI M1/M2 mooring physics is the backbone data asset, but the main public forecasting headline is the bacteria/HAB event-warning work.
+
+What is on this page:
+- ${counts.findings||((s.findings||[]).length)} finding cards, including supported positives, caveated positives, nulls, and negative results.
+- ${counts.models||((s.models||[]).length)} registered models, with ${counts.claimable||0} currently claimable model entries.
+- Lakehouse/data inventory, gates, and ${PROJECT_DOCS.length} sanitized chunks from tracked GitHub project docs.
+
+Main data sources:
+- MBARI M1/M2 mooring time series.
+- California beach water-quality records.
+- Rainfall, discharge, tide, wave, SST, buoy, and upwelling drivers.
+- CalHABMAP / SCCOOS domoic-acid pier observations.
+
+How to go deeper:
+- README.md explains the project.
+- DATA.md explains data provenance and licensing.
+- MODEL_SUITE.md lists models and claimability.
+- research/bacteria/reproduce/REPRODUCE.md covers reproduction for the bacteria headline.
+
+Safety boundary: I can answer from the published snapshot and tracked GitHub docs, but I will not reveal secrets, credentials, private paths, tokens, or environment details.`;}
 function shortJSON(v,limit=1800){try{return JSON.stringify(v,null,2).slice(0,limit);}catch(e){return String(v).slice(0,limit);}}
 function tokenSet(s){return new Set(String(s||'').toLowerCase().match(/[a-z0-9_+-]{3,}/g)||[]);}
 function askDocs(){
@@ -379,6 +413,7 @@ function askContext(question){
 async function askData(){const q=$('#askq').value.trim();if(!q)return;const btn=$('#askbtn'),ans=$('#askans');
   ans.style.display='block';
   if(asksForSecret(q)){ans.innerHTML='<div class="who">● answered locally · public-safety guard</div>I can answer from the published science snapshot, but I cannot reveal secrets, credentials, environment variables, local absolute paths, user names, private keys, tokens, or non-public infrastructure details.';return;}
+  if(isProjectAboutQuestion(q)){ans.innerHTML=`<div class="who">● answered locally · project overview</div>${esc(projectAboutAnswer())}`;return;}
   if(!PROXY_URL){ans.innerHTML='<div class="who">⚠ search isn\'t wired yet — the site owner needs to deploy the search worker and set PROXY_URL.</div>';return;}
   btn.disabled=true;ans.innerHTML='<div class="who"><span class="spin"></span> searching the data…</div>';
   try{const r=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:askContext(q)})});
