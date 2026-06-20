@@ -153,7 +153,7 @@
 </div>
 <script>
 // ===== CONFIG: after deploying the Cloudflare Worker, paste its URL here =====
-const PROXY_URL = "https://opportunity-conducted-thumbnails-shelter.trycloudflare.com/api/ask"; // local-cockpit tunnel (works while the lab PC + tunnel are up)
+const PROXY_URL = "https://mbal-search-957730565502.us-central1.run.app"; // Cloud Run → Vertex AI Gemini (always-on, your GCP, no keys in page)
 // ============================================================================
 let DATA=null, EVID={}, STORE='lake', curModel=null, findingOpened=false;
 const $=s=>document.querySelector(s);
