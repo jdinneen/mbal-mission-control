@@ -49,9 +49,9 @@
   tr.click{cursor:pointer} tr.click:hover td{background:var(--panel2)}
   .num{text-align:right}
   .tag{font-family:var(--mono);font-size:12.5px;padding:1px 6px;border-radius:3px}
-  .t-ready,.t-PASS,.t-production_candidate{background:#143120;color:var(--ok)}
-  .t-WARN,.t-benchmark,.t-research_candidate{background:#332a12;color:var(--warn)}
-  .t-negative_result,.t-research_only_failed_gate{background:#331715;color:var(--bad)}
+  .t-ready,.t-PASS,.t-production_candidate,.t-positive,.t-claim,.t-replication,.t-operational{background:#143120;color:var(--ok)}
+  .t-WARN,.t-benchmark,.t-research_candidate,.t-caveat,.t-status,.t-ablation{background:#332a12;color:var(--warn)}
+  .t-negative_result,.t-research_only_failed_gate,.t-negative,.t-null,.t-refutation{background:#331715;color:var(--bad)}
   .t-baseline,.t-UNKNOWN{background:#21262f;color:var(--dim)}
   .muted{color:var(--mut)} .acc{color:var(--acc)} .okc{color:var(--ok)} .badc{color:var(--bad)} .src{color:var(--blue)}
   .tabs{display:flex;gap:2px;margin-bottom:12px}
@@ -78,14 +78,15 @@
   .statbar .track{height:7px;background:#0a0d12;border:1px solid var(--line);border-radius:4px;overflow:hidden}
   .statbar .track>i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--blue))}
   .stat-help{font-family:var(--sans);font-size:13.5px;color:var(--mut);line-height:1.45;margin-top:8px}
-  #askdock{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;width:min(760px,calc(100% - 200px));z-index:50;background:var(--panel);border:1px solid #1f3b3a;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.5)}
-  #askans{max-height:320px;overflow:auto;padding:12px 14px;border-bottom:1px solid var(--line);font-family:var(--sans);font-size:15.5px;line-height:1.55;white-space:pre-wrap;display:none}
-  #askans .who{font-family:var(--mono);font-size:12.5px;color:var(--mut);margin-bottom:6px;display:flex;gap:8px}
+  #askdock{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;width:min(760px,calc(100% - 200px));z-index:50;background:#fff;border:1px solid #c7d2e1;border-radius:10px;box-shadow:0 12px 36px rgba(0,0,0,.55)}
+  #askans{max-height:320px;overflow:auto;padding:12px 14px;border-bottom:1px solid #d7dde8;font-family:var(--sans);font-size:15.5px;line-height:1.55;white-space:pre-wrap;display:none;color:#111827}
+  #askans .who{font-family:var(--mono);font-size:12.5px;color:#667085;margin-bottom:6px;display:flex;gap:8px}
   #askrow{display:flex;align-items:center;gap:8px;padding:8px 10px}
-  #askrow .lbl{font-family:var(--mono);font-size:13px;color:var(--acc);white-space:nowrap}
-  #askq{flex:1;background:#0a0d12;border:1px solid var(--line);border-radius:6px;color:var(--ink);font-family:var(--sans);font-size:15.5px;padding:8px 10px;outline:none}
-  #askq:focus{border-color:#1f3b3a}
-  #askbtn{background:#143b39;border:1px solid #1f3b3a;color:var(--acc);padding:8px 14px;border-radius:6px;cursor:pointer;font-family:var(--mono);font-size:14px}
+  #askrow .lbl{font-family:var(--mono);font-size:13px;color:#0f766e;white-space:nowrap}
+  #askq{flex:1;background:#fff;border:1px solid #c7d2e1;border-radius:6px;color:#101828;font-family:var(--sans);font-size:15.5px;padding:8px 10px;outline:none}
+  #askq::placeholder{color:#667085}
+  #askq:focus{border-color:#0f766e;box-shadow:0 0 0 3px rgba(15,118,110,.16)}
+  #askbtn{background:#0f766e;border:1px solid #0b5f59;color:#fff;padding:8px 14px;border-radius:6px;cursor:pointer;font-family:var(--mono);font-size:14px}
   #askbtn:disabled{opacity:.5;cursor:default}
   .spin{display:inline-block;width:10px;height:10px;border:2px solid var(--mut);border-top-color:var(--acc);border-radius:50%;animation:sp .7s linear infinite}
   @media (max-width:760px){
@@ -195,6 +196,7 @@ const fmt=n=>n==null?'—':n.toLocaleString();
 const pct=v=>v==null?'—':(100*v).toFixed(1)+'%';
 const mb=n=>n==null?'—':(n>=1024?(n/1024).toFixed(2)+' GB':n.toFixed(1)+' MB');
 const ago=iso=>{if(!iso)return '—';const s=(Date.now()-new Date(iso))/1000;if(s<5400)return Math.round(s/60)+'m ago';if(s<172800)return Math.round(s/3600)+'h ago';return Math.round(s/86400)+'d ago';};
+const tagKind=k=>({claim:'claim',positive:'positive',replication:'replication',operational:'operational',caveat:'caveat',status:'status',null:'null',negative:'negative_result',ablation:'ablation'}[k]||'benchmark');
 
 document.querySelectorAll('nav a').forEach(a=>a.onclick=()=>go(a.dataset.v));
 function go(v){if(location.hash.slice(1)!==v)location.hash=v;showView(v);}
@@ -220,7 +222,7 @@ function render(){
   const ov=$('#ovstat'); ov.textContent=s.overall_status||'—'; ov.className='pill p-'+(s.overall_status||'UNKNOWN');
   $('#t-find').textContent=(s.findings||[]).length;
   $('#t-models').textContent=(s.counts&&s.counts.models)||(s.models||[]).length;
-  $('#t-models-s').textContent=((s.counts&&s.counts.claimable)||0)+' claimable';
+  $('#t-models-s').textContent=((s.counts&&s.counts.claimable)||0)+' model claims · '+((s.counts&&s.counts.positive_findings)||0)+' positives';
   $('#t-data').textContent=((s.counts&&s.counts.lake_datasets)||0)+(((s.counts&&s.counts.shadow_datasets)||0));
   $('#t-data-s').textContent=`${(s.counts&&s.counts.lake_datasets)||0} lake · ${(s.counts&&s.counts.shadow_datasets)||0} shadow`;
   $('#t-stat').textContent=s.overall_status||'—';
@@ -235,7 +237,7 @@ function render(){
 /* findings */
 function renderFindings(){const c=$('#findlist');const t=el('table');t.innerHTML='<tr><th>finding</th><th>kind</th><th>headline</th></tr>';
   DATA.findings.forEach(f=>{const tr=el('tr','click');tr.onclick=()=>openFinding(f);
-    tr.innerHTML=`<td class="f">${esc(f.title)}</td><td><span class="tag t-${f.kind==='negative'?'negative_result':(f.kind==='claim'?'production_candidate':'benchmark')}">${esc(f.kind)}</span></td><td class="acc">${esc(f.headline||'')}</td>`;t.appendChild(tr);});
+    tr.innerHTML=`<td class="f">${esc(f.title)}</td><td><span class="tag t-${tagKind(f.kind)}">${esc(f.kind)}</span></td><td class="acc">${esc(f.headline||'')}</td>`;t.appendChild(tr);});
   c.innerHTML='';c.appendChild(t); if(!findingOpened&&DATA.findings[0]){findingOpened=true;openFinding(DATA.findings[0]);}}
 function confusionHTML(c){if(!c)return '';
   const reading=`At this operating point (${esc(c.operating_point)}, ≈${c.alert_rate_pct}% of days flagged): of ${fmt(c.events)} real events the model catches <b>${fmt(c.tp)}</b> (sensitivity ${pct(c.sensitivity)}) and misses ${fmt(c.fn)}; it raises ${fmt(c.fp)} false alarms while correctly clearing ${fmt(c.tn)} clean days (specificity ${pct(c.specificity)}).`;
