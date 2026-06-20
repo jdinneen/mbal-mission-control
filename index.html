@@ -14,80 +14,112 @@
   }
   *{box-sizing:border-box}
   html,body{margin:0;height:100%}
-  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:13px;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;display:flex;flex-direction:column;height:100vh;overflow:hidden}
   .mono{font-family:var(--mono)}
   header{display:flex;align-items:center;gap:16px;padding:9px 16px;background:var(--panel);border-bottom:1px solid var(--line);flex:0 0 auto}
   header .brand{font-weight:600;letter-spacing:.4px}
   header .brand b{color:var(--acc)}
-  header .snap{font-family:var(--mono);font-size:10.5px;color:var(--mut)}
-  .pill{padding:2px 7px;border-radius:3px;font-family:var(--mono);font-size:10px;font-weight:600}
+  header .snap{font-family:var(--mono);font-size:13.5px;color:var(--mut)}
+  .pill{padding:2px 7px;border-radius:3px;font-family:var(--mono);font-size:13px;font-weight:600}
   .p-GREEN{background:#143120;color:var(--ok)} .p-YELLOW{background:#332a12;color:var(--warn)}
   .p-RED{background:#331715;color:var(--bad)} .p-UNKNOWN{background:#21262f;color:var(--dim)}
   .spacer{flex:1}
   .body{flex:1;display:flex;min-height:0}
   nav{flex:0 0 168px;background:var(--panel);border-right:1px solid var(--line);padding:8px 0;display:flex;flex-direction:column}
-  nav a{display:flex;align-items:center;gap:9px;padding:8px 14px;color:var(--dim);cursor:pointer;font-size:12.5px;border-left:2px solid transparent}
+  nav a{display:flex;align-items:center;gap:9px;padding:8px 14px;color:var(--dim);cursor:pointer;font-size:15.5px;border-left:2px solid transparent}
   nav a:hover{background:var(--panel2);color:var(--ink)}
   nav a.active{color:var(--acc);border-left-color:var(--acc);background:var(--panel2)}
-  nav .meta{margin-top:auto;padding:10px 14px;font-family:var(--mono);font-size:9px;color:var(--mut);line-height:1.5;border-top:1px solid var(--line)}
+  nav .meta{margin-top:auto;padding:10px 14px;font-family:var(--mono);font-size:12px;color:var(--mut);line-height:1.5;border-top:1px solid var(--line)}
   main{flex:1;overflow:auto;padding:16px 18px 120px}
   .view{display:none} .view.active{display:block}
-  h2{font-size:13px;font-weight:600;margin:0 0 2px}
-  .sub{color:var(--dim);font-size:11px;margin-bottom:14px}
+  h2{font-size:16px;font-weight:600;margin:0 0 2px}
+  .sub{color:var(--dim);font-size:14px;margin-bottom:14px}
   .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
   .tile{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 13px;cursor:pointer}
   .tile:hover{border-color:#1f3b3a;background:var(--panel2)}
-  .tile .k{font-family:var(--mono);font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.6px}
-  .tile .v{font-size:25px;font-weight:600;margin-top:5px;font-family:var(--mono)}
-  .tile .s{font-size:10.5px;color:var(--mut);margin-top:2px}
+  .tile .k{font-family:var(--mono);font-size:13px;color:var(--dim);text-transform:uppercase;letter-spacing:.6px}
+  .tile .v{font-size:28px;font-weight:600;margin-top:5px;font-family:var(--mono)}
+  .tile .s{font-size:13.5px;color:var(--mut);margin-top:2px}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 13px;margin-bottom:12px}
-  .card h3{margin:0 0 9px;font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--dim);font-weight:600}
-  table{width:100%;border-collapse:collapse;font-size:12px}
-  th{text-align:left;color:var(--mut);font-weight:500;font-size:10px;text-transform:uppercase;letter-spacing:.5px;padding:5px 8px;border-bottom:1px solid var(--line)}
-  td{padding:6px 8px;border-bottom:1px solid #1a2029;font-family:var(--mono);font-size:11.5px}
+  .card h3{margin:0 0 9px;font-size:14px;text-transform:uppercase;letter-spacing:.6px;color:var(--dim);font-weight:600}
+  table{width:100%;border-collapse:collapse;font-size:15px}
+  th{text-align:left;color:var(--mut);font-weight:500;font-size:13px;text-transform:uppercase;letter-spacing:.5px;padding:5px 8px;border-bottom:1px solid var(--line)}
+  td{padding:6px 8px;border-bottom:1px solid #1a2029;font-family:var(--mono);font-size:14.5px}
   tr.click{cursor:pointer} tr.click:hover td{background:var(--panel2)}
   .num{text-align:right}
-  .tag{font-family:var(--mono);font-size:9.5px;padding:1px 6px;border-radius:3px}
+  .tag{font-family:var(--mono);font-size:12.5px;padding:1px 6px;border-radius:3px}
   .t-ready,.t-PASS,.t-production_candidate{background:#143120;color:var(--ok)}
   .t-WARN,.t-benchmark,.t-research_candidate{background:#332a12;color:var(--warn)}
   .t-negative_result,.t-research_only_failed_gate{background:#331715;color:var(--bad)}
   .t-baseline,.t-UNKNOWN{background:#21262f;color:var(--dim)}
   .muted{color:var(--mut)} .acc{color:var(--acc)} .okc{color:var(--ok)} .badc{color:var(--bad)} .src{color:var(--blue)}
   .tabs{display:flex;gap:2px;margin-bottom:12px}
-  .tabs button{background:var(--panel);border:1px solid var(--line);color:var(--dim);padding:6px 16px;cursor:pointer;font-family:var(--mono);font-size:11px;border-radius:4px}
+  .tabs button{background:var(--panel);border:1px solid var(--line);color:var(--dim);padding:6px 16px;cursor:pointer;font-family:var(--mono);font-size:14px;border-radius:4px}
   .tabs button.active{background:var(--panel2);color:var(--acc);border-color:#1f3b3a}
-  .kv{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-family:var(--mono);font-size:11.5px}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-family:var(--mono);font-size:14.5px}
   .kv .k{color:var(--mut)}
   .cols2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .btn{background:var(--panel2);border:1px solid var(--line);color:var(--dim);padding:4px 10px;border-radius:4px;cursor:pointer;font-family:var(--mono);font-size:10.5px}
+  .btn{background:var(--panel2);border:1px solid var(--line);color:var(--dim);padding:4px 10px;border-radius:4px;cursor:pointer;font-family:var(--mono);font-size:13.5px}
   .btn:hover{color:var(--acc);border-color:#1f3b3a}
   .detail{background:var(--panel2);border:1px solid #1f3b3a;border-radius:6px;padding:14px;margin-top:10px}
-  .empty{color:var(--mut);font-family:var(--mono);font-size:11px;padding:14px;text-align:center}
-  pre{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:10px;overflow:auto;font-family:var(--mono);font-size:10.5px;color:var(--dim);max-height:280px}
-  .plain{font-family:var(--sans);font-size:13px;line-height:1.55;margin:4px 0 10px}
-  .how{font-family:var(--sans);font-size:11.5px;color:var(--dim);line-height:1.5;margin-bottom:12px}
-  .cm{display:grid;grid-template-columns:120px 1fr 1fr;gap:4px;margin:6px 0 4px;font-family:var(--mono);font-size:11px}
-  .cm .h{color:var(--mut);font-size:9.5px;text-transform:uppercase;letter-spacing:.4px;display:flex;align-items:flex-end;padding:2px 4px}
+  .empty{color:var(--mut);font-family:var(--mono);font-size:14px;padding:14px;text-align:center}
+  pre{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:10px;overflow:auto;font-family:var(--mono);font-size:13.5px;color:var(--dim);max-height:280px}
+  .plain{font-family:var(--sans);font-size:16px;line-height:1.55;margin:4px 0 10px}
+  .how{font-family:var(--sans);font-size:14.5px;color:var(--dim);line-height:1.5;margin-bottom:12px}
+  .cm{display:grid;grid-template-columns:120px 1fr 1fr;gap:4px;margin:6px 0 4px;font-family:var(--mono);font-size:14px}
+  .cm .h{color:var(--mut);font-size:12.5px;text-transform:uppercase;letter-spacing:.4px;display:flex;align-items:flex-end;padding:2px 4px}
   .cm .cell{border-radius:5px;padding:9px 10px;text-align:center}
-  .cm .cell .lab{font-size:9px;color:var(--mut);text-transform:uppercase;letter-spacing:.4px}
-  .cm .cell .big{font-size:18px;font-weight:600;margin-top:2px}
-  .cm .rh{display:flex;align-items:center;color:var(--mut);font-size:9.5px;text-transform:uppercase;letter-spacing:.4px;padding:0 4px}
+  .cm .cell .lab{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.4px}
+  .cm .cell .big{font-size:21px;font-weight:600;margin-top:2px}
+  .cm .rh{display:flex;align-items:center;color:var(--mut);font-size:12.5px;text-transform:uppercase;letter-spacing:.4px;padding:0 4px}
   .cmtp,.cmtn{background:#10301d;color:var(--ok)} .cmfp{background:#332a12;color:var(--warn)} .cmfn{background:#331715;color:var(--bad)}
-  .statbar{display:grid;grid-template-columns:120px 1fr 52px;gap:6px;align-items:center;margin:3px 0;font-family:var(--mono);font-size:11px}
+  .statbar{display:grid;grid-template-columns:120px 1fr 52px;gap:6px;align-items:center;margin:3px 0;font-family:var(--mono);font-size:14px}
   .statbar .track{height:7px;background:#0a0d12;border:1px solid var(--line);border-radius:4px;overflow:hidden}
   .statbar .track>i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--blue))}
-  .stat-help{font-family:var(--sans);font-size:10.5px;color:var(--mut);line-height:1.45;margin-top:8px}
+  .stat-help{font-family:var(--sans);font-size:13.5px;color:var(--mut);line-height:1.45;margin-top:8px}
   #askdock{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;width:min(760px,calc(100% - 200px));z-index:50;background:var(--panel);border:1px solid #1f3b3a;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.5)}
-  #askans{max-height:320px;overflow:auto;padding:12px 14px;border-bottom:1px solid var(--line);font-family:var(--sans);font-size:12.5px;line-height:1.55;white-space:pre-wrap;display:none}
-  #askans .who{font-family:var(--mono);font-size:9.5px;color:var(--mut);margin-bottom:6px;display:flex;gap:8px}
+  #askans{max-height:320px;overflow:auto;padding:12px 14px;border-bottom:1px solid var(--line);font-family:var(--sans);font-size:15.5px;line-height:1.55;white-space:pre-wrap;display:none}
+  #askans .who{font-family:var(--mono);font-size:12.5px;color:var(--mut);margin-bottom:6px;display:flex;gap:8px}
   #askrow{display:flex;align-items:center;gap:8px;padding:8px 10px}
-  #askrow .lbl{font-family:var(--mono);font-size:10px;color:var(--acc);white-space:nowrap}
-  #askq{flex:1;background:#0a0d12;border:1px solid var(--line);border-radius:6px;color:var(--ink);font-family:var(--sans);font-size:12.5px;padding:8px 10px;outline:none}
+  #askrow .lbl{font-family:var(--mono);font-size:13px;color:var(--acc);white-space:nowrap}
+  #askq{flex:1;background:#0a0d12;border:1px solid var(--line);border-radius:6px;color:var(--ink);font-family:var(--sans);font-size:15.5px;padding:8px 10px;outline:none}
   #askq:focus{border-color:#1f3b3a}
-  #askbtn{background:#143b39;border:1px solid #1f3b3a;color:var(--acc);padding:8px 14px;border-radius:6px;cursor:pointer;font-family:var(--mono);font-size:11px}
+  #askbtn{background:#143b39;border:1px solid #1f3b3a;color:var(--acc);padding:8px 14px;border-radius:6px;cursor:pointer;font-family:var(--mono);font-size:14px}
   #askbtn:disabled{opacity:.5;cursor:default}
   .spin{display:inline-block;width:10px;height:10px;border:2px solid var(--mut);border-top-color:var(--acc);border-radius:50%;animation:sp .7s linear infinite}
+  @media (max-width:760px){
+    html,body{width:100%;max-width:100%;overflow-x:hidden}
+    header{display:grid;grid-template-columns:minmax(0,1fr);align-items:start;gap:8px 12px;padding:10px 12px;max-width:100vw;overflow:hidden}
+    header .brand{min-width:0}
+    #ovstat{grid-column:1/-1;justify-self:start}
+    #snapwhen{grid-column:1/-1;display:block;width:100%;min-width:0;white-space:normal;line-height:1.35;overflow-wrap:anywhere}
+    header .spacer,header>.snap:last-child{display:none}
+    .body{flex-direction:column;width:100%;max-width:100vw}
+    nav{width:100%;max-width:100vw;flex:0 0 auto;flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--line);padding:0}
+    nav a{flex:0 0 auto;padding:10px 12px;white-space:nowrap}
+    nav .meta{display:none}
+    main,.view,.card,.detail{min-width:0;max-width:100%}
+    main{overflow-x:hidden;padding:14px 12px 150px}
+    .sub,#nextact,#git{overflow-wrap:anywhere}
+    .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .grid2,.cols2{grid-template-columns:1fr}
+    .tile{min-width:0}
+    .card,.detail,#gates,#findlist,#modellist,#lh-assets,#lh-fs{overflow-x:auto}
+    table{min-width:640px}
+    #askdock{left:12px;right:12px;bottom:10px;transform:none;width:auto}
+    #askrow{display:grid;grid-template-columns:1fr;gap:6px}
+    #askrow .lbl{grid-column:1/-1}
+    #askq{width:100%;min-width:0}
+    #askbtn{width:100%}
+    #askans{max-height:220px}
+  }
+  @media (max-width:460px){
+    .tile{padding:10px}
+    table{min-width:580px}
+    #askrow .lbl{grid-column:1/-1;white-space:normal;line-height:1.1}
+    #askbtn{padding:8px 10px}
+  }
   @keyframes sp{to{transform:rotate(360deg)}}
 </style>
 </head>
@@ -119,7 +151,7 @@
       </div>
       <div class="grid2">
         <div class="card"><h3>Gates</h3><div id="gates"></div></div>
-        <div class="card"><h3>Next actions</h3><div id="nextact" class="mono" style="font-size:11px;color:var(--dim);line-height:1.7"></div></div>
+        <div class="card"><h3>Next actions</h3><div id="nextact" class="mono" style="font-size:14px;color:var(--dim);line-height:1.7"></div></div>
       </div>
       <div class="card"><h3>Repository</h3><div id="git" class="kv"></div></div>
     </section>
@@ -208,7 +240,7 @@ function renderFindings(){const c=$('#findlist');const t=el('table');t.innerHTML
 function confusionHTML(c){if(!c)return '';
   const reading=`At this operating point (${esc(c.operating_point)}, ≈${c.alert_rate_pct}% of days flagged): of ${fmt(c.events)} real events the model catches <b>${fmt(c.tp)}</b> (sensitivity ${pct(c.sensitivity)}) and misses ${fmt(c.fn)}; it raises ${fmt(c.fp)} false alarms while correctly clearing ${fmt(c.tn)} clean days (specificity ${pct(c.specificity)}).`;
   const bar=(l,v)=>`<div class="statbar"><span class="muted">${l}</span><div class="track"><i style="width:${(100*(v||0)).toFixed(0)}%"></i></div><span>${pct(v)}</span></div>`;
-  return `<div style="margin-top:6px"><div class="muted mono" style="font-size:9.5px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Confusion matrix — ${esc(c.operating_point)}</div>
+  return `<div style="margin-top:6px"><div class="muted mono" style="font-size:12.5px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Confusion matrix — ${esc(c.operating_point)}</div>
    <div class="cm"><div class="h"></div><div class="h">predicted&nbsp;EVENT</div><div class="h">predicted&nbsp;clean</div>
      <div class="rh">actual EVENT</div><div class="cell cmtp"><div class="lab">true pos</div><div class="big">${fmt(c.tp)}</div></div><div class="cell cmfn"><div class="lab">false neg</div><div class="big">${fmt(c.fn)}</div></div>
      <div class="rh">actual clean</div><div class="cell cmfp"><div class="lab">false alarm</div><div class="big">${fmt(c.fp)}</div></div><div class="cell cmtn"><div class="lab">true neg</div><div class="big">${fmt(c.tn)}</div></div></div>
@@ -223,7 +255,7 @@ function openFinding(f){const d=$('#finddetail');
     ${stats}${confusionHTML(f.confusion)}
     ${f.note?`<div class="stat-help" style="margin-top:8px"><b class="muted">Caveat:</b> ${esc(f.note)}</div>`:''}
     <div id="evbox" style="margin-top:10px">${f.evidence&&EVID[f.evidence]?`<button class="btn" onclick="showEv('${esc(f.evidence)}','#evbox')">show raw evidence JSON</button>`:''}</div></div>`;}
-function showEv(key,box){const d=EVID[key];$(box).innerHTML=`<div class="muted mono" style="font-size:10px;margin-bottom:4px">evidence: ${esc(key)}</div><pre>${esc(JSON.stringify(d,null,2).slice(0,6000))}</pre>`;}
+function showEv(key,box){const d=EVID[key];$(box).innerHTML=`<div class="muted mono" style="font-size:13px;margin-bottom:4px">evidence: ${esc(key)}</div><pre>${esc(JSON.stringify(d,null,2).slice(0,6000))}</pre>`;}
 /* models */
 function renderModels(){const c=$('#modellist');const t=el('table');t.innerHTML='<tr><th>model</th><th>task</th><th>status</th></tr>';
   DATA.models.forEach(m=>{const tr=el('tr','click');tr.onclick=()=>openModel(m);
@@ -234,7 +266,7 @@ function openModel(m){curModel=m.model_id;
     <div class="kv"><span class="k">does</span><span>${esc(m.task_name||m.task)}</span><span class="k">family</span><span>${esc(m.family)}</span>
       <span class="k">status</span><span><span class="tag t-${esc(m.status)}">${esc(m.status)}</span></span>
       <span class="k">claimable</span><span class="${m.claimable?'okc':'muted'}">${m.claimable?'yes — verified':'no'}</span>
-      <span class="k">evidence</span><span class="src mono" style="font-size:10px">${esc(m.evidence||'—')}</span></div>
+      <span class="k">evidence</span><span class="src mono" style="font-size:13px">${esc(m.evidence||'—')}</span></div>
     ${confusionHTML(m.confusion)}
     <div id="mevbox" style="margin-top:10px">${m.evidence&&EVID[m.evidence]?`<button class="btn" onclick="showEv('${esc(m.evidence)}','#mevbox')">show raw evidence JSON</button>`:''}</div></div>`;}
 /* lakehouse */
