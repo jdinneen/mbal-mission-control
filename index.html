@@ -188,7 +188,7 @@
 // ===== CONFIG: after deploying the Cloudflare Worker, paste its URL here =====
 const PROXY_URL = "https://mbal-search-957730565502.us-central1.run.app"; // Cloud Run → Vertex AI Gemini (always-on, your GCP, no keys in page)
 // ============================================================================
-let DATA=null, EVID={}, STORE='lake', curModel=null, findingOpened=false;
+let DATA=null, EVID={}, PROJECT_DOCS=[], STORE='lake', curModel=null, findingOpened=false;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"'`]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[c]));
 const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;};
@@ -211,7 +211,7 @@ window.addEventListener('hashchange',()=>showView(location.hash.slice(1)||'overv
 async function load(){
   try{
     const r=await fetch('data.json',{cache:'no-cache'}); const snap=await r.json();
-    DATA=snap.state; EVID=snap.evidence||{};
+    DATA=snap.state; EVID=snap.evidence||{}; PROJECT_DOCS=snap.project_docs||[];
     $('#snapwhen').textContent='snapshot · '+(snap.built_pacific||'')+' ('+ago(snap.built_iso)+')';
     $('#navmeta').innerHTML='Monterey Bay AI Lab<br>published snapshot';
     render(); showView(location.hash.slice(1)||'overview');
@@ -288,24 +288,101 @@ function renderLake(){const inv=(DATA.inventory||{})[STORE]||{datasets:[]};
   (inv.datasets||[]).forEach(d=>{const tr=el('tr');tr.innerHTML=`<td class="f">${esc(d.name)}</td><td class="num">${fmt(d.files)}</td><td class="num muted">${mb(d.size_mb)}</td><td class="src">${esc(d.source||'—')}</td>`;t2.appendChild(tr);});
   $('#lh-fs').innerHTML='';$('#lh-fs').appendChild(t2);}
 /* ask the data (live, via proxy) */
-function askContext(){const s=DATA;const L=[];
-  L.push('Overall status: '+s.overall_status);
-  L.push('FINDINGS:');s.findings.forEach(f=>{L.push(`- ${f.title} [${f.kind}] — ${f.headline||''}`);if(f.plain)L.push('   '+f.plain);
-    if(f.metrics)L.push('   metrics: '+Object.entries(f.metrics).map(([k,v])=>k+'='+v).join(', '));
-    if(f.confusion){const c=f.confusion;L.push(`   confusion @ ${c.operating_point}: TP=${c.tp} FP=${c.fp} FN=${c.fn} TN=${c.tn}; sensitivity=${c.sensitivity} specificity=${c.specificity} precision=${c.precision}`);}});
-  L.push('MODELS:');s.models.forEach(m=>L.push(`- ${m.model_id} [${m.status}, claimable=${m.claimable}] ${m.task}; ${(m.beats_baseline||'').slice(0,160)}`));
-  L.push('GATES: '+(s.gates||[]).map(g=>g.gate_id+'='+g.overall_status).join(', '));
-  const inv=DATA.inventory||{};if(inv.lake)L.push(`LAKEHOUSE: lake ${inv.lake.dataset_count} datasets/${inv.lake.total_size_mb}MB; shadow ${(inv.shadow||{}).dataset_count} datasets.`);
-  L.push('DATA ASSETS:');(s.data_assets||[]).slice(0,18).forEach(a=>{if(a.rows!=null)L.push(`- ${a.asset_id}: ${a.rows.toLocaleString()} rows, ${a.date_min||''}→${a.date_max||''}`);});
-  return L.join('\n').slice(0,11000);}
+function redactSecrets(text){return String(text==null?'':text)
+  .replace(/C:[\\\/]+Users[\\\/]+[^\\\/\s"']+[\\\/]+(?:AI-Machine[\\\/]+)?/gi,'[local-path-redacted]/')
+  .replace(/\/Users\/[^\/\s"']+\//g,'/[local-path-redacted]/')
+  .replace(/-----BEGIN [^-]*PRIVATE KEY-----[\s\S]*?-----END [^-]*PRIVATE KEY-----/gi,'[private-key-redacted]')
+  .replace(/\b(?:sk|ghp|github_pat|glpat|xox[baprs])-[-A-Za-z0-9_]{16,}\b/g,'[token-redacted]')
+  .replace(/\bAIza[0-9A-Za-z_-]{20,}\b/g,'[api-key-redacted]')
+  .replace(/([?&](?:api[_-]?key|access[_-]?token|refresh[_-]?token|token|password|secret|key)=)[^&\s"']+/gi,'$1[redacted]')
+  .replace(/((?:api[_-]?key|access[_-]?token|refresh[_-]?token|secret|password|credential)\s*[:=]\s*)["']?[^"',}\s]+["']?/gi,'$1[redacted]');}
+function asksForSecret(q){return /\b(show|reveal|print|dump|list|extract|give|tell|what(?:'s| is)?)\b[\s\S]{0,100}\b(secrets?|tokens?|api[\s_-]*keys?|passwords?|credentials?|env(?:ironment)? variables?|private keys?|local paths?|home director(?:y|ies)|usernames?)\b/i.test(q);}
+function shortJSON(v,limit=1800){try{return JSON.stringify(v,null,2).slice(0,limit);}catch(e){return String(v).slice(0,limit);}}
+function tokenSet(s){return new Set(String(s||'').toLowerCase().match(/[a-z0-9_+-]{3,}/g)||[]);}
+function askDocs(){
+  const docs=[],s=DATA||{};
+  (s.findings||[]).forEach((f,i)=>{
+    const ev=f.evidence&&EVID[f.evidence]?('\nEvidence excerpt:\n'+shortJSON(EVID[f.evidence],2600)):'';
+    docs.push({kind:'finding',rank:1000-i,title:f.title,text:
+`Finding: ${f.title}
+Kind: ${f.kind}
+Headline: ${f.headline||''}
+Plain English: ${f.plain||''}
+How: ${f.how||''}
+Metrics: ${shortJSON(f.metrics||{},1200)}
+Caveat/note: ${f.note||''}
+Evidence path: ${f.evidence||''}${ev}`});
+  });
+  (s.models||[]).forEach((m,i)=>{
+    const ev=m.evidence&&EVID[m.evidence]?('\nEvidence excerpt:\n'+shortJSON(EVID[m.evidence],1800)):'';
+    docs.push({kind:'model',rank:500-i,title:m.model_id,text:
+`Model: ${m.model_id}
+Task: ${m.task_name||m.task}
+Family/status: ${m.family} / ${m.status}
+Claimable: ${m.claimable}
+Baseline read: ${m.beats_baseline||''}
+Plain English: ${m.plain||''}
+Evidence path: ${m.evidence||''}${ev}`});
+  });
+  (s.gates||[]).forEach(g=>docs.push({kind:'gate',rank:100,title:g.gate_id,text:
+`Gate: ${g.gate_id}
+Status: ${g.overall_status}
+Artifact: ${g.artifact||''}
+Generated: ${g.generated_at_utc||''}
+Checks: ${shortJSON(g.check_statuses||{},1000)}`}));
+  (s.data_assets||[]).forEach(a=>docs.push({kind:'data_asset',rank:80,title:a.asset_id,text:
+`Data asset: ${a.asset_id}
+Kind/status: ${a.kind||''} / ${a.status||''}
+Rows: ${a.rows||''}
+Range: ${a.date_min||''} to ${a.date_max||''}
+Size MB: ${a.size_mb||''}`}));
+  (PROJECT_DOCS||[]).forEach(d=>docs.push({kind:'project_doc',rank:220+(d.priority||0),title:d.title||d.path,text:
+`Project GitHub doc: ${d.title||d.path}
+Path: ${d.path}
+Chunk: ${d.chunk||1}
+${d.text||''}`}));
+  const inv=s.inventory||{};
+  ['lake','shadow'].forEach(store=>(inv[store]||{}).datasets?.forEach(d=>docs.push({kind:'dataset',rank:60,title:d.name,text:
+`Dataset: ${d.name}
+Store: ${store}
+Files: ${d.files||''}
+Size MB: ${d.size_mb||''}
+Source: ${d.source||''}`})));
+  return docs;
+}
+function scoreDoc(doc,qTokens,qLower){let score=(doc.rank||0)/20;const hay=(doc.title+' '+doc.text).toLowerCase();qTokens.forEach(t=>{if(hay.includes(t))score+=25;if((doc.title||'').toLowerCase().includes(t))score+=40;});if(qLower&&hay.includes(qLower.slice(0,80)))score+=120;return score;}
+function askContext(question){
+  const s=DATA||{},qLower=String(question||'').toLowerCase(),qTokens=tokenSet(question);
+  const docs=askDocs().map(d=>({...d,score:scoreDoc(d,qTokens,qLower)})).sort((a,b)=>b.score-a.score);
+  const selected=docs.slice(0,22);
+  const L=[];
+  L.push('PUBLIC MISSION CONTROL QA POLICY');
+  L.push('- Answer only from the published Mission Control snapshot context below.');
+  L.push('- If the answer is not supported by this context, say that it is not in the published snapshot.');
+  L.push('- Never reveal, infer, or invent secrets, credentials, tokens, private keys, environment variables, local user names, home directories, local absolute paths, process command lines, or non-public infrastructure details.');
+  L.push('- Relative evidence paths like reports/... are allowed because they are public evidence labels in the snapshot.');
+  L.push('- Preserve caveats. Distinguish supported positives, caveated positives, nulls, negatives, and pending/prospective-blocked items.');
+  L.push('');
+  L.push(`Snapshot status: ${s.overall_status||'unknown'}`);
+  L.push(`Counts: findings=${(s.findings||[]).length}; positives=${(s.counts||{}).positive_findings||0}; caveated=${(s.counts||{}).caveated_findings||0}; nulls=${(s.counts||{}).null_findings||0}; models=${(s.models||[]).length}; claimable_models=${(s.counts||{}).claimable||0}`);
+  L.push(`Project docs indexed from tracked GitHub files: ${(PROJECT_DOCS||[]).length} chunks.`);
+  L.push('Top finding titles: '+(s.findings||[]).slice(0,30).map(f=>`${f.title} [${f.kind}]`).join(' | '));
+  L.push('');
+  L.push('RELEVANT PUBLISHED CONTEXT');
+  selected.forEach((d,i)=>L.push(`### ${i+1}. ${d.kind}: ${d.title}\n${d.text}`));
+  L.push('');
+  L.push('ALL MODEL IDS: '+(s.models||[]).map(m=>`${m.model_id}(${m.status}, claimable=${m.claimable})`).join('; '));
+  return redactSecrets(L.join('\n\n')).slice(0,56000);
+}
 async function askData(){const q=$('#askq').value.trim();if(!q)return;const btn=$('#askbtn'),ans=$('#askans');
   ans.style.display='block';
+  if(asksForSecret(q)){ans.innerHTML='<div class="who">● answered locally · public-safety guard</div>I can answer from the published science snapshot, but I cannot reveal secrets, credentials, environment variables, local absolute paths, user names, private keys, tokens, or non-public infrastructure details.';return;}
   if(!PROXY_URL){ans.innerHTML='<div class="who">⚠ search isn\'t wired yet — the site owner needs to deploy the search worker and set PROXY_URL.</div>';return;}
   btn.disabled=true;ans.innerHTML='<div class="who"><span class="spin"></span> searching the data…</div>';
-  try{const r=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:askContext()})});
+  try{const r=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:askContext(q)})});
     const j=await r.json();
     if(j.error)ans.innerHTML=`<div class="who">⚠ ${esc(j.error)}</div>`;
-    else ans.innerHTML=`<div class="who">● answered from the published data${j.model?' · '+esc(j.model):''}</div>${esc(j.answer||'')}`;
+    else ans.innerHTML=`<div class="who">● answered from the published data${j.model?' · '+esc(j.model):''}</div>${esc(redactSecrets(j.answer||''))}`;
   }catch(e){ans.innerHTML=`<div class="who">⚠ ${esc(e)}</div>`;}
   btn.disabled=false;}
 $('#askq').addEventListener('keydown',e=>{if(e.key==='Enter')askData();});

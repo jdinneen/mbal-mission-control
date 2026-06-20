@@ -12,6 +12,7 @@ Usage:  python build_snapshot.py
 import json
 import os
 import re
+import subprocess
 import time
 import urllib.request
 from datetime import datetime, timezone
@@ -865,6 +866,142 @@ def _read_local_evidence(rel):
     return None
 
 
+def _tracked_files():
+    try:
+        r = subprocess.run(
+            ["git", "-C", str(SOURCE_ROOT), "ls-files"],
+            check=True,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+        )
+    except Exception:
+        return []
+    return [p.strip().replace("\\", "/") for p in r.stdout.splitlines() if p.strip()]
+
+
+def _project_doc_priority(rel):
+    root_docs = {
+        "README.md": 1000,
+        "DATA.md": 980,
+        "MODEL_SUITE.md": 960,
+        "PRODUCTION_READINESS.md": 940,
+        "MBAL_PRODUCTION_LAKEHOUSE_CONTRACTS.md": 930,
+        "REMOTE_RESEARCH_CONTRACT.md": 900,
+        "docs/VALUE_GATE.md": 890,
+        "docs/open_source_readiness.md": 870,
+        "docs/PUBLISH_RUNBOOK.md": 860,
+        "research/model_lab/model_registry.yaml": 850,
+        "research/bacteria/reproduce/REPRODUCE.md": 840,
+        "research/bacteria/reproduce/PAPER_DRAFT.md": 835,
+        "research/bacteria/reproduce/FROZEN_HEADLINE.json": 830,
+    }
+    if rel in root_docs:
+        return root_docs[rel]
+    if rel.startswith("docs/findings/") and rel.endswith(".md"):
+        return 760
+    if rel.startswith("reports/science_breakthrough/") and rel.endswith((".md", ".json")):
+        return 740
+    if rel.startswith("reports/meta_synthesis/") and rel.endswith(".md"):
+        return 730
+    if rel.startswith("reports/experiment_program/H1/") and rel.endswith((".md", ".json")):
+        return 720
+    if rel.startswith("research/cross_dataset/") and rel.endswith(".md"):
+        return 700
+    if rel.startswith("research/bacteria/reproduce/expected/") and rel.endswith((".md", ".json")):
+        return 690
+    name = rel.rsplit("/", 1)[-1].upper()
+    if rel.startswith("reports/") and rel.endswith(".md") and any(
+        token in name for token in ("FINDINGS", "DIRECTION", "NEXT", "THESIS", "REVALIDATION", "BENCHMARK", "READINESS")
+    ):
+        return 650
+    if rel.startswith("docs/") and rel.endswith(".md") and any(
+        token in name for token in ("PROGRAM", "PROTOCOL", "MODEL", "LAKEHOUSE", "RUNBOOK", "FINDINGS", "READINESS")
+    ):
+        return 620
+    return 0
+
+
+def _is_project_doc(rel):
+    blocked = (
+        ".github/",
+        "archive/",
+        "docs/agent_brain/",
+        "docs/agent_pair/",
+        "ops/overnight/",
+        "reports/findings_campaign/",
+    )
+    blocked_names = ("CLAUDE.md", "GEMINI.md", "SECURITY.md", "COORDINATION.md")
+    if rel.startswith(blocked) or rel.rsplit("/", 1)[-1] in blocked_names:
+        return False
+    if any(part in rel.lower() for part in ("decision_log", "learnings.jsonl", "intents.json", "private", "secret")):
+        return False
+    if not rel.endswith((".md", ".json", ".yaml", ".yml")):
+        return False
+    return _project_doc_priority(rel) > 0
+
+
+def _doc_title(rel, text):
+    for line in text.splitlines()[:40]:
+        m = re.match(r"^\s{0,3}#{1,3}\s+(.+?)\s*$", line)
+        if m:
+            return m.group(1)[:120]
+    return rel.rsplit("/", 1)[-1]
+
+
+def _split_doc(text, max_chars=5200, max_chunks=3):
+    text = text.replace("\r\n", "\n").replace("\r", "\n").strip()
+    chunks = []
+    starts = [m.start() for m in re.finditer(r"\n#{1,3}\s+", "\n" + text)]
+    if len(starts) > 1:
+        spans = []
+        for i, start in enumerate(starts):
+            real_start = max(0, start - 1)
+            end = starts[i + 1] - 1 if i + 1 < len(starts) else len(text)
+            spans.append(text[real_start:end].strip())
+        for span in spans:
+            if len(span) <= max_chars:
+                chunks.append(span)
+            else:
+                for i in range(0, len(span), max_chars):
+                    chunks.append(span[i:i + max_chars])
+            if len(chunks) >= max_chunks:
+                return chunks[:max_chunks]
+    if not chunks:
+        for i in range(0, min(len(text), max_chars * max_chunks), max_chars):
+            chunks.append(text[i:i + max_chars])
+    return [c for c in chunks if c.strip()][:max_chunks]
+
+
+def _build_project_docs():
+    docs = []
+    files = sorted(
+        [p for p in _tracked_files() if _is_project_doc(p)],
+        key=lambda p: (-_project_doc_priority(p), p),
+    )
+    for rel in files:
+        path = SOURCE_ROOT / rel
+        try:
+            text = path.read_text(encoding="utf-8", errors="replace")
+        except Exception:
+            continue
+        # These chunks are for public Q&A, not source reproduction. Keep them compact.
+        text = re.sub(r"\n{3,}", "\n\n", text)
+        title = _doc_title(rel, text)
+        for idx, chunk in enumerate(_split_doc(text)):
+            docs.append({
+                "path": rel,
+                "title": title,
+                "chunk": idx + 1,
+                "priority": _project_doc_priority(rel),
+                "text": chunk,
+            })
+            if len(docs) >= 120:
+                return docs
+    return docs
+
+
 def main():
     state = _augment_state(_base_state())
 
@@ -894,6 +1031,7 @@ def main():
         "built_pacific": time.strftime("%Y-%m-%d %H:%M %Z"),
         "state": state,
         "evidence": evidence,
+        "project_docs": _build_project_docs(),
     }
     out = HERE / "data.json"
     text = json.dumps(snap, separators=(",", ":"))
@@ -902,6 +1040,24 @@ def main():
     # strip absolute local prefixes (generic user segment) so no machine paths/usernames leak
     text = re.sub(r"C:[\\\\/]+Users[\\\\/]+[^\\\\/\"]+[\\\\/]+AI-Machine[\\\\/]+(?:projects|_deagent)?[\\\\/]+", "", text)
     text = re.sub(r"C:[\\\\/]+Users[\\\\/]+[^\\\\/\"]+[\\\\/]+", "", text)
+    text = re.sub(r"/Users/[^/\\\"]+/", "/[local-path-redacted]/", text)
+    text = re.sub(r"-----BEGIN [^-]*PRIVATE KEY-----.*?-----END [^-]*PRIVATE KEY-----",
+                  "[private-key-redacted]", text, flags=re.I | re.S)
+    text = re.sub(r"\\b(?:sk|ghp|github_pat|glpat|xox[baprs])-[-A-Za-z0-9_]{16,}\\b",
+                  "[token-redacted]", text)
+    text = re.sub(r"\\bAIza[0-9A-Za-z_-]{20,}\\b", "[api-key-redacted]", text)
+    text = re.sub(
+        r"([?&](?:api[_-]?key|access[_-]?token|refresh[_-]?token|token|password|secret|key)=)[^&\\\"']+",
+        r"\\1[redacted]",
+        text,
+        flags=re.I,
+    )
+    text = re.sub(
+        r"((?:api[_-]?key|access[_-]?token|refresh[_-]?token|secret|password|credential)\\s*[:=]\\s*)[\\\"]?[^\\\",}\\s]+[\\\"]?",
+        r"\\1[redacted]",
+        text,
+        flags=re.I,
+    )
     if user:
         text = text.replace(user, "lab")
     out.write_text(text, encoding="utf-8")
