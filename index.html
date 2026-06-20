@@ -354,7 +354,9 @@ function scoreDoc(doc,qTokens,qLower){let score=(doc.rank||0)/20;const hay=(doc.
 function askContext(question){
   const s=DATA||{},qLower=String(question||'').toLowerCase(),qTokens=tokenSet(question);
   const docs=askDocs().map(d=>({...d,score:scoreDoc(d,qTokens,qLower)})).sort((a,b)=>b.score-a.score);
-  const selected=docs.slice(0,22);
+  const projectQuery=/\b(project|repo|repository|github|readme|about|overview|reproduce|reproduction|install|run|commands?|data|architecture|pipeline|license|model suite)\b/i.test(question||'');
+  const forced=projectQuery?docs.filter(d=>d.kind==='project_doc'&&/Path: (README\.md|DATA\.md|MODEL_SUITE\.md|research\/bacteria\/reproduce\/REPRODUCE\.md)/.test(d.text)).slice(0,8):[];
+  const selected=[...forced,...docs.filter(d=>!forced.includes(d))].slice(0,24);
   const L=[];
   L.push('PUBLIC MISSION CONTROL QA POLICY');
   L.push('- Answer only from the published Mission Control snapshot context below.');
