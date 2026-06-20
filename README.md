@@ -29,12 +29,16 @@ Then on GitHub: **Settings → Pages → Build from branch → `main` / root**.
 Your site appears at `https://YOURNAME.github.io/mbal-mission-control/`.
 
 ## 3. Deploy the search proxy (Cloudflare Worker — free tier)
+First get a **free Google AI Studio key**: https://aistudio.google.com → "Get API key"
+(signed in as your Google account). This is separate from GCP billing — it has its own free tier.
 ```
 npm i -g wrangler
 wrangler login                                  # your Cloudflare login
-wrangler secret put ANTHROPIC_API_KEY           # paste your key — stays secret on Cloudflare
+wrangler secret put GOOGLE_AI_KEY               # paste your AI Studio key — stays secret on Cloudflare
 wrangler deploy
 ```
+The worker uses Gemini Flash (`gemini-2.0-flash`). To change the model: `wrangler secret put MODEL`
+(or set it under `[vars]` in `wrangler.toml`).
 This prints a URL like `https://mbal-search.YOURNAME.workers.dev`.
 - Lock it to your site: in `wrangler.toml` set `ALLOWED_ORIGIN = "https://YOURNAME.github.io"`, then `wrangler deploy` again.
 - (Optional) turn on rate limiting: `wrangler kv namespace create RL`, paste the id into `wrangler.toml`, `wrangler deploy`.
@@ -46,9 +50,11 @@ const PROXY_URL = "https://mbal-search.YOURNAME.workers.dev";
 ```
 Commit + push. Search is now live for visitors.
 
-## 5. Put the $20 cap on (do this!)
-Anthropic Console → **Settings → Limits → Monthly spend limit → $20**. That is the hard backstop.
-The worker also caps model (Haiku), output tokens (512), context size, and (optionally) requests/day.
+## 5. Stay within budget
+The free AI Studio tier has its own rate limits and **no charge** — for a shared site that's
+usually all you need (no billing required). The worker also caps model (Gemini Flash), output
+tokens (512), context size, and (optionally) requests/day via the KV rate limiter.
+If you later attach billing to the key, set a budget alert in Google Cloud (~$20).
 
 ## 6. Refresh the published data later
 With the cockpit running locally:

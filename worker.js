@@ -1,21 +1,24 @@
 /**
- * MBAL search proxy — Cloudflare Worker.
+ * MBAL search proxy — Cloudflare Worker (Google Gemini via AI Studio key).
  *
- * Holds your Anthropic API key as a SECRET (never shipped to the browser) and answers
+ * Holds your Google AI Studio key as a SECRET (never shipped to the browser) and answers
  * search questions from the published data, grounded + capped so a public site can't
- * run up your bill.
+ * run up your usage.
  *
- * Cost guards (keep you near the $20 budget):
- *   - model = Claude Haiku (cheapest capable model)
+ * Cost/abuse guards:
+ *   - model = Gemini Flash (cheap; generous free tier)
  *   - max output tokens capped (MAX_OUTPUT)
- *   - input context truncated (MAX_CONTEXT chars)
+ *   - input context truncated (MAX_CONTEXT chars) + question length cap
  *   - optional per-IP + global daily rate limit if you bind a KV namespace "RL"
- *   - HARD BACKSTOP: set a $20 monthly spend limit in the Anthropic console.
+ *   - HARD BACKSTOP: AI Studio free tier has its own rate limits; if you later attach
+ *     billing, set a budget alert.
  *
- * Deploy: see README.md. Set the secret with:  wrangler secret put ANTHROPIC_API_KEY
+ * Deploy (see README.md):
+ *   wrangler secret put GOOGLE_AI_KEY      # paste your AI Studio key — stays secret on Cloudflare
+ *   wrangler deploy
  */
 
-const MODEL = "claude-haiku-4-5-20251001";
+const MODEL = "gemini-2.0-flash";   // override with the MODEL env var if needed
 const MAX_OUTPUT = 512;
 const MAX_CONTEXT = 12000;
 const MAX_QUESTION = 500;
@@ -54,8 +57,8 @@ export default {
     if (request.method === "OPTIONS") return new Response(null, { headers });
     if (request.method !== "POST")
       return new Response(JSON.stringify({ error: "POST only" }), { status: 405, headers });
-    if (!env.ANTHROPIC_API_KEY)
-      return new Response(JSON.stringify({ error: "server not configured (no API key)" }), { headers });
+    if (!env.GOOGLE_AI_KEY)
+      return new Response(JSON.stringify({ error: "server not configured (no GOOGLE_AI_KEY)" }), { headers });
 
     let body;
     try { body = await request.json(); } catch { body = {}; }
@@ -68,32 +71,30 @@ export default {
     if (await rateLimited(env, ip))
       return new Response(JSON.stringify({ error: "rate limit reached — try again later" }), { headers });
 
+    const model = env.MODEL || MODEL;
     const system =
       "You are the search assistant for the Monterey Bay AI Lab's public Mission Control. " +
       "Answer ONLY from the DATA provided. Quote the real numbers. If the answer is not in the data, " +
       "say so plainly. Be concise and plain-English. Never invent numbers.";
     const prompt = `DATA:\n${context}\n\nQUESTION: ${question}\n\nAnswer:`;
 
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${env.GOOGLE_AI_KEY}`;
     try {
-      const r = await fetch("https://api.anthropic.com/v1/messages", {
+      const r = await fetch(url, {
         method: "POST",
-        headers: {
-          "content-type": "application/json",
-          "x-api-key": env.ANTHROPIC_API_KEY,
-          "anthropic-version": "2023-06-01",
-        },
+        headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          model: MODEL,
-          max_tokens: MAX_OUTPUT,
-          system,
-          messages: [{ role: "user", content: prompt }],
+          system_instruction: { parts: [{ text: system }] },
+          contents: [{ role: "user", parts: [{ text: prompt }] }],
+          generationConfig: { maxOutputTokens: MAX_OUTPUT, temperature: 0.2 },
         }),
       });
       const j = await r.json();
       if (!r.ok)
         return new Response(JSON.stringify({ error: j.error?.message || "LLM error" }), { headers });
-      const answer = (j.content || []).map((c) => c.text || "").join("").trim();
-      return new Response(JSON.stringify({ answer, model: MODEL }), { headers });
+      const answer = (j.candidates?.[0]?.content?.parts || [])
+        .map((p) => p.text || "").join("").trim();
+      return new Response(JSON.stringify({ answer, model }), { headers });
     } catch (e) {
       return new Response(JSON.stringify({ error: String(e) }), { headers });
     }
