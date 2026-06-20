@@ -1,0 +1,9 @@
+# never commit secrets or local junk
+.env
+.dev.vars
+node_modules/
+.wrangler/
+__pycache__/
+*.pyc
+
+shot_*.png

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Monterey Bay AI Lab — Mission Control</title>
+<style>
+  :root{
+    --bg:#0b0e13; --panel:#11151c; --panel2:#161b24; --line:#222a36;
+    --ink:#cdd6e4; --dim:#7f8b9d; --mut:#566072;
+    --acc:#4fd1c5; --warn:#e0a030; --bad:#e2544a; --ok:#46c06a; --blue:#5aa0f0;
+    --mono:'Cascadia Code','JetBrains Mono','Consolas',monospace;
+    --sans:'Inter','Segoe UI',system-ui,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:13px;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+  .mono{font-family:var(--mono)}
+  header{display:flex;align-items:center;gap:16px;padding:9px 16px;background:var(--panel);border-bottom:1px solid var(--line);flex:0 0 auto}
+  header .brand{font-weight:600;letter-spacing:.4px}
+  header .brand b{color:var(--acc)}
+  header .snap{font-family:var(--mono);font-size:10.5px;color:var(--mut)}
+  .pill{padding:2px 7px;border-radius:3px;font-family:var(--mono);font-size:10px;font-weight:600}
+  .p-GREEN{background:#143120;color:var(--ok)} .p-YELLOW{background:#332a12;color:var(--warn)}
+  .p-RED{background:#331715;color:var(--bad)} .p-UNKNOWN{background:#21262f;color:var(--dim)}
+  .spacer{flex:1}
+  .body{flex:1;display:flex;min-height:0}
+  nav{flex:0 0 168px;background:var(--panel);border-right:1px solid var(--line);padding:8px 0;display:flex;flex-direction:column}
+  nav a{display:flex;align-items:center;gap:9px;padding:8px 14px;color:var(--dim);cursor:pointer;font-size:12.5px;border-left:2px solid transparent}
+  nav a:hover{background:var(--panel2);color:var(--ink)}
+  nav a.active{color:var(--acc);border-left-color:var(--acc);background:var(--panel2)}
+  nav .meta{margin-top:auto;padding:10px 14px;font-family:var(--mono);font-size:9px;color:var(--mut);line-height:1.5;border-top:1px solid var(--line)}
+  main{flex:1;overflow:auto;padding:16px 18px 120px}
+  .view{display:none} .view.active{display:block}
+  h2{font-size:13px;font-weight:600;margin:0 0 2px}
+  .sub{color:var(--dim);font-size:11px;margin-bottom:14px}
+  .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+  .tile{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 13px;cursor:pointer}
+  .tile:hover{border-color:#1f3b3a;background:var(--panel2)}
+  .tile .k{font-family:var(--mono);font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:.6px}
+  .tile .v{font-size:25px;font-weight:600;margin-top:5px;font-family:var(--mono)}
+  .tile .s{font-size:10.5px;color:var(--mut);margin-top:2px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 13px;margin-bottom:12px}
+  .card h3{margin:0 0 9px;font-size:11px;text-transform:uppercase;letter-spacing:.6px;color:var(--dim);font-weight:600}
+  table{width:100%;border-collapse:collapse;font-size:12px}
+  th{text-align:left;color:var(--mut);font-weight:500;font-size:10px;text-transform:uppercase;letter-spacing:.5px;padding:5px 8px;border-bottom:1px solid var(--line)}
+  td{padding:6px 8px;border-bottom:1px solid #1a2029;font-family:var(--mono);font-size:11.5px}
+  tr.click{cursor:pointer} tr.click:hover td{background:var(--panel2)}
+  .num{text-align:right}
+  .tag{font-family:var(--mono);font-size:9.5px;padding:1px 6px;border-radius:3px}
+  .t-ready,.t-PASS,.t-production_candidate{background:#143120;color:var(--ok)}
+  .t-WARN,.t-benchmark,.t-research_candidate{background:#332a12;color:var(--warn)}
+  .t-negative_result,.t-research_only_failed_gate{background:#331715;color:var(--bad)}
+  .t-baseline,.t-UNKNOWN{background:#21262f;color:var(--dim)}
+  .muted{color:var(--mut)} .acc{color:var(--acc)} .okc{color:var(--ok)} .badc{color:var(--bad)} .src{color:var(--blue)}
+  .tabs{display:flex;gap:2px;margin-bottom:12px}
+  .tabs button{background:var(--panel);border:1px solid var(--line);color:var(--dim);padding:6px 16px;cursor:pointer;font-family:var(--mono);font-size:11px;border-radius:4px}
+  .tabs button.active{background:var(--panel2);color:var(--acc);border-color:#1f3b3a}
+  .kv{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-family:var(--mono);font-size:11.5px}
+  .kv .k{color:var(--mut)}
+  .cols2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .btn{background:var(--panel2);border:1px solid var(--line);color:var(--dim);padding:4px 10px;border-radius:4px;cursor:pointer;font-family:var(--mono);font-size:10.5px}
+  .btn:hover{color:var(--acc);border-color:#1f3b3a}
+  .detail{background:var(--panel2);border:1px solid #1f3b3a;border-radius:6px;padding:14px;margin-top:10px}
+  .empty{color:var(--mut);font-family:var(--mono);font-size:11px;padding:14px;text-align:center}
+  pre{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:10px;overflow:auto;font-family:var(--mono);font-size:10.5px;color:var(--dim);max-height:280px}
+  .plain{font-family:var(--sans);font-size:13px;line-height:1.55;margin:4px 0 10px}
+  .how{font-family:var(--sans);font-size:11.5px;color:var(--dim);line-height:1.5;margin-bottom:12px}
+  .cm{display:grid;grid-template-columns:120px 1fr 1fr;gap:4px;margin:6px 0 4px;font-family:var(--mono);font-size:11px}
+  .cm .h{color:var(--mut);font-size:9.5px;text-transform:uppercase;letter-spacing:.4px;display:flex;align-items:flex-end;padding:2px 4px}
+  .cm .cell{border-radius:5px;padding:9px 10px;text-align:center}
+  .cm .cell .lab{font-size:9px;color:var(--mut);text-transform:uppercase;letter-spacing:.4px}
+  .cm .cell .big{font-size:18px;font-weight:600;margin-top:2px}
+  .cm .rh{display:flex;align-items:center;color:var(--mut);font-size:9.5px;text-transform:uppercase;letter-spacing:.4px;padding:0 4px}
+  .cmtp,.cmtn{background:#10301d;color:var(--ok)} .cmfp{background:#332a12;color:var(--warn)} .cmfn{background:#331715;color:var(--bad)}
+  .statbar{display:grid;grid-template-columns:120px 1fr 52px;gap:6px;align-items:center;margin:3px 0;font-family:var(--mono);font-size:11px}
+  .statbar .track{height:7px;background:#0a0d12;border:1px solid var(--line);border-radius:4px;overflow:hidden}
+  .statbar .track>i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--blue))}
+  .stat-help{font-family:var(--sans);font-size:10.5px;color:var(--mut);line-height:1.45;margin-top:8px}
+  #askdock{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;width:min(760px,calc(100% - 200px));z-index:50;background:var(--panel);border:1px solid #1f3b3a;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+  #askans{max-height:320px;overflow:auto;padding:12px 14px;border-bottom:1px solid var(--line);font-family:var(--sans);font-size:12.5px;line-height:1.55;white-space:pre-wrap;display:none}
+  #askans .who{font-family:var(--mono);font-size:9.5px;color:var(--mut);margin-bottom:6px;display:flex;gap:8px}
+  #askrow{display:flex;align-items:center;gap:8px;padding:8px 10px}
+  #askrow .lbl{font-family:var(--mono);font-size:10px;color:var(--acc);white-space:nowrap}
+  #askq{flex:1;background:#0a0d12;border:1px solid var(--line);border-radius:6px;color:var(--ink);font-family:var(--sans);font-size:12.5px;padding:8px 10px;outline:none}
+  #askq:focus{border-color:#1f3b3a}
+  #askbtn{background:#143b39;border:1px solid #1f3b3a;color:var(--acc);padding:8px 14px;border-radius:6px;cursor:pointer;font-family:var(--mono);font-size:11px}
+  #askbtn:disabled{opacity:.5;cursor:default}
+  .spin{display:inline-block;width:10px;height:10px;border:2px solid var(--mut);border-top-color:var(--acc);border-radius:50%;animation:sp .7s linear infinite}
+  @keyframes sp{to{transform:rotate(360deg)}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">Monterey Bay AI Lab — <b>Mission Control</b></div>
+  <span class="pill p-UNKNOWN" id="ovstat">—</span>
+  <span class="snap" id="snapwhen">published snapshot</span>
+  <div class="spacer"></div>
+  <span class="snap">live search · ask anything below ↓</span>
+</header>
+<div class="body">
+  <nav>
+    <a data-v="overview" class="active">◫ Overview</a>
+    <a data-v="findings">★ Findings</a>
+    <a data-v="models">◆ Models</a>
+    <a data-v="lakehouse">▤ Lakehouse</a>
+    <div class="meta" id="navmeta">loading…</div>
+  </nav>
+  <main>
+    <section class="view active" id="overview">
+      <h2>Overview</h2>
+      <div class="sub">A published snapshot of the lab's findings, models and data. The search box is live.</div>
+      <div class="tiles">
+        <div class="tile" onclick="go('findings')"><div class="k">Findings</div><div class="v" id="t-find">—</div><div class="s">real results</div></div>
+        <div class="tile" onclick="go('models')"><div class="k">Models</div><div class="v" id="t-models">—</div><div class="s" id="t-models-s">in registry</div></div>
+        <div class="tile" onclick="go('lakehouse')"><div class="k">Lake · Shadow</div><div class="v" id="t-data">—</div><div class="s" id="t-data-s">datasets</div></div>
+        <div class="tile" onclick="go('findings')"><div class="k">Status</div><div class="v" id="t-stat">—</div><div class="s">overall</div></div>
+      </div>
+      <div class="grid2">
+        <div class="card"><h3>Gates</h3><div id="gates"></div></div>
+        <div class="card"><h3>Next actions</h3><div id="nextact" class="mono" style="font-size:11px;color:var(--dim);line-height:1.7"></div></div>
+      </div>
+      <div class="card"><h3>Repository</h3><div id="git" class="kv"></div></div>
+    </section>
+    <section class="view" id="findings">
+      <h2>Findings</h2>
+      <div class="sub">Top results. Click for a plain-English read + confusion matrix.</div>
+      <div id="findlist"></div><div id="finddetail"></div>
+    </section>
+    <section class="view" id="models">
+      <h2>Models</h2>
+      <div class="sub">Registry catalog. Click a model for its card + confusion matrix.</div>
+      <div class="cols2"><div class="card"><h3>Catalog</h3><div id="modellist"></div></div><div id="modeldetail"></div></div>
+    </section>
+    <section class="view" id="lakehouse">
+      <h2>Lakehouse</h2>
+      <div class="sub">Production lake vs shadow — datasets, sizes, sources.</div>
+      <div class="tabs"><button class="active" id="tab-lake" onclick="setStore('lake')">Production lake</button><button id="tab-shadow" onclick="setStore('shadow')">Shadow</button></div>
+      <div id="lh-head" class="card"></div>
+      <div class="card"><h3 id="lh-title">Key data assets</h3><div id="lh-assets"></div></div>
+      <div class="card"><h3>Datasets</h3><div id="lh-fs"></div></div>
+    </section>
+  </main>
+</div>
+<div id="askdock">
+  <div id="askans"></div>
+  <div id="askrow">
+    <span class="lbl">ASK THE DATA</span>
+    <input id="askq" placeholder="Ask about the findings, models, or data…" />
+    <button id="askbtn" onclick="askData()">Ask</button>
+  </div>
+</div>
+<script>
+// ===== CONFIG: after deploying the Cloudflare Worker, paste its URL here =====
+const PROXY_URL = ""; // e.g. "https://mbal-search.<you>.workers.dev"
+// ============================================================================
+let DATA=null, EVID={}, STORE='lake', curModel=null, findingOpened=false;
+const $=s=>document.querySelector(s);
+const esc=s=>String(s==null?'':s).replace(/[&<>"'`]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[c]));
+const el=(t,c,h)=>{const e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;};
+const fmt=n=>n==null?'—':n.toLocaleString();
+const pct=v=>v==null?'—':(100*v).toFixed(1)+'%';
+const mb=n=>n==null?'—':(n>=1024?(n/1024).toFixed(2)+' GB':n.toFixed(1)+' MB');
+const ago=iso=>{if(!iso)return '—';const s=(Date.now()-new Date(iso))/1000;if(s<5400)return Math.round(s/60)+'m ago';if(s<172800)return Math.round(s/3600)+'h ago';return Math.round(s/86400)+'d ago';};
+
+document.querySelectorAll('nav a').forEach(a=>a.onclick=()=>go(a.dataset.v));
+function go(v){if(location.hash.slice(1)!==v)location.hash=v;showView(v);}
+function curView(){const a=document.querySelector('nav a.active');return a?a.dataset.v:'overview';}
+function showView(v){let store=null;if(v==='shadow'){store='shadow';v='lakehouse';}else if(v==='lake'){store='lake';v='lakehouse';}
+  document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('active',a.dataset.v===v));
+  document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id===v));
+  if(store){STORE=store;const lb=$('#tab-lake'),sb=$('#tab-shadow');if(lb&&sb){lb.classList.toggle('active',store==='lake');sb.classList.toggle('active',store==='shadow');}}
+  if(DATA){if(v==='lakehouse')renderLake();if(v==='findings')renderFindings();if(v==='models')renderModels();}}
+window.addEventListener('hashchange',()=>showView(location.hash.slice(1)||'overview'));
+
+async function load(){
+  try{
+    const r=await fetch('data.json',{cache:'no-cache'}); const snap=await r.json();
+    DATA=snap.state; EVID=snap.evidence||{};
+    $('#snapwhen').textContent='snapshot · '+(snap.built_pacific||'')+' ('+ago(snap.built_iso)+')';
+    $('#navmeta').innerHTML='Monterey Bay AI Lab<br>published snapshot';
+    render(); showView(location.hash.slice(1)||'overview');
+  }catch(e){ $('#navmeta').innerHTML='⚠ failed to load data.json'; }
+}
+function render(){
+  const s=DATA;
+  const ov=$('#ovstat'); ov.textContent=s.overall_status||'—'; ov.className='pill p-'+(s.overall_status||'UNKNOWN');
+  $('#t-find').textContent=(s.findings||[]).length;
+  $('#t-models').textContent=(s.counts&&s.counts.models)||(s.models||[]).length;
+  $('#t-models-s').textContent=((s.counts&&s.counts.claimable)||0)+' claimable';
+  $('#t-data').textContent=((s.counts&&s.counts.lake_datasets)||0)+(((s.counts&&s.counts.shadow_datasets)||0));
+  $('#t-data-s').textContent=`${(s.counts&&s.counts.lake_datasets)||0} lake · ${(s.counts&&s.counts.shadow_datasets)||0} shadow`;
+  $('#t-stat').textContent=s.overall_status||'—';
+  // gates
+  const t=el('table'); t.innerHTML='<tr><th>gate</th><th>status</th><th>age</th></tr>';
+  (s.gates||[]).forEach(g=>{const tr=el('tr');tr.innerHTML=`<td>${esc(g.gate_id)}</td><td><span class="tag t-${esc(g.overall_status)}">${esc(g.overall_status)}</span></td><td class="muted">${g.age_days!=null?g.age_days+'d':'—'}</td>`;t.appendChild(tr);});
+  $('#gates').innerHTML=''; $('#gates').appendChild(t);
+  $('#nextact').innerHTML=(s.next_actions||[]).map(a=>'• '+esc(a)).join('<br>')||'<span class="muted">none</span>';
+  const g=s.git||{};
+  $('#git').innerHTML=`<span class="k">branch</span><span>${esc(g.branch||'—')}</span><span class="k">changed paths</span><span>${fmt(g.changed_path_count)}</span><span class="k">last commit</span><span class="muted">${esc((g.last_commit||'').slice(0,90))}</span>`;
+}
+/* findings */
+function renderFindings(){const c=$('#findlist');const t=el('table');t.innerHTML='<tr><th>finding</th><th>kind</th><th>headline</th></tr>';
+  DATA.findings.forEach(f=>{const tr=el('tr','click');tr.onclick=()=>openFinding(f);
+    tr.innerHTML=`<td class="f">${esc(f.title)}</td><td><span class="tag t-${f.kind==='negative'?'negative_result':(f.kind==='claim'?'production_candidate':'benchmark')}">${esc(f.kind)}</span></td><td class="acc">${esc(f.headline||'')}</td>`;t.appendChild(tr);});
+  c.innerHTML='';c.appendChild(t); if(!findingOpened&&DATA.findings[0]){findingOpened=true;openFinding(DATA.findings[0]);}}
+function confusionHTML(c){if(!c)return '';
+  const reading=`At this operating point (${esc(c.operating_point)}, ≈${c.alert_rate_pct}% of days flagged): of ${fmt(c.events)} real events the model catches <b>${fmt(c.tp)}</b> (sensitivity ${pct(c.sensitivity)}) and misses ${fmt(c.fn)}; it raises ${fmt(c.fp)} false alarms while correctly clearing ${fmt(c.tn)} clean days (specificity ${pct(c.specificity)}).`;
+  const bar=(l,v)=>`<div class="statbar"><span class="muted">${l}</span><div class="track"><i style="width:${(100*(v||0)).toFixed(0)}%"></i></div><span>${pct(v)}</span></div>`;
+  return `<div style="margin-top:6px"><div class="muted mono" style="font-size:9.5px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Confusion matrix — ${esc(c.operating_point)}</div>
+   <div class="cm"><div class="h"></div><div class="h">predicted&nbsp;EVENT</div><div class="h">predicted&nbsp;clean</div>
+     <div class="rh">actual EVENT</div><div class="cell cmtp"><div class="lab">true pos</div><div class="big">${fmt(c.tp)}</div></div><div class="cell cmfn"><div class="lab">false neg</div><div class="big">${fmt(c.fn)}</div></div>
+     <div class="rh">actual clean</div><div class="cell cmfp"><div class="lab">false alarm</div><div class="big">${fmt(c.fp)}</div></div><div class="cell cmtn"><div class="lab">true neg</div><div class="big">${fmt(c.tn)}</div></div></div>
+   ${bar('sensitivity',c.sensitivity)}${bar('specificity',c.specificity)}${bar('precision',c.precision)}${bar('accuracy',c.accuracy)}
+   <div class="stat-help">${reading}</div>
+   <div class="stat-help muted">Derived from the model's stored recall &amp; precision at the ${c.alert_rate_pct}% alert budget (n=${fmt(c.n)} station-days, ${fmt(c.events)} events) — counts reconcile to the operating point.</div></div>`;}
+function openFinding(f){const d=$('#finddetail');
+  let stats=''; if(f.metrics&&Object.keys(f.metrics).length)stats='<div class="kv" style="margin:6px 0 4px">'+Object.entries(f.metrics).map(([k,v])=>`<span class="k">${esc(k)}</span><span>${v==null?'—':esc(v)}</span>`).join('')+'</div>';
+  d.innerHTML=`<div class="detail"><div style="display:flex;gap:12px;align-items:baseline"><b>${esc(f.title)}</b><button class="btn" style="margin-left:auto" onclick="$('#finddetail').innerHTML=''">close</button></div>
+    ${f.plain?`<div class="plain">${esc(f.plain)}</div>`:''}${f.how?`<div class="how"><b class="muted">How we got it:</b> ${esc(f.how)}</div>`:''}
+    ${f.beats?`<div style="margin:4px 0">beats baseline: <span class="okc">${esc(f.beats)}</span> · deploy-ready ${esc(f.deploy_ready||'—')}</div>`:''}
+    ${stats}${confusionHTML(f.confusion)}
+    ${f.note?`<div class="stat-help" style="margin-top:8px"><b class="muted">Caveat:</b> ${esc(f.note)}</div>`:''}
+    <div id="evbox" style="margin-top:10px">${f.evidence&&EVID[f.evidence]?`<button class="btn" onclick="showEv('${esc(f.evidence)}','#evbox')">show raw evidence JSON</button>`:''}</div></div>`;}
+function showEv(key,box){const d=EVID[key];$(box).innerHTML=`<div class="muted mono" style="font-size:10px;margin-bottom:4px">evidence: ${esc(key)}</div><pre>${esc(JSON.stringify(d,null,2).slice(0,6000))}</pre>`;}
+/* models */
+function renderModels(){const c=$('#modellist');const t=el('table');t.innerHTML='<tr><th>model</th><th>task</th><th>status</th></tr>';
+  DATA.models.forEach(m=>{const tr=el('tr','click');tr.onclick=()=>openModel(m);
+    tr.innerHTML=`<td class="f">${esc(m.model_id)}${m.claimable?' <span class="acc">●</span>':''}</td><td class="muted">${esc(m.task)}</td><td><span class="tag t-${esc(m.status)}">${esc(m.status)}</span></td>`;t.appendChild(tr);});
+  c.innerHTML='';c.appendChild(t); if(!curModel&&DATA.models[0])openModel(DATA.models[0]);}
+function openModel(m){curModel=m.model_id;
+  $('#modeldetail').innerHTML=`<div class="card"><h3>${esc(m.model_id)}</h3>${m.plain?`<div class="plain">${esc(m.plain)}</div>`:''}
+    <div class="kv"><span class="k">does</span><span>${esc(m.task_name||m.task)}</span><span class="k">family</span><span>${esc(m.family)}</span>
+      <span class="k">status</span><span><span class="tag t-${esc(m.status)}">${esc(m.status)}</span></span>
+      <span class="k">claimable</span><span class="${m.claimable?'okc':'muted'}">${m.claimable?'yes — verified':'no'}</span>
+      <span class="k">evidence</span><span class="src mono" style="font-size:10px">${esc(m.evidence||'—')}</span></div>
+    ${confusionHTML(m.confusion)}
+    <div id="mevbox" style="margin-top:10px">${m.evidence&&EVID[m.evidence]?`<button class="btn" onclick="showEv('${esc(m.evidence)}','#mevbox')">show raw evidence JSON</button>`:''}</div></div>`;}
+/* lakehouse */
+function setStore(s){STORE=s;$('#tab-lake').classList.toggle('active',s==='lake');$('#tab-shadow').classList.toggle('active',s==='shadow');renderLake();}
+function renderLake(){const inv=(DATA.inventory||{})[STORE]||{datasets:[]};
+  $('#lh-head').innerHTML=`<div class="kv"><span class="k">store</span><span>${STORE==='lake'?'Production lake':'Shadow'}</span>
+    <span class="k">datasets</span><span class="acc">${inv.dataset_count||0}</span><span class="k">total size</span><span>${mb(inv.total_size_mb)}</span>
+    <span class="k">files</span><span>${fmt(inv.total_files)}</span></div>`;
+  const at=$('#lh-assets');
+  if(STORE==='lake'){$('#lh-title').textContent='Key data assets (row-counted)';const t=el('table');
+    t.innerHTML='<tr><th>asset</th><th class="num">rows</th><th class="num">size</th><th>range</th><th>status</th></tr>';
+    (DATA.data_assets||[]).forEach(a=>{const tr=el('tr');const range=a.date_min?`${(a.date_min+'').slice(0,7)} → ${(a.date_max+'').slice(0,7)}`:(a.run_count!=null?a.run_count+' runs':'—');
+      tr.innerHTML=`<td class="f">${esc(a.asset_id)}</td><td class="num">${a.rows!=null?fmt(a.rows):'—'}</td><td class="num muted">${a.size_mb!=null?a.size_mb+' MB':'—'}</td><td class="muted">${esc(range)}</td><td><span class="tag t-${esc(a.status)}">${esc(a.status)}</span></td>`;t.appendChild(tr);});
+    at.innerHTML='';at.appendChild(t);
+  } else { $('#lh-title').textContent='Shadow promotion candidates'; at.innerHTML='<div class="empty">Candidates validated before promotion — see datasets below.</div>'; }
+  const t2=el('table');t2.innerHTML='<tr><th>dataset</th><th class="num">files</th><th class="num">size</th><th>source</th></tr>';
+  (inv.datasets||[]).forEach(d=>{const tr=el('tr');tr.innerHTML=`<td class="f">${esc(d.name)}</td><td class="num">${fmt(d.files)}</td><td class="num muted">${mb(d.size_mb)}</td><td class="src">${esc(d.source||'—')}</td>`;t2.appendChild(tr);});
+  $('#lh-fs').innerHTML='';$('#lh-fs').appendChild(t2);}
+/* ask the data (live, via proxy) */
+function askContext(){const s=DATA;const L=[];
+  L.push('Overall status: '+s.overall_status);
+  L.push('FINDINGS:');s.findings.forEach(f=>{L.push(`- ${f.title} [${f.kind}] — ${f.headline||''}`);if(f.plain)L.push('   '+f.plain);
+    if(f.metrics)L.push('   metrics: '+Object.entries(f.metrics).map(([k,v])=>k+'='+v).join(', '));
+    if(f.confusion){const c=f.confusion;L.push(`   confusion @ ${c.operating_point}: TP=${c.tp} FP=${c.fp} FN=${c.fn} TN=${c.tn}; sensitivity=${c.sensitivity} specificity=${c.specificity} precision=${c.precision}`);}});
+  L.push('MODELS:');s.models.forEach(m=>L.push(`- ${m.model_id} [${m.status}, claimable=${m.claimable}] ${m.task}; ${(m.beats_baseline||'').slice(0,160)}`));
+  L.push('GATES: '+(s.gates||[]).map(g=>g.gate_id+'='+g.overall_status).join(', '));
+  const inv=DATA.inventory||{};if(inv.lake)L.push(`LAKEHOUSE: lake ${inv.lake.dataset_count} datasets/${inv.lake.total_size_mb}MB; shadow ${(inv.shadow||{}).dataset_count} datasets.`);
+  L.push('DATA ASSETS:');(s.data_assets||[]).slice(0,18).forEach(a=>{if(a.rows!=null)L.push(`- ${a.asset_id}: ${a.rows.toLocaleString()} rows, ${a.date_min||''}→${a.date_max||''}`);});
+  return L.join('\n').slice(0,11000);}
+async function askData(){const q=$('#askq').value.trim();if(!q)return;const btn=$('#askbtn'),ans=$('#askans');
+  ans.style.display='block';
+  if(!PROXY_URL){ans.innerHTML='<div class="who">⚠ search isn\'t wired yet — the site owner needs to deploy the search worker and set PROXY_URL.</div>';return;}
+  btn.disabled=true;ans.innerHTML='<div class="who"><span class="spin"></span> searching the data…</div>';
+  try{const r=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:askContext()})});
+    const j=await r.json();
+    if(j.error)ans.innerHTML=`<div class="who">⚠ ${esc(j.error)}</div>`;
+    else ans.innerHTML=`<div class="who">● answered from the published data${j.model?' · '+esc(j.model):''}</div>${esc(j.answer||'')}`;
+  }catch(e){ans.innerHTML=`<div class="who">⚠ ${esc(e)}</div>`;}
+  btn.disabled=false;}
+$('#askq').addEventListener('keydown',e=>{if(e.key==='Enter')askData();});
+load();
+</script>
+</body>
+</html>
