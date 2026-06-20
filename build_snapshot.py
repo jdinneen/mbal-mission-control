@@ -84,11 +84,14 @@ def main():
     out = HERE / "data.json"
     text = json.dumps(snap, separators=(",", ":"))
     # final scrub: strip any absolute local prefixes that survived inside strings
+    import os
     import re
-    text = re.sub(r"C:[\\\\/]+Users[\\\\/]+jondi[\\\\/]+AI-Machine[\\\\/]+projects[\\\\/]+", "", text)
-    text = re.sub(r"C:[\\\\/]+Users[\\\\/]+jondi[\\\\/]+AI-Machine[\\\\/]+_deagent[\\\\/]+", "", text)
-    text = re.sub(r"C:[\\\\/]+Users[\\\\/]+jondi[\\\\/]+AI-Machine[\\\\/]+", "", text)
-    text = text.replace("jondi", "lab")
+    user = os.environ.get("USERNAME") or os.environ.get("USER") or ""
+    # strip absolute local prefixes (generic user segment) so no machine paths/usernames leak
+    text = re.sub(r"C:[\\\\/]+Users[\\\\/]+[^\\\\/\"]+[\\\\/]+AI-Machine[\\\\/]+(?:projects|_deagent)?[\\\\/]+", "", text)
+    text = re.sub(r"C:[\\\\/]+Users[\\\\/]+[^\\\\/\"]+[\\\\/]+", "", text)
+    if user:
+        text = text.replace(user, "lab")
     out.write_text(text, encoding="utf-8")
     kb = round(out.stat().st_size / 1024, 1)
     print(f"wrote {out}  ({kb} KB)  · findings={len(state.get('findings',[]))} "
