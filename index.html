@@ -462,17 +462,40 @@ function localEvidenceAnswer(question){
   const qLower=String(question||'').toLowerCase(),qTokens=tokenSet(question);
   const matches=askDocs().map(d=>{const hay=(d.title+' '+d.text).toLowerCase();let hits=0;qTokens.forEach(t=>{if(hay.includes(t))hits++;});return {...d,hits,score:scoreDoc(d,qTokens,qLower)};})
     .filter(d=>d.hits>0).sort((a,b)=>b.score-a.score).slice(0,4);
-  if(!matches.length)return `In plain words:
+  if(!matches.length)return `Bottom line:
 I do not see a supported answer in the published science snapshot.
 
-The detail:
+Explanation:
 Try asking about a finding, model, dataset, metric, gate, caveat, bacteria warning, harmful-algae test, domoic-acid result, or failed hypothesis.`;
-  const detail=matches.map(d=>`- ${d.kind}: ${d.title}\n  ${d.text.replace(/\s+/g,' ').slice(0,720)}${d.text.length>720?'...':''}`).join('\n');
-  return `In plain words:
+  const matrix=matches.map(d=>`| ${d.kind} | ${d.title} | ${d.kind==='finding'?'evidence result':'supporting evidence'} |`).join('\n');
+  const detail=matches.map(d=>`- ${d.title}: ${d.text.replace(/\s+/g,' ').slice(0,720)}${d.text.length>720?'...':''}`).join('\n');
+  return `Bottom line:
 I found relevant evidence in the published snapshot. The closest match is "${matches[0].title}".
 
-The detail:
+Matrix:
+| Evidence | What it matched | Verdict |
+|---|---|---|
+${matrix}
+
+Explanation:
 ${detail}`;
+}
+function hasFormatLeak(text){
+  const t=String(text||'');
+  const low=t.toLowerCase();
+  return /Bottom line\*\*\s*-\s*ALWAYS/i.test(t)
+    || low.includes('score'+'card (what we said vs what')
+    || /How checked\*\*\s*-\s*ONLY/i.test(t)
+    || /Your move\*\*\s*-\s*ONLY/i.test(t)
+    || low.includes('keep it tight and easy to '+'read')
+    || /do not repeat it\s*-\s*just stop/i.test(t)
+    || t.includes('Part '+'1 begins on its own '+'line')
+    || t.includes('Write every '+'answer in TWO labelled '+'parts');
+}
+function answerOrFallback(answer,question){
+  const clean=redactSecrets(answer||'').trim();
+  if(!clean||hasFormatLeak(clean))return localEvidenceAnswer(question);
+  return clean;
 }
 function askContext(question){
   const s=DATA||{},qLower=String(question||'').toLowerCase(),qTokens=tokenSet(question);
@@ -482,21 +505,7 @@ function askContext(question){
   const selected=[...forced,...docs.filter(d=>!forced.includes(d))].slice(0,24);
   const safeFindings=(s.findings||[]).filter(f=>!hasOutOfScopeTopic(`${f.title||''} ${f.plain||''} ${f.how||''} ${f.note||''}`));
   const L=[];
-  L.push('PUBLIC MISSION CONTROL QA POLICY');
-  L.push('- Answer only from the published Mission Control snapshot context below.');
-  L.push('- Stay strictly on coastal-water science: observations, models, evidence, metrics, uncertainty, and caveats.');
-  L.push('- If the question asks outside that scientific scope, answer that this snapshot only covers science evidence.');
-  L.push('- If the answer is not supported by this context, say that it is not in the published snapshot.');
-  L.push('- Never reveal, infer, or invent secrets, credentials, tokens, private keys, environment variables, local user names, home directories, local absolute paths, process command lines, or non-public infrastructure details.');
-  L.push('- Relative evidence paths like reports/... are allowed because they are public evidence labels in the snapshot.');
-  L.push('- Preserve caveats. Distinguish supported positives, caveated positives, nulls, negatives, and pending/prospective-blocked items.');
-  L.push('ANSWER STYLE (three audiences at once: a 75-year-old, a 5-year-old, and a data scientist):');
-  L.push('- Write every answer in TWO labelled parts, in this order.');
-  L.push('- Part 1, on its own line, starts with "In plain words:" then 1-2 short sentences a 75-year-old or a child would understand. No jargon, no acronyms, no numbers-as-codes. If you must mention a thing like "average precision" or "LOBO", say what it means in everyday terms (e.g. "how often the warning is right", "we re-checked it by hiding one beach at a time"). Lead with the bottom line (is it good / bad / unknown).');
-  L.push('- Part 2, on its own line, starts with "The detail:" then give the exact numbers, model ids, baselines, and caveats verbatim from the data for a data scientist. Never drop or round away the real figures here.');
-  L.push('- Keep it tight: the plain part stays simple even though the detail part is precise. Do not dumb down or omit the numbers in Part 2; do not let jargon leak into Part 1.');
-  L.push('- If the answer is not in the snapshot, say so plainly in the "In plain words:" part and skip "The detail:".');
-  L.push('');
+  L.push('PUBLISHED SCIENCE SNAPSHOT');
   L.push(`Snapshot status: ${s.overall_status||'unknown'}`);
   L.push(`Counts: findings=${(s.findings||[]).length}; positives=${(s.counts||{}).positive_findings||0}; caveated=${(s.counts||{}).caveated_findings||0}; nulls=${(s.counts||{}).null_findings||0}; models=${(s.models||[]).length}; claimable_models=${(s.counts||{}).claimable||0}`);
   L.push(`Project science notes indexed: ${askDocs().filter(d=>d.kind==='project_doc').length} chunks.`);
@@ -522,7 +531,11 @@ async function askData(){const q=$('#askq').value.trim();if(!q)return;const btn=
   try{const r=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:askContext(q)})});
     const j=await r.json();
     if(j.error)showAns(qhead+`<div class="who">● answered locally · published evidence</div>${esc(localEvidenceAnswer(q))}`);
-    else showAns(qhead+`<div class="who">● answered from the published data${j.model?' · '+esc(j.model):''}</div>${esc(redactSecrets(j.answer||''))}`);
+    else {
+      const ans=answerOrFallback(j.answer||'',q);
+      const source=hasFormatLeak(j.answer||'')?'● answered locally · published evidence':'● answered from the published data';
+      showAns(qhead+`<div class="who">${source}${j.model&&!hasFormatLeak(j.answer||'')?' · '+esc(j.model):''}</div>${esc(ans)}`);
+    }
   }catch(e){showAns(qhead+`<div class="who">● answered locally · published evidence</div>${esc(localEvidenceAnswer(q))}`);}
   btn.disabled=false;}
 $('#askq').addEventListener('keydown',e=>{if(e.key==='Enter')askData();});

@@ -73,12 +73,10 @@ export default {
       "You are the search assistant for the Monterey Bay AI Lab's public Mission Control. " +
       "Answer ONLY from the DATA provided. Stay strictly on coastal-water science: observations, models, evidence, metrics, uncertainty, and caveats. " +
       "If the answer is not in the data, or the question is outside that scientific scope, say so plainly. Never invent numbers. " +
-      "Write so a 75-year-old, a 5-year-old, AND a data scientist are all served, in TWO labelled parts: " +
-      "Part 1 begins on its own line with 'In plain words:' and gives 1-2 short jargon-free sentences anyone " +
-      "would understand (explain any term like 'average precision' in everyday words; lead with the bottom line). " +
-      "Part 2 begins on its own line with 'The detail:' and quotes the exact numbers, model ids, baselines, and " +
-      "caveats for a data scientist. Keep Part 1 simple; never drop the real numbers from Part 2. " +
-      "If the answer is not in the data, give only the 'In plain words:' part.";
+      "Output the answer itself, not the formatting rules. Use 'Bottom line:' for 1-2 plain sentences. " +
+      "When reporting findings or comparisons, add 'Matrix:' with a compact table of claim/result/verdict. " +
+      "Add 'Explanation:' with the exact numbers, baselines, caveats, and how the result was checked. " +
+      "Do not explain what each section is supposed to do.";
     const prompt = `DATA:\n${context}\n\nQUESTION: ${question}\n\nAnswer:`;
 
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${env.GOOGLE_AI_KEY}`;
