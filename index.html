@@ -321,7 +321,11 @@ function normQuestion(q){return String(q||'').toLowerCase()
 function isProjectAboutQuestion(q){const n=normQuestion(q);return /\b(project|repo|repository|mission control|site|lab)\b/.test(n)&&/\b(what|about|overview|purpose|explain|does|do|is this)\b/.test(n);}
 function projectAboutAnswer(){
   const s=DATA||{},counts=s.counts||{};
-  return `This is Monterey Bay AI Lab Mission Control: a public snapshot of a multi-hazard coastal warning research project.
+  return `In plain words:
+This is a science project that tries to warn people, ahead of time, when the ocean water at a beach might be unsafe to swim in. This page is a public scoreboard showing what the warnings can and can't do yet.
+
+The detail:
+Monterey Bay AI Lab Mission Control: a public snapshot of a multi-hazard coastal warning research project.
 
 What the project is about:
 - It builds and audits warning models for rare coastal water-quality events.
@@ -413,6 +417,12 @@ function askContext(question){
   L.push('- Never reveal, infer, or invent secrets, credentials, tokens, private keys, environment variables, local user names, home directories, local absolute paths, process command lines, or non-public infrastructure details.');
   L.push('- Relative evidence paths like reports/... are allowed because they are public evidence labels in the snapshot.');
   L.push('- Preserve caveats. Distinguish supported positives, caveated positives, nulls, negatives, and pending/prospective-blocked items.');
+  L.push('ANSWER STYLE (three audiences at once: a 75-year-old, a 5-year-old, and a data scientist):');
+  L.push('- Write every answer in TWO labelled parts, in this order.');
+  L.push('- Part 1, on its own line, starts with "In plain words:" then 1-2 short sentences a 75-year-old or a child would understand. No jargon, no acronyms, no numbers-as-codes. If you must mention a thing like "average precision" or "LOBO", say what it means in everyday terms (e.g. "how often the warning is right", "we re-checked it by hiding one beach at a time"). Lead with the bottom line (is it good / bad / unknown).');
+  L.push('- Part 2, on its own line, starts with "The detail:" then give the exact numbers, model ids, baselines, and caveats verbatim from the data for a data scientist. Never drop or round away the real figures here.');
+  L.push('- Keep it tight: the plain part stays simple even though the detail part is precise. Do not dumb down or omit the numbers in Part 2; do not let jargon leak into Part 1.');
+  L.push('- If the answer is not in the snapshot, say so plainly in the "In plain words:" part and skip "The detail:".');
   L.push('');
   L.push(`Snapshot status: ${s.overall_status||'unknown'}`);
   L.push(`Counts: findings=${(s.findings||[]).length}; positives=${(s.counts||{}).positive_findings||0}; caveated=${(s.counts||{}).caveated_findings||0}; nulls=${(s.counts||{}).null_findings||0}; models=${(s.models||[]).length}; claimable_models=${(s.counts||{}).claimable||0}`);

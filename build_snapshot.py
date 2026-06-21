@@ -130,6 +130,10 @@ def _r(v, n=4):
     return v
 
 
+def _short_feature(name):
+    return str(name).split("::")[-1] if name is not None else None
+
+
 def _finding(fid, title, kind, headline, plain, how, evidence, metrics=None, note=None):
     return {
         "id": fid,
@@ -685,6 +689,128 @@ def _source_signal_findings():
     return out
 
 
+def _findings_campaign_findings():
+    out = []
+    ledger = _local_json("reports/findings_campaign/final_evidence_ledger.json") or {}
+    if ledger:
+        counts = ledger.get("counts") or {}
+        frontier = {
+            j.get("id"): j.get("category")
+            for j in ledger.get("jobs", [])
+            if j.get("priority", 999) < 100
+        }
+        out.append(_finding(
+            "status_findings_campaign_10h_rerun",
+            "10-hour findings campaign rerun is mostly complete",
+            "status",
+            (
+                f"{counts.get('claim_or_keep', 0)} keep · "
+                f"{counts.get('strong_null_or_refutation', 0)} null/refutation · "
+                f"{counts.get('missing_output', 0)} pending"
+            ),
+            "Fresh dry-onset outputs now synthesize into the final evidence ledger; the one remaining missing output is the deep top-100 serendipity gate.",
+            "Campaign synthesis reads the declared 10-hour job queue plus prior evidence reports and categorizes each output without recomputing science.",
+            "reports/findings_campaign/final_evidence_ledger.json",
+            {
+                "job_count": ledger.get("job_count"),
+                "claim_or_keep": counts.get("claim_or_keep"),
+                "strong_null_or_refutation": counts.get("strong_null_or_refutation"),
+                "missing_output": counts.get("missing_output"),
+                "frontier_categories": frontier,
+            },
+            "Current frontier read: dry-onset interaction and symbolic are strong_null_or_refutation; targeted bacteria L2/L3 is claim_or_keep; serendipity top100 is still pending.",
+        ))
+
+    targeted = _local_json("reports/findings_campaign/bacteria_signal_discovery_targeted/signal_discovery.json") or {}
+    l2 = targeted.get("l2") or {}
+    kept = targeted.get("kept_l2") or [
+        c.get("name") for c in l2.get("candidates", []) if c.get("verdict") == "KEEP"
+    ]
+    candidates = [c for c in l2.get("candidates", []) if c.get("verdict") == "KEEP"]
+    if kept and candidates:
+        best = max(candidates, key=lambda c: c.get("delta_ap") or -999)
+        l3 = targeted.get("l3_proposal") or {}
+        out.append(_finding(
+            "claim_findings_campaign_targeted_l2_keeps",
+            "Targeted bacteria L2 gate keeps residual signals",
+            "positive",
+            f"{len(kept)} L2 KEEP: {', '.join(kept)}",
+            "The narrowed bacteria L2/L3 rerun keeps neighborhood-plus-location, location, and waves over the established FEATS+rain baseline.",
+            "Temporal 2022+ A/B plus leave-one-beach-out generalization on the existing bacteria target and driver tables.",
+            "reports/findings_campaign/bacteria_signal_discovery_targeted/signal_discovery.json",
+            {
+                "n_test": l2.get("n_test"),
+                "events": l2.get("events"),
+                "baseline_ap": _r((l2.get("baseline") or {}).get("ap")),
+                "kept_l2": kept,
+                "best_candidate": best.get("name"),
+                "best_delta_ap": _r(best.get("delta_ap")),
+                "best_lobo_delta_ap": _r(best.get("lobo_delta_ap")),
+                "l3_registered": l3.get("registered"),
+                "l3_min_independence": l3.get("min_independence"),
+            },
+            l3.get("reason") or "L3 composition is not promoted unless two kept L2 signals are residual-independent.",
+        ))
+
+    interaction = _local_json("reports/findings_campaign/bacteria_dry_onset_interaction.json") or {}
+    ixn = ((interaction.get("engines") or {}).get("interaction") or {})
+    survivor = (ixn.get("real_survivors_onset_ab") or [None])[0]
+    if survivor:
+        fdr = ixn.get("fdr") or {}
+        scan = ixn.get("scan") or {}
+        cols = [_short_feature(c) for c in survivor.get("feat_cols", []) if c != "estate_ixn"]
+        out.append(_finding(
+            "null_findings_campaign_dry_onset_interaction",
+            "Dry-onset interaction scan finds only a weak inspect-before-ship hit",
+            "null",
+            f"dAP +{_r(survivor.get('delta_ap_over_deployed_onset'))}; {fdr.get('n_pairs_pass_perm_fwer_p05', 0)} FWER survivors",
+            "One discharge-by-precipitation interaction adds a small onset-slice AP lift in the tree A/B read, but the broader interaction screen does not clear the permutation family-wise error gate.",
+            "GPU pairwise screen over existing estate signals, then onset-slice refit against the deployed FEATS+rain model with block-bootstrap AP CI.",
+            "reports/findings_campaign/bacteria_dry_onset_interaction.json",
+            {
+                "candidate_features": cols,
+                "n_test_onset": survivor.get("n_test_onset"),
+                "events_test_onset": survivor.get("events_test_onset"),
+                "deployed_ap_onset": _r(survivor.get("ap_deployed_model_onset")),
+                "candidate_ap_onset": _r(survivor.get("ap_deployed_plus_candidate_onset")),
+                "delta_ap": _r(survivor.get("delta_ap_over_deployed_onset")),
+                "delta_ap_ci95": survivor.get("delta_ap_block_boot_ci95"),
+                "pairs_tested": scan.get("pairs_tested"),
+                "n_perm": fdr.get("n_perm"),
+                "bh_fdr_pass": fdr.get("n_pairs_pass_bh_fdr_q10"),
+                "perm_fwer_pass": fdr.get("n_pairs_pass_perm_fwer_p05"),
+            },
+            interaction.get("verdict") or ixn.get("verdict"),
+        ))
+
+    symbolic = _local_json("reports/findings_campaign/bacteria_dry_onset_symbolic.json") or {}
+    sym = ((symbolic.get("engines") or {}).get("symbolic") or {})
+    if sym:
+        search = sym.get("search") or {}
+        controls = sym.get("selection_bias_controls") or {}
+        perm = controls.get("permutation_null") or {}
+        fdr = controls.get("bh_fdr") or {}
+        out.append(_finding(
+            "null_findings_campaign_dry_onset_symbolic",
+            "Dry-onset symbolic search stays null after FDR",
+            "null",
+            f"{search.get('formulas_evaluated', 0):,} formulas · {fdr.get('n_survivors', 0)} FDR survivors",
+            "The symbolic rerun found training-skill formulas, but none survived out-of-time onset residual FDR, so it does not create a new bacteria driver.",
+            "Bounded symbolic search over existing estate signals with best-of-search permutation control and BH-FDR on the Pareto front.",
+            "reports/findings_campaign/bacteria_dry_onset_symbolic.json",
+            {
+                "formulas_evaluated": search.get("formulas_evaluated"),
+                "formulas_per_sec": _r(search.get("formulas_per_sec")),
+                "perm_p": perm.get("perm_p"),
+                "n_pareto": fdr.get("n_pareto"),
+                "n_survivors": fdr.get("n_survivors"),
+                "total_seconds": _r(sym.get("total_seconds")),
+            },
+            symbolic.get("verdict") or sym.get("verdict"),
+        ))
+    return out
+
+
 def _serendipity_findings():
     rows = _local_json("reports/serendipity/couplings_gated.json") or []
     supported = [r for r in rows if r.get("verdict") == "SUPPORTED"]
@@ -789,6 +915,7 @@ def _extra_findings():
         _hypoxia_tokyo_findings,
         _cyano_findings,
         _source_signal_findings,
+        _findings_campaign_findings,
         _serendipity_findings,
         _trust_index_findings,
         _major_null_findings,
@@ -864,7 +991,7 @@ def _augment_state(state):
     counts["caveated_findings"] = sum(1 for f in state["findings"] if f.get("kind") == "caveat")
     counts["null_findings"] = sum(1 for f in state["findings"] if f.get("kind") in {"null", "negative"})
     state["counts"] = counts
-    note = "Static build joined cockpit state with H1 trust index, claim cards, and report evidence."
+    note = "Static build joined cockpit state with H1 trust index, findings campaign ledger, claim cards, and report evidence."
     actions = list(state.get("next_actions") or [])
     if note not in actions:
         actions.insert(0, note)
