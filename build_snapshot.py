@@ -22,6 +22,45 @@ COCKPIT = "http://127.0.0.1:8770"
 HERE = Path(__file__).resolve().parent
 SOURCE_ROOT = Path(os.environ.get("MBAL_ROOT", HERE.parent)).resolve()
 
+try:
+    import pyarrow.parquet as _pq
+except Exception:
+    _pq = None
+
+# Cap parquet footers read per dataset so a pathological part-count can't stall the build.
+_ROWS_FILE_CAP = 5000
+
+
+def _count_rows(path_str):
+    """Sum parquet row counts for a dataset dir by reading footers only (no data).
+    Returns (rows, estimated) or (None, False) if not countable. Read-only + defensive:
+    any failure yields None so the build never breaks on a bad file."""
+    if not _pq or not path_str:
+        return None, False
+    try:
+        p = Path(path_str)
+        if not p.exists():
+            return None, False
+        if p.is_file():
+            files = [p] if p.suffix == ".parquet" else []
+        else:
+            files = sorted(p.rglob("*.parquet"))
+        if not files:
+            return None, False
+        estimated = len(files) > _ROWS_FILE_CAP
+        scan = files[:_ROWS_FILE_CAP]
+        total = 0
+        for f in scan:
+            try:
+                total += _pq.ParquetFile(f).metadata.num_rows
+            except Exception:
+                continue
+        if estimated and scan:  # extrapolate from the sampled footers
+            total = int(round(total * len(files) / len(scan)))
+        return total, estimated
+    except Exception:
+        return None, False
+
 
 def _get(path):
     with urllib.request.urlopen(COCKPIT + path, timeout=30) as r:
@@ -42,6 +81,12 @@ def _public(state):
         ds = []
         for d in s.get("datasets", []):
             d = dict(d)
+            if d.get("rows") is None:  # enrich with footer-counted parquet rows before scrubbing path
+                rows, est = _count_rows(d.get("path"))
+                if rows is not None:
+                    d["rows"] = rows
+                    if est:
+                        d["rows_estimated"] = True
             d.pop("path", None)
             d.pop("store_root", None)
             ds.append(d)

@@ -8,7 +8,7 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-FB36EGBD7B');
+  gtag('config', 'G-FB36EGBD7B', { send_page_view: false }); // SPA: page_view fired manually in showView()
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Monterey Bay AI Lab — Mission Control</title>
@@ -87,8 +87,11 @@
   .statbar .track>i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--blue))}
   .stat-help{font-family:var(--sans);font-size:13.5px;color:var(--mut);line-height:1.45;margin-top:8px}
   #askdock{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;width:min(760px,calc(100% - 200px));z-index:50;background:#fff;border:1px solid #c7d2e1;border-radius:10px;box-shadow:0 12px 36px rgba(0,0,0,.55)}
-  #askans{max-height:320px;overflow:auto;padding:12px 14px;border-bottom:1px solid #d7dde8;font-family:var(--sans);font-size:15.5px;line-height:1.55;white-space:pre-wrap;display:none;color:#111827}
+  #askans{max-height:min(60vh,440px);overflow:auto;padding:12px 30px 12px 14px;border-bottom:1px solid #d7dde8;font-family:var(--sans);font-size:15.5px;line-height:1.55;white-space:pre-wrap;display:none;color:#111827}
   #askans .who{font-family:var(--mono);font-size:12.5px;color:#667085;margin-bottom:6px;display:flex;gap:8px}
+  #askans .askq-echo{font-family:var(--mono);font-size:13px;color:#0f766e;font-weight:600;margin-bottom:8px;padding-bottom:7px;border-bottom:1px dashed #d7dde8;white-space:pre-wrap}
+  #askclose{position:absolute;top:5px;right:7px;z-index:2;display:none;background:transparent;border:none;color:#667085;font-size:21px;line-height:1;cursor:pointer;padding:1px 7px;border-radius:5px}
+  #askclose:hover{background:#eef2f7;color:#101828}
   #askrow{display:flex;align-items:center;gap:8px;padding:8px 10px}
   #askrow .lbl{font-family:var(--mono);font-size:13px;color:#0f766e;white-space:nowrap}
   #askq{flex:1;background:#fff;border:1px solid #c7d2e1;border-radius:6px;color:#101828;font-family:var(--sans);font-size:15.5px;padding:8px 10px;outline:none}
@@ -121,7 +124,7 @@
     #askrow .lbl{grid-column:1/-1}
     #askq{width:100%;min-width:0}
     #askbtn{width:100%}
-    #askans{max-height:220px}
+    #askans{max-height:min(50vh,260px)}
   }
   @media (max-width:460px){
     .tile{padding:10px}
@@ -185,6 +188,7 @@
   </main>
 </div>
 <div id="askdock">
+  <button id="askclose" onclick="hideAns()" title="Close answer" aria-label="Close answer">×</button>
   <div id="askans"></div>
   <div id="askrow">
     <span class="lbl">ASK THE DATA</span>
@@ -213,7 +217,8 @@ function showView(v){let store=null;if(v==='shadow'){store='shadow';v='lakehouse
   document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('active',a.dataset.v===v));
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id===v));
   if(store){STORE=store;const lb=$('#tab-lake'),sb=$('#tab-shadow');if(lb&&sb){lb.classList.toggle('active',store==='lake');sb.classList.toggle('active',store==='shadow');}}
-  if(DATA){if(v==='lakehouse')renderLake();if(v==='findings')renderFindings();if(v==='models')renderModels();}}
+  if(DATA){if(v==='lakehouse')renderLake();if(v==='findings')renderFindings();if(v==='models')renderModels();}
+  if(window.gtag){const label=store||v;gtag('event','page_view',{page_title:'Mission Control — '+label,page_location:location.href,page_path:'/'+(location.hash.slice(1)||'overview')});}}
 window.addEventListener('hashchange',()=>showView(location.hash.slice(1)||'overview'));
 
 async function load(){
@@ -292,8 +297,8 @@ function renderLake(){const inv=(DATA.inventory||{})[STORE]||{datasets:[]};
       tr.innerHTML=`<td class="f">${esc(a.asset_id)}</td><td class="num">${a.rows!=null?fmt(a.rows):'—'}</td><td class="num muted">${a.size_mb!=null?a.size_mb+' MB':'—'}</td><td class="muted">${esc(range)}</td><td><span class="tag t-${esc(a.status)}">${esc(a.status)}</span></td>`;t.appendChild(tr);});
     at.innerHTML='';at.appendChild(t);
   } else { $('#lh-title').textContent='Shadow promotion candidates'; at.innerHTML='<div class="empty">Candidates validated before promotion — see datasets below.</div>'; }
-  const t2=el('table');t2.innerHTML='<tr><th>dataset</th><th class="num">files</th><th class="num">size</th><th>source</th></tr>';
-  (inv.datasets||[]).forEach(d=>{const tr=el('tr');tr.innerHTML=`<td class="f">${esc(d.name)}</td><td class="num">${fmt(d.files)}</td><td class="num muted">${mb(d.size_mb)}</td><td class="src">${esc(d.source||'—')}</td>`;t2.appendChild(tr);});
+  const t2=el('table');t2.innerHTML='<tr><th>dataset</th><th class="num">rows</th><th class="num">files</th><th class="num">size</th><th>source</th></tr>';
+  (inv.datasets||[]).forEach(d=>{const tr=el('tr');const rows=d.rows!=null?fmt(d.rows)+(d.rows_estimated?'<span class="muted">~</span>':''):'<span class="muted">—</span>';tr.innerHTML=`<td class="f">${esc(d.name)}</td><td class="num">${rows}</td><td class="num">${fmt(d.files)}</td><td class="num muted">${mb(d.size_mb)}</td><td class="src">${esc(d.source||'—')}</td>`;t2.appendChild(tr);});
   $('#lh-fs').innerHTML='';$('#lh-fs').appendChild(t2);}
 /* ask the data (live, via proxy) */
 function redactSecrets(text){return String(text==null?'':text)
@@ -418,17 +423,21 @@ function askContext(question){
   L.push('ALL MODEL IDS: '+(s.models||[]).map(m=>`${m.model_id}(${m.status}, claimable=${m.claimable})`).join('; '));
   return redactSecrets(L.join('\n\n')).slice(0,56000);
 }
-async function askData(){const q=$('#askq').value.trim();if(!q)return;const btn=$('#askbtn'),ans=$('#askans');
-  ans.style.display='block';
-  if(asksForSecret(q)){ans.innerHTML='<div class="who">● answered locally · public-safety guard</div>I can answer from the published science snapshot, but I cannot reveal secrets, credentials, environment variables, local absolute paths, user names, private keys, tokens, or non-public infrastructure details.';return;}
-  if(isProjectAboutQuestion(q)){ans.innerHTML=`<div class="who">● answered locally · project overview</div>${esc(projectAboutAnswer())}`;return;}
-  if(!PROXY_URL){ans.innerHTML='<div class="who">⚠ search isn\'t wired yet — the site owner needs to deploy the search worker and set PROXY_URL.</div>';return;}
-  btn.disabled=true;ans.innerHTML='<div class="who"><span class="spin"></span> searching the data…</div>';
+function showAns(html){const a=$('#askans');a.innerHTML=html;a.style.display='block';a.scrollTop=0;$('#askclose').style.display='block';}
+function hideAns(){const a=$('#askans');a.style.display='none';a.innerHTML='';$('#askclose').style.display='none';}
+async function askData(){const q=$('#askq').value.trim();if(!q)return;const btn=$('#askbtn');
+  const qhead='<div class="askq-echo">'+esc(q)+'</div>';
+  $('#askq').value='';                                   // question moves out of the input…
+  if(window.gtag)gtag('event','search',{search_term:q}); // …and into GA site-search reports
+  if(asksForSecret(q)){showAns(qhead+'<div class="who">● answered locally · public-safety guard</div>I can answer from the published science snapshot, but I cannot reveal secrets, credentials, environment variables, local absolute paths, user names, private keys, tokens, or non-public infrastructure details.');return;}
+  if(isProjectAboutQuestion(q)){showAns(qhead+`<div class="who">● answered locally · project overview</div>${esc(projectAboutAnswer())}`);return;}
+  if(!PROXY_URL){showAns(qhead+'<div class="who">⚠ search isn\'t wired yet — the site owner needs to deploy the search worker and set PROXY_URL.</div>');return;}
+  btn.disabled=true;showAns(qhead+'<div class="who"><span class="spin"></span> searching the data…</div>');
   try{const r=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:askContext(q)})});
     const j=await r.json();
-    if(j.error)ans.innerHTML=`<div class="who">⚠ ${esc(j.error)}</div>`;
-    else ans.innerHTML=`<div class="who">● answered from the published data${j.model?' · '+esc(j.model):''}</div>${esc(redactSecrets(j.answer||''))}`;
-  }catch(e){ans.innerHTML=`<div class="who">⚠ ${esc(e)}</div>`;}
+    if(j.error)showAns(qhead+`<div class="who">⚠ ${esc(j.error)}</div>`);
+    else showAns(qhead+`<div class="who">● answered from the published data${j.model?' · '+esc(j.model):''}</div>${esc(redactSecrets(j.answer||''))}`);
+  }catch(e){showAns(qhead+`<div class="who">⚠ ${esc(e)}</div>`);}
   btn.disabled=false;}
 $('#askq').addEventListener('keydown',e=>{if(e.key==='Enter')askData();});
 load();
