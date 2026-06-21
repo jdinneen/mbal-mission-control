@@ -24,6 +24,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <style>
   :root{
     --bg:#f5f6f6; --surface:#ffffff; --subtle:#f7f9f9;
@@ -302,6 +304,34 @@
 
   .loadwrap{padding:80px 28px;text-align:center;color:var(--ink4);font-family:var(--mono);font-size:14px}
 
+  /* ---- map ---- */
+  .mapwrap{position:relative;border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--card-sh);background:#eef2f3}
+  #leafmap{height:560px;width:100%}
+  #leafmap .leaflet-container{font-family:var(--sans)}
+  .leaflet-popup-content{font-family:var(--sans);font-size:13px;line-height:1.5}
+  .leaflet-popup-content .pn{font-weight:600;font-size:14px}
+  .leaflet-popup-content .pm{font-family:var(--mono);font-size:12px;color:var(--ink3)}
+  .maplegend{position:absolute;bottom:14px;left:14px;z-index:500;background:rgba(255,255,255,.94);backdrop-filter:blur(4px);border:1px solid var(--border);border-radius:11px;padding:12px 14px;box-shadow:var(--card-sh);max-width:230px}
+  .maplegend .lt{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink4);margin-bottom:8px}
+  .maplegend .lrow{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink2);margin:5px 0}
+  .maplegend .sw{width:13px;height:13px;border-radius:50%;flex:none}
+  .maplegend .ring{width:13px;height:13px;border-radius:50%;border:1.5px dashed #9aa0a7;flex:none}
+  .mapnote{margin:12px 2px 0;font-size:12.5px;color:var(--ink4);line-height:1.5}
+  .mapfail{padding:60px 24px;text-align:center;color:var(--ink4);font-size:14px}
+
+  /* ---- footer / downloads ---- */
+  .sitefoot{border-top:1px solid var(--border);background:var(--surface);margin-top:20px}
+  .footwrap{max-width:1120px;margin:0 auto;padding:34px 28px 48px;display:grid;grid-template-columns:1.3fr 1fr;gap:36px}
+  .footcol .footnote{font-size:13px;line-height:1.6;color:var(--ink3);margin:0 0 14px;max-width:520px}
+  .downloads{display:flex;flex-direction:column;gap:8px}
+  .dl{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 13px;border:1px solid var(--border);border-radius:11px;background:var(--subtle);transition:background .14s,border-color .14s}
+  .dl:hover{background:var(--acc-tint2);border-color:#cfe3e1}
+  .dl .di{min-width:0}
+  .dl .dt{font-size:13.5px;font-weight:600;color:var(--ink)}
+  .dl .dm{font-family:var(--mono);font-size:10.5px;color:var(--ink5);margin-top:3px;word-break:break-all}
+  .dl a.dbtn{flex:none;font-family:var(--mono);font-size:12px;font-weight:600;color:var(--acc);border:1px solid var(--border);border-radius:8px;padding:6px 11px;text-decoration:none;background:var(--surface)}
+  .dl a.dbtn:hover{background:var(--acc);color:#fff;border-color:var(--acc)}
+
   @media (max-width:860px){
     .hwrap{padding:12px 16px}
     nav.tabs{padding:0 16px}
@@ -324,6 +354,10 @@
     /* surface Vocabulary (a core explanatory page) before Lakehouse on mobile */
     nav.tabs button[data-v="vocabulary"]{order:4}
     nav.tabs button[data-v="lakehouse"]{order:5}
+    .footwrap{grid-template-columns:1fr;gap:24px;padding:28px 16px 40px}
+    #leafmap{height:420px}
+    .maplegend{max-width:170px;padding:9px 11px}
+    .dl{flex-wrap:wrap}
   }
   @media (max-width:480px){
     .metrics{grid-template-columns:1fr}
@@ -356,6 +390,7 @@
     <button data-v="frontiers">Frontiers</button>
     <button data-v="models">Models</button>
     <button data-v="lakehouse">Lakehouse</button>
+    <button data-v="map">Map</button>
     <button data-v="vocabulary">Vocabulary</button>
   </nav>
 </header>
@@ -483,6 +518,19 @@
     </div>
   </section>
 
+  <!-- ===== MAP ===== -->
+  <section class="view" id="map">
+    <div style="margin-bottom:18px;max-width:760px">
+      <h1 class="sec">Where the data comes from</h1>
+      <p class="subhead">Every monitoring station behind the beach-bacteria work, by location. Marker size = number of lab samples; color = observed exceedance rate (AB411 &gt; 104 MPN/100 mL). This is <b>observation coverage</b>, not a prediction map — the model is a per-station nowcast, so we show where it has real support and where it doesn't, never a confident color over open water.</p>
+    </div>
+    <div class="mapwrap">
+      <div id="leafmap"></div>
+      <div class="maplegend" id="maplegend"></div>
+    </div>
+    <p class="mapnote" id="mapnote"></p>
+  </section>
+
   <!-- ===== VOCABULARY ===== -->
   <section class="view" id="vocabulary">
     <div style="margin-bottom:18px;max-width:760px">
@@ -492,6 +540,21 @@
     <div class="vocabgrid" id="vocabgrid"></div>
   </section>
 </main>
+
+<footer class="sitefoot">
+  <div class="footwrap">
+    <div class="footcol">
+      <div class="eyebrow" style="margin-bottom:8px">Download the evidence</div>
+      <p class="footnote">Everything on this page is open. Each file carries a SHA-256 so you can verify it matches the published snapshot — the same reproducibility discipline the science is held to. Findings, models, and the station map are exported from the same snapshot, so they can't drift.</p>
+      <div id="downloads" class="downloads"></div>
+    </div>
+    <div class="footcol">
+      <div class="eyebrow" style="margin-bottom:8px">How to read this site</div>
+      <p class="footnote">Results are graded honestly: <b>Supported</b> held up under audit, <b>Caveated</b> is real but limited, <b>Null</b> was tested and didn't hold. Signals carry the catalog verdicts (<b>PRIMARY/KEEP</b> kept, <b>WASH</b> no lift, <b>REJECT</b> hurt, <b>UNTESTED</b> not yet gated). Nulls and failures are kept on the record beside the wins. The map shows observation coverage, not an extrapolated prediction surface.</p>
+      <p class="footnote" id="footstamp"></p>
+    </div>
+  </div>
+</footer>
 
 <div id="drawerhost"></div>
 
@@ -547,11 +610,12 @@ function hasCM(f){const m=f.metrics||{};return ['tp','fp','fn','tn'].every(k=>ty
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.v));
 function go(v){if(location.hash.slice(1)!==v)location.hash=v;else showView(v);}
 function showView(v){
-  if(!['overview','findings','frontiers','models','lakehouse','vocabulary'].includes(v))v='overview';
+  if(!['overview','findings','frontiers','models','lakehouse','map','vocabulary'].includes(v))v='overview';
   TAB=v; if(DETAIL){DETAIL=null;renderDrawer();}
   document.querySelectorAll('nav.tabs button').forEach(b=>{const on=b.dataset.v===v;b.classList.toggle('active',on);if(on&&b.scrollIntoView)try{b.scrollIntoView({inline:'center',block:'nearest'});}catch(e){}});
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id===v));
   if(DATA){if(v==='findings')renderFindings();if(v==='frontiers')renderFrontiers();if(v==='models')renderModels();if(v==='lakehouse')renderLake();if(v==='vocabulary')renderVocabulary();}
+  if(v==='map')renderMap();
   pv('/'+v,v);
 }
 let _lastPV=null;
@@ -565,7 +629,8 @@ async function load(){
     DATA=snap.state; EVID=snap.evidence||{}; PROJECT_DOCS=snap.project_docs||[];
     DATA._built_pacific=snap.built_pacific; DATA._built_iso=snap.built_iso;
     $('#loading').style.display='none';
-    renderHeader(); renderOverview();
+    renderHeader(); renderOverview(); renderDownloads();
+    const fs=$('#footstamp'); if(fs)fs.textContent='Snapshot built '+(DATA._built_pacific||'')+'. Licensed Apache-2.0.';
     showView(location.hash.slice(1)||'overview');
   }catch(e){ $('#loading').textContent='⚠ failed to load data.json — '+e; }
 }
@@ -842,6 +907,45 @@ function vocabDrawer(key){
       ${rows||'<div class="lhempty">Nothing recorded for this concept yet.</div>'}
     </div>
   </div>`;
+}
+
+/* ---------- map (observation coverage — NOT a prediction surface) ---------- */
+let _map=null;
+function brColor(br){if(br==null)return '#b8bdc3';if(br<0.08)return '#1a7a4f';if(br<0.18)return '#3f9e6b';if(br<0.30)return '#c9a23a';if(br<0.45)return '#e0772f';return '#b4453c';}
+function renderMap(){
+  const host=$('#leafmap'); if(!host)return;
+  if(!window.L){host.innerHTML='<div class="mapfail">The map library didn’t load (offline?). The station data is still downloadable in the footer below.</div>';return;}
+  if(_map){setTimeout(()=>_map.invalidateSize(),60);return;}
+  _map=L.map('leafmap',{scrollWheelZoom:false}).setView([36.6,-120.6],6);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO',subdomains:'abcd',maxZoom:19}).addTo(_map);
+  fetch('stations.geojson',{cache:'no-cache'}).then(r=>r.json()).then(fc=>{
+    const feats=fc.features||[]; let mx=1; feats.forEach(f=>mx=Math.max(mx,f.properties.n_obs||0));
+    const rad=n=>3+(Math.sqrt(Math.max(n,1))/Math.sqrt(mx))*13;
+    const grp=L.featureGroup();
+    feats.forEach(f=>{const p=f.properties,c=f.geometry.coordinates,low=p.low_support;
+      L.circleMarker([c[1],c[0]],{radius:rad(p.n_obs),fillColor:brColor(p.base_rate),fillOpacity:low?0.28:0.82,color:low?'#9aa0a7':'#fff',weight:low?1.2:1,dashArray:low?'2 2':null})
+        .bindPopup(`<span class="pn">${esc(p.name)}</span><br><span class="pm">${esc(p.county||'')} · ${fmt(p.n_obs)} samples · exceedance ${p.base_rate!=null?(100*p.base_rate).toFixed(0)+'%':'—'}${low?' · low support':''}</span>`)
+        .addTo(grp);});
+    grp.addTo(_map); try{_map.fitBounds(grp.getBounds().pad(0.05));setTimeout(()=>_map.invalidateSize(),60);}catch(e){}
+    const meta=fc.meta||{};
+    $('#mapnote').textContent=`${(meta.stations||feats.length).toLocaleString()} stations with a known location. ${meta.note||''}`;
+    $('#maplegend').innerHTML=`<div class="lt">Exceedance rate (AB411 &gt; 104)</div>
+      <div class="lrow"><span class="sw" style="background:#1a7a4f"></span>low (&lt; 8%)</div>
+      <div class="lrow"><span class="sw" style="background:#c9a23a"></span>moderate</div>
+      <div class="lrow"><span class="sw" style="background:#b4453c"></span>high (&gt; 45%)</div>
+      <div class="lrow"><span class="ring"></span>&lt; 30 samples (thin support)</div>
+      <div class="lt" style="margin-top:9px">marker size = sample count</div>`;
+  }).catch(()=>{$('#mapnote').textContent='Could not load the station data.';});
+}
+/* ---------- downloads footer (manifest-driven, allowlisted) ---------- */
+function renderDownloads(){
+  const box=$('#downloads'); if(!box)return;
+  const sz=b=>b>=1048576?(b/1048576).toFixed(1)+' MB':b>=1024?(b/1024).toFixed(0)+' KB':b+' B';
+  const typ=t=>({'application/json':'JSON','text/csv':'CSV','application/geo+json':'GeoJSON','text/markdown':'Markdown'}[t]||t);
+  fetch('downloads.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{
+    box.innerHTML=(d.items||[]).map(it=>`<div class="dl"><div class="di"><div class="dt">${esc(it.title)}</div><div class="dm">${typ(it.type)} · ${sz(it.bytes)} · sha256 ${esc(String(it.sha256).slice(0,16))}…</div></div><a class="dbtn" href="${esc(it.path)}" download>Download</a></div>`).join('')
+      ||'<div class="footnote">No downloads in this snapshot.</div>';
+  }).catch(()=>{box.innerHTML='<div class="footnote">Downloads manifest unavailable on this host.</div>';});
 }
 
 /* ---------- frontiers (all hazards + methods, drill-down) ---------- */

@@ -1,0 +1,44 @@
+{
+ "items": [
+  {
+   "title": "Full snapshot (all findings, models, datasets, signals)",
+   "path": "data.json",
+   "type": "application/json",
+   "license": "Apache-2.0",
+   "bytes": 997418,
+   "sha256": "fe24774632e488a046ed1d990e976f534532f6de54f7421e3a9d67e1da42027c"
+  },
+  {
+   "title": "Findings table (CSV)",
+   "path": "downloads/findings.csv",
+   "type": "text/csv",
+   "license": "Apache-2.0",
+   "bytes": 8243,
+   "sha256": "bff66b474578f3b9442cdce21ded6d097b1cea4be48beec884cb5da5e38b1bb3"
+  },
+  {
+   "title": "Models registry (CSV)",
+   "path": "downloads/models.csv",
+   "type": "text/csv",
+   "license": "Apache-2.0",
+   "bytes": 3547,
+   "sha256": "492134020c34c08e120bcdd31fdd74b67e3f126dd9d794a245430ced86ad8353"
+  },
+  {
+   "title": "Monitoring-station coverage (GeoJSON)",
+   "path": "stations.geojson",
+   "type": "application/geo+json",
+   "license": "Apache-2.0",
+   "bytes": 218238,
+   "sha256": "892acc290a0697df7b5e9c3979c0f679e31c4cefc9a82245d4a5788546d81f98"
+  },
+  {
+   "title": "Program results summary",
+   "path": "downloads/PROGRAM_RESULTS.md",
+   "type": "text/markdown",
+   "license": "Apache-2.0",
+   "bytes": 13381,
+   "sha256": "9d2b73e14f6dde93a325870d358ef4c60b5166c1f09851b1a7a9feca17eea25d"
+  }
+ ]
+}

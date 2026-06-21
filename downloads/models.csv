@@ -1,0 +1,19 @@
+model_id,family,task,status,claimable,beats_baseline
+bacteria_hgbt_isotonic,tree,bacteria_classification,production_candidate,True,"yes — beats AB411, Virtual-Beach MLR, and station-memory"
+bacteria_hgbt_spatial,tree,bacteria_classification,negative_result,False,no — raw coordinates and neighbour-lag are a wash (all spatial arms AP 0.497 = the no-spatial driver model); per-station/county/statewide rate features already encode location
+bacteria_xgboost,tree,bacteria_classification,benchmark,False,comparator — run via the suite to test the data ceiling vs HGBT
+bacteria_catboost,tree,bacteria_classification,benchmark,False,"SUPPORTED ranking upgrade over frozen HGBT: AP 0.5164 vs 0.5082, dAP +0.0082, CI [0.0041, 0.0193]. Record-don't-ship operationally because advisory-threshold net-benefit gain is negligible."
+bacteria_lightgbm,tree,bacteria_classification,benchmark,False,"REAL BOOST vs HGBT: dAP +0.0081, paired CI [0.0057, 0.0105] excludes zero."
+bacteria_stack,tree,bacteria_classification,benchmark,False,comparator — the blend most likely to beat a single plateaued model; measured in the all-data suite rerun
+bacteria_mlp_plr,neural,bacteria_classification,benchmark,False,comparator — fair modern deep-tabular test; measured in the all-data suite rerun
+bacteria_tabpfn_matched,foundation,bacteria_classification,benchmark,False,comparator only — answers 'did you try a tabular foundation model?' (NEW_LANGUAGES_TEST_PLAN item 63). Expected within noise of HGBT per the data ceiling; not a claim.
+xgboost_forecast_v2,tree,m1_forecasting,benchmark,False,horizon-specific — gated by best-naive (ops/seasonal_naive.py); +72h tier rejected
+patchtst,neural,m1_forecasting,benchmark,False,horizon-specific; best aggregate full-history neural run
+nhits,neural,m1_forecasting,research_candidate,False,not established
+early_warning_cusum,detector,bacteria_event_detection,negative_result,False,NO — a NULL result; the SD-2022 break is a ~35-sigma step any detector flags
+ab411_rain_rule,baseline,bacteria_classification,baseline,False,n/a — this is the deployed practice we must beat (AP ~0.18 on the deployable stratum)
+virtual_beach_mlr,baseline,bacteria_classification,baseline,False,n/a — the deployed tool we'd replace (AP ~0.38 on the deployable stratum)
+station_memory,baseline,bacteria_classification,baseline,False,n/a — strong baseline (AP ~0.28 on the deployable stratum); the bar drivers must beat
+da_forecast_hgbt,tree,domoic_acid_forecasting,production_candidate,True,"yes vs persistence — AP 0.203 vs best-naive 0.138 (time-holdout; AP drifted down from an earlier 0.232 — source of truth reports/hab/da_forecast.json model_hgbt). Honest lift ~1.4x over PERSISTENCE but the block-bootstrap CI CROSSES ZERO (n=1837/52 events) so NOT statistically established. The earlier 'beats C-HARM 8/8, ~10x' framing is a BROKEN-BASELINE MIRAGE (C-HARM is sub-random here, ROC-AUC 0.30) — retained only as the operational-incumbent comparison. See reports/hab/charm_comparison.json + README."
+hab_sota_hgbt,tree,domoic_acid_forecasting,research_only_failed_gate,False,no — adding the external-context signals does NOT beat the lean DA+precursor incumbent (gate is +0.005 AP)
+charm_da_nowcast,baseline,domoic_acid_forecasting,baseline,False,"n/a — operational incumbent. Our prior-visit forecast out-scores it 8/8, but C-HARM is sub-random on this overlap (ROC-AUC 0.30) so that win is a broken-baseline mirage; plain persistence also beats it 6.68x. Not a headline."
