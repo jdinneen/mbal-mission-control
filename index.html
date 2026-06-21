@@ -1122,13 +1122,45 @@ function askContext(question){
   return redactSecrets(L.join('\n\n')).slice(0,56000);
 }
 function isMissAnswer(t){return /\b(?:not|isn'?t|aren'?t|n't) (?:in|provided|available|here|covered|included|present)\b|\bdon'?t (?:see|have|know)\b|\bno supported answer\b|\boutside (?:that|the|its) scope\b|\bcan'?t answer\b|\bcannot answer\b|\bnot able to\b|\bI'?m sorry\b|\bunable to\b/i.test(String(t||''));}
-function suggestRow(){
-  const qs=starterQuestions().slice(0,5);
-  return `<div style="margin-top:12px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#8c929a">Things I can answer:</div><div class="qasuggest">${qs.map(x=>`<button class="qs" data-q="${esc(x.q)}">${esc(x.q)}</button>`).join('')}</div>`;
+// scaffolding: from a question we couldn't answer, find the CLOSEST questions we CAN answer
+function relatedQuestions(q,n=3){
+  const STOP=new Set(['what','whats','which','your','you','the','does','did','can','could','would','have','has','are','about','with','from','this','that','they','them','our','and','for','how','any','use','used','using','here','there','were','was','will']);
+  const s=String(q||'').toLowerCase(), toks=(s.match(/[a-z0-9]{3,}/g)||[]).filter(t=>!STOP.has(t)), bank=questionBank();
+  // loose topic → a canonical answerable question (covers near-misses & adjacent asks)
+  const nudges=[
+    [/temperatur|\bsst\b|salin|\brain|wind|\btide|wave|discharge|runoff|sensor|measur|\bdata\b|coverage|how much/, 'Which datasets are used?'],
+    [/predict|forecast|\bmodel|algorithm|machine.?learning|\bai\b|neural|xgboost|deep.?learn/, 'What models are in the registry?'],
+    [/accura|how good|skill|score|best|strong|reliab|work.?(s|ed)? well|confiden/, 'Which results are strongest?'],
+    [/fail|wrong|\bbad\b|didn'?t|does ?n'?t work|null|negative|mistake|miss/, 'What failed or didn’t hold up?'],
+    [/tsunami|earthquake|\bflood|sea.?level|surge|inundat/, 'What about coastal flooding?'],
+    [/transfer|other (region|countr|place)|generaliz|\bireland|australia|abroad|elsewhere/, 'Can a model transfer to another country?'],
+    [/whale|cetacean|mammal|\bprey|krill|stranding|dolphin/, 'What about whales?'],
+    [/oxygen|hypox|dead.?zone|anoxic/, 'Do you predict low-oxygen (hypoxia) events?'],
+    [/algae|\bbloom|toxin|domoic|shellfish|red.?tide|\bhab\b/, 'What about harmful algae / domoic acid?'],
+    [/\blake|cyano|freshwater/, 'What about cyanobacteria blooms in lakes?'],
+    [/bacteria|beach|enterococc|swim|water.?quality|exceed|safe to/, 'How good is the beach-bacteria nowcast?'],
+    [/interlingua|physics|dimensionless|pi.?group|shared language/, 'What is interlingua?'],
+    [/\bwhat (do|does|can) (you|we|the lab|it)\b|purpose|goal|mission|what is (this|the project)|who are you|why does this/, 'What is this project about?'],
+  ];
+  const scored=bank.map(x=>{
+    let sc=toks.reduce((a,t)=>a+(x.q.toLowerCase().includes(t)?2:0),0);
+    nudges.forEach(([re,target])=>{ if(re.test(s)&&x.q===target) sc+=10; });
+    return {x,sc};
+  }).filter(o=>o.sc>0).sort((a,b)=>b.sc-a.sc).map(o=>o.x);
+  const out=[],seen=new Set();
+  for(const x of scored){ if(!seen.has(x.q)){seen.add(x.q);out.push(x);} if(out.length>=n)break; }
+  ['What have you worked on?','What is this project about?','Which datasets are used?'].forEach(qq=>{
+    if(out.length<n){const m=bank.find(b=>b.q===qq); if(m&&!seen.has(qq)){seen.add(qq);out.push(m);}}
+  });
+  return out.slice(0,n);
+}
+function suggestRow(items,heading){
+  items=(items&&items.length)?items:starterQuestions().slice(0,5);
+  return `<div style="margin-top:13px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#8c929a">${esc(heading||'Things I can answer')}</div><div class="qasuggest">${items.map(x=>`<button class="qs" data-q="${esc(x.q||x)}">${esc(x.q||x)}</button>`).join('')}</div>`;
 }
 function showAns(who,text,sources,suggest){
   const src=(sources&&sources.length)?`<div class="ground"><span class="g">Grounded in</span>${sources.map(s=>`<span class="s">${esc(s)}</span>`).join('')}</div>`:'';
-  const sug=suggest?suggestRow():'';
+  const sug=suggest?suggestRow(Array.isArray(suggest)?suggest:null,'You asked something I can’t answer — try one of these, which I can:'):'';
   $('#qaout').innerHTML=`<div class="qaans"><div class="who">${who}</div><div class="txt">${esc(text)}</div>${src}${sug}</div>`;
   if(suggest)document.querySelectorAll('#qaout .qs').forEach(b=>b.onclick=()=>askChip(b.dataset.q));
 }
@@ -1138,24 +1170,24 @@ async function askData(){
   $('#askq').value=''; renderChips('');
   if(window.gtag)gtag('event','search',{search_term:q});
   if(asksForSecret(q)){showAns('● answered locally · public-safety guard','I can answer from the published science snapshot, but I cannot reveal secrets, credentials, environment variables, local absolute paths, user names, private keys, tokens, or non-public infrastructure details.',null,true);return;}
-  if(hasOutOfScopeTopic(q)){showAns('● answered locally · science boundary',scienceBoundaryAnswer(),null,true);return;}
+  if(hasOutOfScopeTopic(q)){showAns('● answered locally · science boundary',scienceBoundaryAnswer(),null,relatedQuestions(q));return;}
   if(isProjectAboutQuestion(q)){showAns('● answered locally · project overview',projectAboutAnswer(),['Overview']);return;}
   const cv=vocabularyAnswer(q); if(cv){showAns('● answered locally · vocabulary',cv,['Vocabulary']);return;}
   const fa=frontierAnswer(q); if(fa){showAns('● answered locally · research frontiers',fa,['Frontiers']);return;}
   const sources=topDocTitles(q);
-  if(!PROXY_URL){const a=localEvidenceAnswer(q);showAns('● answered locally · published evidence',a,sources,isMissAnswer(a));return;}
+  if(!PROXY_URL){const a=localEvidenceAnswer(q);showAns('● answered locally · published evidence',a,sources,isMissAnswer(a)?relatedQuestions(q):null);return;}
   btn.disabled=true; showLoading();
   try{
     const r=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:askContext(q)})});
     const j=await r.json();
-    if(j.error){const a=localEvidenceAnswer(q);showAns('● answered locally · published evidence',a,sources,isMissAnswer(a));}
+    if(j.error){const a=localEvidenceAnswer(q);showAns('● answered locally · published evidence',a,sources,isMissAnswer(a)?relatedQuestions(q):null);}
     else{
       const ans=answerOrFallback(j.answer||'',q);
       const leak=hasFormatLeak(j.answer||'');
       const who=leak?'● answered locally · published evidence':('● answered from the published data'+(j.model?' · '+esc(j.model):''));
-      showAns(who,ans,sources,isMissAnswer(ans));
+      showAns(who,ans,sources,isMissAnswer(ans)?relatedQuestions(q):null);
     }
-  }catch(e){const a=localEvidenceAnswer(q);showAns('● answered locally · published evidence',a,sources,isMissAnswer(a));}
+  }catch(e){const a=localEvidenceAnswer(q);showAns('● answered locally · published evidence',a,sources,isMissAnswer(a)?relatedQuestions(q):null);}
   btn.disabled=false;
 }
 /* deterministic concept/definition answer straight from the vocabulary (never hits the proxy) */
