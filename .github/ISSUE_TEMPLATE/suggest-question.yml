@@ -1,0 +1,93 @@
+name: "Suggest a discovery question"
+description: "Propose a scientific question for the lab to investigate. This is a candidate question, not a claim — every suggestion is reviewed before anything enters the research pipeline."
+title: "[suggestion] <short question>"
+labels: ["suggestion:new"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a question. We use a specific vocabulary (see the **Vocabulary** tab on the site).
+        Fill in what you can — only the question itself is required. Nothing here is treated as a result;
+        suggestions are triaged (KEEP / MAYBE / REJECT / NEEDS-DATA) and only become real work after passing
+        the same evidence gates as internal hypotheses.
+
+        **Scope:** suggestions must be about the *coastal-water science* — observations, signals, targets,
+        models, baselines, or evidence. Questions about funding, money, business, commercialization, or
+        partnerships are out of scope and will be closed.
+  - type: textarea
+    id: question
+    attributes:
+      label: Question or hypothesis
+      description: What should the AI try to answer? Phrase it as a question or a falsifiable hypothesis.
+      placeholder: "e.g. Does antecedent soil moisture warn of beach-bacteria exceedances earlier than rainfall alone?"
+    validations:
+      required: true
+  - type: input
+    id: target
+    attributes:
+      label: Target / label
+      description: The thing being explained or predicted (defines the scientific question).
+      placeholder: "e.g. bacteria exceedance (AB411 > 104 MPN/100 mL)"
+  - type: input
+    id: data_source
+    attributes:
+      label: Data source(s)
+      description: Which dataset(s) should it use? Raw, joinable evidence — not a model.
+      placeholder: "e.g. USGS discharge, ASOS rainfall, CalHABMAP piers"
+  - type: input
+    id: signal
+    attributes:
+      label: Signal / feature to test
+      description: A candidate explanatory input.
+      placeholder: "e.g. 7-day antecedent soil moisture"
+  - type: input
+    id: representation
+    attributes:
+      label: Representation (optional)
+      description: A transformed feature space, if relevant.
+      placeholder: "e.g. non-dimensional pi-group, thermal stratification"
+  - type: dropdown
+    id: learner
+    attributes:
+      label: Discovery engine / learner
+      description: What algorithm should try it? (Unfitted, this is a learner — not yet a trained model.)
+      options:
+        - "No preference"
+        - "Gradient-boosted trees (XGBoost / HGBT / CatBoost / LightGBM)"
+        - "Neural network (MLP / sequence model)"
+        - "Foundation / in-context model (e.g. TabPFN)"
+        - "Change / anomaly detector (e.g. CUSUM)"
+        - "Diagnostic lens only (histogram, residual map, synchrony field)"
+        - "Other (describe in question)"
+  - type: input
+    id: baseline
+    attributes:
+      label: Baseline / null it must beat
+      description: An honest comparator that prevents fake discoveries.
+      placeholder: "e.g. station-memory, persistence, rainfall-only model"
+  - type: input
+    id: evidence_gate
+    attributes:
+      label: Evidence gate / robustness check
+      description: How would we know it's real, not luck?
+      placeholder: "e.g. leave-one-beach-out + permutation null + bootstrap CI"
+  - type: input
+    id: failure_modes
+    attributes:
+      label: Expected failure modes
+      description: How might this wash out or mislead?
+      placeholder: "e.g. redundant with discharge; only works in wet season"
+  - type: textarea
+    id: context
+    attributes:
+      label: Why / context (optional)
+      description: Anything that helps us judge or reproduce the idea. Do not include private or sensitive data.
+  - type: checkboxes
+    id: ack
+    attributes:
+      label: Acknowledgement
+      options:
+        - label: "This is a candidate question, not a claim, and I understand it will be reviewed before any investigation."
+          required: true
+        - label: "I am not including secrets, credentials, or private/sensitive data (e.g. email addresses, API keys, internal URLs, local filesystem paths, or unpublished results) in this submission."
+          required: true

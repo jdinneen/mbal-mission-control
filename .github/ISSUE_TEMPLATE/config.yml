@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Browse the science snapshot first
+    url: https://jdinneen.github.io/mbal-mission-control/
+    about: See current findings, models, datasets, and the lab vocabulary before suggesting a question.

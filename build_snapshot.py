@@ -1174,8 +1174,105 @@ def _build_project_docs():
     return docs
 
 
+def _build_lab_memory():
+    """Curated, public-safe 'mission / how we work / what we rejected / open questions' cards.
+
+    Scope discipline (after critic review):
+      * This layer carries NARRATIVE and PRINCIPLE only — mission, working philosophy,
+        deliberately-rejected ideas, and open questions. It deliberately carries NO
+        independent metrics or empirical result claims: the findings/models sections are
+        the single source of truth for "what we measured", so lab_memory cannot drift from
+        or overclaim past the gated evidence.
+      * Hand-vetted literal (NOT an auto-dump of docs/agent_brain/*), matching this
+        builder's existing curated-finding convention.
+      * `basis` is a COARSE provenance label, never an internal file path, so public
+        data.json does not expose the structure of excluded internal docs.
+    """
+    cards = [
+        {"id": "mission_unified_model", "kind": "mission",
+         "claim": "Build one shared model of the coastal ocean — how its physics, weather, runoff, waves, tides, and life connect — so it can warn of rare water-quality events before they are measured directly.",
+         "basis": "lab mission"},
+        {"id": "mission_higher_order", "kind": "mission",
+         "claim": "Look for second- and third-order signal combinations across moorings, satellite, flow and weather data, rather than generic regression on raw sensors.",
+         "basis": "lab mission"},
+        {"id": "done_reframe_surprise", "kind": "done",
+         "claim": "We reframed the bacteria problem around clean-to-dirty surprises, so the science targets events people cannot infer from yesterday's status alone. (See the Findings tab for the measured result.)",
+         "basis": "research direction"},
+        {"id": "done_transfer_tested", "kind": "done",
+         "claim": "We tested whether the California bacteria nowcast carries over to other regions, and logged the outcome with its baseline and permutation-null checks rather than asserting it. (See Findings.)",
+         "basis": "research direction"},
+        {"id": "learn_driver_null", "kind": "learning",
+         "claim": "Across many tested inputs, external rainfall is the main clear driver of beach-bacteria risk; most other candidate drivers — including waves and tide level — wash out against a full baseline. We call this the driver-null pattern.",
+         "basis": "experiment record"},
+        {"id": "learn_evidence_is_combination", "kind": "learning",
+         "claim": "The strongest evidence is a combination — honest baselines, held-out tests, calibration, and failure analysis — not any single score.",
+         "basis": "operating principles"},
+        {"id": "learn_nulls_on_record", "kind": "learning",
+         "claim": "Null results are kept on the record beside the wins, so the next experiment starts from the truth instead of a forgotten dead end.",
+         "basis": "operating principles"},
+        {"id": "learn_breadth_over_depth", "kind": "learning",
+         "claim": "Broad station coverage tends to matter more than long history at a single site when the goal is a statewide model.",
+         "basis": "experiment record"},
+        {"id": "reject_foundation_models", "kind": "rejected",
+         "claim": "Time-series foundation models repeatedly failed to beat a simple persistence baseline on the mooring data, so they were pruned rather than promoted.",
+         "basis": "rejected-ideas record"},
+        {"id": "reject_auto_self_repair", "kind": "rejected",
+         "claim": "Automatic model self-repair when training loss spikes was rejected: a loss spike can be a real ocean anomaly, so the system may flag it but must not silently rewrite itself.",
+         "basis": "rejected-ideas record"},
+        {"id": "open_prospective_scoring", "kind": "open_question",
+         "claim": "The open frontier is prospective scoring — testing new observations after the freeze date before calling a retrospective result final.",
+         "basis": "open questions"},
+        {"id": "open_driver_aware_neural", "kind": "open_question",
+         "claim": "Can driver-aware neural models overcome the modest or negative skill seen in early multi-driver forecasting runs?",
+         "basis": "open questions"},
+    ]
+    return cards
+
+
+def _build_vocabulary():
+    """Curated concept matrix: what KIND of thing each artifact is.
+
+    Teaches the distinction the registry depends on — e.g. an unfitted XGBoost or
+    neural net is a *learner*, not a model, until it is fitted, evaluated and
+    registered; a baseline is a comparator, not a discovery; a histogram is a lens.
+    Examples are real names drawn from the registry / signal catalog, chosen to be
+    public-safe (no external-product criticism, no licensing/business notes).
+    """
+    return [
+        {"key": "source_dataset", "label": "Source dataset",
+         "what": "Raw, joinable evidence we collect — coverage, rows, recency, provenance. Not a model.",
+         "examples": ["ASOS rainfall", "NOAA CO-OPS tide & water level", "CalHABMAP domoic-acid piers", "USGS river discharge", "MBARI M1/M2 moorings"]},
+        {"key": "target", "label": "Target / label",
+         "what": "The thing being explained or predicted — it defines the scientific question.",
+         "examples": ["bacteria exceedance (AB411 > 104 MPN/100 mL)", "domoic-acid pier exceedance", "hypoxia lead (DO ≤ 2 mg/L, 7–14 d)", "renewal onset", "cyano bloom onset"]},
+        {"key": "signal", "label": "Signal / feature",
+         "what": "A candidate explanatory input, tested through gates until it earns KEEP, WASH, or REJECT.",
+         "examples": ["station lab history (primary)", "rainfall (keep)", "river discharge (keep)", "spring–neap tide range (keep, pooled)", "pseudo-nitzschia (keep, for domoic acid)"]},
+        {"key": "representation", "label": "Representation",
+         "what": "A transformed feature space used to expose hidden structure or cross-domain transfer.",
+         "examples": ["thermal stratification (ΔT surface−bottom)", "non-dimensional π-groups", "station-memory features", "harmonic tide range"]},
+        {"key": "diagnostic", "label": "Diagnostic / lens",
+         "what": "A way to look for structure. A discovery aid, not a model.",
+         "examples": ["leave-one-beach-out test", "permutation-null + bootstrap CI", "confusion matrix", "residual maps", "spatial synchrony fields"]},
+        {"key": "learner", "label": "Learner / discovery engine",
+         "what": "An algorithm used to search for relationships. Before it is fitted to data, this is NOT a trained model.",
+         "examples": ["HGBT", "XGBoost", "CatBoost", "LightGBM", "neural net (MLP)", "TabPFN", "CUSUM detector"]},
+        {"key": "trained_model", "label": "Trained model card",
+         "what": "A fitted, evaluated, registered learner plus its evidence and status. Can be claimable, benchmark, or null.",
+         "examples": ["bacteria_hgbt_isotonic (claimable)", "da_forecast_hgbt (claimable)", "bacteria_catboost (benchmark)", "bacteria_mlp_plr (benchmark)"]},
+        {"key": "baseline", "label": "Baseline / null",
+         "what": "An honest comparator that prevents fake discoveries. A baseline is not a discovery claim.",
+         "examples": ["AB411 rain rule", "Virtual-Beach MLR", "station memory", "seasonal-naive / persistence", "permutation nulls"]},
+        {"key": "finding", "label": "Finding",
+         "what": "A promoted scientific statement — only after leakage, baseline, and bootstrap/null checks pass.",
+         "examples": ["driver-null law (rainfall is the main clear external driver)", "spring–neap lift is real but does not generalize spatially", "soil moisture is redundant with discharge", "harmful-algae transfer did not generalize (null)"]},
+    ]
+
+
 def main():
     state = _augment_state(_base_state())
+    state["lab_memory"] = _build_lab_memory()
+    state["vocabulary"] = _build_vocabulary()
 
     # bundle the evidence JSON each finding/model points at (so drill-downs work offline)
     evidence = {}
@@ -1215,9 +1312,9 @@ def main():
     text = re.sub(r"/Users/[^/\\\"]+/", "/[local-path-redacted]/", text)
     text = re.sub(r"-----BEGIN [^-]*PRIVATE KEY-----.*?-----END [^-]*PRIVATE KEY-----",
                   "[private-key-redacted]", text, flags=re.I | re.S)
-    text = re.sub(r"\\b(?:sk|ghp|github_pat|glpat|xox[baprs])-[-A-Za-z0-9_]{16,}\\b",
+    text = re.sub(r"\b(?:sk|ghp|github_pat|glpat|xox[baprs])[-_][-A-Za-z0-9_]{16,}\b",
                   "[token-redacted]", text)
-    text = re.sub(r"\\bAIza[0-9A-Za-z_-]{20,}\\b", "[api-key-redacted]", text)
+    text = re.sub(r"\bAIza[0-9A-Za-z_-]{20,}\b", "[api-key-redacted]", text)
     text = re.sub(
         r"([?&](?:api[_-]?key|access[_-]?token|refresh[_-]?token|token|password|secret|key)=)[^&\\\"']+",
         r"\\1[redacted]",

@@ -209,6 +209,19 @@
   .lhrow .r .chev{color:#c2c7cc}
   .lhempty{font-family:var(--mono);font-size:12.5px;color:var(--ink5);padding:14px 0 2px;border-top:1px solid var(--faint2)}
 
+  /* ---- vocabulary ---- */
+  .vocabgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
+  .vcard{background:var(--surface);border:1px solid var(--border);border-radius:15px;box-shadow:var(--card-sh);padding:20px 21px;transition:box-shadow .18s,transform .18s}
+  .vcard:hover{box-shadow:var(--card-sh-hover);transform:translateY(-2px)}
+  .vcard .vk{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--acc);margin-bottom:8px}
+  .vcard h3{margin:0 0 8px;font-size:17px;font-weight:600}
+  .vcard .vwhat{margin:0 0 14px;font-size:14px;line-height:1.55;color:var(--ink3);text-wrap:pretty}
+  .vcard .vex{display:flex;flex-wrap:wrap;gap:7px;border-top:1px solid var(--faint2);padding-top:13px}
+  .vcard .vex span{font-family:var(--mono);font-size:11.5px;color:var(--ink2);background:var(--faint3);border:1px solid var(--border);border-radius:7px;padding:4px 9px}
+  .suggest-link{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:13px;font-weight:600;color:var(--acc-bright);text-decoration:none}
+  .suggest-link:hover{color:#5fe0d6}
+  .suggest-note{margin:6px 0 0;font-size:12px;color:#7d838b}
+
   /* ---- drawer ---- */
   .backdrop{position:fixed;inset:0;z-index:100;background:rgba(16,24,40,.34);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);animation:mc-fade .2s ease both;display:flex;justify-content:flex-end}
   .drawer{width:460px;max-width:92vw;height:100%;background:var(--surface);box-shadow:-16px 0 44px rgba(16,24,40,.2);overflow-y:auto;animation:mc-slide .28s cubic-bezier(.4,0,.2,1) both}
@@ -284,6 +297,7 @@
     <button data-v="findings">Findings</button>
     <button data-v="models">Models</button>
     <button data-v="lakehouse">Lakehouse</button>
+    <button data-v="vocabulary">Vocabulary</button>
   </nav>
 </header>
 
@@ -310,6 +324,8 @@
         </div>
         <div class="chips" id="qachips"></div>
         <div id="qaout"></div>
+        <a class="suggest-link" id="suggestlink" href="https://github.com/jdinneen/mbal-mission-control/issues/new?template=suggest-question.yml" target="_blank" rel="noopener noreferrer">Have a scientific question we should investigate? Suggest one →</a>
+        <p class="suggest-note">Suggestions are candidate questions, not claims — each is reviewed before anything enters the research pipeline.</p>
       </div>
     </div>
 
@@ -387,6 +403,15 @@
       <div id="datasetrows"></div>
     </div>
   </section>
+
+  <!-- ===== VOCABULARY ===== -->
+  <section class="view" id="vocabulary">
+    <div style="margin-bottom:18px;max-width:760px">
+      <h1 class="sec">What kind of thing is this?</h1>
+      <p class="subhead">The lab is careful about words. An untrained XGBoost or neural net is a <b>learner</b>, not a model — it only becomes a <b>trained model</b> once it's fitted, evaluated, and registered. A <b>baseline</b> is an honest comparator, not a discovery. A histogram is a <b>lens</b>. This is the working vocabulary, with real examples from the registry and signal catalog.</p>
+    </div>
+    <div class="vocabgrid" id="vocabgrid"></div>
+  </section>
 </main>
 
 <div id="drawerhost"></div>
@@ -443,11 +468,11 @@ function hasCM(f){const m=f.metrics||{};return ['tp','fp','fn','tn'].every(k=>ty
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.v));
 function go(v){if(location.hash.slice(1)!==v)location.hash=v;else showView(v);}
 function showView(v){
-  if(!['overview','findings','models','lakehouse'].includes(v))v='overview';
+  if(!['overview','findings','models','lakehouse','vocabulary'].includes(v))v='overview';
   TAB=v; if(DETAIL){DETAIL=null;renderDrawer();}
   document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.v===v));
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id===v));
-  if(DATA){if(v==='findings')renderFindings();if(v==='models')renderModels();if(v==='lakehouse')renderLake();}
+  if(DATA){if(v==='findings')renderFindings();if(v==='models')renderModels();if(v==='lakehouse')renderLake();if(v==='vocabulary')renderVocabulary();}
   pv('/'+v,v);
 }
 let _lastPV=null;
@@ -648,6 +673,17 @@ function renderLake(){
     r.onclick=()=>{DETAIL={type:'dataset',store:r.dataset.t,idx:+r.dataset.i};renderDrawer();});
 }
 
+/* ---------- vocabulary ---------- */
+function renderVocabulary(){
+  const v=DATA.vocabulary||[];
+  $('#vocabgrid').innerHTML=v.map(c=>`<div class="vcard">
+    <div class="vk">${esc(c.key||'').replace(/_/g,' ')}</div>
+    <h3>${esc(c.label)}</h3>
+    <p class="vwhat">${esc(c.what)}</p>
+    <div class="vex">${(c.examples||[]).map(e=>`<span>${esc(e)}</span>`).join('')}</div>
+  </div>`).join('') || '<div class="lhempty">No vocabulary in this snapshot.</div>';
+}
+
 /* ---------- drawer ---------- */
 function renderDrawer(){
   const host=$('#drawerhost');
@@ -823,6 +859,12 @@ Kind/status: ${a.kind||''} / ${a.status||''}
 Rows: ${a.rows||''}
 Range: ${a.date_min||''} to ${a.date_max||''}
 Size MB: ${a.size_mb||''}`}));
+  (s.lab_memory||[]).forEach((c,i)=>addScienceDoc(docs,{kind:'lab_memory',rank:340-i,title:c.claim.slice(0,64),text:
+`Lab note [${c.kind}]: ${c.claim}
+Basis: ${c.basis||'lab notes'}`}));
+  (s.vocabulary||[]).forEach(v=>addScienceDoc(docs,{kind:'vocabulary',rank:150,title:v.label,text:
+`Concept — ${v.label}: ${v.what}
+Examples: ${(v.examples||[]).join('; ')}`}));
   (PROJECT_DOCS||[]).forEach(d=>addScienceDoc(docs,{kind:'project_doc',rank:220+(d.priority||0),title:d.title||d.path,text:
 `Project science doc: ${d.title||d.path}
 Path: ${d.path}
@@ -888,8 +930,21 @@ function askContext(question){
   L.push(`Snapshot status: ${s.overall_status||'unknown'}`);
   L.push(`Counts: findings=${(s.findings||[]).length}; positives=${(s.counts||{}).positive_findings||0}; caveated=${(s.counts||{}).caveated_findings||0}; nulls=${(s.counts||{}).null_findings||0}; models=${(s.models||[]).length}; claimable_models=${(s.counts||{}).claimable||0}`);
   L.push(`Project science notes indexed: ${askDocs().filter(d=>d.kind==='project_doc').length} chunks.`);
-  L.push('Top finding titles: '+safeFindings.slice(0,30).map(f=>`${f.title} [${f.kind}]`).join(' | '));
   L.push('');
+  L.push('GLOSSARY (use these to answer plainly): A "nowcast" estimates the risk of a water-quality exceedance for the next visit/day before the lab sample is back. A "baseline" is an honest comparator (e.g. station-memory = assume today behaves like its recent past). "AP" = average precision; "ROC-AUC" = ranking skill (0.5 = chance); "ECE" = calibration error (lower is better). Status: Supported = held up under audit; Caveated = real but limited; Null = tested, did not hold.');
+  L.push('');
+  // Only foreground headline metrics when the question is performance/quality-oriented,
+  // so unrelated questions (datasets, definitions) aren't biased toward the top findings.
+  const perfIntent=/\b(how\s+(good|well|accurate|strong|reliable)|perform|accuracy|score|skill|auc|precision|recall|f1|best|strongest|beat|better|lift|exceed|metric|result)\w*/i.test(question||'');
+  if(perfIntent){
+    L.push('HEADLINE RESULTS (the question is performance-oriented — use these exact numbers):');
+    safeFindings.slice(0,10).forEach(f=>{
+      const m=f.metrics||{};
+      const nums=['roc_auc','model_roc_auc','model_ap','operational_ap','margin_ap','ratio_vs_station_memory','best_lead_days','precision','recall','ece'].filter(k=>m[k]!=null).map(k=>`${k}=${m[k]}`).join(', ');
+      L.push(`- ${f.title} [${f.kind}]: ${f.headline||''}${nums?` (${nums})`:''}${f.plain?` — ${f.plain}`:''}`);
+    });
+    L.push('');
+  }
   L.push('RELEVANT PUBLISHED CONTEXT');
   selected.forEach((d,i)=>L.push(`### ${i+1}. ${d.kind}: ${d.title}\n${d.text}`));
   L.push('');
