@@ -114,9 +114,14 @@
   #suggestq{width:100%;min-height:74px;resize:vertical;appearance:none;background:#26282f;border:1px solid #3a3d46;border-radius:11px;padding:12px 14px;font-family:var(--sans);font-size:14.5px;line-height:1.5;color:#fff;outline:none;transition:border-color .15s}
   #suggestq:focus{border-color:var(--acc-bright)}
   .suggest-box .actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px}
+  #sugcontact{width:100%;margin-top:8px;appearance:none;background:#26282f;border:1px solid #3a3d46;border-radius:10px;padding:10px 13px;font-family:var(--sans);font-size:13.5px;color:#fff;outline:none;transition:border-color .15s}
+  #sugcontact:focus{border-color:var(--acc-bright)}
+  #sughoney{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
   #suggestbtn{appearance:none;border:none;cursor:pointer;background:var(--acc);color:#fff;border-radius:10px;padding:10px 18px;font-family:var(--sans);font-size:14px;font-weight:600;min-height:44px;transition:background .15s}
   #suggestbtn:hover{background:var(--acc-hover)}
+  #suggestbtn:disabled{opacity:.6;cursor:default}
   .suggest-box .signin{font-size:12px;color:#9097a0}
+  .suggest-ok{margin-top:11px;font-size:13.5px;line-height:1.5;color:#bfeae5;background:rgba(40,196,186,.1);border:1px solid rgba(40,196,186,.24);border-radius:9px;padding:10px 12px}
 
   /* ---- status / metrics panel ---- */
   .statpanel{overflow:hidden;margin-bottom:30px}
@@ -325,6 +330,7 @@
   <nav class="tabs">
     <button data-v="overview" class="active">Overview</button>
     <button data-v="findings">Findings</button>
+    <button data-v="frontiers">Frontiers</button>
     <button data-v="models">Models</button>
     <button data-v="lakehouse">Lakehouse</button>
     <button data-v="vocabulary">Vocabulary</button>
@@ -358,10 +364,13 @@
           <div class="sl"><i></i><span>Suggest a question</span></div>
           <p class="help">Have a scientific question we should investigate? Write it however you like — a quick one line, or as detailed as you want (target, data, signal, baseline). <b>Examples:</b> “Does antecedent soil moisture warn of beach-bacteria exceedances earlier than rainfall?” · “Test pseudo-nitzschia as a domoic-acid signal — does it beat persistence?”</p>
           <textarea id="suggestq" placeholder="e.g. Does river discharge predict bacteria exceedances better than rainfall alone, beating a station-memory baseline?"></textarea>
+          <input id="sugcontact" type="email" autocomplete="off" placeholder="Your email (optional — only if you'd like a reply)"/>
+          <input id="sughoney" tabindex="-1" autocomplete="off" aria-hidden="true"/>
           <div class="actions">
-            <button id="suggestbtn" onclick="submitSuggestion()">Suggest →</button>
-            <span class="signin">Opens GitHub in a new tab (sign-in required) — you stay on this page. A candidate question, not a claim; reviewed before anything runs.</span>
+            <button id="suggestbtn" onclick="submitSuggestion()">Send question →</button>
+            <span class="signin">No account or sign-in needed — it's emailed straight to the lab and you stay on this page. A candidate question, not a claim; reviewed before anything runs.</span>
           </div>
+          <div id="suggest-result"></div>
         </div>
       </div>
     </div>
@@ -403,6 +412,15 @@
     </div>
     <div class="filterbar" id="filterbar"></div>
     <div class="fgrid" id="fgrid"></div>
+  </section>
+
+  <!-- ===== FRONTIERS ===== -->
+  <section class="view" id="frontiers">
+    <div style="margin-bottom:18px;max-width:760px">
+      <h1 class="sec">Frontiers</h1>
+      <p class="subhead">Everything the lab has taken on — across beaches, shellfish toxins, low-oxygen water, lakes, whales, floods, and the shared physics "language" that ports a model from one place to another. Wins, caveats, and honest nulls all on the record. Click any card to drill in.</p>
+    </div>
+    <div class="fgrid" id="frontiergrid"></div>
   </section>
 
   <!-- ===== MODELS ===== -->
@@ -505,11 +523,11 @@ function hasCM(f){const m=f.metrics||{};return ['tp','fp','fn','tn'].every(k=>ty
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.v));
 function go(v){if(location.hash.slice(1)!==v)location.hash=v;else showView(v);}
 function showView(v){
-  if(!['overview','findings','models','lakehouse','vocabulary'].includes(v))v='overview';
+  if(!['overview','findings','frontiers','models','lakehouse','vocabulary'].includes(v))v='overview';
   TAB=v; if(DETAIL){DETAIL=null;renderDrawer();}
   document.querySelectorAll('nav.tabs button').forEach(b=>{const on=b.dataset.v===v;b.classList.toggle('active',on);if(on&&b.scrollIntoView)try{b.scrollIntoView({inline:'center',block:'nearest'});}catch(e){}});
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id===v));
-  if(DATA){if(v==='findings')renderFindings();if(v==='models')renderModels();if(v==='lakehouse')renderLake();if(v==='vocabulary')renderVocabulary();}
+  if(DATA){if(v==='findings')renderFindings();if(v==='frontiers')renderFrontiers();if(v==='models')renderModels();if(v==='lakehouse')renderLake();if(v==='vocabulary')renderVocabulary();}
   pv('/'+v,v);
 }
 let _lastPV=null;
@@ -721,6 +739,42 @@ function renderVocabulary(){
   </div>`).join('') || '<div class="lhempty">No vocabulary in this snapshot.</div>';
 }
 
+/* ---------- frontiers (all hazards + methods, drill-down) ---------- */
+function frontierBadge(st){return STATUS_BADGE[st]||{bg:'#eaf1fb',text:'#3a6ea5'};}
+function renderFrontiers(){
+  const ts=DATA.targets||[];
+  $('#frontiergrid').innerHTML=ts.map((t,i)=>{
+    const b=frontierBadge(t.status); const kind=t.kind==='method'?'Method':'Hazard';
+    const p=(t.plain||'');
+    return `<div class="fcard" data-i="${i}">
+      <div class="toprow">
+        <span class="topic">${esc(kind)}</span>
+        <span class="badge" style="background:${b.bg};color:${b.text}"><i style="background:${b.text}"></i>${esc(t.status)}</span>
+      </div>
+      <h3>${esc(t.label)}</h3>
+      ${t.question?`<p class="plain" style="font-style:italic;color:var(--ink4);margin:0 0 8px">${esc(t.question)}</p>`:''}
+      <p class="plain">${esc(p.slice(0,184))}${p.length>184?'…':''}</p>
+      <div class="ffoot"><span class="mean">${esc(STATUS_MEANING[t.status]||'Kept on the record')}</span><span class="cta">Drill in →</span></div>
+    </div>`;
+  }).join('') || '<div class="lhempty">No research targets in this snapshot.</div>';
+  document.querySelectorAll('#frontiergrid .fcard').forEach(c=>c.onclick=()=>{DETAIL={type:'target',idx:+c.dataset.i};renderDrawer();});
+}
+function targetDrawer(){
+  const t=(DATA.targets||[])[DETAIL.idx]; if(!t)return '';
+  const b=frontierBadge(t.status); const kind=t.kind==='method'?'Method':'Research target';
+  return `<div>
+    <div class="dhead">
+      <div><div class="eb">${esc(kind)}</div><div class="ti">${esc(t.label)}</div>${t.question?`<div class="nt">${esc(t.question)}</div>`:''}</div>
+      <button class="dclose" onclick="closeDrawer()">×</button>
+    </div>
+    <div class="dbody">
+      <span class="badge" style="background:${b.bg};color:${b.text};margin-bottom:16px"><i style="background:${b.text}"></i>${esc(t.status)}</span>
+      <p class="plain">${esc(t.plain||'')}</p>
+      ${t.detail?`<div class="dlabel">The detail</div><p class="plain" style="font-size:14.5px;color:var(--ink2)">${esc(t.detail)}</p>`:''}
+    </div>
+  </div>`;
+}
+
 /* ---------- drawer ---------- */
 function renderDrawer(){
   const host=$('#drawerhost');
@@ -728,6 +782,7 @@ function renderDrawer(){
   let inner='';
   if(DETAIL.type==='model') inner=modelDrawer(DATA.models[DETAIL.idx]);
   else if(DETAIL.type==='dataset') inner=datasetDrawer();
+  else if(DETAIL.type==='target') inner=targetDrawer();
   host.innerHTML=`<div class="backdrop" id="backdrop"><div class="drawer" id="drawer">${inner}</div></div>`;
   $('#backdrop').onclick=closeDrawer;
   $('#drawer').onclick=e=>e.stopPropagation();
@@ -896,6 +951,10 @@ Kind/status: ${a.kind||''} / ${a.status||''}
 Rows: ${a.rows||''}
 Range: ${a.date_min||''} to ${a.date_max||''}
 Size MB: ${a.size_mb||''}`}));
+  (s.targets||[]).forEach((t,i)=>addScienceDoc(docs,{kind:'target',rank:360-i,title:t.label,text:
+`Research frontier/target: ${t.label} [status: ${t.status}]
+Question: ${t.question||''}
+Summary: ${t.plain||''}${t.detail?('\nDetail: '+t.detail):''}`}));
   (s.lab_memory||[]).forEach((c,i)=>addScienceDoc(docs,{kind:'lab_memory',rank:340-i,title:c.claim.slice(0,64),text:
 `Lab note [${c.kind}]: ${c.claim}
 Basis: ${c.basis||'lab notes'}`}));
@@ -928,7 +987,7 @@ function scoreDoc(doc,qTokens,qLower){let score=(doc.rank||0)/20;const hay=(doc.
   return score;}
 function topDocTitles(question,n=3){
   const qLower=String(question||'').toLowerCase(),qTokens=tokenSet(question);
-  const sect={finding:'Findings',model:'Models',gate:'Gates',data_asset:'Lakehouse',project_doc:'Docs',dataset:'Lakehouse',vocabulary:'Vocabulary',lab_memory:'Lab notes'};
+  const sect={finding:'Findings',model:'Models',gate:'Gates',data_asset:'Lakehouse',project_doc:'Docs',dataset:'Lakehouse',vocabulary:'Vocabulary',lab_memory:'Lab notes',target:'Frontiers'};
   const ranked=askDocs().map(d=>({...d,score:scoreDoc(d,qTokens,qLower),hits:[...qTokens].filter(t=>(d.title+' '+d.text).toLowerCase().includes(t)).length}))
     .filter(d=>d.hits>0).sort((a,b)=>b.score-a.score);
   const out=[],seen=new Set();
@@ -993,6 +1052,9 @@ function askContext(question){
   L.push('- Finding: a promoted scientific statement — only after leakage, baseline, and bootstrap/null checks pass.');
   L.push('Also: a "nowcast" estimates next-visit exceedance risk before the lab sample is back. "AP" = average precision; "ROC-AUC" = ranking skill (0.5 = chance); "ECE" = calibration error (lower better). Status: Supported = held under audit; Caveated = real but limited; Null = tested, did not hold.');
   L.push('');
+  L.push('RESEARCH FRONTIERS — every hazard and method the lab has worked on (use these for "what about X / have you done Y / whales / interlingua / hypoxia / cyano / floods"):');
+  (s.targets||[]).forEach(t=>L.push(`- ${t.label} [${t.status}]: ${t.plain||''}`));
+  L.push('');
   // Only foreground headline metrics when the question is performance/quality-oriented,
   // so unrelated questions (datasets, definitions) aren't biased toward the top findings.
   const perfIntent=/\b(how\s+(good|well|accurate|strong|reliable)|perform|accuracy|score|skill|auc|precision|recall|f1|best|strongest|beat|better|lift|exceed|metric|result)\w*/i.test(question||'');
@@ -1024,6 +1086,7 @@ async function askData(){
   if(hasOutOfScopeTopic(q)){showAns('● answered locally · science boundary',scienceBoundaryAnswer());return;}
   if(isProjectAboutQuestion(q)){showAns('● answered locally · project overview',projectAboutAnswer(),['Overview']);return;}
   const cv=vocabularyAnswer(q); if(cv){showAns('● answered locally · vocabulary',cv,['Vocabulary']);return;}
+  const fa=frontierAnswer(q); if(fa){showAns('● answered locally · research frontiers',fa,['Frontiers']);return;}
   const sources=topDocTitles(q);
   if(!PROXY_URL){showAns('● answered locally · published evidence',localEvidenceAnswer(q),sources);return;}
   btn.disabled=true; showLoading();
@@ -1074,15 +1137,62 @@ function vocabularyAnswer(q){
     head="In plain words: these are different kinds of thing in the lab's vocabulary — here is each one.";
   return `${head}\n\n${defs}`;
 }
-/* simple on-page suggestion composer → opens a prefilled GitHub issue in a NEW tab (you stay here) */
-function submitSuggestion(){
-  const t=($('#suggestq')&&$('#suggestq').value||'').trim();
-  if(!t){if($('#suggestq'))$('#suggestq').focus();return;}
+/* deterministic answer for hazard / frontier / interlingua questions, straight from DATA.targets */
+function frontierAnswer(q){
+  const n=String(q||'').toLowerCase(); const ts=(DATA&&DATA.targets)||[]; if(!ts.length)return null;
+  const km={
+    whale_mortality:/\bwhale|whales|cetacean|dolphin|stranding|mortalit/,
+    interlingua:/interlingua|pi.?group|π.?group|zero.?shot|shared (physics )?language|dimensionless/,
+    hypoxia_lead:/hypoxia|hypoxic|low.?oxygen|dissolved.?oxygen|anoxic|\boxygen\b/,
+    renewal_onset:/renewal|fjord|re.?oxygenat/,
+    cyano_onset:/cyano|cyanobacter|lake.?bloom|freshwater bloom/,
+    domoic_acid:/domoic|shellfish.?toxin|razor.?clam|pseudo.?nitzschia|\bhab\b|harmful.?alga/,
+    sfbay_compound_flood:/\bflood|sea.?level|coastal.?flood|compound (flood|event)/,
+    sea_star_kelp_ecosystem:/sea.?star|starfish|\bkelp\b|wasting/,
+    cross_country_transfer:/cross.?countr|\bireland\b|\baustralia\b|port (it|the model)|abroad/,
+    bacteria_exceedance:/enterococc|\bfib\b|beach.?(water|day)|\bbeach bacteria|(?:^|[^o])bacteria\b/
+  };
+  let matched=ts.filter(t=>km[t.id]&&km[t.id].test(n));
+  // "cyanobacteria" contains "bacteria" — if cyano matched, it's not the beach-bacteria target
+  if(matched.some(t=>t.id==='cyano_onset')) matched=matched.filter(t=>t.id!=='bacteria_exceedance');
+  // a specific hazard/method always wins over the broad overview
+  if(matched.length) return 'In plain words:\n\n'+matched.map(t=>`${t.label} [${t.status}]: ${t.plain}${t.detail?('\n\n'+t.detail):''}`).join('\n\n');
+  // no specific hazard named — answer the broad "what have you worked on / everything" question
+  if(/\b(everything|all (the )?(hazards|topics|frontiers|targets|work)|what (have|did|has) (you|we|the lab|it)|what.*work(ed)? on|breadth|full (list|range)|other (hazards|work)|how many (hazards|things|topics))\b/.test(n))
+    return 'In plain words: the lab works across many coastal hazards plus one shared method — wins, caveats, and honest nulls all kept on the record:\n\n'+ts.map(t=>`• ${t.label} [${t.status}]: ${t.plain}`).join('\n\n');
+  return null;
+}
+/* simple on-page suggestion composer → emails the lab (no account/sign-in), stays on this page */
+async function submitSuggestion(){
+  const ta=$('#suggestq'); const q=(ta&&ta.value||'').trim();
+  const res=$('#suggest-result');
+  if(!q){if(ta)ta.focus();return;}
+  if($('#sughoney')&&$('#sughoney').value){return;} // honeypot tripped → silently drop bot
+  const contact=($('#sugcontact')&&$('#sugcontact').value||'').trim();
+  const to=['jon.dinneen','gmail.com'].join('@'); // assembled at runtime so it isn't plain-text in source
+  const btn=$('#suggestbtn'); const old=btn?btn.textContent:''; if(btn){btn.disabled=true;btn.textContent='Sending…';}
+  if(res)res.innerHTML='';
   if(window.gtag)gtag('event','suggest_question',{});
-  const title='[suggestion] '+t.split('\n')[0].slice(0,70);
-  const body=t+'\n\n---\nSubmitted via Mission Control. A candidate question, not a claim — reviewed before anything runs.';
-  const url='https://github.com/jdinneen/mbal-mission-control/issues/new?title='+encodeURIComponent(title)+'&body='+encodeURIComponent(body);
-  window.open(url,'_blank','noopener,noreferrer');
+  try{
+    const r=await fetch('https://formsubmit.co/ajax/'+encodeURIComponent(to),{
+      method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({
+        _subject:'[Mission Control] New research-question suggestion',
+        _template:'table',_captcha:'false',
+        question:q, contact:contact||'(none provided)',
+        note:'Candidate question submitted via Mission Control — not a claim; reviewed before anything runs.'
+      })
+    });
+    let ok=r.ok; try{const j=await r.json();ok=ok&&(j.success===true||j.success==='true');}catch(e){}
+    if(ok){
+      if(res)res.innerHTML='<div class="suggest-ok">✓ Thanks — your question was sent to the lab and will be reviewed. Nothing runs automatically.</div>';
+      if(ta)ta.value=''; if($('#sugcontact'))$('#sugcontact').value='';
+    } else { throw new Error('send failed'); }
+  }catch(e){
+    const mb='mailto:'+to+'?subject='+encodeURIComponent('Mission Control question')+'&body='+encodeURIComponent(q+(contact?('\n\nReply to: '+contact):''));
+    if(res)res.innerHTML='<div class="suggest-ok">Couldn’t send automatically — <a href="'+mb+'" style="color:#5fe0d6;font-weight:600">email it instead →</a></div>';
+  }
+  if(btn){btn.disabled=false;btn.textContent=old;}
 }
 window.addEventListener('DOMContentLoaded',()=>{const i=$('#askq');if(i)i.addEventListener('keydown',e=>{if(e.key==='Enter')askData();});});
 load();

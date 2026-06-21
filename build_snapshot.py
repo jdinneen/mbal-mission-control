@@ -1269,10 +1269,53 @@ def _build_vocabulary():
     ]
 
 
+def _build_targets():
+    """Every hazard/target the lab has actually worked on — the multi-hazard breadth that
+    the bacteria-centric `findings` list alone does not convey. Curated from the signal
+    catalog's target ledger (signals/catalog.yaml meta.targets) + finding reports, with
+    HONEST status (the failures and nulls are kept on the record, not hidden).
+    status: Supported | Caveated | Null | Exploratory.
+    """
+    return [
+        {"id": "bacteria_exceedance", "label": "Beach bacteria exceedance", "status": "Supported",
+         "question": "Will a beach exceed the AB411 enterococcus standard (>104 MPN/100 mL)?",
+         "plain": "Our strongest result: a statewide nowcast at AP 0.5099 / ROC-AUC 0.868, calibrated, independently audited, out-of-time stable 2022–2026, and deploy-ready in 8 of 9 counties — beating station-memory, seasonal-naive, and the AB411 rain rule."},
+        {"id": "domoic_acid", "label": "Domoic-acid shellfish toxin", "status": "Caveated",
+         "question": "Will a pier's next sample exceed particulate domoic acid 500 ng/L?",
+         "plain": "Suggestive, not established: about a week of lead in some seasons (AP 0.203, ROC-AUC 0.842, permutation-p 0.005 so the ranking is real), but the station-clustered bootstrap CI crosses zero and it is underpowered (17 piers). The old '~10× over C-HARM' framing was a broken-baseline mirage — C-HARM is sub-random at pier points."},
+        {"id": "cross_country_transfer", "label": "Cross-country zero-shot transfer", "status": "Caveated",
+         "question": "Can a label-free model rank bacteria exceedance in a country with no local training labels?",
+         "plain": "Real but modest: non-dimensional physics groups transfer US↔Ireland zero-shot at AP ~0.136 (~1.9× over a matched-prevalence baseline) and to Australia, but the regional-transfer story softens under tougher held-out audits."},
+        {"id": "hypoxia_lead", "label": "Coastal hypoxia (low oxygen) lead", "status": "Supported",
+         "question": "Will bottom water go hypoxic (DO ≤ 2 mg/L) 7–14 days ahead?",
+         "plain": "The driver-null's first clean escape: thermal stratification adds +0.021 AP of real lead-skill over persistence+season and survives a permutation null (p=0.005); wind, salinity, and chlorophyll wash out."},
+        {"id": "renewal_onset", "label": "Fjord oxygen-renewal onset", "status": "Supported",
+         "question": "Will a dense-water renewal re-oxygenate an anoxic fjord within ~3 weeks?",
+         "plain": "Deep-water density gives +0.08 AP of renewal-onset lead-skill that is year-robust at ~21-day lead — the slow-driver principle partially transfers to a second basin once the carrier and objective match the physics."},
+        {"id": "cyano_onset", "label": "Lake cyanobacteria bloom onset", "status": "Caveated",
+         "question": "When will a lake's cyanobacteria bloom season start?",
+         "plain": "A national onset-triage allocator over ~2,200 lakes gives a real but modest capture gain (+4–5.5% when 10–50% of lakes are sampled) over a lake-memory baseline; the driver-null holds — no strong meteorological driver. Antecedent winter weather explains only a small, clean part of the year-to-year onset shift."},
+        {"id": "whale_mortality", "label": "Whale (cetacean) mortality", "status": "Null",
+         "question": "Do prior ocean drivers predict California whale mortality beyond seasonal climatology?",
+         "plain": "We reconstructed the 2019–2023 gray-whale die-off from citizen-science (iNaturalist) records and tested prey-collapse, climate, and domoic-acid pathways. Honest result: the prey-collapse link (krill, rockfish) is SUGGESTIVE but NOT robust — it fails a 17-year cluster bootstrap — and the domoic-acid→death link does not hold. The ecology/mortality lane is largely signal-poor; we keep it on the record as an open frontier, not a win."},
+        {"id": "sea_star_kelp_ecosystem", "label": "Sea-star wasting / kelp ecosystem", "status": "Exploratory",
+         "question": "Can ocean drivers explain sea-star wasting and kelp-forest ecosystem shifts?",
+         "plain": "An exploratory cross-dataset lane in the ecology/mortality family; like whale mortality, the early ecology correlations have been hard to make survive strict cross-validation."},
+        {"id": "sfbay_compound_flood", "label": "SF Bay compound coastal flood", "status": "Null",
+         "question": "Will SF Bay see an extreme still-water-level (coastal-flood) day, and is it compound (rain + tide/surge)?",
+         "plain": "A driver-lift wash: the free harmonic tide table alone is the best naive predictor (AP 0.223 / AUROC 0.945); adding weather/runoff drivers (AP 0.294) is NOT CI-separated from tide-only, so there is no demonstrated driver lift yet."},
+        {"id": "interlingua", "label": "Interlingua — a shared physics language", "status": "Caveated", "kind": "method",
+         "question": "Can different regions' coastal data be re-encoded onto one physics 'language' that transfers without local labels?",
+         "plain": "Yes — and the surprise is that the winner is hand-built non-dimensional π-groups (Buckingham-π), not learned neural encoders. The same physics coordinates let a model trained in one place rank dirty-water days in another zero-shot (US↔Ireland AP ~0.136, ~1.9–2.25× over a matched-prevalence baseline; it also transfers to Australia).",
+         "detail": "We re-encoded everything onto a label-free physics manifold and raced learned encoders against hand-built π-groups. The π-groups won — they beat the learned Koopman / self-supervised / Gromov–Wasserstein encoders and survive 50 permutation nulls, so physics, not a bigger model, is the shared language. A deeper information-theoretic analysis then measured the honest ceiling: our interlingua channels carry essentially zero genuine governing dimensionless numbers (the 'π-groups' are normalized quantities), so the real bottleneck is substrate poverty — too few independent physical channels — not the method. The portable axis is low UV-dose. And the manifold is NOT universal across hazards (a bacteria language does not carry to domoic acid), so it is a shared coordinate system per signal, not one universal vector. The cheapest keyless enrichment identified is adding a length+time pair (tide period + water depth)."},
+    ]
+
+
 def main():
     state = _augment_state(_base_state())
     state["lab_memory"] = _build_lab_memory()
     state["vocabulary"] = _build_vocabulary()
+    state["targets"] = _build_targets()
 
     # bundle the evidence JSON each finding/model points at (so drill-downs work offline)
     evidence = {}
