@@ -12,6 +12,15 @@
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Monterey Bay AI Lab — Mission Control</title>
+<meta name="description" content="A public science snapshot from the Monterey Bay AI Lab: what we've tested to forecast rare coastal water-quality events, what held up under audit, and what didn't — every claim tied to real evidence, with the failures kept on the record."/>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f8a84'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E"/>
+<meta property="og:type" content="website"/>
+<meta property="og:title" content="Monterey Bay AI Lab — Mission Control"/>
+<meta property="og:description" content="A public science snapshot: what we've tested to forecast rare coastal water-quality events, what held up under audit, and what didn't — evidence first, failures on the record."/>
+<meta property="og:url" content="https://jdinneen.github.io/mbal-mission-control/"/>
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Monterey Bay AI Lab — Mission Control"/>
+<meta name="twitter:description" content="A public science snapshot: what held up under audit, what didn't, every claim tied to real evidence."/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -29,7 +38,7 @@
   }
   *{box-sizing:border-box}
   html,body{margin:0}
-  body{background:var(--bg);font-family:var(--sans);-webkit-font-smoothing:antialiased;color:var(--ink);font-size:15px;line-height:1.5}
+  body{background:var(--bg);font-family:var(--sans);-webkit-font-smoothing:antialiased;color:var(--ink);font-size:15px;line-height:1.5;overflow-x:clip}
   ::selection{background:#c9ebe7}
   .mono{font-family:var(--mono)}
   a{color:var(--acc);text-decoration:none}
@@ -90,11 +99,24 @@
   .qaload{margin-top:18px;display:flex;align-items:center;gap:11px;color:#8c929a;font-size:14px}
   .qaload i{width:16px;height:16px;border:2px solid #3a3d46;border-top-color:var(--acc-bright);border-radius:50%;animation:mc-spin .7s linear infinite;display:inline-block}
   .qaans{margin-top:18px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);border-radius:13px;padding:18px 19px;animation:mc-rise .3s ease both}
-  .qaans .who{font-family:var(--mono);font-size:11px;color:#6f757d;margin-bottom:8px;display:flex;gap:8px;align-items:center}
-  .qaans .txt{margin:0 0 13px;font-size:15.5px;line-height:1.6;color:#e9ecef;text-wrap:pretty;white-space:pre-wrap}
-  .qaans .ground{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.08);padding-top:12px}
-  .qaans .ground .g{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#6f757d}
-  .qaans .ground .s{font-family:var(--mono);font-size:11.5px;color:var(--acc-bright);background:rgba(40,196,186,.1);border-radius:6px;padding:3px 8px}
+  .qaans .who{font-family:var(--mono);font-size:11.5px;color:#aeb4bb;margin-bottom:8px;display:flex;gap:8px;align-items:center}
+  .qaans .txt{margin:0 0 13px;font-size:15.5px;line-height:1.6;color:#f2f4f6;text-wrap:pretty;white-space:pre-wrap}
+  .qaans .ground{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.12);padding-top:12px}
+  .qaans .ground .g{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#aeb4bb}
+  .qaans .ground .s{font-family:var(--mono);font-size:11.5px;color:#5fe0d6;background:rgba(40,196,186,.18);border:1px solid rgba(40,196,186,.28);border-radius:6px;padding:3px 8px}
+  /* simple suggestion composer (on-page, stays here) */
+  .suggest-box{margin-top:18px;border-top:1px solid rgba(255,255,255,.12);padding-top:16px}
+  .suggest-box .sl{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+  .suggest-box .sl i{width:6px;height:6px;border-radius:50%;background:var(--acc-bright)}
+  .suggest-box .sl span{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--acc-bright)}
+  .suggest-box .help{margin:0 0 10px;font-size:13.5px;line-height:1.5;color:#b9bfc6}
+  .suggest-box .help b{color:#dfe3e7;font-weight:600}
+  #suggestq{width:100%;min-height:74px;resize:vertical;appearance:none;background:#26282f;border:1px solid #3a3d46;border-radius:11px;padding:12px 14px;font-family:var(--sans);font-size:14.5px;line-height:1.5;color:#fff;outline:none;transition:border-color .15s}
+  #suggestq:focus{border-color:var(--acc-bright)}
+  .suggest-box .actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px}
+  #suggestbtn{appearance:none;border:none;cursor:pointer;background:var(--acc);color:#fff;border-radius:10px;padding:10px 18px;font-family:var(--sans);font-size:14px;font-weight:600;min-height:44px;transition:background .15s}
+  #suggestbtn:hover{background:var(--acc-hover)}
+  .suggest-box .signin{font-size:12px;color:#9097a0}
 
   /* ---- status / metrics panel ---- */
   .statpanel{overflow:hidden;margin-bottom:30px}
@@ -218,9 +240,6 @@
   .vcard .vwhat{margin:0 0 14px;font-size:14px;line-height:1.55;color:var(--ink3);text-wrap:pretty}
   .vcard .vex{display:flex;flex-wrap:wrap;gap:7px;border-top:1px solid var(--faint2);padding-top:13px}
   .vcard .vex span{font-family:var(--mono);font-size:11.5px;color:var(--ink2);background:var(--faint3);border:1px solid var(--border);border-radius:7px;padding:4px 9px}
-  .suggest-link{display:inline-flex;align-items:center;gap:6px;margin-top:14px;font-size:13px;font-weight:600;color:var(--acc-bright);text-decoration:none}
-  .suggest-link:hover{color:#5fe0d6}
-  .suggest-note{margin:6px 0 0;font-size:12px;color:#7d838b}
 
   /* ---- drawer ---- */
   .backdrop{position:fixed;inset:0;z-index:100;background:rgba(16,24,40,.34);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);animation:mc-fade .2s ease both;display:flex;justify-content:flex-end}
@@ -268,11 +287,22 @@
     .m-grid .hide-sm,.d-grid .hide-sm{display:none}
     .thead{display:none}
     .snappill .b{display:none}
+    .brand{min-width:0}
+    .brand .name,.brand .eyebrow{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    /* Ask + Suggest usable on small screens */
+    .hero .row{flex-direction:column}
+    #askq{min-width:0;width:100%}
+    #askbtn{width:100%;min-height:44px;justify-content:center}
+    /* surface Vocabulary (a core explanatory page) before Lakehouse on mobile */
+    nav.tabs button[data-v="vocabulary"]{order:4}
+    nav.tabs button[data-v="lakehouse"]{order:5}
   }
   @media (max-width:480px){
     .metrics{grid-template-columns:1fr}
     .metric{border-right:none!important;border-bottom:1px solid var(--faint)}
     .insetgrid{grid-template-columns:1fr}
+    .vocabgrid{grid-template-columns:1fr}
+    .snappill{display:none}
   }
 </style>
 </head>
@@ -324,8 +354,15 @@
         </div>
         <div class="chips" id="qachips"></div>
         <div id="qaout"></div>
-        <a class="suggest-link" id="suggestlink" href="https://github.com/jdinneen/mbal-mission-control/issues/new?template=suggest-question.yml" target="_blank" rel="noopener noreferrer">Have a scientific question we should investigate? Suggest one →</a>
-        <p class="suggest-note">Suggestions are candidate questions, not claims — each is reviewed before anything enters the research pipeline.</p>
+        <div class="suggest-box">
+          <div class="sl"><i></i><span>Suggest a question</span></div>
+          <p class="help">Have a scientific question we should investigate? Write it however you like — a quick one line, or as detailed as you want (target, data, signal, baseline). <b>Examples:</b> “Does antecedent soil moisture warn of beach-bacteria exceedances earlier than rainfall?” · “Test pseudo-nitzschia as a domoic-acid signal — does it beat persistence?”</p>
+          <textarea id="suggestq" placeholder="e.g. Does river discharge predict bacteria exceedances better than rainfall alone, beating a station-memory baseline?"></textarea>
+          <div class="actions">
+            <button id="suggestbtn" onclick="submitSuggestion()">Suggest →</button>
+            <span class="signin">Opens GitHub in a new tab (sign-in required) — you stay on this page. A candidate question, not a claim; reviewed before anything runs.</span>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -470,7 +507,7 @@ function go(v){if(location.hash.slice(1)!==v)location.hash=v;else showView(v);}
 function showView(v){
   if(!['overview','findings','models','lakehouse','vocabulary'].includes(v))v='overview';
   TAB=v; if(DETAIL){DETAIL=null;renderDrawer();}
-  document.querySelectorAll('nav.tabs button').forEach(b=>b.classList.toggle('active',b.dataset.v===v));
+  document.querySelectorAll('nav.tabs button').forEach(b=>{const on=b.dataset.v===v;b.classList.toggle('active',on);if(on&&b.scrollIntoView)try{b.scrollIntoView({inline:'center',block:'nearest'});}catch(e){}});
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id===v));
   if(DATA){if(v==='findings')renderFindings();if(v==='models')renderModels();if(v==='lakehouse')renderLake();if(v==='vocabulary')renderVocabulary();}
   pv('/'+v,v);
@@ -879,10 +916,19 @@ Size MB: ${d.size_mb||''}
 Source: ${d.source||''}`})));
   return docs;
 }
-function scoreDoc(doc,qTokens,qLower){let score=(doc.rank||0)/20;const hay=(doc.title+' '+doc.text).toLowerCase();qTokens.forEach(t=>{if(hay.includes(t))score+=25;if((doc.title||'').toLowerCase().includes(t))score+=40;});if(qLower&&hay.includes(qLower.slice(0,80)))score+=120;return score;}
+// terms that signal a vocabulary/concept question, and the "what kind of thing" intent
+const VOCAB_TERMS=/\b(learner|discovery engine|trained model|model card|models?|signal|feature|target|label|baseline|nulls?|representation|diagnostic|lens|histogram|finding|source dataset|datasets?|xgboost|catboost|lightgbm|hgbt|neural net(work)?|tabpfn|synchrony)\b/i;
+const CONCEPT_INTENT=/\b(what('?s| is| are)?|whats|difference between|differ|vs\.?|versus|define|definition|meaning|mean by|explain|kind of thing|categor|terminolog|glossary)\b/i;
+function isConceptQuestion(q){return CONCEPT_INTENT.test(q||'')&&VOCAB_TERMS.test(q||'');}
+function scoreDoc(doc,qTokens,qLower){let score=(doc.rank||0)/20;const hay=(doc.title+' '+doc.text).toLowerCase();qTokens.forEach(t=>{if(hay.includes(t))score+=25;if((doc.title||'').toLowerCase().includes(t))score+=40;});if(qLower&&hay.includes(qLower.slice(0,80)))score+=120;
+  // boost vocabulary above generic project docs for definition/concept queries
+  if(doc.kind==='vocabulary'&&isConceptQuestion(qLower))score+=300;
+  // boost lab notes for "what have we done / learned / mission" queries
+  if(doc.kind==='lab_memory'&&/\b(what (have|did) (we|you)|done|learned|learning|mission|goal|trying to|rejected|killed|open question|frontier)\b/i.test(qLower))score+=120;
+  return score;}
 function topDocTitles(question,n=3){
   const qLower=String(question||'').toLowerCase(),qTokens=tokenSet(question);
-  const sect={finding:'Findings',model:'Models',gate:'Gates',data_asset:'Lakehouse',project_doc:'Docs',dataset:'Lakehouse'};
+  const sect={finding:'Findings',model:'Models',gate:'Gates',data_asset:'Lakehouse',project_doc:'Docs',dataset:'Lakehouse',vocabulary:'Vocabulary',lab_memory:'Lab notes'};
   const ranked=askDocs().map(d=>({...d,score:scoreDoc(d,qTokens,qLower),hits:[...qTokens].filter(t=>(d.title+' '+d.text).toLowerCase().includes(t)).length}))
     .filter(d=>d.hits>0).sort((a,b)=>b.score-a.score);
   const out=[],seen=new Set();
@@ -922,7 +968,11 @@ function askContext(question){
   const s=DATA||{},qLower=String(question||'').toLowerCase(),qTokens=tokenSet(question);
   const docs=askDocs().map(d=>({...d,score:scoreDoc(d,qTokens,qLower)})).sort((a,b)=>b.score-a.score);
   const projectQuery=/\b(project|repo|repository|github|readme|about|overview|reproduce|reproduction|install|run|commands?|data|architecture|pipeline|model suite)\b/i.test(question||'');
-  const forced=projectQuery?docs.filter(d=>d.kind==='project_doc'&&/Path: (README\.md|DATA\.md|MODEL_SUITE\.md|research\/bacteria\/reproduce\/REPRODUCE\.md)/.test(d.text)).slice(0,8):[];
+  const conceptQuery=isConceptQuestion(question);
+  const forcedProj=projectQuery?docs.filter(d=>d.kind==='project_doc'&&/Path: (README\.md|DATA\.md|MODEL_SUITE\.md|research\/bacteria\/reproduce\/REPRODUCE\.md)/.test(d.text)).slice(0,8):[];
+  // force ALL vocabulary cards into context for any concept/definition question
+  const forcedVocab=conceptQuery?docs.filter(d=>d.kind==='vocabulary'):[];
+  const forced=[...forcedVocab,...forcedProj];
   const selected=[...forced,...docs.filter(d=>!forced.includes(d))].slice(0,24);
   const safeFindings=(s.findings||[]).filter(f=>!hasOutOfScopeTopic(`${f.title||''} ${f.plain||''} ${f.how||''} ${f.note||''}`));
   const L=[];
@@ -931,7 +981,17 @@ function askContext(question){
   L.push(`Counts: findings=${(s.findings||[]).length}; positives=${(s.counts||{}).positive_findings||0}; caveated=${(s.counts||{}).caveated_findings||0}; nulls=${(s.counts||{}).null_findings||0}; models=${(s.models||[]).length}; claimable_models=${(s.counts||{}).claimable||0}`);
   L.push(`Project science notes indexed: ${askDocs().filter(d=>d.kind==='project_doc').length} chunks.`);
   L.push('');
-  L.push('GLOSSARY (use these to answer plainly): A "nowcast" estimates the risk of a water-quality exceedance for the next visit/day before the lab sample is back. A "baseline" is an honest comparator (e.g. station-memory = assume today behaves like its recent past). "AP" = average precision; "ROC-AUC" = ranking skill (0.5 = chance); "ECE" = calibration error (lower is better). Status: Supported = held up under audit; Caveated = real but limited; Null = tested, did not hold.');
+  L.push('GLOSSARY — the lab vocabulary (use this to answer "what is X" / "difference between X and Y" questions directly):');
+  L.push('- Source dataset: raw, joinable evidence we collect (e.g. rainfall, tides, mooring data). Not a model.');
+  L.push('- Target / label: the thing being explained or predicted (e.g. bacteria exceedance). Defines the question.');
+  L.push('- Signal / feature: a candidate explanatory input, tested through gates until it earns KEEP, WASH, or REJECT.');
+  L.push('- Representation: a transformed feature space (e.g. tide harmonics, non-dimensional groups) used to expose structure.');
+  L.push('- Diagnostic / lens: a way to look for structure (histogram, residual map, confusion matrix). A discovery aid, NOT a model.');
+  L.push('- Learner / discovery engine: an ALGORITHM used to search for relationships (XGBoost, CatBoost, LightGBM, HGBT, neural network, TabPFN). Before it is fitted to data it is NOT a trained model.');
+  L.push('- Trained model (model card): a fitted, evaluated, REGISTERED learner plus its evidence and status (claimable / benchmark / null). The difference from a learner: a learner is just the algorithm; it becomes a trained model only after it is fitted, evaluated and registered.');
+  L.push('- Baseline / null: an honest comparator (e.g. station-memory, persistence, permutation null) that prevents fake discoveries. A baseline is NOT a discovery.');
+  L.push('- Finding: a promoted scientific statement — only after leakage, baseline, and bootstrap/null checks pass.');
+  L.push('Also: a "nowcast" estimates next-visit exceedance risk before the lab sample is back. "AP" = average precision; "ROC-AUC" = ranking skill (0.5 = chance); "ECE" = calibration error (lower better). Status: Supported = held under audit; Caveated = real but limited; Null = tested, did not hold.');
   L.push('');
   // Only foreground headline metrics when the question is performance/quality-oriented,
   // so unrelated questions (datasets, definitions) aren't biased toward the top findings.
@@ -963,6 +1023,7 @@ async function askData(){
   if(asksForSecret(q)){showAns('● answered locally · public-safety guard','I can answer from the published science snapshot, but I cannot reveal secrets, credentials, environment variables, local absolute paths, user names, private keys, tokens, or non-public infrastructure details.');return;}
   if(hasOutOfScopeTopic(q)){showAns('● answered locally · science boundary',scienceBoundaryAnswer());return;}
   if(isProjectAboutQuestion(q)){showAns('● answered locally · project overview',projectAboutAnswer(),['Overview']);return;}
+  const cv=vocabularyAnswer(q); if(cv){showAns('● answered locally · vocabulary',cv,['Vocabulary']);return;}
   const sources=topDocTitles(q);
   if(!PROXY_URL){showAns('● answered locally · published evidence',localEvidenceAnswer(q),sources);return;}
   btn.disabled=true; showLoading();
@@ -978,6 +1039,50 @@ async function askData(){
     }
   }catch(e){showAns('● answered locally · published evidence',localEvidenceAnswer(q),sources);}
   btn.disabled=false;
+}
+/* deterministic concept/definition answer straight from the vocabulary (never hits the proxy) */
+function vocabMatches(q){
+  const n=String(q||'').toLowerCase();
+  const syn={
+    source_dataset:/\b(source dataset|data source|dataset|raw data)\b/,
+    target:/\b(target|label|outcome|thing (we|you).{0,14}(predict|explain))\b/,
+    signal:/\b(signal|feature|predictor|input variable)\b/,
+    representation:/\b(representation|feature space|transform|embedding|harmonic|pi.?group)\b/,
+    diagnostic:/\b(diagnostic|lens|histogram|residual|confusion matrix|synchrony)\b/,
+    learner:/\b(learner|discovery engine|algorithm|xgboost|catboost|lightgbm|hgbt|gradient boost|neural net(work)?|tabpfn)\b/,
+    trained_model:/\b(trained model|model card|registered model|fitted model)\b/,
+    baseline:/\b(baseline|null model|persistence|comparator|station.?memory)\b/,
+    finding:/\b(finding|conclusion)\b/
+  };
+  const voc=(DATA&&DATA.vocabulary)||[];
+  const out=voc.filter(c=>syn[c.key]&&syn[c.key].test(n));
+  if(/\bmodel\b/.test(n)&&!out.some(c=>c.key==='trained_model')){const tm=voc.find(c=>c.key==='trained_model');if(tm)out.push(tm);}
+  return out;
+}
+function vocabularyAnswer(q){
+  if(!isConceptQuestion(q))return null;
+  let cards=vocabMatches(q); if(!cards.length)return null;
+  const order=((DATA&&DATA.vocabulary)||[]).map(c=>c.key), seen=new Set();
+  cards=cards.filter(c=>!seen.has(c.key)&&seen.add(c.key)).sort((a,b)=>order.indexOf(a.key)-order.indexOf(b.key));
+  const keys=cards.map(c=>c.key);
+  const isDiff=/\b(difference|differ|vs\.?|versus|compared|not the same)\b/i.test(q);
+  const defs=cards.map(c=>`${c.label}: ${c.what} Examples: ${(c.examples||[]).slice(0,4).join('; ')}.`).join('\n\n');
+  let head='In plain words:';
+  if(isDiff&&keys.includes('learner')&&keys.includes('trained_model'))
+    head='In plain words: a learner (or discovery engine) is just the algorithm — XGBoost, a neural network, and so on. It becomes a trained model only once it has been fitted to data, evaluated, and registered with its evidence and status. Every trained model started as a learner, but an unfitted learner is not yet a model.';
+  else if(isDiff&&cards.length>=2)
+    head="In plain words: these are different kinds of thing in the lab's vocabulary — here is each one.";
+  return `${head}\n\n${defs}`;
+}
+/* simple on-page suggestion composer → opens a prefilled GitHub issue in a NEW tab (you stay here) */
+function submitSuggestion(){
+  const t=($('#suggestq')&&$('#suggestq').value||'').trim();
+  if(!t){if($('#suggestq'))$('#suggestq').focus();return;}
+  if(window.gtag)gtag('event','suggest_question',{});
+  const title='[suggestion] '+t.split('\n')[0].slice(0,70);
+  const body=t+'\n\n---\nSubmitted via Mission Control. A candidate question, not a claim — reviewed before anything runs.';
+  const url='https://github.com/jdinneen/mbal-mission-control/issues/new?title='+encodeURIComponent(title)+'&body='+encodeURIComponent(body);
+  window.open(url,'_blank','noopener,noreferrer');
 }
 window.addEventListener('DOMContentLoaded',()=>{const i=$('#askq');if(i)i.addEventListener('keydown',e=>{if(e.key==='Enter')askData();});});
 load();
