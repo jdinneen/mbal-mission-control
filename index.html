@@ -310,7 +310,12 @@
   .loadwrap{padding:80px 28px;text-align:center;color:var(--ink4);font-family:var(--mono);font-size:14px}
 
   /* ---- map ---- */
-  .maptoggle{display:inline-flex;gap:3px;margin-bottom:14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:3px;box-shadow:var(--card-sh)}
+  .mapcontrols{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
+  .mapdomain{display:inline-flex;gap:3px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:3px;box-shadow:var(--card-sh)}
+  .mapdomain button{appearance:none;border:none;background:none;cursor:pointer;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink3);padding:7px 14px;border-radius:8px;transition:all .14s}
+  .mapdomain button:hover{color:var(--ink)}
+  .mapdomain button.active{background:var(--ink);color:#fff}
+  .maptoggle{display:inline-flex;gap:3px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:3px;box-shadow:var(--card-sh)}
   .maptoggle button{appearance:none;border:none;background:none;cursor:pointer;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink3);padding:7px 15px;border-radius:8px;transition:all .14s}
   .maptoggle button:hover{color:var(--ink)}
   .maptoggle button.active{background:var(--acc);color:#fff}
@@ -535,18 +540,25 @@
   <!-- ===== MAP ===== -->
   <section class="view" id="map">
     <div style="margin-bottom:18px;max-width:760px">
-      <h1 class="sec">The model, station by station</h1>
-      <p class="subhead">Two honest views across the monitoring network. <b>Coverage</b> = where the data is and the observed exceedance rate. <b>Model skill</b> = each station colored by the model's actual held-out ranking skill (AUC) there. Stations with too few held-out events to score honestly stay hollow — we never paint confidence where there's no support, and never interpolate a surface over open water.</p>
+      <h1 class="sec">The network, by place</h1>
+      <p class="subhead">Pick a dataset, then a view. <b>Coverage</b> = where the monitoring sites are and how often they go over the limit. <b>Model skill</b> (beach bacteria only) colors each site by the model's actual held-out ranking skill (AUC) there; sites with too few held-out events stay hollow. We never paint confidence where there's no support, and never interpolate a surface over open water.</p>
     </div>
-    <div class="maptoggle" id="maptoggle">
-      <button data-m="coverage" class="active">Coverage</button>
-      <button data-m="skill">Model skill</button>
+    <div class="mapcontrols">
+      <div class="mapdomain" id="mapdomain">
+        <button data-d="bacteria" class="active">CA beach bacteria</button>
+        <button data-d="cyano">US lakes · cyano</button>
+      </div>
+      <div class="maptoggle" id="maptoggle">
+        <button data-m="coverage" class="active">Coverage</button>
+        <button data-m="skill">Model skill</button>
+      </div>
     </div>
     <div class="mapwrap">
       <div id="leafmap"></div>
       <div class="maplegend" id="maplegend"></div>
     </div>
     <p class="mapnote" id="mapnote"></p>
+    <p class="mapnote" style="color:var(--ink5)">Other basins (e.g. Japan / Tokyo Bay) are held under a research-only license, so their station data isn't republished here.</p>
   </section>
 
   <!-- ===== VOCABULARY ===== -->
@@ -927,57 +939,70 @@ function vocabDrawer(key){
   </div>`;
 }
 
-/* ---------- map: two honest station-level views (coverage / model skill) ---------- */
-let _map=null,_mlayer=null,_feats=[],_mmax=1,_mmeta={};
+/* ---------- map: multi-domain (CA bacteria / US lakes), honest views ---------- */
+const MAP_DOMAINS=[
+  {key:'bacteria',label:'CA beach bacteria',file:'stations.geojson',unit:'samples',valueLabel:'exceedance (AB411 > 104)',siteWord:'stations',hasSkill:true},
+  {key:'cyano',label:'US lakes · cyano',file:'lakes_cyano.geojson',unit:'obs-weeks',valueLabel:'bloom frequency',siteWord:'lakes',hasSkill:false}
+];
+let _map=null,_mlayer=null,_feats=[],_mmax=1,_mmeta={},_domain=MAP_DOMAINS[0],_mode='coverage',_dcache={};
 function brColor(br){if(br==null)return '#b8bdc3';if(br<0.08)return '#1a7a4f';if(br<0.18)return '#3f9e6b';if(br<0.30)return '#c9a23a';if(br<0.45)return '#e0772f';return '#b4453c';}
 function aucColor(a){if(a==null)return null;if(a<0.6)return '#b4453c';if(a<0.7)return '#e0772f';if(a<0.8)return '#c9a23a';if(a<0.88)return '#3f9e6b';return '#1a7a4f';}
 function mRad(n){return 3+(Math.sqrt(Math.max(n,1))/Math.sqrt(_mmax))*13;}
 function mPopup(p,mode){
-  const head=`<span class="pn">${esc(p.name)}</span><br><span class="pm">${esc(p.county||'')} · ${fmt(p.n_obs)} samples`;
+  const head=`<span class="pn">${esc(p.name)}</span><br><span class="pm">${esc(p.county||'')} · ${fmt(p.n_obs)} ${_domain.unit}`;
   if(mode==='skill'){const a=p.model_auc;
     return head+` · ${fmt(p.n_test)} held-out (${fmt(p.events)} events)`+(a!=null?` · model AUC ${a.toFixed(2)} vs station-memory ${(p.mem_auc!=null?p.mem_auc.toFixed(2):'—')}`:` · too few events to score`)+`</span>`;}
-  return head+` · exceedance ${p.base_rate!=null?(100*p.base_rate).toFixed(0)+'%':'—'}${p.low_support?' · low support':''}</span>`;
+  return head+` · ${esc(_domain.valueLabel.split(' (')[0])} ${p.base_rate!=null?(100*p.base_rate).toFixed(0)+'%':'—'}${p.low_support?' · low support':''}</span>`;
 }
 function mDraw(mode){
-  if(!_mlayer)return; _mlayer.clearLayers();
+  if(!_mlayer)return; _mode=mode; _mlayer.clearLayers();
   _feats.forEach(f=>{const p=f.properties,c=f.geometry.coordinates;let fill,op,stroke,wt,dash;
     if(mode==='skill'){const a=p.model_auc;
       if(a==null){fill='#cfd2d6';op=0.14;stroke='#9aa0a7';wt=1;dash='2 2';}
       else{fill=aucColor(a);op=0.85;stroke='#fff';wt=1;dash=null;}
     }else{const low=p.low_support;fill=brColor(p.base_rate);op=low?0.28:0.82;stroke=low?'#9aa0a7':'#fff';wt=low?1.2:1;dash=low?'2 2':null;}
     L.circleMarker([c[1],c[0]],{radius:mRad(p.n_obs),fillColor:fill,fillOpacity:op,color:stroke,weight:wt,dashArray:dash}).bindPopup(mPopup(p,mode)).addTo(_mlayer);});
-  const sc=_mmeta.scored_stations||0,tot=(_mmeta.stations||_feats.length);
+  const sc=_mmeta.scored_stations||0,tot=(_mmeta.stations||_feats.length),sw=_domain.siteWord;
   if(mode==='skill'){
-    $('#mapnote').textContent=`${sc.toLocaleString()} of ${tot.toLocaleString()} stations have enough held-out events to score honestly; the rest stay hollow. Per-station AUC is noisy at low counts, so we mask rather than colour them. ${_mmeta.note||''}`;
+    $('#mapnote').textContent=`${sc.toLocaleString()} of ${tot.toLocaleString()} ${sw} have enough held-out events to score honestly; the rest stay hollow. Per-station AUC is noisy at low counts, so we mask rather than colour them. ${_mmeta.note||''}`;
     $('#maplegend').innerHTML=`<div class="lt">Held-out model skill (AUC)</div>
       <div class="lrow"><span class="sw" style="background:#b4453c"></span>poor (&lt; 0.60)</div>
       <div class="lrow"><span class="sw" style="background:#c9a23a"></span>moderate (~0.75)</div>
       <div class="lrow"><span class="sw" style="background:#1a7a4f"></span>strong (&gt; 0.88)</div>
       <div class="lrow"><span class="ring"></span>too few events to score</div>
-      <div class="lt" style="margin-top:9px">marker size = sample count</div>`;
+      <div class="lt" style="margin-top:9px">marker size = ${esc(_domain.unit)}</div>`;
   }else{
-    $('#mapnote').textContent=`${tot.toLocaleString()} stations with a known location. ${_mmeta.note||''}`;
-    $('#maplegend').innerHTML=`<div class="lt">Observed exceedance (AB411 &gt; 104)</div>
-      <div class="lrow"><span class="sw" style="background:#1a7a4f"></span>low (&lt; 8%)</div>
+    $('#mapnote').textContent=`${tot.toLocaleString()} ${sw} with a known location. ${_mmeta.note||''}`;
+    $('#maplegend').innerHTML=`<div class="lt">Observed ${esc(_domain.valueLabel)}</div>
+      <div class="lrow"><span class="sw" style="background:#1a7a4f"></span>low</div>
       <div class="lrow"><span class="sw" style="background:#c9a23a"></span>moderate</div>
-      <div class="lrow"><span class="sw" style="background:#b4453c"></span>high (&gt; 45%)</div>
-      <div class="lrow"><span class="ring"></span>&lt; 30 samples (thin support)</div>
-      <div class="lt" style="margin-top:9px">marker size = sample count</div>`;
+      <div class="lrow"><span class="sw" style="background:#b4453c"></span>high</div>
+      <div class="lrow"><span class="ring"></span>thin support</div>
+      <div class="lt" style="margin-top:9px">marker size = ${esc(_domain.unit)}</div>`;
   }
   document.querySelectorAll('#maptoggle button').forEach(b=>b.classList.toggle('active',b.dataset.m===mode));
+}
+function selectDomain(key){
+  const d=MAP_DOMAINS.find(x=>x.key===key)||MAP_DOMAINS[0]; _domain=d;
+  document.querySelectorAll('#mapdomain button').forEach(b=>b.classList.toggle('active',b.dataset.d===d.key));
+  const tog=$('#maptoggle'); if(tog)tog.style.display=d.hasSkill?'inline-flex':'none';
+  if(!d.hasSkill)_mode='coverage';
+  const done=fc=>{_feats=fc.features||[]; _mmeta=fc.meta||{}; _mmax=1; _feats.forEach(f=>_mmax=Math.max(_mmax,f.properties.n_obs||0));
+    if(_mlayer)_mlayer.clearLayers(); else _mlayer=L.featureGroup().addTo(_map);
+    mDraw(d.hasSkill?_mode:'coverage');
+    try{_map.fitBounds(_mlayer.getBounds().pad(0.06));setTimeout(()=>_map.invalidateSize(),60);}catch(e){}};
+  if(_dcache[key])done(_dcache[key]);
+  else{$('#mapnote').textContent='Loading '+d.label+'…';fetch(d.file,{cache:'no-cache'}).then(r=>r.json()).then(fc=>{_dcache[key]=fc;done(fc);}).catch(()=>{$('#mapnote').textContent='Could not load '+d.label+' data.';});}
 }
 function renderMap(){
   const host=$('#leafmap'); if(!host)return;
   if(!window.L){host.innerHTML='<div class="mapfail">The map library didn’t load (offline?). The station data is still downloadable in the footer below.</div>';return;}
   if(_map){setTimeout(()=>_map.invalidateSize(),60);return;}
-  _map=L.map('leafmap',{scrollWheelZoom:false}).setView([36.6,-120.6],6);
+  _map=L.map('leafmap',{scrollWheelZoom:false}).setView([37,-110],4);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO',subdomains:'abcd',maxZoom:19}).addTo(_map);
   document.querySelectorAll('#maptoggle button').forEach(b=>b.onclick=()=>mDraw(b.dataset.m));
-  fetch('stations.geojson',{cache:'no-cache'}).then(r=>r.json()).then(fc=>{
-    _feats=fc.features||[]; _mmeta=fc.meta||{}; _mmax=1; _feats.forEach(f=>_mmax=Math.max(_mmax,f.properties.n_obs||0));
-    _mlayer=L.featureGroup().addTo(_map); mDraw('coverage');
-    try{_map.fitBounds(_mlayer.getBounds().pad(0.05));setTimeout(()=>_map.invalidateSize(),60);}catch(e){}
-  }).catch(()=>{$('#mapnote').textContent='Could not load the station data.';});
+  document.querySelectorAll('#mapdomain button').forEach(b=>b.onclick=()=>selectDomain(b.dataset.d));
+  selectDomain('bacteria');
 }
 /* ---------- downloads footer (manifest-driven, allowlisted) ---------- */
 function renderDownloads(){

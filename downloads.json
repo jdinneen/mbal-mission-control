@@ -25,12 +25,20 @@
    "sha256": "492134020c34c08e120bcdd31fdd74b67e3f126dd9d794a245430ced86ad8353"
   },
   {
-   "title": "Monitoring-station coverage (GeoJSON)",
+   "title": "Beach-station coverage + model skill (GeoJSON)",
    "path": "stations.geojson",
    "type": "application/geo+json",
    "license": "Apache-2.0",
    "bytes": 264663,
-   "sha256": "1dd7856e5e36214c010f6d14d490ac52de73d9ec9715c89b8e59a9a8a24b1939"
+   "sha256": "7f2d620df97aae97326003be570939064b79325d3396362e37a8428f728322b2"
+  },
+  {
+   "title": "US lake cyano coverage (GeoJSON)",
+   "path": "lakes_cyano.geojson",
+   "type": "application/geo+json",
+   "license": "Public domain (EPA CyAN)",
+   "bytes": 625536,
+   "sha256": "47de9540a9fd4a58b8028f8169459d3baa56c3c34b6ddd4600e30cc92e671e6b"
   },
   {
    "title": "Program results summary",

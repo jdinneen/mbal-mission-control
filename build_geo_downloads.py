@@ -138,6 +138,48 @@ def build_stations():
     if aucs:
         print(f"  per-station model AUC range {min(aucs):.3f}–{max(aucs):.3f} mean {sum(aucs)/len(aucs):.3f}")
 
+# ---------- 1b. lakes_cyano.geojson (US lakes — coverage only; public EPA CyAN) ----------
+def build_cyano_lakes():
+    import duckdb
+    con = duckdb.connect()
+    src = ROOT / "reports" / "hab" / "cyano" / "cyano_discovery_lakeyear.parquet"
+    if not src.exists():
+        print("cyano lake-year parquet not found — skipping lakes domain")
+        return
+    rows = con.execute(f"""
+        select lake_id, any_value(lake_name) as lk_name, any_value(state) as lk_state,
+               avg(lat) as lk_lat, avg(lon) as lk_lon,
+               sum(obs_weeks) as n_obs,
+               sum(bloom_weeks) * 1.0 / nullif(sum(obs_weeks), 0) as bloom_rate
+        from read_parquet('{src.as_posix()}')
+        where lat is not null and lon is not null
+        group by lake_id
+    """).fetchall()
+    feats = []
+    for lid, name, state, lat, lon, n, br in rows:
+        n = int(n or 0)
+        feats.append({
+            "type": "Feature",
+            "geometry": {"type": "Point", "coordinates": [round(float(lon), 5), round(float(lat), 5)]},
+            "properties": {
+                "station_id": lid, "name": name or lid, "county": state or "",
+                "n_obs": n, "base_rate": (round(float(br), 4) if br is not None else None),
+                "low_support": n < 20, "hazard": "cyano",
+                "n_test": 0, "events": 0, "model_auc": None, "mem_auc": None,
+            },
+        })
+    fc = {"type": "FeatureCollection",
+          "meta": {"hazard": "cyano", "stations": len(feats), "scored_stations": 0,
+                   "unit": "obs-weeks", "value_label": "bloom frequency", "has_skill": False,
+                   "note": "US lakes from the public EPA CyAN satellite record. Marker size = weeks "
+                           "observed; color = fraction of observed weeks with a cyanobacteria bloom. "
+                           "Coverage only — the cyano work is onset/triage, not a per-lake exceedance "
+                           "classifier, so there is no honest per-lake model-skill layer here."},
+          "features": feats}
+    (HERE / "lakes_cyano.geojson").write_text(json.dumps(fc, separators=(",", ":")), encoding="utf-8")
+    print(f"lakes_cyano.geojson: {len(feats)} US lakes")
+
+
 # ---------- 2. CSV exports from data.json (can't drift) ----------
 def _csv(rows, cols):
     buf = io.StringIO()
@@ -174,8 +216,10 @@ def build_manifest(have_program):
         {"title": "Full snapshot (all findings, models, datasets, signals)", "path": "data.json", "type": "application/json", "license": APACHE},
         {"title": "Findings table (CSV)", "path": "downloads/findings.csv", "type": "text/csv", "license": APACHE},
         {"title": "Models registry (CSV)", "path": "downloads/models.csv", "type": "text/csv", "license": APACHE},
-        {"title": "Monitoring-station coverage (GeoJSON)", "path": "stations.geojson", "type": "application/geo+json", "license": APACHE},
+        {"title": "Beach-station coverage + model skill (GeoJSON)", "path": "stations.geojson", "type": "application/geo+json", "license": APACHE},
     ]
+    if (HERE / "lakes_cyano.geojson").exists():
+        allow.append({"title": "US lake cyano coverage (GeoJSON)", "path": "lakes_cyano.geojson", "type": "application/geo+json", "license": "Public domain (EPA CyAN)"})
     if have_program:
         allow.append({"title": "Program results summary", "path": "downloads/PROGRAM_RESULTS.md", "type": "text/markdown", "license": APACHE})
     items = []
@@ -196,6 +240,7 @@ def build_license():
 def main():
     state = json.load(open(HERE / "data.json", encoding="utf-8"))["state"]
     build_stations()
+    build_cyano_lakes()
     build_csvs(state)
     have = build_program_results()
     build_license()
