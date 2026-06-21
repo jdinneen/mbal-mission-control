@@ -211,14 +211,16 @@ const ago=iso=>{if(!iso)return '—';const s=(Date.now()-new Date(iso))/1000;if(
 const tagKind=k=>({claim:'claim',positive:'positive',replication:'replication',operational:'operational',caveat:'caveat',status:'status',null:'null',negative:'negative_result',ablation:'ablation'}[k]||'benchmark');
 
 document.querySelectorAll('nav a').forEach(a=>a.onclick=()=>go(a.dataset.v));
-function go(v){if(location.hash.slice(1)!==v)location.hash=v;showView(v);}
+function go(v){if(location.hash.slice(1)!==v){location.hash=v;}else{showView(v);}} // hash change → single showView via hashchange
 function curView(){const a=document.querySelector('nav a.active');return a?a.dataset.v:'overview';}
 function showView(v){let store=null;if(v==='shadow'){store='shadow';v='lakehouse';}else if(v==='lake'){store='lake';v='lakehouse';}
   document.querySelectorAll('nav a').forEach(a=>a.classList.toggle('active',a.dataset.v===v));
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id===v));
   if(store){STORE=store;const lb=$('#tab-lake'),sb=$('#tab-shadow');if(lb&&sb){lb.classList.toggle('active',store==='lake');sb.classList.toggle('active',store==='shadow');}}
   if(DATA){if(v==='lakehouse')renderLake();if(v==='findings')renderFindings();if(v==='models')renderModels();}
-  if(window.gtag){const label=store||v;gtag('event','page_view',{page_title:'Mission Control — '+label,page_location:location.href,page_path:'/'+(location.hash.slice(1)||'overview')});}}
+  pv('/'+(location.hash.slice(1)||'overview'),store||v);}
+let _lastPV=null;
+function pv(path,label){if(!window.gtag||path===_lastPV)return;_lastPV=path;gtag('event','page_view',{page_title:'Mission Control — '+label,page_location:location.href,page_path:path});} // dedupe guards against any double-fire
 window.addEventListener('hashchange',()=>showView(location.hash.slice(1)||'overview'));
 
 async function load(){
@@ -285,7 +287,7 @@ function openModel(m){curModel=m.model_id;
     ${confusionHTML(m.confusion)}
     <div id="mevbox" style="margin-top:10px">${m.evidence&&EVID[m.evidence]?`<button class="btn" onclick="showEv('${esc(m.evidence)}','#mevbox')">show raw evidence JSON</button>`:''}</div></div>`;}
 /* lakehouse */
-function setStore(s){STORE=s;$('#tab-lake').classList.toggle('active',s==='lake');$('#tab-shadow').classList.toggle('active',s==='shadow');renderLake();}
+function setStore(s){STORE=s;$('#tab-lake').classList.toggle('active',s==='lake');$('#tab-shadow').classList.toggle('active',s==='shadow');renderLake();pv('/lakehouse/'+s,s);}
 function renderLake(){const inv=(DATA.inventory||{})[STORE]||{datasets:[]};
   $('#lh-head').innerHTML=`<div class="kv"><span class="k">store</span><span>${STORE==='lake'?'Production lake':'Shadow'}</span>
     <span class="k">datasets</span><span class="acc">${inv.dataset_count||0}</span><span class="k">total size</span><span>${mb(inv.total_size_mb)}</span>
