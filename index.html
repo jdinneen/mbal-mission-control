@@ -19,88 +19,99 @@
     --acc:#4fd1c5; --warn:#e0a030; --bad:#e2544a; --ok:#46c06a; --blue:#5aa0f0;
     --mono:'Cascadia Code','JetBrains Mono','Consolas',monospace;
     --sans:'Inter','Segoe UI',system-ui,sans-serif;
+    --font-boost:5pt;
   }
   *{box-sizing:border-box}
   html,body{margin:0;height:100%}
-  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;display:flex;flex-direction:column;height:100vh;overflow:hidden}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:calc(16px + var(--font-boost));display:flex;flex-direction:column;height:100vh;overflow:hidden}
   .mono{font-family:var(--mono)}
   header{display:flex;align-items:center;gap:16px;padding:9px 16px;background:var(--panel);border-bottom:1px solid var(--line);flex:0 0 auto}
-  header .brand{font-weight:600;letter-spacing:.4px}
+  header .brand{font-weight:600;letter-spacing:.4px;min-width:0;max-width:100%;overflow-wrap:anywhere;line-height:1.2}
   header .brand b{color:var(--acc)}
-  header .snap{font-family:var(--mono);font-size:13.5px;color:var(--mut)}
-  .pill{padding:2px 7px;border-radius:3px;font-family:var(--mono);font-size:13px;font-weight:600}
+  header .snap{font-family:var(--mono);font-size:calc(13.5px + var(--font-boost));color:var(--mut)}
+  .pill{padding:2px 7px;border-radius:3px;font-family:var(--mono);font-size:calc(13px + var(--font-boost));font-weight:600}
   .p-GREEN{background:#143120;color:var(--ok)} .p-YELLOW{background:#332a12;color:var(--warn)}
   .p-RED{background:#331715;color:var(--bad)} .p-UNKNOWN{background:#21262f;color:var(--dim)}
   .spacer{flex:1}
   .body{flex:1;display:flex;min-height:0}
-  nav{flex:0 0 168px;background:var(--panel);border-right:1px solid var(--line);padding:8px 0;display:flex;flex-direction:column}
-  nav a{display:flex;align-items:center;gap:9px;padding:8px 14px;color:var(--dim);cursor:pointer;font-size:15.5px;border-left:2px solid transparent}
+  nav{flex:0 0 230px;background:var(--panel);border-right:1px solid var(--line);padding:8px 0;display:flex;flex-direction:column}
+  nav a{display:flex;align-items:center;gap:9px;padding:10px 14px;color:var(--dim);cursor:pointer;font-size:calc(15.5px + var(--font-boost));border-left:2px solid transparent}
   nav a:hover{background:var(--panel2);color:var(--ink)}
   nav a.active{color:var(--acc);border-left-color:var(--acc);background:var(--panel2)}
-  nav .meta{margin-top:auto;padding:10px 14px;font-family:var(--mono);font-size:12px;color:var(--mut);line-height:1.5;border-top:1px solid var(--line)}
-  main{flex:1;overflow:auto;padding:16px 18px 120px}
+  nav .meta{margin-top:auto;padding:10px 14px;font-family:var(--mono);font-size:calc(12px + var(--font-boost));color:var(--mut);line-height:1.5;border-top:1px solid var(--line)}
+  main{flex:1;overflow:auto;padding:18px 20px 190px}
   .view{display:none} .view.active{display:block}
-  h2{font-size:16px;font-weight:600;margin:0 0 2px}
-  .sub{color:var(--dim);font-size:14px;margin-bottom:14px}
+  h2{font-size:calc(16px + var(--font-boost));font-weight:600;margin:0 0 2px}
+  .sub{color:var(--dim);font-size:calc(14px + var(--font-boost));margin-bottom:18px;line-height:1.45}
+  .science-hero{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(260px,.9fr);gap:14px;margin-bottom:16px}
+  .science-panel{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:16px 17px;min-width:0;max-width:100%;overflow-wrap:anywhere}
+  .science-panel p{margin:0 0 12px;line-height:1.5;min-width:0;overflow-wrap:anywhere}
+  .science-panel p:last-child{margin-bottom:0}
+  .eyebrow{font-family:var(--mono);font-size:calc(12.5px + var(--font-boost));color:var(--acc);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+  .lead{font-size:calc(18px + var(--font-boost));line-height:1.45;color:#e6edf7;overflow-wrap:anywhere}
+  .science-list{margin:0;padding-left:1.15em;line-height:1.55}
+  .science-list li{margin:7px 0}
+  .ask-note{display:flex;flex-direction:column;gap:10px}
+  .ask-note .btn{align-self:flex-start}
   .tiles{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
   .tile{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 13px;cursor:pointer}
   .tile:hover{border-color:#1f3b3a;background:var(--panel2)}
-  .tile .k{font-family:var(--mono);font-size:13px;color:var(--dim);text-transform:uppercase;letter-spacing:.6px}
-  .tile .v{font-size:28px;font-weight:600;margin-top:5px;font-family:var(--mono)}
-  .tile .s{font-size:13.5px;color:var(--mut);margin-top:2px}
+  .tile .k{font-family:var(--mono);font-size:calc(13px + var(--font-boost));color:var(--dim);text-transform:uppercase;letter-spacing:.6px}
+  .tile .v{font-size:calc(28px + var(--font-boost));font-weight:600;margin-top:5px;font-family:var(--mono)}
+  .tile .s{font-size:calc(13.5px + var(--font-boost));color:var(--mut);margin-top:2px;line-height:1.25}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .card{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:12px 13px;margin-bottom:12px}
-  .card h3{margin:0 0 9px;font-size:14px;text-transform:uppercase;letter-spacing:.6px;color:var(--dim);font-weight:600}
-  table{width:100%;border-collapse:collapse;font-size:15px}
-  th{text-align:left;color:var(--mut);font-weight:500;font-size:13px;text-transform:uppercase;letter-spacing:.5px;padding:5px 8px;border-bottom:1px solid var(--line)}
-  td{padding:6px 8px;border-bottom:1px solid #1a2029;font-family:var(--mono);font-size:14.5px}
+  .card h3{margin:0 0 9px;font-size:calc(14px + var(--font-boost));text-transform:uppercase;letter-spacing:.6px;color:var(--dim);font-weight:600}
+  table{width:100%;border-collapse:collapse;font-size:calc(15px + var(--font-boost))}
+  th{text-align:left;color:var(--mut);font-weight:500;font-size:calc(13px + var(--font-boost));text-transform:uppercase;letter-spacing:.5px;padding:7px 8px;border-bottom:1px solid var(--line)}
+  td{padding:8px 8px;border-bottom:1px solid #1a2029;font-family:var(--mono);font-size:calc(14.5px + var(--font-boost));line-height:1.35}
   tr.click{cursor:pointer} tr.click:hover td{background:var(--panel2)}
   .num{text-align:right}
-  .tag{font-family:var(--mono);font-size:12.5px;padding:1px 6px;border-radius:3px}
+  .tag{font-family:var(--mono);font-size:calc(12.5px + var(--font-boost));padding:2px 6px;border-radius:3px}
   .t-ready,.t-PASS,.t-production_candidate,.t-positive,.t-claim,.t-replication,.t-operational{background:#143120;color:var(--ok)}
   .t-WARN,.t-benchmark,.t-research_candidate,.t-caveat,.t-status,.t-ablation{background:#332a12;color:var(--warn)}
   .t-negative_result,.t-research_only_failed_gate,.t-negative,.t-null,.t-refutation{background:#331715;color:var(--bad)}
   .t-baseline,.t-UNKNOWN{background:#21262f;color:var(--dim)}
   .muted{color:var(--mut)} .acc{color:var(--acc)} .okc{color:var(--ok)} .badc{color:var(--bad)} .src{color:var(--blue)}
   .tabs{display:flex;gap:2px;margin-bottom:12px}
-  .tabs button{background:var(--panel);border:1px solid var(--line);color:var(--dim);padding:6px 16px;cursor:pointer;font-family:var(--mono);font-size:14px;border-radius:4px}
+  .tabs button{background:var(--panel);border:1px solid var(--line);color:var(--dim);padding:8px 16px;cursor:pointer;font-family:var(--mono);font-size:calc(14px + var(--font-boost));border-radius:4px}
   .tabs button.active{background:var(--panel2);color:var(--acc);border-color:#1f3b3a}
-  .kv{display:grid;grid-template-columns:auto 1fr;gap:3px 14px;font-family:var(--mono);font-size:14.5px}
+  .kv{display:grid;grid-template-columns:auto minmax(0,1fr);gap:5px 14px;font-family:var(--mono);font-size:calc(14.5px + var(--font-boost));line-height:1.35}
   .kv .k{color:var(--mut)}
   .cols2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-  .btn{background:var(--panel2);border:1px solid var(--line);color:var(--dim);padding:4px 10px;border-radius:4px;cursor:pointer;font-family:var(--mono);font-size:13.5px}
+  .btn{background:var(--panel2);border:1px solid var(--line);color:var(--dim);padding:7px 11px;border-radius:4px;cursor:pointer;font-family:var(--mono);font-size:calc(13.5px + var(--font-boost))}
   .btn:hover{color:var(--acc);border-color:#1f3b3a}
   .detail{background:var(--panel2);border:1px solid #1f3b3a;border-radius:6px;padding:14px;margin-top:10px}
-  .empty{color:var(--mut);font-family:var(--mono);font-size:14px;padding:14px;text-align:center}
-  pre{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:10px;overflow:auto;font-family:var(--mono);font-size:13.5px;color:var(--dim);max-height:280px}
-  .plain{font-family:var(--sans);font-size:16px;line-height:1.55;margin:4px 0 10px}
-  .how{font-family:var(--sans);font-size:14.5px;color:var(--dim);line-height:1.5;margin-bottom:12px}
-  .cm{display:grid;grid-template-columns:120px 1fr 1fr;gap:4px;margin:6px 0 4px;font-family:var(--mono);font-size:14px}
-  .cm .h{color:var(--mut);font-size:12.5px;text-transform:uppercase;letter-spacing:.4px;display:flex;align-items:flex-end;padding:2px 4px}
+  .empty{color:var(--mut);font-family:var(--mono);font-size:calc(14px + var(--font-boost));padding:14px;text-align:center}
+  pre{background:#0a0d12;border:1px solid var(--line);border-radius:5px;padding:10px;overflow:auto;font-family:var(--mono);font-size:calc(13.5px + var(--font-boost));color:var(--dim);max-height:280px}
+  .plain{font-family:var(--sans);font-size:calc(16px + var(--font-boost));line-height:1.55;margin:4px 0 10px}
+  .how{font-family:var(--sans);font-size:calc(14.5px + var(--font-boost));color:var(--dim);line-height:1.5;margin-bottom:12px}
+  .cm{display:grid;grid-template-columns:170px 1fr 1fr;gap:4px;margin:6px 0 4px;font-family:var(--mono);font-size:calc(14px + var(--font-boost))}
+  .cm .h{color:var(--mut);font-size:calc(12.5px + var(--font-boost));text-transform:uppercase;letter-spacing:.4px;display:flex;align-items:flex-end;padding:2px 4px}
   .cm .cell{border-radius:5px;padding:9px 10px;text-align:center}
-  .cm .cell .lab{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.4px}
-  .cm .cell .big{font-size:21px;font-weight:600;margin-top:2px}
-  .cm .rh{display:flex;align-items:center;color:var(--mut);font-size:12.5px;text-transform:uppercase;letter-spacing:.4px;padding:0 4px}
+  .cm .cell .lab{font-size:calc(12px + var(--font-boost));color:var(--mut);text-transform:uppercase;letter-spacing:.4px}
+  .cm .cell .big{font-size:calc(21px + var(--font-boost));font-weight:600;margin-top:2px}
+  .cm .rh{display:flex;align-items:center;color:var(--mut);font-size:calc(12.5px + var(--font-boost));text-transform:uppercase;letter-spacing:.4px;padding:0 4px}
   .cmtp,.cmtn{background:#10301d;color:var(--ok)} .cmfp{background:#332a12;color:var(--warn)} .cmfn{background:#331715;color:var(--bad)}
-  .statbar{display:grid;grid-template-columns:120px 1fr 52px;gap:6px;align-items:center;margin:3px 0;font-family:var(--mono);font-size:14px}
+  .statbar{display:grid;grid-template-columns:160px 1fr 78px;gap:6px;align-items:center;margin:3px 0;font-family:var(--mono);font-size:calc(14px + var(--font-boost))}
   .statbar .track{height:7px;background:#0a0d12;border:1px solid var(--line);border-radius:4px;overflow:hidden}
   .statbar .track>i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--blue))}
-  .stat-help{font-family:var(--sans);font-size:13.5px;color:var(--mut);line-height:1.45;margin-top:8px}
-  #askdock{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;width:min(760px,calc(100% - 200px));z-index:50;background:#fff;border:1px solid #c7d2e1;border-radius:10px;box-shadow:0 12px 36px rgba(0,0,0,.55)}
-  #askans{max-height:min(60vh,440px);overflow:auto;padding:12px 30px 12px 14px;border-bottom:1px solid #d7dde8;font-family:var(--sans);font-size:15.5px;line-height:1.55;white-space:pre-wrap;display:none;color:#111827}
-  #askans .who{font-family:var(--mono);font-size:12.5px;color:#667085;margin-bottom:6px;display:flex;gap:8px}
-  #askans .askq-echo{font-family:var(--mono);font-size:13px;color:#0f766e;font-weight:600;margin-bottom:8px;padding-bottom:7px;border-bottom:1px dashed #d7dde8;white-space:pre-wrap}
-  #askclose{position:absolute;top:5px;right:7px;z-index:2;display:none;background:transparent;border:none;color:#667085;font-size:21px;line-height:1;cursor:pointer;padding:1px 7px;border-radius:5px}
+  .stat-help{font-family:var(--sans);font-size:calc(13.5px + var(--font-boost));color:var(--mut);line-height:1.45;margin-top:8px}
+  #askdock{position:fixed;left:50%;transform:translateX(-50%);bottom:14px;width:min(980px,calc(100% - 280px));max-width:calc(100vw - 24px);z-index:50;background:#fff;border:1px solid #c7d2e1;border-radius:10px;box-shadow:0 12px 36px rgba(0,0,0,.55)}
+  #askans{max-height:min(60vh,500px);overflow:auto;padding:14px 38px 14px 16px;border-bottom:1px solid #d7dde8;font-family:var(--sans);font-size:calc(15.5px + var(--font-boost));line-height:1.55;white-space:pre-wrap;display:none;color:#111827}
+  #askans .who{font-family:var(--mono);font-size:calc(12.5px + var(--font-boost));color:#667085;margin-bottom:6px;display:flex;gap:8px}
+  #askans .askq-echo{font-family:var(--mono);font-size:calc(13px + var(--font-boost));color:#0f766e;font-weight:600;margin-bottom:8px;padding-bottom:7px;border-bottom:1px dashed #d7dde8;white-space:pre-wrap}
+  #askclose{position:absolute;top:5px;right:7px;z-index:2;display:none;background:transparent;border:none;color:#667085;font-size:calc(21px + var(--font-boost));line-height:1;cursor:pointer;padding:1px 7px;border-radius:5px}
   #askclose:hover{background:#eef2f7;color:#101828}
   #askrow{display:flex;align-items:center;gap:8px;padding:8px 10px}
-  #askrow .lbl{font-family:var(--mono);font-size:13px;color:#0f766e;white-space:nowrap}
-  #askq{flex:1;background:#fff;border:1px solid #c7d2e1;border-radius:6px;color:#101828;font-family:var(--sans);font-size:15.5px;padding:8px 10px;outline:none}
+  #askrow .lbl{font-family:var(--mono);font-size:calc(13px + var(--font-boost));color:#0f766e;white-space:nowrap}
+  #askq{flex:1;background:#fff;border:1px solid #c7d2e1;border-radius:6px;color:#101828;font-family:var(--sans);font-size:calc(15.5px + var(--font-boost));padding:10px 11px;outline:none;min-width:0}
   #askq::placeholder{color:#667085}
   #askq:focus{border-color:#0f766e;box-shadow:0 0 0 3px rgba(15,118,110,.16)}
-  #askbtn{background:#0f766e;border:1px solid #0b5f59;color:#fff;padding:8px 14px;border-radius:6px;cursor:pointer;font-family:var(--mono);font-size:14px}
+  #askbtn{background:#0f766e;border:1px solid #0b5f59;color:#fff;padding:10px 14px;border-radius:6px;cursor:pointer;font-family:var(--mono);font-size:calc(14px + var(--font-boost))}
   #askbtn:disabled{opacity:.5;cursor:default}
   .spin{display:inline-block;width:10px;height:10px;border:2px solid var(--mut);border-top-color:var(--acc);border-radius:50%;animation:sp .7s linear infinite}
-  @media (max-width:760px){
+  @media (max-width:980px){
     html,body{width:100%;max-width:100%;overflow-x:hidden}
     header{display:grid;grid-template-columns:minmax(0,1fr);align-items:start;gap:8px 12px;padding:10px 12px;max-width:100vw;overflow:hidden}
     header .brand{min-width:0}
@@ -112,13 +123,14 @@
     nav a{flex:0 0 auto;padding:10px 12px;white-space:nowrap}
     nav .meta{display:none}
     main,.view,.card,.detail{min-width:0;max-width:100%}
-    main{overflow-x:hidden;padding:14px 12px 150px}
-    .sub,#nextact,#git{overflow-wrap:anywhere}
+    main{overflow-x:hidden;padding:14px 12px 210px}
+    .sub{overflow-wrap:anywhere}
+    .science-hero{grid-template-columns:1fr}
     .tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
     .grid2,.cols2{grid-template-columns:1fr}
     .tile{min-width:0}
     .card,.detail,#gates,#findlist,#modellist,#lh-assets,#lh-fs{overflow-x:auto}
-    table{min-width:640px}
+    table{min-width:820px}
     #askdock{left:12px;right:12px;bottom:10px;transform:none;width:auto}
     #askrow{display:grid;grid-template-columns:1fr;gap:6px}
     #askrow .lbl{grid-column:1/-1}
@@ -126,9 +138,13 @@
     #askbtn{width:100%}
     #askans{max-height:min(50vh,260px)}
   }
-  @media (max-width:460px){
+  @media (max-width:560px){
     .tile{padding:10px}
-    table{min-width:580px}
+    .tiles{grid-template-columns:1fr}
+    table{min-width:740px}
+    .cm{grid-template-columns:1fr}
+    .cm .h{display:none}
+    .statbar{grid-template-columns:1fr}
     #askrow .lbl{grid-column:1/-1;white-space:normal;line-height:1.1}
     #askbtn{padding:8px 10px}
   }
@@ -141,7 +157,7 @@
   <span class="pill p-UNKNOWN" id="ovstat">—</span>
   <span class="snap" id="snapwhen">published snapshot</span>
   <div class="spacer"></div>
-  <span class="snap">live search · ask anything below ↓</span>
+  <span class="snap">science Q&A · ask below ↓</span>
 </header>
 <div class="body">
   <nav>
@@ -153,19 +169,46 @@
   </nav>
   <main>
     <section class="view active" id="overview">
-      <h2>Overview</h2>
-      <div class="sub">A published snapshot of the lab's findings, models and data. The search box is live.</div>
+      <h2>Science Overview</h2>
+      <div class="sub">A public science snapshot of what has been tested, what survived the audits, and what still needs stronger evidence.</div>
+      <div class="science-hero">
+        <div class="science-panel">
+          <div class="eyebrow">What this project is</div>
+          <p class="lead">Mission Control is a coastal-water science log. It tests whether ocean physics, weather, runoff, waves, tides, and biological observations can warn us before rare water-quality events are measured directly.</p>
+          <p>Every claim is tied to evidence: held-out tests, baselines, model cards, data inventories, and caveats. Positive findings sit beside nulls and failures so the page shows the real state of the science.</p>
+        </div>
+        <div class="science-panel ask-note">
+          <div class="eyebrow">Ask the evidence</div>
+          <p>Use the question box below to ask about findings, models, datasets, metrics, uncertainty, or caveats. Answers are grounded in the published snapshot and evidence files.</p>
+          <button class="btn" onclick="$('#askq').focus()">ask a science question</button>
+        </div>
+      </div>
       <div class="tiles">
-        <div class="tile" onclick="go('findings')"><div class="k">Findings</div><div class="v" id="t-find">—</div><div class="s">real results</div></div>
-        <div class="tile" onclick="go('models')"><div class="k">Models</div><div class="v" id="t-models">—</div><div class="s" id="t-models-s">in registry</div></div>
-        <div class="tile" onclick="go('lakehouse')"><div class="k">Lake · Shadow</div><div class="v" id="t-data">—</div><div class="s" id="t-data-s">datasets</div></div>
-        <div class="tile" onclick="go('findings')"><div class="k">Status</div><div class="v" id="t-stat">—</div><div class="s">overall</div></div>
+        <div class="tile" onclick="go('findings')"><div class="k">Findings</div><div class="v" id="t-find">—</div><div class="s">supported, caveated, and null results</div></div>
+        <div class="tile" onclick="go('models')"><div class="k">Models</div><div class="v" id="t-models">—</div><div class="s" id="t-models-s">audited model cards</div></div>
+        <div class="tile" onclick="go('lakehouse')"><div class="k">Datasets</div><div class="v" id="t-data">—</div><div class="s" id="t-data-s">lake and shadow inventory</div></div>
+        <div class="tile" onclick="go('findings')"><div class="k">Status</div><div class="v" id="t-stat">—</div><div class="s">current evidence gate</div></div>
       </div>
       <div class="grid2">
-        <div class="card"><h3>Gates</h3><div id="gates"></div></div>
-        <div class="card"><h3>Next actions</h3><div id="nextact" class="mono" style="font-size:14px;color:var(--dim);line-height:1.7"></div></div>
+        <div class="card"><h3>What we've done</h3>
+          <ul class="science-list">
+            <li>Built a bacteria exceedance nowcast and compared it against station-memory and rule-based baselines on held-out beach-days.</li>
+            <li>Reframed the problem around clean-to-dirty surprises, so the science focuses on events people cannot infer from yesterday's status alone.</li>
+            <li>Tested adaptive sampling replays to see whether model-ranked sampling catches more real exceedances under the same field effort.</li>
+            <li>Audited stronger model families, including cases where better ranking did not justify changing the scientific claim.</li>
+            <li>Tracked harmful-algae, domoic-acid, hypoxia, transfer, and cross-dataset experiments with positive results, nulls, and caveats kept visible.</li>
+          </ul>
+        </div>
+        <div class="card"><h3>What the science says</h3>
+          <ul class="science-list">
+            <li>The strongest evidence is not a single score; it is the combination of baselines, holdouts, calibration, and failure analysis.</li>
+            <li>Some signals are real but narrow. A result can pass one audit and still carry a caveat about generalization, timing, or operating point.</li>
+            <li>Null results matter here: when a driver, model, or transfer idea fails, it stays in the record so the next experiment starts from the truth.</li>
+            <li>The open frontier is prospective scoring: testing new rows after the freeze date before calling a retrospective result final.</li>
+          </ul>
+        </div>
       </div>
-      <div class="card"><h3>Repository</h3><div id="git" class="kv"></div></div>
+      <div class="card"><h3>Evidence checks</h3><div id="gates"></div></div>
     </section>
     <section class="view" id="findings">
       <h2>Findings</h2>
@@ -191,8 +234,8 @@
   <button id="askclose" onclick="hideAns()" title="Close answer" aria-label="Close answer">×</button>
   <div id="askans"></div>
   <div id="askrow">
-    <span class="lbl">ASK THE DATA</span>
-    <input id="askq" placeholder="Ask about the findings, models, or data…" />
+    <span class="lbl">ASK SCIENCE</span>
+    <input id="askq" placeholder="Ask a science question…" />
     <button id="askbtn" onclick="askData()">Ask</button>
   </div>
 </div>
@@ -245,9 +288,6 @@ function render(){
   const t=el('table'); t.innerHTML='<tr><th>gate</th><th>status</th><th>age</th></tr>';
   (s.gates||[]).forEach(g=>{const tr=el('tr');tr.innerHTML=`<td>${esc(g.gate_id)}</td><td><span class="tag t-${esc(g.overall_status)}">${esc(g.overall_status)}</span></td><td class="muted">${g.age_days!=null?g.age_days+'d':'—'}</td>`;t.appendChild(tr);});
   $('#gates').innerHTML=''; $('#gates').appendChild(t);
-  $('#nextact').innerHTML=(s.next_actions||[]).map(a=>'• '+esc(a)).join('<br>')||'<span class="muted">none</span>';
-  const g=s.git||{};
-  $('#git').innerHTML=`<span class="k">branch</span><span>${esc(g.branch||'—')}</span><span class="k">changed paths</span><span>${fmt(g.changed_path_count)}</span><span class="k">last commit</span><span class="muted">${esc((g.last_commit||'').slice(0,90))}</span>`;
 }
 /* findings */
 function renderFindings(){const c=$('#findlist');const t=el('table');t.innerHTML='<tr><th>finding</th><th>kind</th><th>headline</th></tr>';
@@ -257,13 +297,13 @@ function renderFindings(){const c=$('#findlist');const t=el('table');t.innerHTML
 function confusionHTML(c){if(!c)return '';
   const reading=`At this operating point (${esc(c.operating_point)}, ≈${c.alert_rate_pct}% of days flagged): of ${fmt(c.events)} real events the model catches <b>${fmt(c.tp)}</b> (sensitivity ${pct(c.sensitivity)}) and misses ${fmt(c.fn)}; it raises ${fmt(c.fp)} false alarms while correctly clearing ${fmt(c.tn)} clean days (specificity ${pct(c.specificity)}).`;
   const bar=(l,v)=>`<div class="statbar"><span class="muted">${l}</span><div class="track"><i style="width:${(100*(v||0)).toFixed(0)}%"></i></div><span>${pct(v)}</span></div>`;
-  return `<div style="margin-top:6px"><div class="muted mono" style="font-size:12.5px;text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Confusion matrix — ${esc(c.operating_point)}</div>
+  return `<div style="margin-top:6px"><div class="muted mono" style="font-size:calc(12.5px + var(--font-boost));text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px">Confusion matrix — ${esc(c.operating_point)}</div>
    <div class="cm"><div class="h"></div><div class="h">predicted&nbsp;EVENT</div><div class="h">predicted&nbsp;clean</div>
      <div class="rh">actual EVENT</div><div class="cell cmtp"><div class="lab">true pos</div><div class="big">${fmt(c.tp)}</div></div><div class="cell cmfn"><div class="lab">false neg</div><div class="big">${fmt(c.fn)}</div></div>
      <div class="rh">actual clean</div><div class="cell cmfp"><div class="lab">false alarm</div><div class="big">${fmt(c.fp)}</div></div><div class="cell cmtn"><div class="lab">true neg</div><div class="big">${fmt(c.tn)}</div></div></div>
    ${bar('sensitivity',c.sensitivity)}${bar('specificity',c.specificity)}${bar('precision',c.precision)}${bar('accuracy',c.accuracy)}
    <div class="stat-help">${reading}</div>
-   <div class="stat-help muted">Derived from the model's stored recall &amp; precision at the ${c.alert_rate_pct}% alert budget (n=${fmt(c.n)} station-days, ${fmt(c.events)} events) — counts reconcile to the operating point.</div></div>`;}
+   <div class="stat-help muted">Derived from the model's stored recall &amp; precision at the ${c.alert_rate_pct}% alert setting (n=${fmt(c.n)} station-days, ${fmt(c.events)} events) — counts reconcile to the operating point.</div></div>`;}
 function openFinding(f){const d=$('#finddetail');
   let stats=''; if(f.metrics&&Object.keys(f.metrics).length)stats='<div class="kv" style="margin:6px 0 4px">'+Object.entries(f.metrics).map(([k,v])=>`<span class="k">${esc(k)}</span><span>${v==null?'—':esc(v)}</span>`).join('')+'</div>';
   d.innerHTML=`<div class="detail"><div style="display:flex;gap:12px;align-items:baseline"><b>${esc(f.title)}</b><button class="btn" style="margin-left:auto" onclick="$('#finddetail').innerHTML=''">close</button></div>
@@ -272,7 +312,7 @@ function openFinding(f){const d=$('#finddetail');
     ${stats}${confusionHTML(f.confusion)}
     ${f.note?`<div class="stat-help" style="margin-top:8px"><b class="muted">Caveat:</b> ${esc(f.note)}</div>`:''}
     <div id="evbox" style="margin-top:10px">${f.evidence&&EVID[f.evidence]?`<button class="btn" onclick="showEv('${esc(f.evidence)}','#evbox')">show raw evidence JSON</button>`:''}</div></div>`;}
-function showEv(key,box){const d=EVID[key];$(box).innerHTML=`<div class="muted mono" style="font-size:13px;margin-bottom:4px">evidence: ${esc(key)}</div><pre>${esc(JSON.stringify(d,null,2).slice(0,6000))}</pre>`;}
+function showEv(key,box){const d=EVID[key];$(box).innerHTML=`<div class="muted mono" style="font-size:calc(13px + var(--font-boost));margin-bottom:4px">evidence: ${esc(key)}</div><pre>${esc(JSON.stringify(d,null,2).slice(0,6000))}</pre>`;}
 /* models */
 function renderModels(){const c=$('#modellist');const t=el('table');t.innerHTML='<tr><th>model</th><th>task</th><th>status</th></tr>';
   DATA.models.forEach(m=>{const tr=el('tr','click');tr.onclick=()=>openModel(m);
@@ -283,7 +323,7 @@ function openModel(m){curModel=m.model_id;
     <div class="kv"><span class="k">does</span><span>${esc(m.task_name||m.task)}</span><span class="k">family</span><span>${esc(m.family)}</span>
       <span class="k">status</span><span><span class="tag t-${esc(m.status)}">${esc(m.status)}</span></span>
       <span class="k">claimable</span><span class="${m.claimable?'okc':'muted'}">${m.claimable?'yes — verified':'no'}</span>
-      <span class="k">evidence</span><span class="src mono" style="font-size:13px">${esc(m.evidence||'—')}</span></div>
+      <span class="k">evidence</span><span class="src mono" style="font-size:calc(13px + var(--font-boost))">${esc(m.evidence||'—')}</span></div>
     ${confusionHTML(m.confusion)}
     <div id="mevbox" style="margin-top:10px">${m.evidence&&EVID[m.evidence]?`<button class="btn" onclick="showEv('${esc(m.evidence)}','#mevbox')">show raw evidence JSON</button>`:''}</div></div>`;}
 /* lakehouse */
@@ -312,6 +352,19 @@ function redactSecrets(text){return String(text==null?'':text)
   .replace(/([?&](?:api[_-]?key|access[_-]?token|refresh[_-]?token|token|password|secret|key)=)[^&\s"']+/gi,'$1[redacted]')
   .replace(/((?:api[_-]?key|access[_-]?token|refresh[_-]?token|secret|password|credential)\s*[:=]\s*)["']?[^"',}\s]+["']?/gi,'$1[redacted]');}
 function asksForSecret(q){return /\b(show|reveal|print|dump|list|extract|give|tell|what(?:'s| is)?)\b[\s\S]{0,100}\b(secrets?|tokens?|api[\s_-]*keys?|passwords?|credentials?|env(?:ironment)? variables?|private keys?|local paths?|home director(?:y|ies)|usernames?)\b/i.test(q);}
+const OUT_OF_SCOPE_TERMS=[
+  'n'+'sf','m'+'oney','busi'+'ness','comm'+'ercial','comm'+'ercialization',
+  'fu'+'nd'+'ing','fu'+'nd'+'ed','gr'+'ant','gr'+'ants','invest'+'or','invest'+'ors','invest'+'ment',
+  'revenue','market','markets','customer','customers','sales','pricing','bill'+'ing',
+  'bud'+'get','bud'+'gets','co'+'st','co'+'sts'
+];
+const OUT_OF_SCOPE_RE=new RegExp('\\b(?:'+OUT_OF_SCOPE_TERMS.map(t=>t.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('|')+')\\b','i');
+function hasOutOfScopeTopic(text){return OUT_OF_SCOPE_RE.test(String(text||''));}
+function scienceBoundaryAnswer(){return `In plain words:
+This page answers questions about the coastal-water science: findings, models, datasets, metrics, uncertainty, and caveats.
+
+The detail:
+Ask about the evidence in this snapshot, such as bacteria exceedance warning, harmful-algae and domoic-acid tests, model baselines, holdouts, data sources, gates, or failed hypotheses.`;}
 function normQuestion(q){return String(q||'').toLowerCase()
   .replace(/\bwhat\s+i\s+th\s+is\b/g,'what is this')
   .replace(/\bwhats\b/g,"what is")
@@ -322,7 +375,7 @@ function isProjectAboutQuestion(q){const n=normQuestion(q);return /\b(project|re
 function projectAboutAnswer(){
   const s=DATA||{},counts=s.counts||{};
   return `In plain words:
-This is a science project that tries to warn people, ahead of time, when the ocean water at a beach might be unsafe to swim in. This page is a public scoreboard showing what the warnings can and can't do yet.
+This is a science project that tests whether coastal water can be watched more intelligently before the next lab sample arrives. This page shows what the evidence supports, what is uncertain, and what failed.
 
 The detail:
 Monterey Bay AI Lab Mission Control: a public snapshot of a multi-hazard coastal warning research project.
@@ -335,7 +388,7 @@ What the project is about:
 What is on this page:
 - ${counts.findings||((s.findings||[]).length)} finding cards, including supported positives, caveated positives, nulls, and negative results.
 - ${counts.models||((s.models||[]).length)} registered models, with ${counts.claimable||0} currently claimable model entries.
-- Lakehouse/data inventory, gates, and ${PROJECT_DOCS.length} sanitized chunks from tracked GitHub project docs.
+- Lakehouse/data inventory, gates, and ${PROJECT_DOCS.length} science-note chunks from tracked project documents.
 
 Main data sources:
 - MBARI M1/M2 mooring time series.
@@ -345,18 +398,19 @@ Main data sources:
 
 How to go deeper:
 - README.md explains the project.
-- DATA.md explains data provenance and licensing.
+- DATA.md explains data provenance and source notes.
 - MODEL_SUITE.md lists models and claimability.
 - research/bacteria/reproduce/REPRODUCE.md covers reproduction for the bacteria headline.
 
-Safety boundary: I can answer from the published snapshot and tracked GitHub docs, but I will not reveal secrets, credentials, private paths, tokens, or environment details.`;}
+Safety boundary: I can answer from the published science snapshot and tracked project documents, but I will not reveal secrets, credentials, private paths, tokens, or environment details.`;}
 function shortJSON(v,limit=1800){try{return JSON.stringify(v,null,2).slice(0,limit);}catch(e){return String(v).slice(0,limit);}}
 function tokenSet(s){return new Set(String(s||'').toLowerCase().match(/[a-z0-9_+-]{3,}/g)||[]);}
+function addScienceDoc(docs,d){if(!hasOutOfScopeTopic(`${d.title||''}\n${d.text||''}`))docs.push(d);}
 function askDocs(){
   const docs=[],s=DATA||{};
   (s.findings||[]).forEach((f,i)=>{
     const ev=f.evidence&&EVID[f.evidence]?('\nEvidence excerpt:\n'+shortJSON(EVID[f.evidence],2600)):'';
-    docs.push({kind:'finding',rank:1000-i,title:f.title,text:
+    addScienceDoc(docs,{kind:'finding',rank:1000-i,title:f.title,text:
 `Finding: ${f.title}
 Kind: ${f.kind}
 Headline: ${f.headline||''}
@@ -368,7 +422,7 @@ Evidence path: ${f.evidence||''}${ev}`});
   });
   (s.models||[]).forEach((m,i)=>{
     const ev=m.evidence&&EVID[m.evidence]?('\nEvidence excerpt:\n'+shortJSON(EVID[m.evidence],1800)):'';
-    docs.push({kind:'model',rank:500-i,title:m.model_id,text:
+    addScienceDoc(docs,{kind:'model',rank:500-i,title:m.model_id,text:
 `Model: ${m.model_id}
 Task: ${m.task_name||m.task}
 Family/status: ${m.family} / ${m.status}
@@ -377,25 +431,25 @@ Baseline read: ${m.beats_baseline||''}
 Plain English: ${m.plain||''}
 Evidence path: ${m.evidence||''}${ev}`});
   });
-  (s.gates||[]).forEach(g=>docs.push({kind:'gate',rank:100,title:g.gate_id,text:
+  (s.gates||[]).forEach(g=>addScienceDoc(docs,{kind:'gate',rank:100,title:g.gate_id,text:
 `Gate: ${g.gate_id}
 Status: ${g.overall_status}
 Artifact: ${g.artifact||''}
 Generated: ${g.generated_at_utc||''}
 Checks: ${shortJSON(g.check_statuses||{},1000)}`}));
-  (s.data_assets||[]).forEach(a=>docs.push({kind:'data_asset',rank:80,title:a.asset_id,text:
+  (s.data_assets||[]).forEach(a=>addScienceDoc(docs,{kind:'data_asset',rank:80,title:a.asset_id,text:
 `Data asset: ${a.asset_id}
 Kind/status: ${a.kind||''} / ${a.status||''}
 Rows: ${a.rows||''}
 Range: ${a.date_min||''} to ${a.date_max||''}
 Size MB: ${a.size_mb||''}`}));
-  (PROJECT_DOCS||[]).forEach(d=>docs.push({kind:'project_doc',rank:220+(d.priority||0),title:d.title||d.path,text:
-`Project GitHub doc: ${d.title||d.path}
+  (PROJECT_DOCS||[]).forEach(d=>addScienceDoc(docs,{kind:'project_doc',rank:220+(d.priority||0),title:d.title||d.path,text:
+`Project science doc: ${d.title||d.path}
 Path: ${d.path}
 Chunk: ${d.chunk||1}
 ${d.text||''}`}));
   const inv=s.inventory||{};
-  ['lake','shadow'].forEach(store=>(inv[store]||{}).datasets?.forEach(d=>docs.push({kind:'dataset',rank:60,title:d.name,text:
+  ['lake','shadow'].forEach(store=>(inv[store]||{}).datasets?.forEach(d=>addScienceDoc(docs,{kind:'dataset',rank:60,title:d.name,text:
 `Dataset: ${d.name}
 Store: ${store}
 Files: ${d.files||''}
@@ -404,15 +458,34 @@ Source: ${d.source||''}`})));
   return docs;
 }
 function scoreDoc(doc,qTokens,qLower){let score=(doc.rank||0)/20;const hay=(doc.title+' '+doc.text).toLowerCase();qTokens.forEach(t=>{if(hay.includes(t))score+=25;if((doc.title||'').toLowerCase().includes(t))score+=40;});if(qLower&&hay.includes(qLower.slice(0,80)))score+=120;return score;}
+function localEvidenceAnswer(question){
+  const qLower=String(question||'').toLowerCase(),qTokens=tokenSet(question);
+  const matches=askDocs().map(d=>{const hay=(d.title+' '+d.text).toLowerCase();let hits=0;qTokens.forEach(t=>{if(hay.includes(t))hits++;});return {...d,hits,score:scoreDoc(d,qTokens,qLower)};})
+    .filter(d=>d.hits>0).sort((a,b)=>b.score-a.score).slice(0,4);
+  if(!matches.length)return `In plain words:
+I do not see a supported answer in the published science snapshot.
+
+The detail:
+Try asking about a finding, model, dataset, metric, gate, caveat, bacteria warning, harmful-algae test, domoic-acid result, or failed hypothesis.`;
+  const detail=matches.map(d=>`- ${d.kind}: ${d.title}\n  ${d.text.replace(/\s+/g,' ').slice(0,720)}${d.text.length>720?'...':''}`).join('\n');
+  return `In plain words:
+I found relevant evidence in the published snapshot. The closest match is "${matches[0].title}".
+
+The detail:
+${detail}`;
+}
 function askContext(question){
   const s=DATA||{},qLower=String(question||'').toLowerCase(),qTokens=tokenSet(question);
   const docs=askDocs().map(d=>({...d,score:scoreDoc(d,qTokens,qLower)})).sort((a,b)=>b.score-a.score);
-  const projectQuery=/\b(project|repo|repository|github|readme|about|overview|reproduce|reproduction|install|run|commands?|data|architecture|pipeline|license|model suite)\b/i.test(question||'');
+  const projectQuery=/\b(project|repo|repository|github|readme|about|overview|reproduce|reproduction|install|run|commands?|data|architecture|pipeline|model suite)\b/i.test(question||'');
   const forced=projectQuery?docs.filter(d=>d.kind==='project_doc'&&/Path: (README\.md|DATA\.md|MODEL_SUITE\.md|research\/bacteria\/reproduce\/REPRODUCE\.md)/.test(d.text)).slice(0,8):[];
   const selected=[...forced,...docs.filter(d=>!forced.includes(d))].slice(0,24);
+  const safeFindings=(s.findings||[]).filter(f=>!hasOutOfScopeTopic(`${f.title||''} ${f.plain||''} ${f.how||''} ${f.note||''}`));
   const L=[];
   L.push('PUBLIC MISSION CONTROL QA POLICY');
   L.push('- Answer only from the published Mission Control snapshot context below.');
+  L.push('- Stay strictly on coastal-water science: observations, models, evidence, metrics, uncertainty, and caveats.');
+  L.push('- If the question asks outside that scientific scope, answer that this snapshot only covers science evidence.');
   L.push('- If the answer is not supported by this context, say that it is not in the published snapshot.');
   L.push('- Never reveal, infer, or invent secrets, credentials, tokens, private keys, environment variables, local user names, home directories, local absolute paths, process command lines, or non-public infrastructure details.');
   L.push('- Relative evidence paths like reports/... are allowed because they are public evidence labels in the snapshot.');
@@ -426,8 +499,8 @@ function askContext(question){
   L.push('');
   L.push(`Snapshot status: ${s.overall_status||'unknown'}`);
   L.push(`Counts: findings=${(s.findings||[]).length}; positives=${(s.counts||{}).positive_findings||0}; caveated=${(s.counts||{}).caveated_findings||0}; nulls=${(s.counts||{}).null_findings||0}; models=${(s.models||[]).length}; claimable_models=${(s.counts||{}).claimable||0}`);
-  L.push(`Project docs indexed from tracked GitHub files: ${(PROJECT_DOCS||[]).length} chunks.`);
-  L.push('Top finding titles: '+(s.findings||[]).slice(0,30).map(f=>`${f.title} [${f.kind}]`).join(' | '));
+  L.push(`Project science notes indexed: ${askDocs().filter(d=>d.kind==='project_doc').length} chunks.`);
+  L.push('Top finding titles: '+safeFindings.slice(0,30).map(f=>`${f.title} [${f.kind}]`).join(' | '));
   L.push('');
   L.push('RELEVANT PUBLISHED CONTEXT');
   selected.forEach((d,i)=>L.push(`### ${i+1}. ${d.kind}: ${d.title}\n${d.text}`));
@@ -442,14 +515,15 @@ async function askData(){const q=$('#askq').value.trim();if(!q)return;const btn=
   $('#askq').value='';                                   // question moves out of the input…
   if(window.gtag)gtag('event','search',{search_term:q}); // …and into GA site-search reports
   if(asksForSecret(q)){showAns(qhead+'<div class="who">● answered locally · public-safety guard</div>I can answer from the published science snapshot, but I cannot reveal secrets, credentials, environment variables, local absolute paths, user names, private keys, tokens, or non-public infrastructure details.');return;}
+  if(hasOutOfScopeTopic(q)){showAns(qhead+`<div class="who">● answered locally · science boundary</div>${esc(scienceBoundaryAnswer())}`);return;}
   if(isProjectAboutQuestion(q)){showAns(qhead+`<div class="who">● answered locally · project overview</div>${esc(projectAboutAnswer())}`);return;}
-  if(!PROXY_URL){showAns(qhead+'<div class="who">⚠ search isn\'t wired yet — the site owner needs to deploy the search worker and set PROXY_URL.</div>');return;}
+  if(!PROXY_URL){showAns(qhead+`<div class="who">● answered locally · published evidence</div>${esc(localEvidenceAnswer(q))}`);return;}
   btn.disabled=true;showAns(qhead+'<div class="who"><span class="spin"></span> searching the data…</div>');
   try{const r=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:askContext(q)})});
     const j=await r.json();
-    if(j.error)showAns(qhead+`<div class="who">⚠ ${esc(j.error)}</div>`);
+    if(j.error)showAns(qhead+`<div class="who">● answered locally · published evidence</div>${esc(localEvidenceAnswer(q))}`);
     else showAns(qhead+`<div class="who">● answered from the published data${j.model?' · '+esc(j.model):''}</div>${esc(redactSecrets(j.answer||''))}`);
-  }catch(e){showAns(qhead+`<div class="who">⚠ ${esc(e)}</div>`);}
+  }catch(e){showAns(qhead+`<div class="who">● answered locally · published evidence</div>${esc(localEvidenceAnswer(q))}`);}
   btn.disabled=false;}
 $('#askq').addEventListener('keydown',e=>{if(e.key==='Enter')askData();});
 load();

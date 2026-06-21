@@ -2,16 +2,13 @@
  * MBAL search proxy — Cloudflare Worker (Google Gemini via AI Studio key).
  *
  * Holds your Google AI Studio key as a SECRET (never shipped to the browser) and answers
- * search questions from the published data, grounded + capped so a public site can't
- * run up your usage.
+ * science questions from the published data, grounded and capped for a public site.
  *
- * Cost/abuse guards:
- *   - model = Gemini Flash (cheap; generous free tier)
+ * Guardrails:
+ *   - model = Gemini Flash
  *   - max output tokens capped (MAX_OUTPUT)
  *   - input context truncated (MAX_CONTEXT chars) + question length cap
  *   - optional per-IP + global daily rate limit if you bind a KV namespace "RL"
- *   - HARD BACKSTOP: AI Studio free tier has its own rate limits; if you later attach
- *     billing, set a budget alert.
  *
  * Deploy (see README.md):
  *   wrangler secret put GOOGLE_AI_KEY      # paste your AI Studio key — stays secret on Cloudflare
@@ -19,7 +16,7 @@
  */
 
 const MODEL = "gemini-2.0-flash";   // override with the MODEL env var if needed
-const MAX_OUTPUT = 512;
+const MAX_OUTPUT = 900;
 const MAX_CONTEXT = 12000;
 const MAX_QUESTION = 500;
 const PER_IP_PER_DAY = 40;     // used only if a KV namespace "RL" is bound
@@ -74,7 +71,8 @@ export default {
     const model = env.MODEL || MODEL;
     const system =
       "You are the search assistant for the Monterey Bay AI Lab's public Mission Control. " +
-      "Answer ONLY from the DATA provided. If the answer is not in the data, say so plainly. Never invent numbers. " +
+      "Answer ONLY from the DATA provided. Stay strictly on coastal-water science: observations, models, evidence, metrics, uncertainty, and caveats. " +
+      "If the answer is not in the data, or the question is outside that scientific scope, say so plainly. Never invent numbers. " +
       "Write so a 75-year-old, a 5-year-old, AND a data scientist are all served, in TWO labelled parts: " +
       "Part 1 begins on its own line with 'In plain words:' and gives 1-2 short jargon-free sentences anyone " +
       "would understand (explain any term like 'average precision' in everyday words; lead with the bottom line). " +
