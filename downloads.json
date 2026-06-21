@@ -29,16 +29,16 @@
    "path": "stations.geojson",
    "type": "application/geo+json",
    "license": "Apache-2.0",
-   "bytes": 218238,
-   "sha256": "892acc290a0697df7b5e9c3979c0f679e31c4cefc9a82245d4a5788546d81f98"
+   "bytes": 264663,
+   "sha256": "1dd7856e5e36214c010f6d14d490ac52de73d9ec9715c89b8e59a9a8a24b1939"
   },
   {
    "title": "Program results summary",
    "path": "downloads/PROGRAM_RESULTS.md",
    "type": "text/markdown",
    "license": "Apache-2.0",
-   "bytes": 13381,
-   "sha256": "9d2b73e14f6dde93a325870d358ef4c60b5166c1f09851b1a7a9feca17eea25d"
+   "bytes": 13958,
+   "sha256": "1b261ce930d32f1e0023f9f218998639c66cd8e84c748c642e484a08aa91f97e"
   }
  ]
 }

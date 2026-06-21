@@ -115,10 +115,15 @@
   .qaans .ground .g{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#aeb4bb}
   .qaans .ground .s{font-family:var(--mono);font-size:11.5px;color:#5fe0d6;background:rgba(40,196,186,.18);border:1px solid rgba(40,196,186,.28);border-radius:6px;padding:3px 8px}
   /* simple suggestion composer (on-page, stays here) */
-  .suggest-box{margin-top:18px;border-top:1px solid rgba(255,255,255,.12);padding-top:16px}
-  .suggest-box .sl{display:flex;align-items:center;gap:9px;margin-bottom:8px}
-  .suggest-box .sl i{width:6px;height:6px;border-radius:50%;background:var(--acc-bright)}
-  .suggest-box .sl span{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--acc-bright)}
+  .suggest-box{margin-top:16px;border-top:1px solid rgba(255,255,255,.12);padding-top:10px}
+  .suggest-toggle{width:100%;appearance:none;border:none;background:transparent;color:#dfe3e7;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0;font-family:var(--sans);font-size:14px;font-weight:650;text-align:left}
+  .suggest-toggle:hover{color:#fff}
+  .suggest-toggle .left{display:flex;align-items:center;gap:9px}
+  .suggest-toggle .dot{width:6px;height:6px;border-radius:50%;background:var(--acc-bright);box-shadow:0 0 0 4px rgba(40,196,186,.08)}
+  .suggest-toggle .caret{font-size:18px;color:var(--acc-bright);line-height:1;transition:transform .15s ease}
+  .suggest-box.open .suggest-toggle .caret{transform:rotate(90deg)}
+  .suggest-body{display:none;padding-top:4px}
+  .suggest-box.open .suggest-body{display:block}
   .suggest-box .help{margin:0 0 10px;font-size:13.5px;line-height:1.5;color:#b9bfc6}
   .suggest-box .help b{color:#dfe3e7;font-weight:600}
   #suggestq{width:100%;min-height:74px;resize:vertical;appearance:none;background:#26282f;border:1px solid #3a3d46;border-radius:11px;padding:12px 14px;font-family:var(--sans);font-size:14.5px;line-height:1.5;color:#fff;outline:none;transition:border-color .15s}
@@ -305,6 +310,10 @@
   .loadwrap{padding:80px 28px;text-align:center;color:var(--ink4);font-family:var(--mono);font-size:14px}
 
   /* ---- map ---- */
+  .maptoggle{display:inline-flex;gap:3px;margin-bottom:14px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:3px;box-shadow:var(--card-sh)}
+  .maptoggle button{appearance:none;border:none;background:none;cursor:pointer;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink3);padding:7px 15px;border-radius:8px;transition:all .14s}
+  .maptoggle button:hover{color:var(--ink)}
+  .maptoggle button.active{background:var(--acc);color:#fff}
   .mapwrap{position:relative;border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--card-sh);background:#eef2f3}
   #leafmap{height:560px;width:100%}
   #leafmap .leaflet-container{font-family:var(--sans)}
@@ -419,17 +428,22 @@
         <div class="chiplabel" id="chiplabel">Try one of these — they all have answers:</div>
         <div class="chips" id="qachips"></div>
         <div id="qaout"></div>
-        <div class="suggest-box">
-          <div class="sl"><i></i><span>Suggest a question</span></div>
-          <p class="help">Have a scientific question we should investigate? Write it however you like — a quick one line, or as detailed as you want (target, data, signal, baseline). <b>Examples:</b> “Does antecedent soil moisture warn of beach-bacteria exceedances earlier than rainfall?” · “Test pseudo-nitzschia as a domoic-acid signal — does it beat persistence?”</p>
-          <textarea id="suggestq" placeholder="e.g. Does river discharge predict bacteria exceedances better than rainfall alone, beating a station-memory baseline?"></textarea>
-          <input id="sugcontact" type="email" autocomplete="off" placeholder="Your email (optional — only if you'd like a reply)"/>
-          <input id="sughoney" tabindex="-1" autocomplete="off" aria-hidden="true"/>
-          <div class="actions">
-            <button id="suggestbtn" onclick="submitSuggestion()">Send question →</button>
-            <span class="signin">No account or sign-in needed — it's emailed straight to the lab and you stay on this page. A candidate question, not a claim; reviewed before anything runs.</span>
+        <div class="suggest-box" id="suggestbox">
+          <button class="suggest-toggle" type="button" aria-expanded="false" aria-controls="suggestbody" onclick="toggleSuggestion()">
+            <span class="left"><i class="dot"></i><span>Send a suggestion</span></span>
+            <span class="caret" aria-hidden="true">›</span>
+          </button>
+          <div class="suggest-body" id="suggestbody">
+            <p class="help">Have a scientific question we should investigate? Write it however you like — a quick one line, or as detailed as you want (target, data, signal, baseline). <b>Examples:</b> “Does antecedent soil moisture warn of beach-bacteria exceedances earlier than rainfall?” · “Test pseudo-nitzschia as a domoic-acid signal — does it beat persistence?”</p>
+            <textarea id="suggestq" placeholder="e.g. Does river discharge predict bacteria exceedances better than rainfall alone, beating a station-memory baseline?"></textarea>
+            <input id="sugcontact" type="email" autocomplete="off" placeholder="Your email (optional — only if you'd like a reply)"/>
+            <input id="sughoney" tabindex="-1" autocomplete="off" aria-hidden="true"/>
+            <div class="actions">
+              <button id="suggestbtn" onclick="submitSuggestion()">Send question →</button>
+              <span class="signin">No account or sign-in needed — it's emailed straight to the lab and you stay on this page. A candidate question, not a claim; reviewed before anything runs.</span>
+            </div>
+            <div id="suggest-result"></div>
           </div>
-          <div id="suggest-result"></div>
         </div>
       </div>
     </div>
@@ -521,8 +535,12 @@
   <!-- ===== MAP ===== -->
   <section class="view" id="map">
     <div style="margin-bottom:18px;max-width:760px">
-      <h1 class="sec">Where the data comes from</h1>
-      <p class="subhead">Every monitoring station behind the beach-bacteria work, by location. Marker size = number of lab samples; color = observed exceedance rate (AB411 &gt; 104 MPN/100 mL). This is <b>observation coverage</b>, not a prediction map — the model is a per-station nowcast, so we show where it has real support and where it doesn't, never a confident color over open water.</p>
+      <h1 class="sec">The model, station by station</h1>
+      <p class="subhead">Two honest views across the monitoring network. <b>Coverage</b> = where the data is and the observed exceedance rate. <b>Model skill</b> = each station colored by the model's actual held-out ranking skill (AUC) there. Stations with too few held-out events to score honestly stay hollow — we never paint confidence where there's no support, and never interpolate a surface over open water.</p>
+    </div>
+    <div class="maptoggle" id="maptoggle">
+      <button data-m="coverage" class="active">Coverage</button>
+      <button data-m="skill">Model skill</button>
     </div>
     <div class="mapwrap">
       <div id="leafmap"></div>
@@ -655,7 +673,7 @@ function renderOverview(){
   const metrics=[
     {k:'Findings', v:String(fs.length), e:'', sub:sup+' supported · '+nul+' null'},
     {k:'Models', v:String((s.models||[]).length), e:'', sub:(c.claimable||0)+' claimable'},
-    {k:'Lake datasets', v:String(assets.length), e:'', sub:fmt(totRows)+' rows'},
+    {k:'Governed assets', v:String(assets.length), e:'', sub:fmt(totRows)+' counted rows'},
     {k:'Last freeze', v: mm?MONTHS[+mm[2]-1]:'—', e: mm?"'"+mm[1].slice(2):'', sub:'prospective open'}
   ];
   $('#metrics').innerHTML=metrics.map(m=>`<div class="metric"><div class="k">${esc(m.k)}</div><div class="v"><b>${esc(m.v)}</b>${m.e?`<em>${esc(m.e)}</em>`:''}</div><div class="s">${esc(m.sub)}</div></div>`).join('');
@@ -909,32 +927,56 @@ function vocabDrawer(key){
   </div>`;
 }
 
-/* ---------- map (observation coverage — NOT a prediction surface) ---------- */
-let _map=null;
+/* ---------- map: two honest station-level views (coverage / model skill) ---------- */
+let _map=null,_mlayer=null,_feats=[],_mmax=1,_mmeta={};
 function brColor(br){if(br==null)return '#b8bdc3';if(br<0.08)return '#1a7a4f';if(br<0.18)return '#3f9e6b';if(br<0.30)return '#c9a23a';if(br<0.45)return '#e0772f';return '#b4453c';}
+function aucColor(a){if(a==null)return null;if(a<0.6)return '#b4453c';if(a<0.7)return '#e0772f';if(a<0.8)return '#c9a23a';if(a<0.88)return '#3f9e6b';return '#1a7a4f';}
+function mRad(n){return 3+(Math.sqrt(Math.max(n,1))/Math.sqrt(_mmax))*13;}
+function mPopup(p,mode){
+  const head=`<span class="pn">${esc(p.name)}</span><br><span class="pm">${esc(p.county||'')} · ${fmt(p.n_obs)} samples`;
+  if(mode==='skill'){const a=p.model_auc;
+    return head+` · ${fmt(p.n_test)} held-out (${fmt(p.events)} events)`+(a!=null?` · model AUC ${a.toFixed(2)} vs station-memory ${(p.mem_auc!=null?p.mem_auc.toFixed(2):'—')}`:` · too few events to score`)+`</span>`;}
+  return head+` · exceedance ${p.base_rate!=null?(100*p.base_rate).toFixed(0)+'%':'—'}${p.low_support?' · low support':''}</span>`;
+}
+function mDraw(mode){
+  if(!_mlayer)return; _mlayer.clearLayers();
+  _feats.forEach(f=>{const p=f.properties,c=f.geometry.coordinates;let fill,op,stroke,wt,dash;
+    if(mode==='skill'){const a=p.model_auc;
+      if(a==null){fill='#cfd2d6';op=0.14;stroke='#9aa0a7';wt=1;dash='2 2';}
+      else{fill=aucColor(a);op=0.85;stroke='#fff';wt=1;dash=null;}
+    }else{const low=p.low_support;fill=brColor(p.base_rate);op=low?0.28:0.82;stroke=low?'#9aa0a7':'#fff';wt=low?1.2:1;dash=low?'2 2':null;}
+    L.circleMarker([c[1],c[0]],{radius:mRad(p.n_obs),fillColor:fill,fillOpacity:op,color:stroke,weight:wt,dashArray:dash}).bindPopup(mPopup(p,mode)).addTo(_mlayer);});
+  const sc=_mmeta.scored_stations||0,tot=(_mmeta.stations||_feats.length);
+  if(mode==='skill'){
+    $('#mapnote').textContent=`${sc.toLocaleString()} of ${tot.toLocaleString()} stations have enough held-out events to score honestly; the rest stay hollow. Per-station AUC is noisy at low counts, so we mask rather than colour them. ${_mmeta.note||''}`;
+    $('#maplegend').innerHTML=`<div class="lt">Held-out model skill (AUC)</div>
+      <div class="lrow"><span class="sw" style="background:#b4453c"></span>poor (&lt; 0.60)</div>
+      <div class="lrow"><span class="sw" style="background:#c9a23a"></span>moderate (~0.75)</div>
+      <div class="lrow"><span class="sw" style="background:#1a7a4f"></span>strong (&gt; 0.88)</div>
+      <div class="lrow"><span class="ring"></span>too few events to score</div>
+      <div class="lt" style="margin-top:9px">marker size = sample count</div>`;
+  }else{
+    $('#mapnote').textContent=`${tot.toLocaleString()} stations with a known location. ${_mmeta.note||''}`;
+    $('#maplegend').innerHTML=`<div class="lt">Observed exceedance (AB411 &gt; 104)</div>
+      <div class="lrow"><span class="sw" style="background:#1a7a4f"></span>low (&lt; 8%)</div>
+      <div class="lrow"><span class="sw" style="background:#c9a23a"></span>moderate</div>
+      <div class="lrow"><span class="sw" style="background:#b4453c"></span>high (&gt; 45%)</div>
+      <div class="lrow"><span class="ring"></span>&lt; 30 samples (thin support)</div>
+      <div class="lt" style="margin-top:9px">marker size = sample count</div>`;
+  }
+  document.querySelectorAll('#maptoggle button').forEach(b=>b.classList.toggle('active',b.dataset.m===mode));
+}
 function renderMap(){
   const host=$('#leafmap'); if(!host)return;
   if(!window.L){host.innerHTML='<div class="mapfail">The map library didn’t load (offline?). The station data is still downloadable in the footer below.</div>';return;}
   if(_map){setTimeout(()=>_map.invalidateSize(),60);return;}
   _map=L.map('leafmap',{scrollWheelZoom:false}).setView([36.6,-120.6],6);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO',subdomains:'abcd',maxZoom:19}).addTo(_map);
+  document.querySelectorAll('#maptoggle button').forEach(b=>b.onclick=()=>mDraw(b.dataset.m));
   fetch('stations.geojson',{cache:'no-cache'}).then(r=>r.json()).then(fc=>{
-    const feats=fc.features||[]; let mx=1; feats.forEach(f=>mx=Math.max(mx,f.properties.n_obs||0));
-    const rad=n=>3+(Math.sqrt(Math.max(n,1))/Math.sqrt(mx))*13;
-    const grp=L.featureGroup();
-    feats.forEach(f=>{const p=f.properties,c=f.geometry.coordinates,low=p.low_support;
-      L.circleMarker([c[1],c[0]],{radius:rad(p.n_obs),fillColor:brColor(p.base_rate),fillOpacity:low?0.28:0.82,color:low?'#9aa0a7':'#fff',weight:low?1.2:1,dashArray:low?'2 2':null})
-        .bindPopup(`<span class="pn">${esc(p.name)}</span><br><span class="pm">${esc(p.county||'')} · ${fmt(p.n_obs)} samples · exceedance ${p.base_rate!=null?(100*p.base_rate).toFixed(0)+'%':'—'}${low?' · low support':''}</span>`)
-        .addTo(grp);});
-    grp.addTo(_map); try{_map.fitBounds(grp.getBounds().pad(0.05));setTimeout(()=>_map.invalidateSize(),60);}catch(e){}
-    const meta=fc.meta||{};
-    $('#mapnote').textContent=`${(meta.stations||feats.length).toLocaleString()} stations with a known location. ${meta.note||''}`;
-    $('#maplegend').innerHTML=`<div class="lt">Exceedance rate (AB411 &gt; 104)</div>
-      <div class="lrow"><span class="sw" style="background:#1a7a4f"></span>low (&lt; 8%)</div>
-      <div class="lrow"><span class="sw" style="background:#c9a23a"></span>moderate</div>
-      <div class="lrow"><span class="sw" style="background:#b4453c"></span>high (&gt; 45%)</div>
-      <div class="lrow"><span class="ring"></span>&lt; 30 samples (thin support)</div>
-      <div class="lt" style="margin-top:9px">marker size = sample count</div>`;
+    _feats=fc.features||[]; _mmeta=fc.meta||{}; _mmax=1; _feats.forEach(f=>_mmax=Math.max(_mmax,f.properties.n_obs||0));
+    _mlayer=L.featureGroup().addTo(_map); mDraw('coverage');
+    try{_map.fitBounds(_mlayer.getBounds().pad(0.05));setTimeout(()=>_map.invalidateSize(),60);}catch(e){}
   }).catch(()=>{$('#mapnote').textContent='Could not load the station data.';});
 }
 /* ---------- downloads footer (manifest-driven, allowlisted) ---------- */
@@ -1123,7 +1165,8 @@ How to go deeper:
 
 Safety boundary: I can answer from the published science snapshot and tracked project documents, but I will not reveal secrets, credentials, private paths, tokens, or environment details.`;}
 function shortJSON(v,limit=1800){try{return JSON.stringify(v,null,2).slice(0,limit);}catch(e){return String(v).slice(0,limit);}}
-function tokenSet(s){return new Set(String(s||'').toLowerCase().match(/[a-z0-9_+-]{3,}/g)||[]);}
+const QA_STOP=new Set(['what','whats','which','your','you','the','does','did','can','could','would','have','has','are','about','with','from','this','that','they','them','our','and','for','how','any','use','used','using','here','there','were','was','will','into','onto','than','then','when','where','why','who','all','one','two','also','only','more','most','less','least','good','bad','today','tomorrow','yesterday','please']);
+function tokenSet(s){return new Set((String(s||'').toLowerCase().match(/[a-z0-9_+-]{3,}/g)||[]).filter(t=>!QA_STOP.has(t)));}
 function addScienceDoc(docs,d){if(!hasOutOfScopeTopic(`${d.title||''}\n${d.text||''}`))docs.push(d);}
 function askDocs(){
   const docs=[],s=DATA||{};
@@ -1193,18 +1236,38 @@ Source: ${d.source||''}`})));
 // terms that signal a vocabulary/concept question, and the "what kind of thing" intent
 const VOCAB_TERMS=/\b(learner|discovery engine|trained model|model card|models?|signal|feature|target|label|baseline|nulls?|representation|diagnostic|lens|histogram|finding|source dataset|datasets?|xgboost|catboost|lightgbm|hgbt|neural net(work)?|tabpfn|synchrony)\b/i;
 const CONCEPT_INTENT=/\b(what('?s| is| are)?|whats|difference between|differ|vs\.?|versus|define|definition|meaning|mean by|explain|kind of thing|categor|terminolog|glossary)\b/i;
-function isConceptQuestion(q){return CONCEPT_INTENT.test(q||'')&&VOCAB_TERMS.test(q||'');}
+function isConceptQuestion(q){return CONCEPT_INTENT.test(q||'')&&VOCAB_TERMS.test(q||'')&&!/\bregistry\b/i.test(q||'');}
+const PERFORMANCE_RE=/\b(how\s+(good|well|accurate|strong|reliable)|perform|accuracy|score|skill|auc|precision|recall|f1|best|strongest|beat|better|lift|exceed|metric|result|evidence|claim)\w*/i;
+const DATASET_RE=/\b(data|dataset|source|lakehouse|asset|rows|coverage|inputs?|drivers?)\b/i;
+const MODEL_RE=/\b(models?|registry|algorithm|learner|xgboost|catboost|lightgbm|hgbt|neural|baseline)\b/i;
+function isPerformanceQuestion(q){return PERFORMANCE_RE.test(q||'');}
+function isDatasetQuestion(q){return DATASET_RE.test(q||'');}
+function isModelQuestion(q){return MODEL_RE.test(q||'');}
 function scoreDoc(doc,qTokens,qLower){let score=(doc.rank||0)/20;const hay=(doc.title+' '+doc.text).toLowerCase();qTokens.forEach(t=>{if(hay.includes(t))score+=25;if((doc.title||'').toLowerCase().includes(t))score+=40;});if(qLower&&hay.includes(qLower.slice(0,80)))score+=120;
   // boost vocabulary above generic project docs for definition/concept queries
   if(doc.kind==='vocabulary'&&isConceptQuestion(qLower))score+=300;
+  if(isPerformanceQuestion(qLower)){
+    if(doc.kind==='finding')score+=520;
+    if(doc.kind==='model')score+=180;
+    if(doc.kind==='project_doc')score-=80;
+    if(/\b(yellow|overall status|project status)\b/i.test(hay))score-=180;
+  }
+  if(isDatasetQuestion(qLower)){
+    if(doc.kind==='data_asset'||doc.kind==='dataset')score+=320;
+    if(doc.kind==='project_doc'&&/DATA\.md|REPRODUCE\.md/.test(doc.text))score+=120;
+  }
+  if(isModelQuestion(qLower)&&doc.kind==='model')score+=320;
   // boost lab notes for "what have we done / learned / mission" queries
   if(doc.kind==='lab_memory'&&/\b(what (have|did) (we|you)|done|learned|learning|mission|goal|trying to|rejected|killed|open question|frontier)\b/i.test(qLower))score+=120;
   return score;}
-function topDocTitles(question,n=3){
+function rankedDocs(question){
   const qLower=String(question||'').toLowerCase(),qTokens=tokenSet(question);
-  const sect={finding:'Findings',model:'Models',gate:'Gates',data_asset:'Lakehouse',project_doc:'Docs',dataset:'Lakehouse',vocabulary:'Vocabulary',lab_memory:'Lab notes',target:'Frontiers',signal:'Signals'};
-  const ranked=askDocs().map(d=>({...d,score:scoreDoc(d,qTokens,qLower),hits:[...qTokens].filter(t=>(d.title+' '+d.text).toLowerCase().includes(t)).length}))
+  return askDocs().map(d=>({...d,score:scoreDoc(d,qTokens,qLower),hits:[...qTokens].filter(t=>(d.title+' '+d.text).toLowerCase().includes(t)).length}))
     .filter(d=>d.hits>0).sort((a,b)=>b.score-a.score);
+}
+function topDocTitles(question,n=3){
+  const sect={finding:'Findings',model:'Models',gate:'Gates',data_asset:'Lakehouse',project_doc:'Docs',dataset:'Lakehouse',vocabulary:'Vocabulary',lab_memory:'Lab notes',target:'Frontiers',signal:'Signals'};
+  const ranked=rankedDocs(question);
   const out=[],seen=new Set();
   for(const d of ranked){
     const t=String(d.title||'').replace(/\s+—.*$/,'').trim(); // drop long subtitle after em-dash
@@ -1214,13 +1277,38 @@ function topDocTitles(question,n=3){
   }
   return out;
 }
+function unsupportedEvidenceAnswer(){
+  return `I don't have enough published evidence in this snapshot to answer that directly.
+
+Ask a narrower question about a named result, model, dataset, baseline, caveat, or frontier.`;
+}
+function evidenceSnippet(d,limit=260){
+  return String(d.text||'').replace(/\s+/g,' ').replace(/^(Finding|Model|Gate|Data asset|Dataset|Project science doc|Research frontier\/target|Signal\/feature tested|Concept|Lab note)\s*[:—-]\s*/i,'').slice(0,limit).trim();
+}
+function isWeakEvidenceMatch(question,matches){
+  if(!matches.length)return true;
+  const top=matches[0], qTokens=tokenSet(question);
+  if(!qTokens.size)return true;
+  if(top.kind==='finding'||top.kind==='model'||top.kind==='data_asset'||top.kind==='dataset'||top.kind==='vocabulary')return top.score<70;
+  if(top.kind==='project_doc'||top.kind==='lab_memory'||top.kind==='signal'||top.kind==='target')return top.score<115||top.hits<2;
+  return top.score<90;
+}
 function localEvidenceAnswer(question){
-  const qLower=String(question||'').toLowerCase(),qTokens=tokenSet(question);
-  const matches=askDocs().map(d=>{const hay=(d.title+' '+d.text).toLowerCase();let hits=0;qTokens.forEach(t=>{if(hay.includes(t))hits++;});return {...d,hits,score:scoreDoc(d,qTokens,qLower)};})
-    .filter(d=>d.hits>0).sort((a,b)=>b.score-a.score).slice(0,4);
-  if(!matches.length)return `I answer only from the lab's published snapshot, and I don't see that in it.`;
-  const detail=matches.map(d=>`• ${d.title}: ${d.text.replace(/\s+/g,' ').slice(0,560)}${d.text.length>560?'…':''}`).join('\n');
-  return `Closest match in the published snapshot: "${matches[0].title}".\n\n${detail}`;
+  const matches=rankedDocs(question).slice(0,4);
+  if(isWeakEvidenceMatch(question,matches))return unsupportedEvidenceAnswer();
+  const detail=matches.map(d=>`- ${d.kind}: ${d.title} — ${evidenceSnippet(d)}${String(d.text||'').length>260?'…':''}`).join('\n');
+  return `Best matching published evidence:
+${detail}
+
+Caveat:
+This is a retrieval fallback, not a full synthesis. Ask one of the suggested questions for a stronger grounded answer.`;
+}
+function shouldUseProxy(question){
+  const ranked=rankedDocs(question);
+  if(isWeakEvidenceMatch(question,ranked))return false;
+  if(isPerformanceQuestion(question))return ranked.slice(0,8).some(d=>d.kind==='finding'||d.kind==='model');
+  if(isDatasetQuestion(question))return ranked.slice(0,8).some(d=>d.kind==='data_asset'||d.kind==='dataset'||/DATA\.md|REPRODUCE\.md/.test(d.text||''));
+  return ranked[0].score>20;
 }
 function hasFormatLeak(text){
   const t=String(text||''); const low=t.toLowerCase();
@@ -1237,6 +1325,217 @@ function answerOrFallback(answer,question){
   const clean=redactSecrets(answer||'').trim();
   if(!clean||hasFormatLeak(clean))return localEvidenceAnswer(question);
   return clean;
+}
+function metricValue(v,dec=4){
+  if(v==null)return '—';
+  if(typeof v==='number')return Number.isInteger(v)?fmt(v):v.toFixed(dec).replace(/0+$/,'').replace(/\.$/,'');
+  return String(v);
+}
+function findingByTitle(rx){return (DATA&&DATA.findings||[]).find(f=>rx.test(f.title||''));}
+function modelById(id){return (DATA&&DATA.models||[]).find(m=>m.model_id===id);}
+function evidenceLabel(path){
+  if(!path)return null;
+  const p=String(path);
+  if(p.includes('operational_benchmark'))return 'Operational benchmark';
+  if(p.includes('science_claim_cards'))return 'Science claim cards';
+  if(p.includes('breakthrough_gate'))return 'Breakthrough gate';
+  if(p.includes('claim_cards'))return 'Claim cards';
+  if(p.includes('da_forecast'))return 'DA forecast card';
+  return p.split('/').slice(-2).join('/');
+}
+function metricPairs(metrics,limit=5){
+  const out=[];
+  Object.entries(metrics||{}).forEach(([k,v])=>{
+    if(out.length>=limit||Array.isArray(v)||typeof v==='boolean'||v==null)return;
+    out.push(`${k.replace(/_/g,' ')} ${metricValue(v)}`);
+  });
+  return out.join('; ');
+}
+function topicSpec(q){
+  const n=String(q||'').toLowerCase();
+  if(/\bmcye\b|microcystin|cyanobacter|cyano|toxin|freshwater.?bloom/.test(n))
+    return {label:'cyanobacteria / mcyE toxin evidence', findingRe:/mcye|microcystin|cyanobacter|cyano|toxin/i};
+  if(/hypoxia|hypoxic|low.?oxygen|dissolved.?oxygen|anoxic|\boxygen\b/.test(n))
+    return {label:'hypoxia lead/onset evidence', findingRe:/hypoxia|oxygen|stratification|gru/i};
+  if(/domoic|shellfish.?toxin|razor.?clam|pseudo.?nitzschia|\bhab\b|harmful.?alga/.test(n))
+    return {label:'domoic-acid / HAB evidence', findingRe:/domoic|hab|harmful|shellfish|c-harm|pseudo/i};
+  return null;
+}
+function topicPerformanceAnswer(q){
+  if(!isPerformanceQuestion(q))return null;
+  const spec=topicSpec(q); if(!spec)return null;
+  const order={Supported:0,Caveated:1,Null:2};
+  const fs=((DATA&&DATA.findings)||[])
+    .filter(f=>spec.findingRe.test(`${f.title||''} ${f.headline||''} ${f.plain||''} ${f.note||''} ${f.evidence||''}`))
+    .sort((a,b)=>(order[findingStatus(a.kind)]-order[findingStatus(b.kind)])||String(a.title||'').localeCompare(String(b.title||'')));
+  if(!fs.length)return null;
+  const positives=fs.filter(f=>findingStatus(f.kind)==='Supported');
+  const caveats=fs.filter(f=>findingStatus(f.kind)==='Caveated');
+  const nulls=fs.filter(f=>findingStatus(f.kind)==='Null');
+  const lead=(positives[0]||caveats[0]||fs[0]);
+  const shown=[...positives.slice(0,4),...caveats.slice(0,2),...nulls.slice(0,2)].filter((f,i,a)=>a.indexOf(f)===i).slice(0,6);
+  return {
+    who:'● answered locally · topic evidence',
+    text:`In plain words:
+For ${spec.label}, the strongest matching evidence is "${lead.title}". This is stronger than the broad frontier summary because it is tied to audited findings and metrics.
+
+Evidence:
+${shown.map(f=>`- ${f.title} [${findingStatus(f.kind)}]: ${f.headline||''}${metricPairs(f.metrics)?` (${metricPairs(f.metrics)})`:''} — ${f.plain||''}`).join('\n')}
+
+Caveat:
+This is topic-specific evidence, not a universal project ranking. Null findings in the same topic still matter and are listed when they are part of the snapshot.`,
+    sources:shown.slice(0,4).map(f=>'Findings · '+f.title)
+  };
+}
+function nowcastDefinitionAnswer(){
+  return `In plain words:
+A nowcast is a current or very-near-term estimate made before the next direct observation arrives. Here, the beach-bacteria nowcast estimates exceedance risk from the latest available beach, weather, flow, tide, wave, and station-history signals.
+
+Evidence:
+- The bacteria nowcast is evaluated on held-out beach-days, not described as a live public swim advisory.
+- The strongest card reports AP 0.5099 vs station-memory 0.2782 on 89,321 station-days, with ECE 0.0087.
+
+Caveat:
+This site cannot tell you whether a specific beach is safe to swim at today. Use local public-health advisories for real-time decisions.`;
+}
+function strongestResultsAnswer(){
+  const f=(rx)=>findingByTitle(rx)||{};
+  const bacteria=f(/Bacteria nowcast beats station-memory/i);
+  const onset=f(/Clean-to-dirty beach surprise/i);
+  const season=f(/held-from-fitting 2026/i);
+  const sampling=f(/Adaptive sampling replay/i);
+  const hypoxia=f(/Hypoxia onset forecast/i);
+  const mcye=f(/mcyE genotype-to-toxin effect definitively replicates/i);
+  const tide=f(/Harmonic tide range/i);
+  const lock=f(/breakthrough gate/i);
+  const bm=bacteria.metrics||{}, om=onset.metrics||{}, sm=season.metrics||{}, am=sampling.metrics||{}, hm=hypoxia.metrics||{}, mm=mcye.metrics||{}, tm=tide.metrics||{};
+  return `In plain words:
+By deployable public-warning readiness, the strongest result in this snapshot is the California beach-bacteria nowcast. It beats station-memory on the frozen deployable stratum and also holds on the clean-to-dirty onset slice, which is the operationally useful surprise case. By scientific effect strength, hypoxia onset and mcyE toxin replication are also strong positives.
+
+Evidence:
+- Bacteria nowcast: AP ${metricValue(bm.model_ap)} vs station-memory ${metricValue(bm.station_memory_ap)}; ΔAP +${metricValue(bm.margin_ap)}; ROC-AUC ${metricValue(bm.roc_auc)}; ECE ${metricValue(bm.ece)}; n=${fmt(bm.n)} / events=${fmt(bm.events)}.
+- Clean-to-dirty onset: AP ${metricValue(om.model_ap)} vs station-memory ${metricValue(om.station_memory_ap)}; ΔAP +${metricValue(om.delta_ap)}; lift ${metricValue(om.ratio_vs_station_memory,2)}×.
+- Held-from-fitting 2026 season: AP ${metricValue(sm.model_ap)} vs ${String(sm.best_baseline||'best baseline').replace(/_/g,'-')} ${metricValue(sm.best_baseline_ap)}; ΔAP +${metricValue(sm.delta_ap)}.
+- Adaptive sampling replay: top-20 capture ${metricValue(am.top20_model_capture)} vs station-memory ${metricValue(am.top20_station_memory_capture)}.
+- Hypoxia onset: 7d AP ${metricValue(hm.h7_model_ap)} vs better naive ${metricValue(hm.h7_better_naive_ap)}; 14d AP ${metricValue(hm.h14_model_ap)}; 28d AP ${metricValue(hm.h28_model_ap)}.
+- mcyE Alberta replication: partial rho ${metricValue(mm.partial_rho)}; n=${fmt(mm.n)}; lakes=${fmt(mm.lakes)}; CI ${Array.isArray(mm.boot_ci95)?mm.boot_ci95.map(x=>metricValue(x)).join(' to '):'—'}.
+
+Caveat:
+There is no single universal leaderboard across different targets. ${lock.plain||'The final breakthrough label still needs prospective lockbox scoring.'} ${tide.title?`The tide feature is real but caveated: ${tide.headline||''} (${tm.ci95?`CI ${tm.ci95.join(' to ')}`:'limited generalization evidence'}).`:''}`;
+}
+function bacteriaNowcastAnswer(){
+  const bacteria=findingByTitle(/Bacteria nowcast beats station-memory/i)||{};
+  const onset=findingByTitle(/Clean-to-dirty beach surprise/i)||{};
+  const rule=findingByTitle(/advisory rule catches/i)||{};
+  const horizon=findingByTitle(/forecast horizon/i)||{};
+  const lock=findingByTitle(/breakthrough gate/i)||{};
+  const bm=bacteria.metrics||{}, om=onset.metrics||{}, rm=rule.metrics||{}, hm=horizon.metrics||{};
+  return `In plain words:
+The beach-bacteria nowcast is the most mature result here. On the frozen deployable test set it materially beats station-memory and rule-based baselines, and its strongest public-health case is catching clean-to-dirty surprises.
+
+Evidence:
+- Main frozen result: AP ${metricValue(bm.model_ap)} vs station-memory ${metricValue(bm.station_memory_ap)}; ΔAP +${metricValue(bm.margin_ap)}; ROC-AUC ${metricValue(bm.roc_auc)}; ECE ${metricValue(bm.ece)}.
+- Test size: n=${fmt(bm.n)} station-days with ${fmt(bm.events)} exceedances.
+- Onset/surprise slice: AP ${metricValue(om.model_ap)} vs station-memory ${metricValue(om.station_memory_ap)}; ΔAP +${metricValue(om.delta_ap)}; base rate ${metricValue(om.base_rate)}.
+- Advisory threshold card: recall ${metricValue(rm.recall)} and precision ${metricValue(rm.precision)} at τ=${metricValue(rm.tau)}.
+- Forecast horizon: lead-2d AP ${metricValue(hm.lead2_model_ap)} vs station-memory ${metricValue(hm.lead2_station_memory_ap)}; lead 3d loses.
+
+Caveat:
+${lock.headline||'Retrospective pass, prospective lockbox pending'} — this should be read as strong retrospective evidence, not a finished prospective deployment claim.`;
+}
+function modelsRegistryAnswer(){
+  const models=(DATA&&DATA.models)||[], counts=(DATA&&DATA.counts)||{};
+  const claimable=models.filter(m=>m.claimable);
+  const upgraded=models.filter(m=>/bacteria_(catboost|lightgbm)/.test(m.model_id));
+  const baselines=models.filter(m=>m.status==='baseline');
+  const lines=[];
+  lines.push(`In plain words:\nThe registry has ${counts.models||models.length} model entries; ${counts.claimable||claimable.length} are marked claimable in this snapshot. A learner is just an algorithm; a registered model is fitted, evaluated, and tied to evidence.`);
+  lines.push('\nClaimable models:');
+  claimable.forEach(m=>{
+    if(m.model_id==='bacteria_hgbt_isotonic')lines.push(`- ${m.model_id}: tree model for bacteria exceedance; beats AB411, Virtual-Beach MLR, and station-memory; evidence ${evidenceLabel(m.evidence)||'—'}.`);
+    else if(m.model_id==='da_forecast_hgbt')lines.push(`- ${m.model_id}: domoic-acid / HAB next-visit model; AP 0.203 vs best-naive 0.138 in the snapshot; marked claimable but caveated because the block-bootstrap persistence margin crosses zero.`);
+    else lines.push(`- ${m.model_id}: ${m.family}/${m.task}; evidence ${evidenceLabel(m.evidence)||'—'}.`);
+  });
+  if(upgraded.length){
+    lines.push('\nAudited upgrade candidates:');
+    upgraded.forEach(m=>{
+      if(m.model_id==='bacteria_catboost')lines.push('- bacteria_catboost: real ranking lift over frozen HGBT, AP 0.5164 vs 0.5082; record-don\'t-ship because threshold net benefit is negligible.');
+      else if(m.model_id==='bacteria_lightgbm')lines.push('- bacteria_lightgbm: paired AP lift over HGBT, ΔAP +0.0081 with CI excluding zero.');
+      else lines.push(`- ${m.model_id}: ${m.plain||m.beats_baseline||'audited benchmark'}`);
+    });
+  }
+  if(baselines.length)lines.push('\nBaselines kept visible: '+baselines.map(m=>m.model_id).join(', ')+'.');
+  lines.push('\nCaveat:\nClaimable does not mean final deployment. The DA/HAB model is marked claimable in the snapshot, but its own card says the persistence-margin CI crosses zero; treat it as a caveated candidate unless a stricter forward test clears.');
+  return lines.join('\n');
+}
+function datasetsAnswer(){
+  const assets=(DATA&&DATA.data_assets)||[];
+  const rows=assets.reduce((a,x)=>a+(x.rows||0),0);
+  const pick=id=>assets.find(a=>a.asset_id===id)||{};
+  const named=['statewide_observations','statewide_training_frame','m1_history','m2_history','rainfall_grid','discharge_gauge','tide_stages','cdip_waves'].map(pick).filter(a=>a.asset_id);
+  const lines=[`In plain words:\nThe snapshot indexes ${assets.length} governed data assets with ${fmt(rows)} counted rows where row counts are available. The main evidence base is beach monitoring plus weather, flow, tide/wave, and Monterey Bay mooring physics.`,'\nKey datasets:'];
+  named.forEach(a=>lines.push(`- ${a.asset_id}: ${fmt(a.rows)} rows${a.date_min?`; ${String(a.date_min).slice(0,10)} to ${String(a.date_max).slice(0,10)}`:''}; ${a.status||'status unknown'}.`));
+  lines.push('\nCaveat:\nSome broad lakehouse/raw-data assets are local or generated and are not the same as the small frozen reproduction bundle. For paper-style reproduction, use the committed frozen inputs and manifest described in REPRODUCE.md.');
+  return lines.join('\n');
+}
+function failuresAnswer(){
+  const fs=(DATA&&DATA.findings||[]).filter(f=>findingStatus(f.kind)==='Null').slice(0,8);
+  if(!fs.length)return 'In plain words:\nThis snapshot does not list a null finding in the public findings array.';
+  return `In plain words:
+The lab keeps failed ideas on the record. The main nulls say that several plausible extra drivers or broad searches did not beat the existing baselines.
+
+Evidence:
+${fs.map(f=>`- ${f.title}: ${f.headline||''} — ${f.plain||''}`).join('\n')}
+
+Caveat:
+A null here means tested under the snapshot's gate, not impossible forever. It usually means the current open data, target, or validation setup did not clear the bar.`;
+}
+function caveatsAnswer(){
+  const fs=(DATA&&DATA.findings||[]).filter(f=>findingStatus(f.kind)==='Caveated').slice(0,8);
+  return `In plain words:
+The biggest caveat is prospective validation: the strongest bacteria story passes retrospective gates, but the breakthrough label is still blocked until post-freeze lockbox rows are scored.
+
+Caveated/status findings:
+${fs.map(f=>`- ${f.title}: ${f.headline||''} — ${f.plain||''}`).join('\n')}
+
+Caveat:
+Read claim cards and model cards together. Some model-level wins improve ranking but do not yet justify changing an operational threshold or deployment claim.`;
+}
+function baselinesAnswer(){
+  const b=modelById('station_memory')||{}, ab=modelById('ab411_rain_rule')||{}, vb=modelById('virtual_beach_mlr')||{};
+  const f=findingByTitle(/Bacteria nowcast beats station-memory/i)||{}, m=f.metrics||{};
+  return `In plain words:
+The important baselines are station-memory, AB411 rain rule, Virtual-Beach-class MLR, persistence, and seasonal naive. The bacteria headline is strongest because it beats the hard station-memory baseline, not just a weak rule.
+
+Evidence:
+- Frozen bacteria model AP ${metricValue(m.model_ap)} vs station-memory AP ${metricValue(m.station_memory_ap)}; ΔAP +${metricValue(m.margin_ap)}.
+- ${b.model_id||'station_memory'}: ${b.beats_baseline||'strong status-quo baseline'}.
+- ${ab.model_id||'ab411_rain_rule'}: ${ab.beats_baseline||'deployed rain-rule comparator'}.
+- ${vb.model_id||'virtual_beach_mlr'}: ${vb.beats_baseline||'deployed-practice class comparator'}.
+
+Caveat:
+Baseline fairness is per target. A model can beat AB411 but still fail the stronger station-memory or persistence bar.`;
+}
+function deterministicEvidenceAnswer(q){
+  const n=normQuestion(q);
+  if(/\b(strongest|best|top results?|strong results?|which results|evidence strongest)\b/.test(n))
+    return {who:'● answered locally · ranked evidence', text:strongestResultsAnswer(), sources:['Findings · Bacteria nowcast beats station-memory status quo','Findings · Clean-to-dirty beach surprise reframe','Findings · Frozen bacteria model passes held-from-fitting 2026 season','Findings · Adaptive sampling replay beats site-memory sampling','Findings · Hypoxia onset forecast beats better naive across horizons','Findings · mcyE genotype-to-toxin effect definitively replicates in Alberta']};
+  if(/\bnowcast\b/.test(n)&&CONCEPT_INTENT.test(n))
+    return {who:'● answered locally · vocabulary', text:nowcastDefinitionAnswer(), sources:['Vocabulary','Findings · Bacteria nowcast beats station-memory status quo']};
+  if(/\b(beach.?bacteria|bacteria nowcast|enterococc|fib|water.?quality|safe to swim)\b/.test(n)&&isPerformanceQuestion(n))
+    return {who:'● answered locally · bacteria evidence', text:bacteriaNowcastAnswer(), sources:['Findings · Bacteria nowcast beats station-memory status quo','Findings · Clean-to-dirty beach surprise reframe','Findings · Deployable bacteria advisory rule','Findings · Bacteria forecast horizon is honest to about 2 days']};
+  const topic=topicPerformanceAnswer(n); if(topic)return topic;
+  if(/\b(models? in the registry|model registry|what models|which models)\b/.test(n))
+    return {who:'● answered locally · model registry', text:modelsRegistryAnswer(), sources:['Models']};
+  if(/\b(which datasets|what datasets|data sources?|which data|what data)\b/.test(n))
+    return {who:'● answered locally · data inventory', text:datasetsAnswer(), sources:['Lakehouse','DATA.md','REPRODUCE.md']};
+  if(/\b(failed|didn.?t hold|doesn.?t hold|null|negative results?|what failed|wrong)\b/.test(n))
+    return {who:'● answered locally · null evidence', text:failuresAnswer(), sources:['Findings · Nulls']};
+  if(/\b(caveat|caveats|limits|limitations|biggest caveats|uncertain)\b/.test(n))
+    return {who:'● answered locally · caveats', text:caveatsAnswer(), sources:['Findings · Caveats','Gates']};
+  if(/\b(compare against|comparator|station.?memory|ab411|persistence|baseline bar|stronger baseline)\b/.test(n))
+    return {who:'● answered locally · baselines', text:baselinesAnswer(), sources:['Models · Baselines','Findings']};
+  return null;
 }
 function askContext(question){
   const s=DATA||{},qLower=String(question||'').toLowerCase(),qTokens=tokenSet(question);
@@ -1297,8 +1596,7 @@ function askContext(question){
 function isMissAnswer(t){return /\b(?:not|isn'?t|aren'?t|n't) (?:in|provided|available|here|covered|included|present)\b|\bdon'?t (?:see|have|know)\b|\bno supported answer\b|\boutside (?:that|the|its) scope\b|\bcan'?t answer\b|\bcannot answer\b|\bnot able to\b|\bI'?m sorry\b|\bunable to\b/i.test(String(t||''));}
 // scaffolding: from a question we couldn't answer, find the CLOSEST questions we CAN answer
 function relatedQuestions(q,n=3){
-  const STOP=new Set(['what','whats','which','your','you','the','does','did','can','could','would','have','has','are','about','with','from','this','that','they','them','our','and','for','how','any','use','used','using','here','there','were','was','will']);
-  const s=String(q||'').toLowerCase(), toks=(s.match(/[a-z0-9]{3,}/g)||[]).filter(t=>!STOP.has(t)), bank=questionBank();
+  const s=String(q||'').toLowerCase(), toks=[...tokenSet(s)], bank=questionBank();
   // loose topic → a canonical answerable question (covers near-misses & adjacent asks)
   const nudges=[
     [/temperatur|\bsst\b|salin|\brain|wind|\btide|wave|discharge|runoff|sensor|measur|\bdata\b|coverage|how much/, 'Which datasets are used?'],
@@ -1345,13 +1643,15 @@ async function askData(){
   if(asksForSecret(q)){showAns('● answered locally · public-safety guard','I can answer from the published science snapshot, but I cannot reveal secrets, credentials, environment variables, local absolute paths, user names, private keys, tokens, or non-public infrastructure details.',null,true);return;}
   if(hasOutOfScopeTopic(q)){showAns('● answered locally · science boundary',scienceBoundaryAnswer(),null,relatedQuestions(q));return;}
   if(isProjectAboutQuestion(q)){showAns('● answered locally · project overview',projectAboutAnswer(),['Overview']);return;}
+  const det=deterministicEvidenceAnswer(q); if(det){showAns(det.who,det.text,det.sources,det.suggest||null);return;}
   const cv=vocabularyAnswer(q); if(cv){showAns('● answered locally · vocabulary',cv,['Vocabulary']);return;}
   const fa=frontierAnswer(q); if(fa){showAns('● answered locally · research frontiers',fa,['Frontiers']);return;}
   const sources=topDocTitles(q);
   if(!PROXY_URL){const a=localEvidenceAnswer(q);showAns('● answered locally · published evidence',a,sources,isMissAnswer(a)?relatedQuestions(q):null);return;}
+  if(!shouldUseProxy(q)){const a=localEvidenceAnswer(q);showAns('● answered locally · published evidence',a,sources,relatedQuestions(q));return;}
   btn.disabled=true; showLoading();
   try{
-    const r=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:askContext(q)})});
+    const r=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:askContext(q),mode:isPerformanceQuestion(q)?'results':isDatasetQuestion(q)?'data':isModelQuestion(q)?'models':'general'})});
     const j=await r.json();
     if(j.error){const a=localEvidenceAnswer(q);showAns('● answered locally · published evidence',a,sources,isMissAnswer(a)?relatedQuestions(q):null);}
     else{
@@ -1423,6 +1723,14 @@ function frontierAnswer(q){
   return null;
 }
 /* simple on-page suggestion composer → emails the lab (no account/sign-in), stays on this page */
+function toggleSuggestion(force){
+  const box=$('#suggestbox'); if(!box)return;
+  const open=force==null?!box.classList.contains('open'):!!force;
+  box.classList.toggle('open',open);
+  const btn=box.querySelector('.suggest-toggle');
+  if(btn)btn.setAttribute('aria-expanded',open?'true':'false');
+  if(open){const ta=$('#suggestq'); setTimeout(()=>{if(ta)ta.focus();},0);}
+}
 async function submitSuggestion(){
   const ta=$('#suggestq'); const q=(ta&&ta.value||'').trim();
   const res=$('#suggest-result');

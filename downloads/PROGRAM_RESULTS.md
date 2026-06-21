@@ -126,3 +126,10 @@ _Generated from the runner ledger; every verdict was computed on real data throu
 - **The honesty gates caught two overclaims (the discipline working):** (1) F8 decision-curve was KEEP only because it compared to treat-all; the adversarial critic (F4) showed persistence/seasonal net benefit beat the model at its own threshold → fixed to gate vs the stronger baseline → F8 correctly WASH. (2) G4 red-tide showed ΔAP 0.79 from TARGET LEAKAGE (contemporaneous pDA/tDA/dDA ARE the domoic-acid measurement that defines the label); on lagged features only it washes (G4 WASH).
 
 - **Honestly not run:** C4/C8 (interlingua variants needing an alt SST source / documented cross-signal null), D2 (drift scan), G1/G5 (no source frame), G6/B7 (need method corpus), G7 (product — correctly gated on the WASHed F1+E4). No fabricated metrics.
+
+
+## Driver-null saturation (this program's own ledger)
+
+Driver/transfer/ablation/LOXO attempts on the home corpus: **11/11 WASH** (100%; several share a mechanism, so not that many independent tests). The catalog-based gate cannot see these — they live in `mbal_program/ledger.jsonl`.
+
+**SATURATED** — don't add another driver/model here; reframe instead. Run `python ops/hypothesis_portfolio_gate.py check <cand>.json` for the reframe menu (transfer / triage / lead-time / orthogonal-forcing / objective-slice / new-data-or-label) before proposing another driver.

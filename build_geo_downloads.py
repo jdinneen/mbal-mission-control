@@ -35,7 +35,55 @@ def sha256(p):
             h.update(chunk)
     return h.hexdigest()
 
-# ---------- 1. stations.geojson (coverage, not prediction) ----------
+def _auc(labels, scores):
+    """Rank-based AUC (Mann-Whitney), tie-aware. None if a class is absent."""
+    pos = sum(labels); neg = len(labels) - pos
+    if pos == 0 or neg == 0:
+        return None
+    order = sorted(range(len(scores)), key=lambda i: scores[i])
+    ranks = [0.0] * len(scores)
+    i = 0
+    while i < len(order):
+        j = i
+        while j < len(order) and scores[order[j]] == scores[order[i]]:
+            j += 1
+        avg = (i + j - 1) / 2.0 + 1.0
+        for k in range(i, j):
+            ranks[order[k]] = avg
+        i = j
+    sum_pos = sum(ranks[i] for i in range(len(labels)) if labels[i] == 1)
+    return (sum_pos - pos * (pos + 1) / 2.0) / (pos * neg)
+
+
+def _per_station_skill(con):
+    """Real held-out per-station model skill from the frozen test predictions.
+    Returns {station_id: {n_test, events, model_auc, mem_auc}}. AUC only where the
+    station has enough held-out events to be meaningful — never invented."""
+    pred = ROOT / "reports" / "error_atlas" / "test_predictions.parquet"
+    if not pred.exists():
+        return {}
+    rows = con.execute(f"""
+        select station_id, exceed, p_model_cal, p_station_memory
+        from read_parquet('{pred.as_posix()}')
+        where p_model_cal is not null
+    """).fetchall()
+    by = {}
+    for sid, ex, pm, pmem in rows:
+        by.setdefault(sid, []).append((int(ex), float(pm), float(pmem) if pmem is not None else 0.0))
+    out = {}
+    for sid, recs in by.items():
+        y = [r[0] for r in recs]
+        n = len(y); ev = sum(y)
+        rec = {"n_test": n, "events": ev}
+        # meaningful per-station skill needs both classes + a few events
+        if ev >= 3 and (n - ev) >= 3 and n >= 20:
+            rec["model_auc"] = round(_auc(y, [r[1] for r in recs]) or 0, 3)
+            rec["mem_auc"] = round(_auc(y, [r[2] for r in recs]) or 0, 3)
+        out[sid] = rec
+    return out
+
+
+# ---------- 1. stations.geojson (coverage + real held-out model skill) ----------
 def build_stations():
     import duckdb
     con = duckdb.connect()
@@ -56,8 +104,10 @@ def build_stations():
         left join obs o using (station_id)
         where g.latitude is not null and g.longitude is not null
     """).fetchall()
+    skill = _per_station_skill(con)
     feats = []
     for sid, name, county, lat, lon, n, br in rows:
+        sk = skill.get(sid, {})
         feats.append({
             "type": "Feature",
             "geometry": {"type": "Point", "coordinates": [round(float(lon), 5), round(float(lat), 5)]},
@@ -65,23 +115,28 @@ def build_stations():
                 "station_id": sid, "name": name or sid, "county": county or "",
                 "n_obs": int(n), "base_rate": (round(float(br), 4) if br is not None else None),
                 "low_support": int(n) < 30, "hazard": "bacteria",
+                "n_test": sk.get("n_test", 0), "events": sk.get("events", 0),
+                "model_auc": sk.get("model_auc"), "mem_auc": sk.get("mem_auc"),
             },
         })
+    scored = sum(1 for f in feats if f["properties"]["model_auc"] is not None)
     fc = {"type": "FeatureCollection",
-          "meta": {"hazard": "bacteria", "exceedance_threshold_mpn": EXCEED_MPN,
-                   "note": "Monitoring stations with a known location. Marker size = number of "
-                           "lab samples; color = observed AB411 exceedance rate (>104 MPN/100mL); "
-                           "hatched/low = fewer than 30 samples (thin support). This is observation "
-                           "coverage, not a model prediction surface.",
-                   "stations": len(feats)},
+          "meta": {"hazard": "bacteria", "exceedance_threshold_mpn": EXCEED_MPN, "stations": len(feats),
+                   "scored_stations": scored,
+                   "note": "Monitoring stations with a known location. COVERAGE view: size = number of "
+                           "lab samples, color = observed AB411 exceedance rate (>104 MPN/100mL). MODEL-SKILL "
+                           "view: color = the calibrated model's held-out ranking skill (AUC) at that station "
+                           "from the frozen test set; stations with too few held-out events to score honestly "
+                           "are shown hollow ('not enough events'). Per-station AUC is noisy at low counts — "
+                           "that is why thin stations are masked rather than colored. This is never an "
+                           "interpolated surface over open water."},
           "features": feats}
     (HERE / "stations.geojson").write_text(json.dumps(fc, separators=(",", ":")), encoding="utf-8")
     nz = sum(1 for f in feats if f["properties"]["n_obs"] >= 30)
-    print(f"stations.geojson: {len(feats)} stations ({nz} with >=30 samples)")
-    # sanity on base rate
-    brs = [f["properties"]["base_rate"] for f in feats if f["properties"]["base_rate"] is not None]
-    if brs:
-        print(f"  base_rate range {min(brs):.3f}–{max(brs):.3f} mean {sum(brs)/len(brs):.3f}")
+    print(f"stations.geojson: {len(feats)} stations ({nz} with >=30 samples; {scored} with honest per-station AUC)")
+    aucs = [f["properties"]["model_auc"] for f in feats if f["properties"]["model_auc"] is not None]
+    if aucs:
+        print(f"  per-station model AUC range {min(aucs):.3f}–{max(aucs):.3f} mean {sum(aucs)/len(aucs):.3f}")
 
 # ---------- 2. CSV exports from data.json (can't drift) ----------
 def _csv(rows, cols):
