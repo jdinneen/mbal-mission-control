@@ -1311,11 +1311,64 @@ def _build_targets():
     ]
 
 
+def _build_signals():
+    """The full signal catalog — every candidate input/feature/method tested, with its
+    HONEST per-target verdict (PRIMARY / KEEP / WASH / REJECT / UNTESTED). Read live from
+    signals/catalog.yaml so it stays in sync with the real ledger. Science-only fields
+    (name, what, modality, verdicts) — no evidence paths, no internal file references.
+    """
+    try:
+        import yaml
+        cat = yaml.safe_load((SOURCE_ROOT / "signals" / "catalog.yaml").read_text(encoding="utf-8"))
+    except Exception:
+        return []
+
+    def find_signals(o):
+        if isinstance(o, dict):
+            if isinstance(o.get("signals"), list):
+                return o["signals"]
+            for v in o.values():
+                r = find_signals(v)
+                if r is not None:
+                    return r
+        elif isinstance(o, list):
+            for it in o:
+                r = find_signals(it)
+                if r is not None:
+                    return r
+        return None
+
+    sigs = find_signals(cat) or []
+    rank = {"PRIMARY": 0, "KEEP": 1, "KEEP-research": 2, "UNTESTED": 3, "WASH": 4, "REJECT": 5}
+    out = []
+    for s in sigs:
+        if not isinstance(s, dict) or not s.get("name"):
+            continue
+        pv = s.get("predictive_value") or {}
+        verdicts = []
+        if isinstance(pv, dict):
+            for tgt, info in pv.items():
+                st = info.get("status") if isinstance(info, dict) else info
+                if st:
+                    verdicts.append({"target": tgt, "status": str(st)})
+        what = str(s.get("captures") or s.get("does") or "").strip()
+        if len(what) > 170:
+            what = what[:169] + "…"
+        best = min([rank.get(v["status"], 9) for v in verdicts], default=9)
+        out.append({"name": s["name"], "what": what, "modality": str(s.get("modality") or ""),
+                    "verdicts": verdicts, "_r": best})
+    out.sort(key=lambda x: (x["_r"], x["name"]))
+    for o in out:
+        o.pop("_r", None)
+    return out
+
+
 def main():
     state = _augment_state(_base_state())
     state["lab_memory"] = _build_lab_memory()
     state["vocabulary"] = _build_vocabulary()
     state["targets"] = _build_targets()
+    state["signals"] = _build_signals()
 
     # bundle the evidence JSON each finding/model points at (so drill-downs work offline)
     evidence = {}

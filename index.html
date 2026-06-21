@@ -253,6 +253,21 @@
   .vcard .vwhat{margin:0 0 14px;font-size:14px;line-height:1.55;color:var(--ink3);text-wrap:pretty}
   .vcard .vex{display:flex;flex-wrap:wrap;gap:7px;border-top:1px solid var(--faint2);padding-top:13px}
   .vcard .vex span{font-family:var(--mono);font-size:11.5px;color:var(--ink2);background:var(--faint3);border:1px solid var(--border);border-radius:7px;padding:4px 9px}
+  .vcard.clickable{cursor:pointer}
+  .vcardfoot{margin-top:13px;padding-top:12px;border-top:1px solid var(--faint2);font-size:13px;font-weight:600;color:var(--acc)}
+  /* vocab drilldown rows (in drawer) */
+  .vrow{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid var(--faint2)}
+  .vrow.clickable{cursor:pointer;margin:0 -10px;padding:11px 10px;border-radius:9px;border-top:1px solid transparent}
+  .vrow.clickable:hover{background:var(--acc-tint2)}
+  .vrow+.vrow{border-top:1px solid var(--faint2)}
+  .vmain{min-width:0}
+  .vname{font-size:14px;font-weight:600;color:#2b3036;font-family:var(--mono);word-break:break-word}
+  .vmod{font-family:var(--mono);font-size:10px;color:var(--ink5);text-transform:uppercase;letter-spacing:.04em;margin-left:6px}
+  .vsub{display:block;font-size:12.5px;color:var(--ink4);margin-top:3px;line-height:1.45}
+  .vmeta{flex:none;display:flex;align-items:center;gap:5px;flex-wrap:wrap;justify-content:flex-end;max-width:48%}
+  .vchip{font-family:var(--mono);font-size:9.5px;font-weight:600;border-radius:6px;padding:2px 6px;white-space:nowrap}
+  .vlist{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+  .vrow .chev{color:#c2c7cc;align-self:center}
 
   /* ---- drawer ---- */
   .backdrop{position:fixed;inset:0;z-index:100;background:rgba(16,24,40,.34);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);animation:mc-fade .2s ease both;display:flex;justify-content:flex-end}
@@ -777,14 +792,56 @@ function renderLake(){
 }
 
 /* ---------- vocabulary ---------- */
+const VERDICT_BADGE={PRIMARY:{bg:'#e3f3ef',text:'#0f7a74'},KEEP:{bg:'#e3f3ef',text:'#1a7a4f'},'KEEP-research':{bg:'#fdf3e0',text:'#9a6a07'},UNTESTED:{bg:'#eef0f2',text:'#586069'},WASH:{bg:'#f1f1f3',text:'#7c828a'},REJECT:{bg:'#fbeceb',text:'#b4453c'}};
+function anyBadge(st){return STATUS_BADGE[st]||VERDICT_BADGE[st]||{bg:'#eef0f2',text:'#586069'};}
+function statusChip(st){const b=anyBadge(st);return `<span class="vchip" style="background:${b.bg};color:${b.text}">${esc(st)}</span>`;}
+const shortTarget=t=>({bacteria_exceedance:'bacteria',domoic_acid:'domoic',whale_mortality:'whale',hypoxia_lead:'hypoxia',hypoxia_onset:'hypoxia-onset',cyano_onset:'cyano',cyano_onset_timing_anom:'cyano-anom',renewal_onset:'renewal',sfbay_compound_flood:'flood',sea_star_kelp_ecosystem:'sea-star',cross_country_transfer:'transfer'}[t]||String(t||'').split('_')[0]);
+function verdictChips(vs){return (vs||[]).map(v=>{const b=anyBadge(v.status);return `<span class="vchip" style="background:${b.bg};color:${b.text}" title="${esc(v.target)}">${esc(shortTarget(v.target))} · ${esc(v.status)}</span>`;}).join('');}
+let _vocabItems=[];
+// everything we have for a given concept, pulled from the real snapshot
+function vocabItems(key){
+  const s=DATA||{};
+  if(key==='source_dataset') return lakeAssets().map((a,i)=>({label:a.asset_id,sub:(a.rows!=null?fmt(a.rows)+' rows':mb(a.size_mb))+' · production lake',open:()=>{DETAIL={type:'dataset',store:'lake',idx:i};renderDrawer();}}))
+      .concat(shadowAssets().map((d,i)=>({label:d.name,sub:'shadow',open:()=>{DETAIL={type:'dataset',store:'shadow',idx:i};renderDrawer();}})));
+  if(key==='target') return (s.targets||[]).map((t,i)=>({label:t.label,chip:t.status,sub:t.question,open:()=>{DETAIL={type:'target',idx:i};renderDrawer();}}));
+  if(key==='finding') return (s.findings||[]).map(f=>({label:f.title,chip:findingStatus(f.kind),sub:f.plain||f.headline||''}));
+  if(key==='trained_model') return (s.models||[]).map((m,i)=>({label:m.model_id,chip:modelStatus(m.status),sub:[m.family,m.task].filter(Boolean).join(' · '),open:()=>{DETAIL={type:'model',idx:i};renderDrawer();}}));
+  if(key==='baseline') return (s.models||[]).map((m,i)=>({m,i})).filter(o=>modelStatus(o.m.status)==='Baseline'||o.m.family==='baseline').map(o=>({label:o.m.model_id,chip:'Baseline',sub:o.m.task||'',open:()=>{DETAIL={type:'model',idx:o.i};renderDrawer();}}));
+  if(key==='learner'){const fam={};(s.models||[]).forEach(m=>{const f=m.family||'other';(fam[f]=fam[f]||[]).push(m.model_id);});return Object.entries(fam).map(([f,ms])=>({label:f+(f==='baseline'?' (comparators)':' learner'),sub:ms.length+' fitted: '+ms.join(', ')}));}
+  if(key==='signal') return (s.signals||[]).map(g=>({label:g.name,sub:g.what,modality:g.modality,verdicts:g.verdicts}));
+  if(key==='representation') return (s.signals||[]).filter(g=>g.modality==='derived').map(g=>({label:g.name,sub:g.what,verdicts:g.verdicts}));
+  const c=(s.vocabulary||[]).find(v=>v.key===key);return ((c&&c.examples)||[]).map(e=>({label:e}));
+}
 function renderVocabulary(){
   const v=DATA.vocabulary||[];
-  $('#vocabgrid').innerHTML=v.map(c=>`<div class="vcard">
+  $('#vocabgrid').innerHTML=v.map(c=>{
+    const n=vocabItems(c.key).length;
+    return `<div class="vcard clickable" data-k="${esc(c.key)}">
     <div class="vk">${esc(c.key||'').replace(/_/g,' ')}</div>
     <h3>${esc(c.label)}</h3>
     <p class="vwhat">${esc(c.what)}</p>
-    <div class="vex">${(c.examples||[]).map(e=>`<span>${esc(e)}</span>`).join('')}</div>
-  </div>`).join('') || '<div class="lhempty">No vocabulary in this snapshot.</div>';
+    <div class="vex">${(c.examples||[]).slice(0,4).map(e=>`<span>${esc(e)}</span>`).join('')}</div>
+    <div class="vcardfoot">See all ${n} ${esc(c.key.replace(/_/g,' '))}${n===1?'':'s'} →</div>
+  </div>`;}).join('') || '<div class="lhempty">No vocabulary in this snapshot.</div>';
+  document.querySelectorAll('#vocabgrid .vcard').forEach(card=>card.onclick=()=>{DETAIL={type:'vocab',key:card.dataset.k};renderDrawer();});
+}
+function vocabDrawer(key){
+  const c=(DATA.vocabulary||[]).find(v=>v.key===key); if(!c)return '';
+  _vocabItems=vocabItems(key);
+  const rows=_vocabItems.map((it,i)=>`<div class="vrow${it.open?' clickable':''}" data-i="${i}">
+      <div class="vmain"><span class="vname">${esc(it.label)}</span>${it.modality?` <span class="vmod">${esc(it.modality)}</span>`:''}${it.sub?`<span class="vsub">${esc(it.sub)}</span>`:''}</div>
+      <span class="vmeta">${it.chip?statusChip(it.chip):''}${it.verdicts?`<span class="vlist">${verdictChips(it.verdicts)}</span>`:''}${it.open?'<span class="chev">→</span>':''}</span>
+    </div>`).join('');
+  return `<div>
+    <div class="dhead">
+      <div><div class="eb">Vocabulary · everything we have</div><div class="ti">${esc(c.label)}</div><div class="nt">${_vocabItems.length} item${_vocabItems.length===1?'':'s'}</div></div>
+      <button class="dclose" onclick="closeDrawer()">×</button>
+    </div>
+    <div class="dbody">
+      <p class="plain" style="margin-bottom:18px">${esc(c.what)}</p>
+      ${rows||'<div class="lhempty">Nothing recorded for this concept yet.</div>'}
+    </div>
+  </div>`;
 }
 
 /* ---------- frontiers (all hazards + methods, drill-down) ---------- */
@@ -831,9 +888,11 @@ function renderDrawer(){
   if(DETAIL.type==='model') inner=modelDrawer(DATA.models[DETAIL.idx]);
   else if(DETAIL.type==='dataset') inner=datasetDrawer();
   else if(DETAIL.type==='target') inner=targetDrawer();
+  else if(DETAIL.type==='vocab') inner=vocabDrawer(DETAIL.key);
   host.innerHTML=`<div class="backdrop" id="backdrop"><div class="drawer" id="drawer">${inner}</div></div>`;
   $('#backdrop').onclick=closeDrawer;
   $('#drawer').onclick=e=>e.stopPropagation();
+  if(DETAIL.type==='vocab')document.querySelectorAll('#drawer .vrow.clickable').forEach(r=>r.onclick=()=>{const it=_vocabItems[+r.dataset.i];if(it&&it.open)it.open();});
 }
 function closeDrawer(){DETAIL=null;renderDrawer();}
 function modelDrawer(m){
@@ -1003,6 +1062,10 @@ Size MB: ${a.size_mb||''}`}));
 `Research frontier/target: ${t.label} [status: ${t.status}]
 Question: ${t.question||''}
 Summary: ${t.plain||''}${t.detail?('\nDetail: '+t.detail):''}`}));
+  (s.signals||[]).forEach(g=>addScienceDoc(docs,{kind:'signal',rank:200,title:g.name,text:
+`Signal/feature tested: ${g.name} (${g.modality||'—'})
+What it captures: ${g.what||''}
+Verdict per target: ${(g.verdicts||[]).map(v=>v.target+'='+v.status).join('; ')||'untested'} (PRIMARY/KEEP=kept, WASH=no lift, REJECT=hurt, UNTESTED=not yet gated)`}));
   (s.lab_memory||[]).forEach((c,i)=>addScienceDoc(docs,{kind:'lab_memory',rank:340-i,title:c.claim.slice(0,64),text:
 `Lab note [${c.kind}]: ${c.claim}
 Basis: ${c.basis||'lab notes'}`}));
@@ -1035,7 +1098,7 @@ function scoreDoc(doc,qTokens,qLower){let score=(doc.rank||0)/20;const hay=(doc.
   return score;}
 function topDocTitles(question,n=3){
   const qLower=String(question||'').toLowerCase(),qTokens=tokenSet(question);
-  const sect={finding:'Findings',model:'Models',gate:'Gates',data_asset:'Lakehouse',project_doc:'Docs',dataset:'Lakehouse',vocabulary:'Vocabulary',lab_memory:'Lab notes',target:'Frontiers'};
+  const sect={finding:'Findings',model:'Models',gate:'Gates',data_asset:'Lakehouse',project_doc:'Docs',dataset:'Lakehouse',vocabulary:'Vocabulary',lab_memory:'Lab notes',target:'Frontiers',signal:'Signals'};
   const ranked=askDocs().map(d=>({...d,score:scoreDoc(d,qTokens,qLower),hits:[...qTokens].filter(t=>(d.title+' '+d.text).toLowerCase().includes(t)).length}))
     .filter(d=>d.hits>0).sort((a,b)=>b.score-a.score);
   const out=[],seen=new Set();
@@ -1103,6 +1166,12 @@ function askContext(question){
   L.push('RESEARCH FRONTIERS — every hazard and method the lab has worked on (use these for "what about X / have you done Y / whales / interlingua / hypoxia / cyano / floods"):');
   (s.targets||[]).forEach(t=>L.push(`- ${t.label} [${t.status}]: ${t.plain||''}`));
   L.push('');
+  if((s.signals||[]).length){
+    const vc={}; s.signals.forEach(g=>(g.verdicts||[]).forEach(v=>{vc[v.status]=(vc[v.status]||0)+1;}));
+    const kept=s.signals.filter(g=>(g.verdicts||[]).some(v=>v.status==='KEEP'||v.status==='PRIMARY')).map(g=>g.name);
+    L.push(`SIGNALS TESTED: ${s.signals.length} candidate signals/features in the catalog; verdicts across targets: ${Object.entries(vc).map(([k,n])=>k+'='+n).join(', ')}. Kept (KEEP/PRIMARY): ${kept.join(', ')}. WASH=tested no lift, REJECT=hurt, UNTESTED=not yet gated.`);
+    L.push('');
+  }
   // Only foreground headline metrics when the question is performance/quality-oriented,
   // so unrelated questions (datasets, definitions) aren't biased toward the top findings.
   const perfIntent=/\b(how\s+(good|well|accurate|strong|reliable)|perform|accuracy|score|skill|auc|precision|recall|f1|best|strongest|beat|better|lift|exceed|metric|result)\w*/i.test(question||'');
