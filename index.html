@@ -93,9 +93,17 @@
   #askbtn{appearance:none;border:none;cursor:pointer;background:var(--acc);color:#fff;border-radius:11px;padding:0 24px;font-family:var(--sans);font-size:15px;font-weight:600;display:flex;align-items:center;gap:8px;transition:background .15s}
   #askbtn:hover{background:var(--acc-hover)}
   #askbtn:disabled{opacity:.55;cursor:default}
-  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
-  .chip{appearance:none;cursor:pointer;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#cdd2d8;border-radius:999px;padding:7px 13px;font-family:var(--mono);font-size:12px;transition:all .15s}
+  .chiplabel{margin-top:14px;font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#8c929a}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+  .chip{appearance:none;cursor:pointer;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#cdd2d8;border-radius:999px;padding:7px 13px;font-family:var(--sans);font-size:13px;transition:all .15s;text-align:left}
   .chip:hover{background:rgba(40,196,186,.14);border-color:rgba(40,196,186,.4);color:#fff}
+  .chip .cg{font-family:var(--mono);font-size:10px;color:#28c4ba;opacity:.85;margin-right:7px;text-transform:uppercase;letter-spacing:.04em}
+  .chips.typeahead{flex-direction:column;gap:0;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:11px;padding:5px;margin-top:9px}
+  .chips.typeahead .chip{background:none;border:none;border-radius:7px;width:100%;padding:9px 11px;font-size:13.5px}
+  .chips.typeahead .chip:hover{background:rgba(40,196,186,.12)}
+  .qasuggest{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+  .qasuggest .qs{appearance:none;cursor:pointer;background:rgba(40,196,186,.1);border:1px solid rgba(40,196,186,.25);color:#9fe7e0;border-radius:999px;padding:6px 12px;font-family:var(--sans);font-size:12.5px}
+  .qasuggest .qs:hover{background:rgba(40,196,186,.2);color:#fff}
   .qaload{margin-top:18px;display:flex;align-items:center;gap:11px;color:#8c929a;font-size:14px}
   .qaload i{width:16px;height:16px;border:2px solid #3a3d46;border-top-color:var(--acc-bright);border-radius:50%;animation:mc-spin .7s linear infinite;display:inline-block}
   .qaans{margin-top:18px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);border-radius:13px;padding:18px 19px;animation:mc-rise .3s ease both}
@@ -353,11 +361,12 @@
       <div class="glow"></div>
       <div class="inner">
         <div class="lbl"><i></i><span>Ask the evidence</span></div>
-        <p class="d">Every answer is grounded in the published snapshot — findings, model cards, datasets, metrics, and caveats. Ask anything.</p>
+        <p class="d">Answers come straight from the published snapshot — the lab's findings, models, datasets, the topics on the <b style="color:#cdd2d8">Frontiers</b> tab, and the words it uses. Pick a question below, or type your own.</p>
         <div class="row">
-          <input id="askq" placeholder="e.g. How good is the bacteria nowcast?" autocomplete="off"/>
+          <input id="askq" placeholder="Type a question, or tap one below…" autocomplete="off"/>
           <button id="askbtn" onclick="askData()">Ask<span style="font-size:17px">→</span></button>
         </div>
+        <div class="chiplabel" id="chiplabel">Try one of these — they all have answers:</div>
         <div class="chips" id="qachips"></div>
         <div id="qaout"></div>
         <div class="suggest-box">
@@ -603,14 +612,53 @@ function renderOverview(){
       <div class="age">${g.age_days!=null?'updated '+g.age_days+'d ago':''}</div></div>`;}).join('')
     || '<div class="lhempty">No gates in this snapshot.</div>';
 
-  // Q&A chips
-  const chips=[
-    {label:'How good is the nowcast?', q:'How good is the bacteria nowcast?'},
-    {label:'What failed?', q:'What experiments failed?'},
-    {label:'Which datasets?', q:'Which datasets are used?'}
+  renderChips('');
+}
+/* curated bank of questions we answer WELL — guides people to answerable questions */
+function questionBank(){
+  const ts=(DATA&&DATA.targets)||[];
+  const topicQ={whale_mortality:'What about whales?',interlingua:'What is interlingua?',hypoxia_lead:'Do you predict low-oxygen (hypoxia) events?',renewal_onset:'What is the fjord oxygen-renewal work?',cyano_onset:'What about cyanobacteria blooms in lakes?',domoic_acid:'What about harmful algae / domoic acid?',sfbay_compound_flood:'What about coastal flooding?',sea_star_kelp_ecosystem:'What about sea-star wasting and kelp?',cross_country_transfer:'Can a model transfer to another country?',bacteria_exceedance:'How good is the beach-bacteria nowcast?'};
+  const bank=[
+    {g:'Start', q:'What is this project about?'},
+    {g:'Start', q:'What have you worked on?'},
+    {g:'Results', q:'Which results are strongest?'},
+    {g:'Results', q:'What failed or didn’t hold up?'},
+    {g:'Results', q:'What are the biggest caveats?'},
   ];
-  $('#qachips').innerHTML=chips.map((c,i)=>`<button class="chip" data-q="${esc(c.q)}">${esc(c.label)}</button>`).join('');
-  document.querySelectorAll('#qachips .chip').forEach(b=>b.onclick=()=>{$('#askq').value=b.dataset.q;$('#askq').focus();});
+  ts.forEach(t=>{ if(topicQ[t.id]) bank.push({g:'Topics', q:topicQ[t.id]}); });
+  bank.push(
+    {g:'Models', q:'What models are in the registry?'},
+    {g:'Models', q:'What baselines do you compare against?'},
+    {g:'Data', q:'Which datasets are used?'},
+    {g:'Words', q:'What’s the difference between a learner and a trained model?'},
+    {g:'Words', q:'What is a baseline?'},
+    {g:'Words', q:'What is a nowcast?'}
+  );
+  return bank;
+}
+// default starter spread (one strong question per theme, in a helpful order)
+function starterQuestions(){
+  const b=questionBank(), seen=new Set(), out=[];
+  for(const x of b){ if(!seen.has(x.g)){seen.add(x.g);out.push(x);} } // one per group
+  // plus a couple of marquee topics
+  ['What about whales?','What is interlingua?'].forEach(q=>{const m=b.find(x=>x.q===q);if(m&&!out.includes(m))out.push(m);});
+  return out.slice(0,9);
+}
+function askChip(q){const i=$('#askq');if(i)i.value=q;renderChips('');askData();}
+function renderChips(filter){
+  const box=$('#qachips'), lbl=$('#chiplabel'); if(!box)return;
+  const f=String(filter||'').trim().toLowerCase();
+  let list, typeahead=false;
+  if(f.length>=2){
+    const toks=f.match(/[a-z0-9]{2,}/g)||[];
+    list=questionBank().map(x=>({x,s:toks.reduce((a,t)=>a+(x.q.toLowerCase().includes(t)?1:0),0)+(x.q.toLowerCase().includes(f)?2:0)}))
+      .filter(o=>o.s>0).sort((a,b)=>b.s-a.s).slice(0,6).map(o=>o.x);
+    typeahead=true;
+  } else { list=starterQuestions(); }
+  box.classList.toggle('typeahead',typeahead);
+  if(lbl)lbl.textContent = typeahead ? (list.length?'Did you mean:':'No suggestion — press Ask to try it anyway') : 'Try one of these — they all have answers:';
+  box.innerHTML=list.map(x=>`<button class="chip" data-q="${esc(x.q)}"><span class="cg">${esc(x.g)}</span>${esc(x.q)}</button>`).join('');
+  document.querySelectorAll('#qachips .chip').forEach(b=>b.onclick=()=>askChip(b.dataset.q));
 }
 
 /* ---------- findings ---------- */
@@ -1003,7 +1051,7 @@ function localEvidenceAnswer(question){
   const qLower=String(question||'').toLowerCase(),qTokens=tokenSet(question);
   const matches=askDocs().map(d=>{const hay=(d.title+' '+d.text).toLowerCase();let hits=0;qTokens.forEach(t=>{if(hay.includes(t))hits++;});return {...d,hits,score:scoreDoc(d,qTokens,qLower)};})
     .filter(d=>d.hits>0).sort((a,b)=>b.score-a.score).slice(0,4);
-  if(!matches.length)return `I don't see a supported answer in the published science snapshot. Try asking about a finding, model, dataset, metric, gate, caveat, the bacteria warning, a harmful-algae test, a domoic-acid result, or a failed hypothesis.`;
+  if(!matches.length)return `I answer only from the lab's published snapshot, and I don't see that in it.`;
   const detail=matches.map(d=>`• ${d.title}: ${d.text.replace(/\s+/g,' ').slice(0,560)}${d.text.length>560?'…':''}`).join('\n');
   return `Closest match in the published snapshot: "${matches[0].title}".\n\n${detail}`;
 }
@@ -1073,34 +1121,41 @@ function askContext(question){
   L.push('ALL MODEL IDS: '+(s.models||[]).map(m=>`${m.model_id}(${m.status}, claimable=${m.claimable})`).join('; '));
   return redactSecrets(L.join('\n\n')).slice(0,56000);
 }
-function showAns(who,text,sources){
+function isMissAnswer(t){return /\b(?:not|isn'?t|aren'?t|n't) (?:in|provided|available|here|covered|included|present)\b|\bdon'?t (?:see|have|know)\b|\bno supported answer\b|\boutside (?:that|the|its) scope\b|\bcan'?t answer\b|\bcannot answer\b|\bnot able to\b|\bI'?m sorry\b|\bunable to\b/i.test(String(t||''));}
+function suggestRow(){
+  const qs=starterQuestions().slice(0,5);
+  return `<div style="margin-top:12px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#8c929a">Things I can answer:</div><div class="qasuggest">${qs.map(x=>`<button class="qs" data-q="${esc(x.q)}">${esc(x.q)}</button>`).join('')}</div>`;
+}
+function showAns(who,text,sources,suggest){
   const src=(sources&&sources.length)?`<div class="ground"><span class="g">Grounded in</span>${sources.map(s=>`<span class="s">${esc(s)}</span>`).join('')}</div>`:'';
-  $('#qaout').innerHTML=`<div class="qaans"><div class="who">${who}</div><div class="txt">${esc(text)}</div>${src}</div>`;
+  const sug=suggest?suggestRow():'';
+  $('#qaout').innerHTML=`<div class="qaans"><div class="who">${who}</div><div class="txt">${esc(text)}</div>${src}${sug}</div>`;
+  if(suggest)document.querySelectorAll('#qaout .qs').forEach(b=>b.onclick=()=>askChip(b.dataset.q));
 }
 function showLoading(){$('#qaout').innerHTML=`<div class="qaload"><i></i>Searching evidence files…</div>`;}
 async function askData(){
   const q=$('#askq').value.trim(); if(!q)return; const btn=$('#askbtn');
-  $('#askq').value='';
+  $('#askq').value=''; renderChips('');
   if(window.gtag)gtag('event','search',{search_term:q});
-  if(asksForSecret(q)){showAns('● answered locally · public-safety guard','I can answer from the published science snapshot, but I cannot reveal secrets, credentials, environment variables, local absolute paths, user names, private keys, tokens, or non-public infrastructure details.');return;}
-  if(hasOutOfScopeTopic(q)){showAns('● answered locally · science boundary',scienceBoundaryAnswer());return;}
+  if(asksForSecret(q)){showAns('● answered locally · public-safety guard','I can answer from the published science snapshot, but I cannot reveal secrets, credentials, environment variables, local absolute paths, user names, private keys, tokens, or non-public infrastructure details.',null,true);return;}
+  if(hasOutOfScopeTopic(q)){showAns('● answered locally · science boundary',scienceBoundaryAnswer(),null,true);return;}
   if(isProjectAboutQuestion(q)){showAns('● answered locally · project overview',projectAboutAnswer(),['Overview']);return;}
   const cv=vocabularyAnswer(q); if(cv){showAns('● answered locally · vocabulary',cv,['Vocabulary']);return;}
   const fa=frontierAnswer(q); if(fa){showAns('● answered locally · research frontiers',fa,['Frontiers']);return;}
   const sources=topDocTitles(q);
-  if(!PROXY_URL){showAns('● answered locally · published evidence',localEvidenceAnswer(q),sources);return;}
+  if(!PROXY_URL){const a=localEvidenceAnswer(q);showAns('● answered locally · published evidence',a,sources,isMissAnswer(a));return;}
   btn.disabled=true; showLoading();
   try{
     const r=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,context:askContext(q)})});
     const j=await r.json();
-    if(j.error){showAns('● answered locally · published evidence',localEvidenceAnswer(q),sources);}
+    if(j.error){const a=localEvidenceAnswer(q);showAns('● answered locally · published evidence',a,sources,isMissAnswer(a));}
     else{
       const ans=answerOrFallback(j.answer||'',q);
       const leak=hasFormatLeak(j.answer||'');
       const who=leak?'● answered locally · published evidence':('● answered from the published data'+(j.model?' · '+esc(j.model):''));
-      showAns(who,ans,sources);
+      showAns(who,ans,sources,isMissAnswer(ans));
     }
-  }catch(e){showAns('● answered locally · published evidence',localEvidenceAnswer(q),sources);}
+  }catch(e){const a=localEvidenceAnswer(q);showAns('● answered locally · published evidence',a,sources,isMissAnswer(a));}
   btn.disabled=false;
 }
 /* deterministic concept/definition answer straight from the vocabulary (never hits the proxy) */
@@ -1194,7 +1249,7 @@ async function submitSuggestion(){
   }
   if(btn){btn.disabled=false;btn.textContent=old;}
 }
-window.addEventListener('DOMContentLoaded',()=>{const i=$('#askq');if(i)i.addEventListener('keydown',e=>{if(e.key==='Enter')askData();});});
+window.addEventListener('DOMContentLoaded',()=>{const i=$('#askq');if(i){i.addEventListener('keydown',e=>{if(e.key==='Enter')askData();});i.addEventListener('input',()=>{if(DATA)renderChips(i.value);});}});
 load();
 </script>
 </body>
