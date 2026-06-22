@@ -549,6 +549,8 @@
       <div class="mapdomain" id="mapdomain">
         <button data-d="bacteria" class="active">CA beach bacteria</button>
         <button data-d="cyano">US lakes · cyano</button>
+        <button data-d="domoic">Domoic-acid piers</button>
+        <button data-d="ireland">Ireland bathing water</button>
       </div>
       <div class="maptoggle" id="maptoggle">
         <button data-m="coverage" class="active">Coverage</button>
@@ -946,15 +948,19 @@ function vocabDrawer(key){
 // which map domain (if any) a result/model belongs to — null = no spatial map yet
 function mapDomainFor(s){const t=String(s||'').toLowerCase();
   if(/cyano|\blake/.test(t))return 'cyano';
+  if(/domoic|pseudo.?nitzschia|\bhab\b|harmful.?alga|\bda_|shellfish.?toxin/.test(t))return 'domoic';
+  if(/ireland|cross.?countr|transfer|interlingua|zero.?shot/.test(t))return 'ireland';
   if(/bacteria|beach|enterococc|exceedance|station.?memory|clean.?to.?dirty|sampling/.test(t))return 'bacteria';
   return null;}
-const DOMAIN_LABEL={bacteria:'CA beach bacteria',cyano:'US lakes · cyano'};
+const DOMAIN_LABEL={bacteria:'CA beach bacteria',cyano:'US lakes · cyano',domoic:'Domoic-acid piers',ireland:'Ireland bathing water'};
 let _pendingDomain=null;
 function goMap(dom){_pendingDomain=dom||null; if(DETAIL){DETAIL=null;renderDrawer();} location.hash='map';}
 function mapLink(domain){return domain?`<button class="lnk maplink" onclick="goMap('${domain}')">📍 Where's the data &amp; how confident is the model? See the ${esc(DOMAIN_LABEL[domain]||domain)} map →</button>`:'';}
 const MAP_DOMAINS=[
   {key:'bacteria',label:'CA beach bacteria',file:'stations.geojson',unit:'samples',valueLabel:'exceedance (AB411 > 104)',siteWord:'stations',hasSkill:true},
-  {key:'cyano',label:'US lakes · cyano',file:'lakes_cyano.geojson',unit:'obs-weeks',valueLabel:'bloom frequency',siteWord:'lakes',hasSkill:false}
+  {key:'cyano',label:'US lakes · cyano',file:'lakes_cyano.geojson',unit:'obs-weeks',valueLabel:'bloom frequency',siteWord:'lakes',hasSkill:false},
+  {key:'domoic',label:'Domoic-acid piers',file:'piers_domoic.geojson',unit:'samples',valueLabel:'domoic-acid exceedance',siteWord:'piers',hasSkill:false},
+  {key:'ireland',label:'Ireland bathing water',file:'ireland_beaches.geojson',unit:'samples',valueLabel:'below-Good rate',siteWord:'beaches',hasSkill:false}
 ];
 let _map=null,_mlayer=null,_feats=[],_mmax=1,_mmeta={},_domain=MAP_DOMAINS[0],_mode='coverage',_dcache={};
 function brColor(br){if(br==null)return '#b8bdc3';if(br<0.08)return '#1a7a4f';if(br<0.18)return '#3f9e6b';if(br<0.30)return '#c9a23a';if(br<0.45)return '#e0772f';return '#b4453c';}
