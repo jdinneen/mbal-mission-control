@@ -1,0 +1,75 @@
+1
+00:00:00,000 --> 00:00:07,000
+This is the bacteria finding: can a model warn us about unsafe beach water before the lab result arrives?
+
+2
+00:00:07,000 --> 00:00:16,000
+The lab measures Enterococcus, a fecal-indicator bacteria. It is a warning sign for possible poop pollution.
+
+3
+00:00:16,000 --> 00:00:24,000
+The old way is slow: culture tests are useful, but the result often arrives 18 to 24 hours later.
+
+4
+00:00:24,000 --> 00:00:33,000
+We used beach samples plus information that would be known in time: recent lab history, place, season, rain, and runoff.
+
+5
+00:00:33,000 --> 00:00:41,000
+The test was honest: train on older years, calibrate on 2020 to 2021, and report on the 2022-plus test set.
+
+6
+00:00:41,000 --> 00:00:49,000
+The model learns from features, which are clues like rainfall, runoff, beach history, season, and location.
+
+7
+00:00:49,000 --> 00:00:57,000
+The model gives a probability score, like a weather forecast. Adults still choose when that score becomes a warning.
+
+8
+00:00:57,000 --> 00:01:06,000
+The calibrated model beat the main operational baselines on average precision, with strong AUC and low calibration error.
+
+9
+00:01:06,000 --> 00:01:15,000
+AP, AUC, and ECE answer different questions: ranking rare events, separating unsafe from safe days, and checking probabilities.
+
+10
+00:01:15,000 --> 00:01:25,000
+A confusion matrix turns the chosen advisory rule into four outcomes: true positives, false positives, false negatives, and true negatives.
+
+11
+00:01:25,000 --> 00:01:34,000
+At the chosen threshold, the rule caught 86 percent of unsafe days and made about 3.35 false advisories per caught exceedance.
+
+12
+00:01:34,000 --> 00:01:43,000
+Changing the threshold changes the tradeoff. Lower thresholds catch more unsafe days, but also create more false alarms.
+
+13
+00:01:43,000 --> 00:01:51,000
+The hard part is avoiding both mistakes: too many false alarms, and too many missed unsafe days.
+
+14
+00:01:51,000 --> 00:01:59,000
+The chosen advisory rule is cautious: it catches most dirty days, but the false-alarm cost is stated plainly.
+
+15
+00:01:59,000 --> 00:02:07,500
+The science is not magic. The signal comes from past samples, beach-specific history, season, location, rain, and runoff.
+
+16
+00:02:07,500 --> 00:02:17,500
+A related finding says the target label matters: culture and ddPCR tests disagree at official cutoffs, even though they rank dirty days similarly.
+
+17
+00:02:17,500 --> 00:02:25,500
+What it means: the model can support warnings and sampling decisions, but people still choose the policy threshold.
+
+18
+00:02:25,500 --> 00:02:33,500
+What it does not mean: it is not a guarantee, not ocean magic, and not a final answer on which bacteria test best predicts health risk.
+
+19
+00:02:33,500 --> 00:02:41,500
+Bottom line: the model improves risk ranking, the confusion matrix explains the tradeoff, and the next science question is the label.

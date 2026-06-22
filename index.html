@@ -40,6 +40,7 @@
   *{box-sizing:border-box}
   html,body{margin:0}
   body{background:var(--bg);font-family:var(--sans);-webkit-font-smoothing:antialiased;color:var(--ink);font-size:15px;line-height:1.5;overflow-x:clip}
+  .hwrap,nav.tabs,main,.footwrap{box-sizing:border-box;width:100%}
   ::selection{background:#c9ebe7}
   .mono{font-family:var(--mono)}
   a{color:var(--acc);text-decoration:none}
@@ -187,6 +188,38 @@
   .trow .chev{justify-self:end;color:#c2c7cc;font-size:16px}
   .sbadge{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;border-radius:7px;padding:4px 10px;justify-self:start}
 
+  /* ---- complete ledger ---- */
+  .ledgerstats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 18px}
+  .ledgerstat{background:var(--surface);border:1px solid var(--border);border-radius:13px;box-shadow:var(--card-sh);padding:15px 16px}
+  .ledgerstat .k{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink5);margin-bottom:6px}
+  .ledgerstat .v{font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1}
+  .ledgerstat .s{font-size:12.5px;color:var(--ink4);margin-top:6px;line-height:1.4}
+  .ledgerbar{display:flex;flex-direction:column;gap:10px;margin:0 0 16px;padding:14px;background:rgba(245,246,246,.86);border:1px solid var(--border);border-radius:14px;box-shadow:var(--card-sh);backdrop-filter:blur(8px)}
+  .ledgersearch{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .ledgersearch input{flex:1 1 260px;min-width:0;appearance:none;border:1px solid var(--border);background:var(--surface);border-radius:10px;padding:10px 12px;font-family:var(--sans);font-size:14px;color:var(--ink);outline:none}
+  .ledgersearch input:focus{border-color:#bfe0dc;box-shadow:0 0 0 3px rgba(15,138,132,.11)}
+  .ledgerselect{appearance:none;flex:0 1 220px;min-width:0;max-width:100%;border:1px solid var(--border);background:var(--surface);border-radius:10px;padding:10px 32px 10px 12px;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink3);background-image:linear-gradient(45deg,transparent 50%,var(--ink4) 50%),linear-gradient(135deg,var(--ink4) 50%,transparent 50%);background-position:calc(100% - 15px) 16px,calc(100% - 10px) 16px;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+  .ledgercount{font-family:var(--mono);font-size:12px;color:var(--ink5);margin:0 0 10px}
+  .ledgerlist{overflow:hidden}
+  .l-grid{grid-template-columns:minmax(0,1.55fr) 130px minmax(0,.8fr) 34px}
+  .ledgerhead{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink5);background:var(--subtle)}
+  .ledgerrow{display:grid;gap:14px;align-items:center;padding:15px 20px;border-bottom:1px solid var(--faint3);transition:background .14s}
+  .ledgerrow>*{min-width:0}
+  .ledgerrow.click{cursor:pointer}
+  .ledgerrow.click:hover{background:var(--acc-tint2)}
+  .ledgerrow:last-child{border-bottom:none}
+  .ledgerrow .ltitle{font-size:14.5px;font-weight:600;line-height:1.28;color:var(--ink);word-break:break-word;overflow-wrap:anywhere}
+  .ledgerrow .ldesc{font-size:12.8px;line-height:1.45;color:var(--ink4);margin-top:4px;text-wrap:pretty;overflow-wrap:anywhere}
+  .ledgerrow .lmeta{font-family:var(--mono);font-size:11.5px;color:var(--ink5);margin-top:6px;word-break:break-word;overflow-wrap:anywhere}
+  .ltypechip{display:inline-flex;align-items:center;gap:6px;justify-self:start;font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;border-radius:7px;padding:4px 9px;background:var(--faint3);color:var(--ink3)}
+  .ltypechip i{width:6px;height:6px;border-radius:50%;background:var(--acc)}
+  .ledgerrow .lchips{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .jsonpreview{margin:10px 0 0;background:var(--subtle);border:1px solid var(--faint);border-radius:9px;padding:12px;overflow:auto;font-family:var(--mono);font-size:11.5px;color:var(--ink2);max-height:360px;white-space:pre-wrap;word-break:break-word}
+  .fieldgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 22px}
+  .fieldcard{background:var(--subtle);border:1px solid var(--faint);border-radius:10px;padding:12px;min-width:0}
+  .fieldcard .fk{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink5);margin-bottom:5px}
+  .fieldcard .fv{font-size:13px;color:#2b3036;line-height:1.42;word-break:break-word;overflow-wrap:anywhere}
+
   /* ---- lakehouse lists ---- */
   .lhlists{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
   .lhcard{padding:22px}
@@ -311,6 +344,38 @@
   .bigcard .num{display:flex;gap:22px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px solid var(--faint2)}
   .bigcard .num div b{display:block;font-size:23px;font-weight:600;letter-spacing:-.02em;line-height:1}
   .bigcard .num div span{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink5);margin-top:5px;display:block}
+  .storypanel{margin:28px 0 30px}
+  .storyintro{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(280px,.9fr);gap:18px;align-items:start;margin-bottom:14px}
+  .storycopy{padding:22px 24px}
+  .storycopy .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--acc);font-weight:600;margin-bottom:9px}
+  .storycopy h2{margin:0 0 9px;font-size:21px;font-weight:600;letter-spacing:-.01em}
+  .storycopy p{margin:0;font-size:14.5px;line-height:1.58;color:var(--ink2);text-wrap:pretty}
+  .storyimage{height:360px;border-radius:14px;overflow:hidden;border:1px solid var(--border);background:#dfe8e8;box-shadow:var(--card-sh)}
+  .storyimage img{width:100%;height:100%;object-fit:cover;display:block}
+  .storymedia{overflow:hidden;border:1px solid var(--border);border-radius:14px;background:var(--surface);box-shadow:var(--card-sh)}
+  .storymedia video{display:block;width:100%;aspect-ratio:16/9;background:#101820}
+  .storyvideobar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 13px;border-top:1px solid var(--faint);background:var(--subtle);flex-wrap:wrap}
+  .storyvideobar span{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink5)}
+  .storyvideolinks{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .storyvideolinks a{font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--acc);border:1px solid var(--border);border-radius:8px;padding:5px 9px;background:var(--surface)}
+  .storyvideolinks a:hover{background:var(--acc);border-color:var(--acc);color:#fff}
+  .storyflow{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+  .storystep{background:var(--surface);border:1px solid var(--border);border-radius:13px;box-shadow:var(--card-sh);padding:16px 17px}
+  .storystep .num{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink5);margin-bottom:8px}
+  .storystep h3{margin:0 0 7px;font-size:15.5px;font-weight:600}
+  .storystep p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink3);text-wrap:pretty}
+  .storyscore{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+  .storymetric{background:var(--subtle);border:1px solid var(--faint);border-radius:12px;padding:14px 15px}
+  .storymetric .k{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink5);margin-bottom:6px}
+  .storymetric .v{font-size:23px;font-weight:600;letter-spacing:-.02em;line-height:1}
+  .storymetric .s{font-size:12.5px;color:var(--ink4);margin-top:5px;line-height:1.4}
+  .storycompare{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  .storybar{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:16px 17px;box-shadow:var(--card-sh)}
+  .storybar .top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+  .storybar .name{font-size:14px;font-weight:600;color:var(--ink)}
+  .storybar .ap{font-family:var(--mono);font-size:12px;color:var(--ink4)}
+  .storybar .track{height:9px;background:var(--faint3);border-radius:999px;overflow:hidden}
+  .storybar .fill{height:100%;border-radius:999px;background:var(--acc)}
   .secband{display:flex;align-items:baseline;gap:12px;margin:30px 0 14px;flex-wrap:wrap}
   .secband h2{margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em}
   .secband p{margin:0;font-size:14px;color:var(--ink4)}
@@ -368,17 +433,18 @@
   .reprocard li{font-size:14px;line-height:1.6;color:var(--ink2);margin-bottom:7px}
   .reprocard code{font-family:var(--mono);font-size:12.5px;background:var(--faint3);border:1px solid var(--border);border-radius:5px;padding:1px 6px}
   @media (max-width:860px){
-    .bigrow,.minigrid,.paths,.qcardgrid{grid-template-columns:1fr}
+    .bigrow,.minigrid,.paths,.qcardgrid,.storyintro,.storyflow,.storycompare{grid-template-columns:1fr}
     .hwrap{padding:12px 16px}
     nav.tabs{padding:0 16px}
     main{padding:24px 16px 64px}
     h1.page{font-size:27px}
-    .metrics{grid-template-columns:1fr 1fr}
+    .metrics,.ledgerstats{grid-template-columns:1fr 1fr}
     .metric:nth-child(odd){border-right:1px solid var(--faint)}
     .metric:nth-child(1),.metric:nth-child(2){border-bottom:1px solid var(--faint)}
     .grid2,.fgrid,.lhlists{grid-template-columns:1fr}
     .m-grid,.d-grid{grid-template-columns:1.6fr 1fr 22px}
-    .m-grid .hide-sm,.d-grid .hide-sm{display:none}
+    .l-grid{grid-template-columns:minmax(0,1fr) 92px 24px}
+    .m-grid .hide-sm,.d-grid .hide-sm,.l-grid .hide-sm{display:none}
     .thead{display:none}
     .snappill .b{display:none}
     .brand{min-width:0}
@@ -387,13 +453,20 @@
     #leafmap{height:420px}
     .maplegend{max-width:170px;padding:9px 11px}
     .dl{flex-wrap:wrap}
+    .ledgerrow{padding:14px 16px}
+    .fieldgrid{grid-template-columns:1fr}
+    .storyscore{grid-template-columns:1fr 1fr}
+    .storyimage{height:260px}
   }
   @media (max-width:480px){
-    .metrics{grid-template-columns:1fr}
+    .metrics,.ledgerstats{grid-template-columns:1fr}
     .metric{border-right:none!important;border-bottom:1px solid var(--faint)}
     .insetgrid{grid-template-columns:1fr}
     .vocabgrid{grid-template-columns:1fr}
     .snappill{display:none}
+    .ledgersearch input,.ledgerselect{flex-basis:100%;width:100%}
+    .storyscore{grid-template-columns:1fr}
+    .storyimage{height:220px}
   }
 </style>
 </head>
@@ -419,6 +492,7 @@
     <button data-v="findings">Findings</button>
     <button data-v="models">Models</button>
     <button data-v="map">Map</button>
+    <button data-v="ledger">Ledger</button>
     <button data-v="data">Data &amp; reproduce</button>
     <button data-v="glossary">Glossary</button>
   </nav>
@@ -437,6 +511,9 @@
 
     <!-- the two big things: the law + the shipped win (data-bound) -->
     <div class="bigrow" id="bigrow"></div>
+
+    <!-- beach bacteria narrative, folded in from the standalone explainer -->
+    <div id="bacteriastory"></div>
 
     <!-- two entry paths -->
     <div class="paths">
@@ -587,6 +664,33 @@
     <p class="mapnote" style="color:var(--ink5)">Other basins (e.g. Japan / Tokyo Bay) are held under a research-only license, so their station data isn't republished here.</p>
   </section>
 
+  <!-- ===== COMPLETE LEDGER ===== -->
+  <section class="view" id="ledger">
+    <div style="margin-bottom:22px;max-width:860px">
+      <h1 class="sec">Complete ledger</h1>
+      <p class="subhead">Every published entry in the snapshot, in one searchable audit trail: findings, models, research questions, signals, datasets, gates, evidence files, docs, vocabulary, and notes. Use the filters to narrow the long list; click any row for the plain-English meaning, saved fields, provenance, and raw record.</p>
+    </div>
+    <div class="ledgerstats" id="ledgerstats"></div>
+    <div class="ledgerbar">
+      <div class="ledgersearch">
+        <input id="ledgersearch" type="search" placeholder="Search title, ID, evidence path, metric, source, or text..." autocomplete="off"/>
+        <select class="ledgerselect" id="ledgertopic"><option value="all">All topics</option></select>
+        <select class="ledgerselect" id="ledgersort">
+          <option value="signal">Important first</option>
+          <option value="type">Group by type</option>
+          <option value="az">A to Z</option>
+        </select>
+      </div>
+      <div class="filterrow" id="ledgertypebar"></div>
+      <div class="filterrow" id="ledgerstatusbar"></div>
+    </div>
+    <div class="ledgercount" id="ledgercount"></div>
+    <div class="card ledgerlist">
+      <div class="ledgerrow ledgerhead l-grid"><span>Entry</span><span>Type</span><span class="hide-sm">State / topic</span><span></span></div>
+      <div id="ledgerrows"></div>
+    </div>
+  </section>
+
   <!-- ===== GLOSSARY ===== -->
   <section class="view" id="glossary">
     <div style="margin-bottom:18px;max-width:780px">
@@ -615,18 +719,20 @@
 
 <script>
 let DATA=null, EVID={}, PROJECT_DOCS=[], TAB='overview', FFILTER='all', FFAM='all', OPENF=null, DETAIL=null;
+let LEDGER_TYPE='all', LEDGER_STATUS='all', LEDGER_TOPIC='all', LEDGER_SORT='signal', LEDGER_QUERY='', LEDGER_ROWS=null;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"'`]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[c]));
 const fmt=n=>n==null?'—':Number(n).toLocaleString();
 const pct=v=>v==null?'—':(100*v).toFixed(1)+'%';
 const mb=n=>n==null?'—':(n>=1024?(n/1024).toFixed(2)+' GB':Number(n).toFixed(1)+' MB');
 const ago=iso=>{if(!iso)return '—';const s=(Date.now()-new Date(iso))/1000;if(s<5400)return Math.round(s/60)+'m ago';if(s<172800)return Math.round(s/3600)+'h ago';return Math.round(s/86400)+'d ago';};
+const pretty=id=>String(id||'').replace(/[_-]+/g,' ').replace(/\b\w/g,ch=>ch.toUpperCase());
 const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
 /* ---------- status / value mapping (data-bound, no fabrication) ---------- */
 const FINDING_STATUS={claim:'Supported',positive:'Supported',replication:'Supported',operational:'Supported',caveat:'Caveated',status:'Caveated',null:'Null',negative_result:'Null',negative:'Null',refutation:'Null',ablation:'Caveated'};
 function findingStatus(k){return FINDING_STATUS[k]||'Caveated';}
-const STATUS_BADGE={Supported:{bg:'#e3f3ef',text:'#1a7a4f'},Caveated:{bg:'#fdf3e0',text:'#9a6a07'},Null:{bg:'#eef0f2',text:'#586069'},Audited:{bg:'#e3f3ef',text:'#1a7a4f'},Baseline:{bg:'#eef0f2',text:'#586069'},Production:{bg:'#eef4f3',text:'#0f7a74'},Shadow:{bg:'#f1f1f3',text:'#7c828a'}};
+const STATUS_BADGE={Supported:{bg:'#e3f3ef',text:'#1a7a4f'},Caveated:{bg:'#fdf3e0',text:'#9a6a07'},Null:{bg:'#eef0f2',text:'#586069'},Audited:{bg:'#e3f3ef',text:'#1a7a4f'},Baseline:{bg:'#eef0f2',text:'#586069'},Production:{bg:'#eef4f3',text:'#0f7a74'},Shadow:{bg:'#f1f1f3',text:'#7c828a'},PASS:{bg:'#e3f3ef',text:'#1a7a4f'},WARN:{bg:'#fdf3e0',text:'#9a6a07'},FAIL:{bg:'#fbeceb',text:'#b4453c'},Evidence:{bg:'#eef4f3',text:'#0f7a74'},Document:{bg:'#eaf1fb',text:'#3a6ea5'},Vocabulary:{bg:'#f1f1f3',text:'#586069'},Signal:{bg:'#eef4f3',text:'#0f7a74'},Note:{bg:'#f1f1f3',text:'#7c828a'},Question:{bg:'#eaf1fb',text:'#3a6ea5'}};
 const STATUS_SEG={Supported:'#0f8a84',Caveated:'#c9a23a',Null:'#b8bdc3',Audited:'#0f8a84',Baseline:'#b8bdc3'};
 const STATUS_STRENGTH={Supported:3,Caveated:2,Null:1};
 const STRENGTH_LABEL={3:'Strong',2:'Moderate',1:'Weak'};
@@ -745,7 +851,7 @@ function appendHelpAll(selector,helps){
 function applyStaticHelp(){
   appendHelp('#snaplabel','Published snapshot means a frozen public copy of the current evidence, not a live private workspace.');
   appendHelp('#snapwhen','This is the month and year when the public snapshot was built.');
-  appendHelpAll('nav.tabs button',['Overview is the summary page.','Findings are tested science results.','Frontiers are research areas and hazards the lab has worked on.','Models are fitted systems and baselines in the registry.','Lakehouse is the organized data inventory.','Map shows data and model evidence by place.','Vocabulary explains the lab words.']);
+  appendHelpAll('nav.tabs button',['Overview is the summary page.','Questions are research areas and hazards the lab has worked on.','Findings are tested science results.','Models are fitted systems and baselines in the registry.','Map shows data and model evidence by place.','Ledger is the full searchable audit trail.','Data and reproduce is the organized data inventory and downloads.','Glossary explains the lab words.']);
   appendHelp('#overview .eyebrow','This page starts with the big picture before showing the evidence cards and datasets.');
   appendHelp('#overview .page','A unified model means one project trying to connect many coastal signals: water, weather, runoff, tides, waves, biology, and observations.');
   appendHelp('#overview .lede','This paragraph is the plain-language mission: show wins, limits, and failures with evidence attached.');
@@ -764,6 +870,8 @@ function applyStaticHelp(){
   appendHelp('#lakehouse .subhead','Production data is governed; shadow data is experimental or still being validated.');
   appendHelp('#map .sec','The map shows evidence by place. It does not invent values between stations.');
   appendHelp('#map .subhead','Coverage shows where data exists; model skill shows point-level held-out confidence; evidence grid groups nearby observations into cells as the honest map-pixel equivalent.');
+  appendHelp('#ledger .sec','The ledger is the complete public index of snapshot entries.');
+  appendHelp('#ledger .subhead','Use the ledger to trace every row back to its type, status, source fields, and raw record.');
   appendHelpAll('#mapdomain button',['California beach bacteria monitoring sites and model evidence.','US lake cyanobacteria observations. This map shows coverage, not a finalized lake model.']);
   appendHelpAll('#maptoggle button',['Coverage means where observations exist and how often the measured condition appears.','Model skill means how well the model ranked held-out events at each site, when enough events exist.','Evidence grid groups nearby sites into map cells so you can see observation support and model confidence together without pretending we have ocean-wide pixels.']);
   appendHelp('#vocabulary .sec','This section explains the lab words so non-experts can read the site without guessing.');
@@ -842,14 +950,17 @@ function findingFamily(fid){return _findingFamily[fid]||{family:'Cross-cutting &
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.v));
 function go(v){if(location.hash.slice(1)!==v)location.hash=v;else showView(v);}
 const VIEW_ALIAS={frontiers:'questions',lakehouse:'data',vocabulary:'glossary'};
+if('scrollRestoration' in history)history.scrollRestoration='manual';
+function resetRouteScroll(){window.scrollTo(0,0);setTimeout(()=>window.scrollTo(0,0),80);setTimeout(()=>window.scrollTo(0,0),220);}
 function showView(v){
   v=VIEW_ALIAS[v]||v;
-  if(!['overview','questions','findings','models','map','data','glossary'].includes(v))v='overview';
+  if(!['overview','questions','findings','models','map','ledger','data','glossary'].includes(v))v='overview';
   TAB=v; if(DETAIL){DETAIL=null;renderDrawer();}
   document.querySelectorAll('nav.tabs button').forEach(b=>{const on=b.dataset.v===v;b.classList.toggle('active',on);if(on&&b.scrollIntoView)try{b.scrollIntoView({inline:'center',block:'nearest'});}catch(e){}});
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id===v));
-  if(DATA){if(v==='questions')renderQuestions();if(v==='findings')renderFindings();if(v==='models')renderModels();if(v==='data')renderData();if(v==='glossary')renderVocabulary();}
+  if(DATA){if(v==='questions')renderQuestions();if(v==='findings')renderFindings();if(v==='models')renderModels();if(v==='ledger')renderLedger();if(v==='data')renderData();if(v==='glossary')renderVocabulary();}
   if(v==='map')renderMap();
+  resetRouteScroll();
   pv('/'+v,v);
 }
 let _lastPV=null;
@@ -862,6 +973,7 @@ async function load(){
     const r=await fetch('data.json',{cache:'no-cache'}); const snap=await r.json();
     DATA=snap.state; EVID=snap.evidence||{}; PROJECT_DOCS=snap.project_docs||[];
     DATA._built_pacific=snap.built_pacific; DATA._built_iso=snap.built_iso;
+    LEDGER_ROWS=null;
     buildFindingFamily();
     $('#loading').style.display='none';
     renderHeader(); renderOverview(); renderDownloads();
@@ -884,6 +996,70 @@ function targetMini(id){const t=targetById(id);if(!t)return '';const b=frontierB
     <div class="mh"><span class="mt">${esc(t.label)}</span><span class="badge" style="background:${b.bg};color:${b.text}"><i style="background:${b.text}"></i>${esc(t.status)}</span></div>
     <p>${esc(p.slice(0,168))}${p.length>168?'…':''}</p>
     <div class="go">Open the question →</div></div>`;}
+function findingById(id){return (DATA.findings||[]).find(f=>f.id===id);}
+function renderBacteriaStory(){
+  const host=$('#bacteriastory'); if(!host)return;
+  const decision=findingById('claim_bacteria_decision_rule')||{}, dm=decision.metrics||{};
+  const station=findingById('claim_bacteria_station_memory_supported')||{}, sm=station.metrics||{};
+  const onset=findingById('claim_clean_to_dirty_onset')||{}, om=onset.metrics||{};
+  const bench=(((EVID['research/bacteria/reproduce/expected/operational_benchmark.json']||{}).strata||{}).EXCLUDE_SAN_DIEGO)||{};
+  const models=bench.models||{}, op=bench.operational_verdict||{};
+  const rain=models.baseline_ab411_rain||{}, model=models.model_hgbt_calibrated||models.model_hgbt||{};
+  const recall=dm.recall!=null?pct(dm.recall):'86%';
+  const precision=dm.precision!=null?pct(dm.precision):'23%';
+  const tau=dm.tau!=null?pct(dm.tau):'6.4%';
+  const flag=dm.flag_rate!=null?pct(dm.flag_rate):'38%';
+  const falsePer=dm.false_advisories_per_caught!=null?Number(dm.false_advisories_per_caught).toFixed(2):'3.35';
+  const modelAp=model.ap!=null?model.ap.toFixed(4):(op.model_calibrated_ap!=null?op.model_calibrated_ap.toFixed(4):'0.5099');
+  const rainAp=rain.ap!=null?rain.ap.toFixed(4):(op.ab411_ap!=null?op.ab411_ap.toFixed(4):'0.1779');
+  const memAp=sm.station_memory_ap!=null?sm.station_memory_ap.toFixed(4):(models.baseline_station_memory&&models.baseline_station_memory.ap!=null?models.baseline_station_memory.ap.toFixed(4):'0.2782');
+  const onsetLift=om.ratio_vs_station_memory!=null?om.ratio_vs_station_memory.toFixed(1)+'x':'2.1x';
+  const maxAp=Math.max(Number(modelAp)||0,Number(rainAp)||0,Number(memAp)||0,0.01);
+  const bar=(name,ap,sub,color)=>`<div class="storybar">
+    <div class="top"><span class="name">${esc(name)}</span><span class="ap">AP ${esc(ap)}</span></div>
+    <div class="track"><div class="fill" style="width:${Math.max(5,Math.min(100,(Number(ap)||0)/maxAp*100)).toFixed(1)}%;background:${color}"></div></div>
+    <p style="margin:9px 0 0;font-size:12.8px;line-height:1.45;color:var(--ink4)">${esc(sub)}</p>
+  </div>`;
+  host.innerHTML=`<section class="storypanel">
+    <div class="secband"><h2>Beach bacteria, from sample to warning</h2><p>Watch the classroom version, then read the audited numbers underneath.</p></div>
+    <div class="storyintro">
+      <div class="card storycopy">
+        <div class="tag">Beach warning explainer</div>
+        <h2>The danger is invisible, and the lab result arrives late.</h2>
+        <p>Beach bacteria can come from runoff, animal waste, aging infrastructure, and local conditions. A swimmer cannot see it. The usual lab culture takes about <b>18-24 hours</b>, so a same-day warning has to use information available before the sample result is known.</p>
+      </div>
+      <div class="storymedia">
+        <video controls preload="metadata" playsinline poster="videos/bacteria_finding_8th_grade_poster.jpg" aria-label="Eighth-grade explainer video about the beach bacteria finding">
+          <source src="videos/bacteria_finding_8th_grade.mp4" type="video/mp4">
+          <a href="videos/bacteria_finding_8th_grade.mp4">Open the bacteria finding explainer video.</a>
+        </video>
+        <div class="storyvideobar">
+          <span>2:41 classroom explainer</span>
+          <div class="storyvideolinks">
+            <a href="bacteria-video.html">Share page</a>
+            <a href="videos/bacteria_finding_8th_grade.mp4">MP4</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="storyflow">
+      <div class="storystep"><div class="num">1 · old rule</div><h3>Station-memory is the status quo.</h3><p>It asks whether this site was dirty recently. The model beats it on the deployable 2022+ holdout: AP ${modelAp} versus station-memory AP ${memAp}.</p></div>
+      <div class="storystep"><div class="num">2 · features</div><h3>The model reads clues, not labels.</h3><p>It uses causal, available-at-decision features such as recent lab history, rain, season, location, waves, and other vetted signals. Signals that wash out stay in the ledger.</p></div>
+      <div class="storystep"><div class="num">3 · probability</div><h3>The output is a risk score.</h3><p>The decision rule turns calibrated probability into action: warn when P(exceedance) is at least ${tau}. The chosen threshold flags ${flag} of beach-days.</p></div>
+    </div>
+    <div class="storyscore">
+      <div class="storymetric"><div class="k">True warnings</div><div class="v">${fmt(dm.tp)}</div><div class="s">warned, and the water exceeded</div></div>
+      <div class="storymetric"><div class="k">False warnings</div><div class="v">${fmt(dm.fp)}</div><div class="s">warned, but the sample was below limit</div></div>
+      <div class="storymetric"><div class="k">Missed events</div><div class="v">${fmt(dm.fn)}</div><div class="s">not warned, but exceeded</div></div>
+      <div class="storymetric"><div class="k">Dirty days caught</div><div class="v">${recall}</div><div class="s">precision ${precision}; ${falsePer} false advisories per catch</div></div>
+    </div>
+    <div class="storycompare">
+      ${bar('Calibrated AI nowcast',modelAp,'Frozen HGBT + isotonic model on EXCLUDE_SAN_DIEGO test stratum.','#0f8a84')}
+      ${bar('AB411 rain rule',rainAp,'Rain-only wet-weather advisory benchmark from the same operational benchmark.','#b8bdc3')}
+    </div>
+    <p class="mapnote" style="margin-top:12px">The useful reframe is clean-to-dirty onset: among currently-clean beach-days, the model is ${esc(onsetLift)} over station memory on AP in the saved retrospective gate. The prospective post-freeze lockbox is still the honest next proof.</p>
+  </section>`;
+}
 function renderOverview(){
   const s=DATA, c=s.counts||{};
   const fs=s.findings||[];
@@ -918,6 +1094,7 @@ function renderOverview(){
     <p>${esc((bac.plain||'').slice(0,230))}${(bac.plain||'').length>230?'…':''}</p>
     <div class="go" style="margin-top:13px;font-size:13px;font-weight:600;color:var(--acc)">Open the question →</div></div>`:'');
   $('#bigrow').innerHTML=lawCard+winCard;
+  renderBacteriaStory();
 
   // escapes (drivers genuinely beat the baseline) + honest nulls
   $('#escapelist').innerHTML=['hypoxia_lead','renewal_onset','cross_country_transfer','cyano_onset'].map(targetMini).join('');
@@ -1035,6 +1212,250 @@ function renderModels(){
   }).join('');
   $('#modelrows').innerHTML=rows || '<div class="lhempty" style="padding:18px 22px">No models in this snapshot.</div>';
   document.querySelectorAll('#modelrows .trow').forEach(r=>r.onclick=e=>{if(e.target.closest('.helpq'))return;DETAIL={type:'model',idx:+r.dataset.i};renderDrawer();});
+}
+
+/* ---------- complete ledger ---------- */
+const LEDGER_TYPES=[
+  ['finding','Findings','#0f8a84'],
+  ['model','Models','#3a6ea5'],
+  ['question','Questions','#5f7fb0'],
+  ['signal','Signals','#4f9b6e'],
+  ['dataset','Datasets','#0f7a74'],
+  ['gate','Gates','#9a6a07'],
+  ['evidence','Evidence files','#7c6fb0'],
+  ['document','Docs','#586f8a'],
+  ['vocabulary','Vocabulary','#7c828a'],
+  ['note','Notes','#9aa0a7'],
+  ['metadata','Metadata','#5b6168']
+];
+const LEDGER_TYPE_META=Object.fromEntries(LEDGER_TYPES.map((t,i)=>[t[0],{label:t[1],dot:t[2],rank:i}]));
+function targetFamilyTitle(id){for(const F of TARGET_FAMILIES){if(F.ids.includes(id))return F.title;}return 'Cross-cutting & methods';}
+function targetLabel(id){const t=targetById(id);return t?(t.label||t.id):pretty(id);}
+function targetTopicFromText(s){const d=mapDomainFor(s);return d?DOMAIN_LABEL[d]:'Cross-cutting & methods';}
+function trimText(s,n=190){s=String(s==null?'':s).replace(/\s+/g,' ').trim();return s.length>n?s.slice(0,n-3)+'...':s;}
+function valueText(v,n=260){
+  if(v==null)return '-';
+  if(typeof v==='boolean')return v?'yes':'no';
+  if(typeof v==='number')return Number.isInteger(v)?fmt(v):String(Number(v.toFixed?Number(v.toFixed(4)):v));
+  if(Array.isArray(v))return trimText(v.map(x=>typeof x==='object'?JSON.stringify(x):String(x)).join(', '),n);
+  if(typeof v==='object')return trimText(JSON.stringify(v),n);
+  return trimText(v,n);
+}
+function ledgerSignalStatus(g){
+  const sts=(g.verdicts||[]).map(v=>String(v.status||''));
+  if(sts.some(s=>s==='PRIMARY'||s==='KEEP'))return 'Signal';
+  if(sts.length&&sts.every(s=>s==='WASH'||s==='REJECT'))return 'Null';
+  if(sts.some(s=>s==='UNTESTED'||s==='KEEP-research'))return 'Caveated';
+  return 'Signal';
+}
+function ledgerEvidenceTitle(path){
+  const base=String(path||'').split('/').pop()||path;
+  return base.replace(/\.(json|md|csv)$/i,'');
+}
+function ledgerEvidenceSummary(v){
+  if(v==null)return 'Saved evidence artifact with no payload in this public snapshot.';
+  if(Array.isArray(v))return `Saved evidence artifact containing ${v.length} records.`;
+  if(typeof v==='object'){
+    const keys=Object.keys(v);
+    const hints=[];
+    for(const k of ['verdict','status','headline','title','summary','plain','model_ap','delta_ap','roc_auc','n','events']){
+      if(v[k]!=null)hints.push(`${pretty(k)}: ${valueText(v[k],90)}`);
+    }
+    return hints.length?`Machine-readable evidence artifact. ${hints.slice(0,3).join('; ')}.`:`Machine-readable evidence artifact with ${keys.length} top-level field${keys.length===1?'':'s'}: ${keys.slice(0,6).map(pretty).join(', ')}.`;
+  }
+  return trimText(v,210);
+}
+function ledgerRows(){
+  if(LEDGER_ROWS)return LEDGER_ROWS;
+  const rows=[]; let order=0;
+  const add=r=>{
+    const meta=LEDGER_TYPE_META[r.type]||{label:pretty(r.type),dot:'#9aa0a7',rank:99};
+    const row={order:order++,typeLabel:meta.label,typeRank:meta.rank,dot:meta.dot,status:r.status||meta.label,topic:r.topic||'General',...r};
+    row.key=row.key||`${row.type}:${row.order}`;
+    row.search=[
+      row.typeLabel,row.status,row.topic,row.title,row.desc,row.meta,row.id,
+      typeof row.raw==='string'?row.raw:JSON.stringify(row.raw||{})
+    ].join(' ').toLowerCase();
+    rows.push(row);
+  };
+  add({type:'metadata',key:'metadata:snapshot',title:'Published snapshot',status:DATA.overall_status||'Metadata',topic:'Snapshot',desc:`Static site snapshot built ${DATA._built_pacific||DATA.snapshot_generated||'unknown build time'}.`,meta:'data.json',raw:{built_pacific:DATA._built_pacific,built_iso:DATA._built_iso,snapshot_generated:DATA.snapshot_generated,overall_status:DATA.overall_status,counts:DATA.counts}});
+  if(DATA.git)add({type:'metadata',key:'metadata:git',title:'Git provenance',status:'Metadata',topic:'Snapshot',desc:`Source branch ${DATA.git.branch||'unknown'} at ${DATA.git.last_commit||'unknown commit'}.`,meta:DATA.git.risk?'risk '+DATA.git.risk:'repository state',raw:DATA.git});
+  (DATA.findings||[]).forEach((f,i)=>{
+    const st=findingStatus(f.kind), fam=findingFamily(f.id);
+    const m=pickMetric(f);
+    add({type:'finding',key:'finding:'+f.id,id:f.id,index:i,title:f.title||f.id,status:st,topic:fam.family,desc:f.plain||f.headline||f.how||'',meta:`${m.label}: ${m.value}${f.evidence?' · '+f.evidence:''}`,raw:f,source:{type:'finding',id:f.id}});
+  });
+  (DATA.models||[]).forEach((m,i)=>{
+    const st=modelStatus(m.status), topic=targetLabel(TASK_TARGET[m.task]||m.task);
+    add({type:'model',key:'model:'+m.model_id,id:m.model_id,index:i,title:m.model_id,status:st,topic,desc:m.plain||m.beats_baseline||`Registered ${m.family||'model'} for ${m.task||'an unspecified task'}.`,meta:[m.family,m.status,m.claimable?'claimable':'not claimable'].filter(Boolean).join(' · '),raw:m,source:{type:'model',idx:i}});
+  });
+  (DATA.targets||[]).forEach((t,i)=>{
+    add({type:'question',key:'question:'+t.id,id:t.id,index:i,title:t.label||t.question||t.id,status:t.status||'Question',topic:targetFamilyTitle(t.id),desc:t.plain||t.question||'',meta:[(findingsForTarget(t.id)||[]).length+' findings',(modelsForTarget(t.id)||[]).length+' models',(signalsForTarget(t.id)||[]).length+' signals'].join(' · '),raw:t,source:{type:'target',idx:i}});
+  });
+  (DATA.signals||[]).forEach((g,i)=>{
+    const targets=[...new Set((g.verdicts||[]).map(v=>v.target).filter(Boolean))];
+    add({type:'signal',key:'signal:'+g.name,id:g.name,index:i,title:g.name,status:ledgerSignalStatus(g),topic:g.modality?pretty(g.modality):targetTopicFromText(g.name+' '+g.what),desc:g.what||'Tracked signal or representation.',meta:`${(g.verdicts||[]).length} verdicts${targets.length?' · '+targets.slice(0,3).map(targetLabel).join(', '):''}`,raw:g});
+  });
+  (DATA.data_assets||[]).forEach((a,i)=>{
+    const range=a.date_min?`${String(a.date_min).slice(0,10)} to ${String(a.date_max||'').slice(0,10)}`:'no date range';
+    add({type:'dataset',key:'dataset:lake:'+a.asset_id,id:a.asset_id,index:i,store:'lake',title:a.asset_id,status:'Production',topic:a.source?pretty(a.source):pretty(a.kind||'dataset'),desc:`Governed public data asset with ${a.rows!=null?fmt(a.rows)+' rows':'unknown row count'} and ${range}.`,meta:[a.kind,a.status,a.path].filter(Boolean).join(' · '),raw:a,source:{type:'dataset',store:'lake',idx:i}});
+  });
+  shadowAssets().forEach((d,i)=>{
+    add({type:'dataset',key:'dataset:shadow:'+d.name,id:d.name,index:i,store:'shadow',title:d.name,status:'Shadow',topic:pretty(d.source||'shadow'),desc:'Experimental or under-validation dataset tracked before production promotion.',meta:[d.rows!=null?fmt(d.rows)+' rows':null,d.source].filter(Boolean).join(' · '),raw:d,source:{type:'dataset',store:'shadow',idx:i}});
+  });
+  (DATA.gates||[]).forEach((g,i)=>{
+    const st=String(g.overall_status||'Gate').toUpperCase();
+    add({type:'gate',key:'gate:'+g.gate_id,id:g.gate_id,index:i,title:pretty(g.gate_id),status:st,topic:'Audit gates',desc:gateExplain(g),meta:[g.artifact,g.age_days!=null?g.age_days+'d old':null].filter(Boolean).join(' · '),raw:g});
+  });
+  Object.entries(EVID||{}).forEach(([path,obj],i)=>{
+    add({type:'evidence',key:'evidence:'+path,id:path,index:i,title:ledgerEvidenceTitle(path),status:'Evidence',topic:path.split('/').slice(0,2).join('/')||'Evidence files',desc:ledgerEvidenceSummary(obj),meta:path,raw:obj,path});
+  });
+  (PROJECT_DOCS||[]).forEach((d,i)=>{
+    add({type:'document',key:'document:'+i+':'+d.path,id:d.path,index:i,title:d.title||d.path,status:'Document',topic:d.path||'Project docs',desc:d.text||'',meta:[d.path,d.chunk!=null?'chunk '+d.chunk:null,d.priority!=null?'priority '+d.priority:null].filter(Boolean).join(' · '),raw:d});
+  });
+  (DATA.vocabulary||[]).forEach((c,i)=>{
+    add({type:'vocabulary',key:'vocabulary:'+c.key,id:c.key,index:i,title:c.label||c.key,status:'Vocabulary',topic:'Glossary',desc:c.what||'',meta:(c.examples||[]).slice(0,3).join(' · '),raw:c,source:{type:'vocab',key:c.key}});
+  });
+  (DATA.next_actions||[]).forEach((n,i)=>{
+    add({type:'note',key:'note:next:'+i,id:'next_action_'+(i+1),index:i,title:'Build note '+(i+1),status:'Note',topic:'Build notes',desc:n,meta:'next_actions',raw:n});
+  });
+  (DATA.lab_memory||[]).forEach((m,i)=>{
+    add({type:'note',key:'note:memory:'+((m&&m.id)||i),id:(m&&m.id)||'memory_'+i,index:i,title:(m&&m.claim?trimText(m.claim,80):(m&&m.id)||'Lab memory'),status:'Note',topic:m&&m.kind?pretty(m.kind):'Lab memory',desc:(m&&m.claim)||'',meta:m&&m.basis?m.basis:'lab_memory',raw:m});
+  });
+  LEDGER_ROWS=rows;
+  return rows;
+}
+function ledgerTypeButton(row,activeKey){
+  return `<button class="fpill${LEDGER_TYPE===row[0]?' active':''}" data-t="${esc(row[0])}">${esc(row[1])}<span class="c">${row[2]}</span></button>`;
+}
+function ledgerStatusButton(row){
+  return `<button class="fpill${LEDGER_STATUS===row[0]?' active':''}" data-s="${esc(row[0])}">${esc(row[1])}<span class="c">${row[2]}</span></button>`;
+}
+function ledgerFilteredRows(){
+  const q=LEDGER_QUERY.trim().toLowerCase();
+  let rows=ledgerRows().filter(r=>
+    (LEDGER_TYPE==='all'||r.type===LEDGER_TYPE)&&
+    (LEDGER_STATUS==='all'||r.status===LEDGER_STATUS)&&
+    (LEDGER_TOPIC==='all'||r.topic===LEDGER_TOPIC)&&
+    (!q||q.split(/\s+/).every(term=>r.search.includes(term)))
+  );
+  if(LEDGER_SORT==='type')rows=rows.slice().sort((a,b)=>(a.typeRank-b.typeRank)||(a.topic||'').localeCompare(b.topic||'')||a.order-b.order);
+  else if(LEDGER_SORT==='az')rows=rows.slice().sort((a,b)=>(a.title||'').localeCompare(b.title||''));
+  else rows=rows.slice().sort((a,b)=>(a.typeRank-b.typeRank)||a.order-b.order);
+  return rows;
+}
+function renderLedgerStats(all){
+  const supported=all.filter(r=>r.status==='Supported').length;
+  const evidence=all.filter(r=>r.type==='evidence'||r.type==='document').length;
+  const datasets=all.filter(r=>r.type==='dataset').length;
+  const rows=(DATA.data_assets||[]).reduce((a,d)=>a+(d.rows||0),0);
+  $('#ledgerstats').innerHTML=[
+    ['Ledger entries',fmt(all.length),'every published row type'],
+    ['Supported findings',fmt(supported),(DATA.findings||[]).length+' total findings'],
+    ['Data assets',fmt(datasets),fmt(rows)+' governed rows'],
+    ['Evidence + docs',fmt(evidence),'raw artifacts and text chunks']
+  ].map(([k,v,s])=>`<div class="ledgerstat"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div><div class="s">${esc(s)}</div></div>`).join('');
+}
+function renderLedgerFilters(all){
+  const typeDefs=[['all','All',all.length]].concat(LEDGER_TYPES.map(([k,l])=>[k,l,all.filter(r=>r.type===k).length]).filter(x=>x[2]));
+  $('#ledgertypebar').innerHTML='<span class="fl-label">Type</span>'+typeDefs.map(ledgerTypeButton).join('');
+  document.querySelectorAll('#ledgertypebar .fpill').forEach(b=>b.onclick=()=>{LEDGER_TYPE=b.dataset.t;renderLedger();});
+  const preStatus=all.filter(r=>(LEDGER_TYPE==='all'||r.type===LEDGER_TYPE)&&(LEDGER_TOPIC==='all'||r.topic===LEDGER_TOPIC)&&(!LEDGER_QUERY.trim()||LEDGER_QUERY.trim().toLowerCase().split(/\s+/).every(term=>r.search.includes(term))));
+  const statusOrder=['Supported','Caveated','Null','Audited','Baseline','Production','Shadow','PASS','WARN','FAIL','Signal','Evidence','Document','Vocabulary','Note','Metadata'];
+  const have=[...new Set(preStatus.map(r=>r.status))];
+  if(LEDGER_STATUS!=='all'&&!have.includes(LEDGER_STATUS))LEDGER_STATUS='all';
+  const statusDefs=[['all','All states',preStatus.length]].concat(statusOrder.filter(s=>have.includes(s)).map(s=>[s,s,preStatus.filter(r=>r.status===s).length]));
+  $('#ledgerstatusbar').innerHTML='<span class="fl-label">State</span>'+statusDefs.map(ledgerStatusButton).join('');
+  document.querySelectorAll('#ledgerstatusbar .fpill').forEach(b=>b.onclick=()=>{LEDGER_STATUS=b.dataset.s;renderLedger();});
+  const topics=[...new Set(all.map(r=>r.topic).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  const ts=$('#ledgertopic');
+  ts.innerHTML='<option value="all">All topics</option>'+topics.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('');
+  ts.value=topics.includes(LEDGER_TOPIC)?LEDGER_TOPIC:'all';
+  LEDGER_TOPIC=ts.value;
+  ts.onchange=()=>{LEDGER_TOPIC=ts.value;renderLedger();};
+  const sort=$('#ledgersort'); sort.value=LEDGER_SORT; sort.onchange=()=>{LEDGER_SORT=sort.value;renderLedger();};
+  const search=$('#ledgersearch');
+  if(search.value!==LEDGER_QUERY)search.value=LEDGER_QUERY;
+  search.oninput=()=>{LEDGER_QUERY=search.value;renderLedger();};
+}
+function renderLedger(){
+  const all=ledgerRows();
+  renderLedgerStats(all);
+  renderLedgerFilters(all);
+  const rows=ledgerFilteredRows();
+  $('#ledgercount').textContent=`Showing ${rows.length.toLocaleString()} of ${all.length.toLocaleString()} ledger entries. Click any row for the full saved record.`;
+  $('#ledgerrows').innerHTML=rows.map(r=>{
+    const b=anyBadge(r.status), meta=LEDGER_TYPE_META[r.type]||{label:r.type,dot:r.dot||'#9aa0a7'};
+    return `<div class="ledgerrow click l-grid" data-k="${esc(r.key)}">
+      <div><div class="ltitle">${esc(r.title)}</div><div class="ldesc">${esc(trimText(r.desc,230))}</div><div class="lmeta">${esc(trimText(r.meta||r.id||'',160))}</div></div>
+      <span class="ltypechip"><i style="background:${esc(meta.dot)}"></i>${esc(meta.label)}</span>
+      <div class="lchips hide-sm"><span class="sbadge" style="background:${b.bg};color:${b.text}">${esc(r.status)}</span><span class="vchip" style="background:var(--faint3);color:var(--ink3)">${esc(trimText(r.topic,42))}</span></div>
+      <span class="chev">→</span>
+    </div>`;
+  }).join('') || '<div class="lhempty" style="padding:18px 22px">No ledger entries match the current filters.</div>';
+  document.querySelectorAll('#ledgerrows .ledgerrow').forEach(r=>r.onclick=e=>{if(e.target.closest('.helpq'))return;DETAIL={type:'ledger',key:r.dataset.k};renderDrawer();});
+}
+function ledgerMeaning(type){
+  return {
+    finding:'A finding is a tested science result. It may be supported, caveated, or null, but it stays in the record either way.',
+    model:'A model entry is a fitted system or baseline in the registry, with task, family, claimability, and evidence status.',
+    question:'A question is a research target: the hazard, transfer problem, or method the lab is trying to answer.',
+    signal:'A signal is an input, representation, or feature family tested against one or more targets. Verdicts say whether it helped.',
+    dataset:'A dataset entry is a stored source asset or tracked shadow dataset used by the snapshot.',
+    gate:'A gate is an automated audit or publishability check. PASS/WARN/FAIL says how that check read at snapshot time.',
+    evidence:'An evidence file is a machine-readable report backing a finding, model, or gate.',
+    document:'A doc entry is a searchable chunk from the published project-doc corpus.',
+    vocabulary:'A vocabulary entry defines one lab word and lists real examples.',
+    note:'A note records build context, next actions, or lab memory that explains how the snapshot was assembled.',
+    metadata:'Metadata explains the snapshot build, repository provenance, and overall status.'
+  }[type]||'This is a published snapshot entry.';
+}
+function ledgerFieldPairs(row){
+  const r=row.raw||{}, type=row.type;
+  if(type==='finding')return [['ID',r.id],['Kind',r.kind],['Status',row.status],['Topic',row.topic],['Evidence',r.evidence],['How tested',r.how],['Caveat / note',r.note],['Key metrics',r.metrics]];
+  if(type==='model')return [['Model ID',r.model_id],['Family',r.family],['Task',r.task],['Registry status',r.status],['Claimable',r.claimable],['Baseline read',r.beats_baseline],['Evidence',r.evidence],['Evidence present',r.evidence_exists]];
+  if(type==='question')return [['ID',r.id],['Question',r.question],['Status',r.status],['Family',row.topic],['Linked findings',findingsForTarget(r.id).length],['Linked models',modelsForTarget(r.id).length],['Linked signals',signalsForTarget(r.id).length]];
+  if(type==='signal')return [['Name',r.name],['Modality',r.modality],['Verdicts',r.verdicts],['Targets',(r.verdicts||[]).map(v=>targetLabel(v.target)).join(', ')]];
+  if(type==='dataset')return [['Name',r.asset_id||r.name],['Tier',row.status],['Rows',r.rows],['Kind / source',r.kind||r.source],['Path',r.path],['Status',r.status],['Time range',r.date_min?String(r.date_min).slice(0,10)+' to '+String(r.date_max||'').slice(0,10):null],['Size',r.size_mb!=null?mb(r.size_mb):r.files]];
+  if(type==='gate')return [['Gate ID',r.gate_id],['Status',r.overall_status],['Artifact',r.artifact],['Rerun command',r.rerun_command],['Generated',r.generated_at_utc],['Modified',r.modified_utc],['Age',r.age_days!=null?r.age_days+' days':null],['Checks',r.check_statuses]];
+  if(type==='evidence')return [['Path',row.path],['Top-level fields',typeof r==='object'&&r&&!Array.isArray(r)?Object.keys(r).join(', '):null],['Record count',Array.isArray(r)?r.length:null],['Payload type',Array.isArray(r)?'array':typeof r]];
+  if(type==='document')return [['Path',r.path],['Title',r.title],['Chunk',r.chunk],['Priority',r.priority]];
+  if(type==='vocabulary')return [['Key',r.key],['Label',r.label],['Examples',r.examples]];
+  if(type==='metadata')return Object.entries(r).map(([k,v])=>[pretty(k),v]);
+  if(typeof r==='object'&&r)return Object.entries(r).slice(0,10).map(([k,v])=>[pretty(k),v]);
+  return [['Text',r]];
+}
+function ledgerActions(row){
+  const actions=[];
+  if(row.source&&row.source.type==='finding')actions.push(`<button class="lnk" onclick="openFindingById('${esc(row.source.id)}')">Open finding card →</button>`);
+  if(row.source&&row.source.type==='model')actions.push(`<button class="lnk" onclick="DETAIL={type:'model',idx:${row.source.idx}};renderDrawer()">Open model card →</button>`);
+  if(row.source&&row.source.type==='dataset')actions.push(`<button class="lnk" onclick="DETAIL={type:'dataset',store:'${row.source.store}',idx:${row.source.idx}};renderDrawer()">Open dataset card →</button>`);
+  if(row.source&&row.source.type==='target')actions.push(`<button class="lnk" onclick="DETAIL={type:'target',idx:${row.source.idx}};renderDrawer()">Open question hub →</button>`);
+  if(row.source&&row.source.type==='vocab')actions.push(`<button class="lnk" onclick="DETAIL={type:'vocab',key:'${esc(row.source.key)}'};renderDrawer()">Open vocabulary examples →</button>`);
+  const dom=mapDomainFor([row.title,row.desc,row.topic,row.meta].join(' '));
+  if(dom)actions.push(mapLink(dom,'grid'));
+  return actions.length?`<div class="hubsec"><div class="hl">Related views</div><div style="display:flex;gap:8px;flex-wrap:wrap">${actions.join('')}</div></div>`:'';
+}
+function ledgerDrawer(key){
+  const row=ledgerRows().find(r=>r.key===key); if(!row)return '';
+  const b=anyBadge(row.status), meta=LEDGER_TYPE_META[row.type]||{label:pretty(row.type),dot:'#9aa0a7'};
+  const fields=ledgerFieldPairs(row).filter(([k,v])=>v!=null&&v!==''&&!(Array.isArray(v)&&!v.length));
+  const json=JSON.stringify(row.raw,null,2);
+  return `<div>
+    <div class="dhead">
+      <div><div class="eb">${esc(meta.label)} · ${esc(row.status)}</div><div class="ti">${esc(row.title)}</div><div class="nt">${esc(row.id||row.topic||'ledger entry')}</div></div>
+      <button class="dclose" onclick="closeDrawer()">×</button>
+    </div>
+    <div class="dbody">
+      <span class="badge" style="background:${b.bg};color:${b.text};margin-bottom:16px"><i style="background:${b.text}"></i>${esc(row.status)}</span>
+      <p class="plain">${esc(trimText(row.desc||ledgerMeaning(row.type),900))}</p>
+      <div class="dlabel">What this entry is</div>
+      <p class="plain" style="font-size:14.5px;color:var(--ink3);margin-bottom:18px">${esc(ledgerMeaning(row.type))}</p>
+      <div class="fieldgrid">${fields.slice(0,10).map(([k,v])=>`<div class="fieldcard"><div class="fk">${esc(k)}</div><div class="fv">${esc(valueText(v,420))}</div></div>`).join('')}</div>
+      ${ledgerActions(row)}
+      <div class="hubsec"><div class="hl">Raw saved record</div><pre class="jsonpreview">${esc(json.length>12000?json.slice(0,12000)+'\n... truncated in browser drawer ...':json)}</pre></div>
+    </div>
+  </div>`;
 }
 
 /* ---------- lakehouse ---------- */
@@ -1353,6 +1774,7 @@ function renderDrawer(){
   else if(DETAIL.type==='dataset') inner=datasetDrawer();
   else if(DETAIL.type==='target') inner=targetDrawer();
   else if(DETAIL.type==='vocab') inner=vocabDrawer(DETAIL.key);
+  else if(DETAIL.type==='ledger') inner=ledgerDrawer(DETAIL.key);
   host.innerHTML=`<div class="backdrop" id="backdrop"><div class="drawer" id="drawer">${inner}</div></div>`;
   $('#backdrop').onclick=closeDrawer;
   $('#drawer').onclick=e=>e.stopPropagation();

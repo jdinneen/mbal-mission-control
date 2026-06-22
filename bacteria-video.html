@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bacteria Finding Explainer</title>
+  <meta name="description" content="An eighth-grade-friendly animated explainer of the MBAL bacteria forecasting result.">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #14213d;
+      --muted: #53606f;
+      --line: #d8dee8;
+      --surface: #f7f9fc;
+      --accent: #0b7a75;
+      --accent-dark: #075f5c;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: #ffffff;
+    }
+
+    main {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 28px 0 40px;
+    }
+
+    header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 0 0 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.6rem, 3vw, 2.7rem);
+      line-height: 1.05;
+      letter-spacing: 0;
+    }
+
+    p {
+      margin: 10px 0 0;
+      max-width: 720px;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 1rem;
+    }
+
+    .actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    a.button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 14px;
+      border: 1px solid var(--accent);
+      border-radius: 6px;
+      background: var(--accent);
+      color: #ffffff;
+      font-weight: 700;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    a.button.secondary {
+      background: #ffffff;
+      color: var(--accent-dark);
+    }
+
+    .video-shell {
+      margin-top: 24px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 12px;
+    }
+
+    video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      background: #101820;
+      border-radius: 6px;
+    }
+
+    .meta {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .metric {
+      min-height: 82px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+    }
+
+    .metric strong {
+      display: block;
+      font-size: 1.25rem;
+      line-height: 1.15;
+    }
+
+    .metric span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+
+    @media (max-width: 760px) {
+      main {
+        width: min(100% - 20px, 1120px);
+        padding-top: 18px;
+      }
+
+      header {
+        display: block;
+      }
+
+      .actions {
+        justify-content: flex-start;
+        margin-top: 16px;
+      }
+
+      .meta {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>Bacteria Finding Explainer</h1>
+        <p>An animated, eighth-grade-friendly walkthrough of how the beach bacteria forecast was built, what the confusion matrix means, and how to read the result.</p>
+      </div>
+      <nav class="actions" aria-label="Video links">
+        <a class="button" href="videos/bacteria_finding_8th_grade.mp4">Open MP4</a>
+        <a class="button secondary" href="./">Mission Control</a>
+      </nav>
+    </header>
+
+    <section class="video-shell" aria-label="Bacteria explainer video">
+      <video controls preload="metadata" poster="videos/bacteria_finding_8th_grade_poster.jpg" src="videos/bacteria_finding_8th_grade.mp4">
+        <a href="videos/bacteria_finding_8th_grade.mp4">Download the bacteria finding explainer video.</a>
+      </video>
+    </section>
+
+    <section class="meta" aria-label="Key numbers in the explainer">
+      <div class="metric">
+        <strong>86%</strong>
+        <span>Unsafe days caught by the advisory rule.</span>
+      </div>
+      <div class="metric">
+        <strong>7,780</strong>
+        <span>Unsafe station-days correctly flagged.</span>
+      </div>
+      <div class="metric">
+        <strong>26,026</strong>
+        <span>Safe station-days that would still get alerts.</span>
+      </div>
+      <div class="metric">
+        <strong>2:41</strong>
+        <span>Silent classroom video with on-screen captions.</span>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
