@@ -114,6 +114,8 @@
   .qaans .ground{display:flex;align-items:center;gap:8px;flex-wrap:wrap;border-top:1px solid rgba(255,255,255,.12);padding-top:12px}
   .qaans .ground .g{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:#aeb4bb}
   .qaans .ground .s{font-family:var(--mono);font-size:11.5px;color:#5fe0d6;background:rgba(40,196,186,.18);border:1px solid rgba(40,196,186,.28);border-radius:6px;padding:3px 8px}
+  .qaans .ground button.slink{appearance:none;cursor:pointer;transition:all .14s}
+  .qaans .ground button.slink:hover{background:rgba(40,196,186,.34);border-color:rgba(40,196,186,.6);color:#fff;transform:translateY(-1px)}
   /* simple suggestion composer (on-page, stays here) */
   .suggest-box{margin-top:16px;border-top:1px solid rgba(255,255,255,.12);padding-top:10px}
   .suggest-toggle{width:100%;appearance:none;border:none;background:transparent;color:#dfe3e7;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 0;font-family:var(--sans);font-size:14px;font-weight:650;text-align:left}
@@ -173,8 +175,16 @@
   .check .top{display:flex;align-items:center;gap:7px;margin-bottom:7px}
   .check .top i{width:18px;height:18px;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
   .check .top span{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase}
-  .check .nm{font-size:13.5px;font-weight:600;color:#2b3036}
-  .check .age{font-family:var(--mono);font-size:11px;color:var(--ink5);margin-top:4px}
+  .check .nm{font-size:13.5px;font-weight:600;color:#2b3036;display:flex;align-items:center;gap:6px}
+  .check .age{font-family:var(--mono);font-size:11px;color:var(--ink5);margin-top:4px;display:flex;align-items:center;gap:6px}
+  .helpq{position:relative;display:inline-flex;align-items:center;justify-content:center;flex:none;width:17px;height:17px;border-radius:50%;border:1px solid #cfd9d8;background:#fff;color:var(--acc);font-family:var(--mono);font-size:11px;font-weight:700;line-height:1;cursor:help;vertical-align:middle;margin-left:4px}
+  .helpq .tip{position:absolute;z-index:20;left:50%;bottom:calc(100% + 9px);transform:translateX(-50%) translateY(4px);width:min(260px,70vw);padding:10px 11px;border-radius:8px;background:#20242a;color:#f3f5f6;box-shadow:0 14px 35px rgba(0,0,0,.22);font-family:var(--sans);font-size:12.5px;font-weight:500;line-height:1.45;letter-spacing:0;text-transform:none;opacity:0;pointer-events:none;transition:opacity .12s ease,transform .12s ease;text-align:left}
+  .helpq .tip:after{content:"";position:absolute;left:50%;top:100%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#20242a}
+  .helpq:hover .tip,.helpq:focus .tip{opacity:1;transform:translateX(-50%) translateY(0)}
+  .checks h3{display:flex;align-items:center;gap:8px}
+  .helped{display:inline-flex;align-items:center;gap:3px;min-width:0}
+  .helped.block{display:flex}
+  .plain .helpq,.subhead .helpq,.lede .helpq,.footnote .helpq{margin-left:6px}
 
   /* ---- findings ---- */
   .filterbar{display:flex;align-items:center;gap:8px;margin-bottom:18px;flex-wrap:wrap}
@@ -479,7 +489,7 @@
     </div>
 
     <div class="card checks">
-      <h3>Evidence gates</h3>
+      <h3>Evidence gates <span class="helpq" tabindex="0" aria-label="Evidence gates are automated checks that ask: is the science snapshot fresh, complete, and safe enough to show?"><span>?</span><span class="tip" role="tooltip">Evidence gates are automated checks that ask: is the science snapshot fresh, complete, and safe enough to show?</span></span></h3>
       <div class="checkgrid" id="checkgrid"></div>
     </div>
   </section>
@@ -543,7 +553,7 @@
   <section class="view" id="map">
     <div style="margin-bottom:18px;max-width:760px">
       <h1 class="sec">The network, by place</h1>
-      <p class="subhead">Pick a dataset, then a view. <b>Coverage</b> = where the monitoring sites are and how often they go over the limit. <b>Model skill</b> (beach bacteria only) colors each site by the model's actual held-out ranking skill (AUC) there; sites with too few held-out events stay hollow. We never paint confidence where there's no support, and never interpolate a surface over open water.</p>
+      <p class="subhead">Pick a dataset, then a view. <b>Coverage</b> = where monitoring sites are and how often they go over the limit. <b>Model skill</b> (beach bacteria only) colors each site by actual held-out ranking skill (AUC). <b>Evidence grid</b> groups nearby sites into map cells so you can see observation support and model confidence together. We never paint confidence where there's no support, and never interpolate a surface over open water.</p>
     </div>
     <div class="mapcontrols">
       <div class="mapdomain" id="mapdomain">
@@ -553,6 +563,7 @@
       <div class="maptoggle" id="maptoggle">
         <button data-m="coverage" class="active">Coverage</button>
         <button data-m="skill">Model skill</button>
+        <button data-m="grid">Evidence grid</button>
       </div>
     </div>
     <div class="mapwrap">
@@ -613,6 +624,153 @@ const STRENGTH_LABEL={3:'Strong',2:'Moderate',1:'Weak'};
 const STATUS_MEANING={Supported:'Held up under audit',Caveated:'Real, but with limits',Null:"Tested — it didn't hold"};
 const MODEL_STATUS={production_candidate:'Audited',benchmark:'Audited',research_candidate:'Audited',replication:'Audited',baseline:'Baseline',negative_result:'Null',research_only_failed_gate:'Null',refutation:'Null'};
 function modelStatus(s){return MODEL_STATUS[s]||'Audited';}
+const GATE_EXPLAIN={
+  release_gate:'Checks whether the project is safe enough to publish: key files exist, model outputs are present, and the main release checks are not broken.',
+  sr_manager_gate:'A higher-level review. It asks: would a careful manager be comfortable showing this snapshot, or are there still warnings to look at?',
+  promotion_matrix:'Tracks which models or results earned promotion from experiment to serious candidate. Think of it like a scoreboard for what advanced.',
+  data_health:'Checks whether the data looks usable: inventories exist, targets have coverage, driver files are tracked, and obvious data problems are not showing up.'
+};
+function helpQ(text){return `<span class="helpq" tabindex="0" aria-label="${esc(text)}" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()">?<span class="tip" role="tooltip">${esc(text)}</span></span>`;}
+function h(text,help,cls=''){return `<span class="helped ${cls}">${esc(text)}${helpQ(help)}</span>`;}
+function gateStatusExplain(st){
+  if(st==='PASS')return 'PASS means this check found no major problem. It does not mean perfect forever; it means this snapshot cleared that gate.';
+  if(st==='WARN')return 'WARN means the check found something worth looking at, but it is not bad enough to stop showing the snapshot.';
+  if(st==='FAIL')return 'FAIL means the check found a blocking problem. The result should not be treated as ready until it is fixed.';
+  return 'This is the current state of the check.';
+}
+function gateAgeExplain(days){return days!=null?`This shows how old the gate result is. Here, it was last updated about ${days} days ago.`:'This shows when the gate was last updated, if the snapshot has that information.';}
+function gateExplain(g){
+  const id=g&&g.gate_id;
+  const checks=Object.keys((g&&g.check_statuses)||{});
+  const checkText=checks.length?' It includes checks like '+checks.slice(0,4).map(x=>x.replace(/_/g,' ')).join(', ')+(checks.length>4?', and more.':'.'):'';
+  return (GATE_EXPLAIN[id]||'This is an automated quality check for part of the evidence snapshot.')+checkText;
+}
+function metricCardHelp(k,v,sub){
+  if(k==='Findings')return `This is the number of tested science results in the snapshot. A finding can be a win, a warning/caveat, or a null result that did not hold up.`;
+  if(k==='Models')return `This is the number of registered model entries. A registered model has been fitted and tracked; claimable means the snapshot says it has enough evidence to cite carefully.`;
+  if(k==='Governed assets')return `This is the public, governed data-asset ledger, not every raw file the lab has. Counted rows are rows with known row counts in this snapshot.`;
+  if(k==='Last freeze')return `A freeze is the date when the snapshot was locked. Prospective scoring means new rows after that date still need to be tested before calling a result final.`;
+  return `This card summarizes one part of the published science snapshot.`;
+}
+function subMetricHelp(k,sub){
+  if(/supported/.test(sub))return `Supported means the result held up under the checks shown here. Null means the idea was tested and did not beat the baseline.`;
+  if(/claimable/.test(sub))return `Claimable models are the small subset the snapshot says can be discussed as evidence-backed. The rest may be baselines, candidates, or research-only.`;
+  if(/rows/.test(sub))return `Rows are individual records in the governed data assets where the row count is known.`;
+  if(/prospective/.test(sub))return `Prospective means the next test is on data that arrived after the freeze, which is harder and more honest than only looking backward.`;
+  return `This is the short explanation under the main number.`;
+}
+function statementHelp(text){
+  const t=String(text||'').toLowerCase();
+  if(t.includes('station-memory'))return `Station-memory means a simple baseline that guesses from what usually happened at that station before. Beating it is harder than beating a weak rule.`;
+  if(t.includes('clean-to-dirty'))return `Clean-to-dirty means the beach looked okay before, then crossed the bacteria limit. Those surprise cases are the useful warnings.`;
+  if(t.includes('adaptive sampling'))return `Adaptive sampling means using the model to decide where field crews should sample first under the same limited budget.`;
+  if(t.includes('audited'))return `Audited means checked against saved evidence, baselines, and holdouts instead of just trusted because it sounded good.`;
+  if(t.includes('null'))return `A null result is not hidden failure. It is a tested idea that did not clear the evidence bar, so it stays visible.`;
+  if(t.includes('prospective'))return `Prospective scoring tests future rows after the freeze. That is the honest next step before saying a retrospective result is final.`;
+  if(t.includes('baselines'))return `A baseline is the simple or standard method the new model must beat. Without a baseline, a score is hard to trust.`;
+  if(t.includes('caveat'))return `A caveat is a real limit on the claim, such as not enough future data, weak generalization, or a result that only works in one slice.`;
+  return `This is a plain-English statement from the published snapshot. It summarizes evidence without making a new claim.`;
+}
+function statusExplain(st){
+  if(st==='Supported')return `Supported means the result held up under the snapshot's checks. It is evidence-backed, not just an idea.`;
+  if(st==='Caveated')return `Caveated means there is a real signal, but it has limits you should read before trusting it too much.`;
+  if(st==='Null')return `Null means this was tested and did not clear the bar. It is useful because it prevents pretending a weak idea worked.`;
+  if(st==='Audited')return `Audited means this model or result has been checked against saved evidence. It may still be a candidate, not a deployed system.`;
+  if(st==='Baseline')return `Baseline means comparator. It is the simple or status-quo method that a new model must beat.`;
+  if(st==='Production')return `Production means this data asset is in the governed public ledger for this snapshot.`;
+  if(st==='Shadow')return `Shadow means experimental or under validation. It is tracked, but not promoted to the governed production ledger.`;
+  return `This label tells you the evidence status for this item.`;
+}
+function topicExplain(topic){return `${topic} is the broad bucket this finding belongs to, so you know what kind of science result you are looking at.`;}
+function evidenceStrengthExplain(st){return `Evidence strength is a plain-language rating from the finding status. ${statusExplain(st)}`;}
+function metricExplain(label,value){
+  const l=String(label||'').toLowerCase();
+  if(l.includes('ap'))return `AP means average precision. For rare events, higher AP means the model ranks real events closer to the top. This card shows ${value}.`;
+  if(l.includes('auc'))return `AUC measures ranking skill. 0.5 is roughly random; closer to 1.0 is better. This card shows ${value}.`;
+  if(l.includes('Δ')||l.includes('delta'))return `Delta means the difference between the model and a baseline. Positive usually means the model improved.`;
+  if(l.includes('top'))return `Top capture asks: if we only inspect the highest-risk places, how many real events do we catch?`;
+  if(l.includes('lead'))return `Lead time means how far ahead the signal gives useful warning.`;
+  if(l.includes('ρ')||l.includes('rho'))return `Rho is a correlation number. Bigger positive values mean two things move together more strongly.`;
+  if(l.includes('τ'))return `Tau is the decision threshold: above it, the model flags a warning.`;
+  return `This is the main number chosen for the card: ${label} ${value}.`;
+}
+function modelFieldHelp(field,m){
+  if(field==='model')return `This is the model ID. It is the short registry name used to track the fitted model and its evidence.`;
+  if(field==='family')return `Family means the kind of algorithm or comparator, like HGBT, CatBoost, LightGBM, or baseline.`;
+  if(field==='task')return `Task means what the model is trying to predict or rank.`;
+  if(field==='status')return statusExplain(modelStatus(m.status));
+  if(field==='claimable')return `Claimable says whether this snapshot treats the model as evidence-backed enough to cite carefully.`;
+  if(field==='baseline')return `Baseline read says what simple or existing method this model was compared against.`;
+  if(field==='evidence')return `Evidence is the saved report or card that backs the model claim.`;
+  return `This field explains one part of the model card.`;
+}
+function datasetFieldHelp(field,a,tier){
+  if(field==='name')return `This is the dataset or asset name used inside the snapshot.`;
+  if(field==='rows')return `Rows are individual records. A row can be one sample, station-day, observation, or feature record depending on the dataset.`;
+  if(field==='source')return `Source tells what kind of file or upstream source this dataset came from.`;
+  if(field==='tier')return statusExplain(tier);
+  if(field==='updated')return `Updated tells how recently this dataset artifact changed in the snapshot.`;
+  if(field==='range')return `Time range tells the first and last dates covered by this dataset.`;
+  if(field==='size')return `Size is the file size, not the scientific importance of the dataset.`;
+  return `This explains one dataset field.`;
+}
+function frontierHelp(t){
+  return `A frontier is a research target or method the lab has worked on. This one is ${t.status||'tracked'}, meaning its current evidence is shown but may still have limits.`;
+}
+function vocabHelp(c){return `This term is part of the lab vocabulary. The point is to make sure words like model, baseline, target, and signal mean something precise.`;}
+function appendHelp(selector,text){
+  const el=$(selector); if(!el||el.dataset.helped)return;
+  el.dataset.helped='1'; el.insertAdjacentHTML('beforeend',' '+helpQ(text));
+}
+function appendHelpAll(selector,helps){
+  document.querySelectorAll(selector).forEach((el,i)=>{
+    if(el.dataset.helped)return;
+    const text=Array.isArray(helps)?helps[i]:helps;
+    if(!text)return;
+    el.dataset.helped='1'; el.insertAdjacentHTML('beforeend',' '+helpQ(text));
+  });
+}
+function applyStaticHelp(){
+  appendHelp('#snaplabel','Published snapshot means a frozen public copy of the current evidence, not a live private workspace.');
+  appendHelp('#snapwhen','This is the month and year when the public snapshot was built.');
+  appendHelpAll('nav.tabs button',['Overview is the summary page.','Findings are tested science results.','Frontiers are research areas and hazards the lab has worked on.','Models are fitted systems and baselines in the registry.','Lakehouse is the organized data inventory.','Map shows data and model evidence by place.','Vocabulary explains the lab words.']);
+  appendHelp('#overview .eyebrow','This page starts with the big picture before showing the evidence cards and datasets.');
+  appendHelp('#overview .page','A unified model means one project trying to connect many coastal signals: water, weather, runoff, tides, waves, biology, and observations.');
+  appendHelp('#overview .lede','This paragraph is the plain-language mission: show wins, limits, and failures with evidence attached.');
+  appendHelp('.hero .lbl span','Ask the Evidence searches only the published snapshot, not private files or guesses.');
+  appendHelp('.hero .d','This tells you what the question box can use: findings, models, datasets, frontiers, and vocabulary from the snapshot.');
+  appendHelp('#askbtn','Ask sends your question to the evidence search. Some high-value questions are answered locally from fixed snapshot data.');
+  appendHelp('#chiplabel','These are starter questions that should have grounded answers in the snapshot.');
+  appendHelp('#suggestbox .suggest-toggle .left span','Use this if the site does not answer the scientific question you wanted. It sends a candidate question for review.');
+  appendHelp('#suggestbtn','This sends your suggested research question to the lab for review. It does not start an experiment automatically.');
+  appendHelp('#suggestbox .signin','This explains the privacy/behavior of the suggestion form: no sign-in, optional email, reviewed before anything runs.');
+  appendHelp('.statpanel .head .l .t','The overall evidence gate summarizes whether the snapshot is publishable, blocked, or waiting on prospective checks.');
+  appendHelp('#gatepill','This is the overall status of the snapshot. PASS means okay to publish; PROSPECTIVE means future rows still need scoring; BLOCKED means do not rely on it yet.');
+  appendHelp('.statpanel .head .cap','Retrospective means looking backward at frozen data. Prospective means testing future rows after the freeze.');
+  appendHelp('.grid2 .listcard:nth-child(1) h3','These are the major pieces of work represented by the snapshot.');
+  appendHelp('.grid2 .listcard:nth-child(2) h3','These are the main lessons the evidence supports, including limits and failures.');
+  appendHelp('#findings .sec','Findings are tested science results. They can be supported, caveated, or null.');
+  appendHelp('#findings .subhead','This explains how to read finding cards: plain claim first, technical details on click.');
+  appendHelp('#frontiers .sec','Frontiers are research areas the lab has tried, even if they are not finished wins.');
+  appendHelp('#frontiers .subhead','This section shows the full breadth: wins, caveats, and honest nulls across topics.');
+  appendHelp('#models .sec','Models are fitted systems or baselines in the registry, not just algorithm names.');
+  appendHelp('#models .subhead','The model registry shows what each model does and what evidence backs it.');
+  appendHelp('#lakehouse .sec','Lakehouse means the organized data inventory behind the snapshot.');
+  appendHelp('#lakehouse .subhead','Production data is governed; shadow data is experimental or still being validated.');
+  appendHelp('#map .sec','The map shows evidence by place. It does not invent values between stations.');
+  appendHelp('#map .subhead','Coverage shows where data exists; model skill shows point-level held-out confidence; evidence grid groups nearby observations into cells as the honest map-pixel equivalent.');
+  appendHelpAll('#mapdomain button',['California beach bacteria monitoring sites and model evidence.','US lake cyanobacteria observations. This map shows coverage, not a finalized lake model.']);
+  appendHelpAll('#maptoggle button',['Coverage means where observations exist and how often the measured condition appears.','Model skill means how well the model ranked held-out events at each site, when enough events exist.','Evidence grid groups nearby sites into map cells so you can see observation support and model confidence together without pretending we have ocean-wide pixels.']);
+  appendHelp('#vocabulary .sec','This section explains the lab words so non-experts can read the site without guessing.');
+  appendHelp('#vocabulary .subhead','The vocabulary prevents common confusion, like treating an unfitted learner as a trained model.');
+  appendHelp('.sitefoot .footcol:nth-child(1) .eyebrow','Downloads let someone inspect or reproduce the public evidence outside the web page.');
+  appendHelp('.sitefoot .footcol:nth-child(1) .footnote','SHA-256 is a fingerprint for a file. If the fingerprint matches, the file did not silently change.');
+  appendHelp('.sitefoot .footcol:nth-child(2) .eyebrow','This is the legend for interpreting the site honestly.');
+  appendHelp('.sitefoot .footcol:nth-child(2) .footnote','This explains the grading words used across the site: supported, caveated, null, keep, wash, reject, and untested.');
+  appendHelpAll('#models .thead span',['Model ID: the registry name for the fitted model or baseline.','Family: the algorithm or comparator type.','Task: what the model tries to predict or rank.','Status: the evidence state in the registry.',null]);
+  appendHelpAll('#lakehouse .thead span',['Dataset name in the snapshot.','Number of records when known.','Source or file kind.','Tier: production means governed; shadow means experimental.',null]);
+  appendHelpAll('.lhcard .h h3',['Production lake contains governed public data assets in this snapshot.','Shadow contains experimental datasets that are tracked but not promoted yet.']);
+}
 
 // pick one salient, real metric for a finding card
 const METRIC_PICK=[
@@ -661,7 +819,7 @@ async function load(){
     DATA=snap.state; EVID=snap.evidence||{}; PROJECT_DOCS=snap.project_docs||[];
     DATA._built_pacific=snap.built_pacific; DATA._built_iso=snap.built_iso;
     $('#loading').style.display='none';
-    renderHeader(); renderOverview(); renderDownloads();
+    renderHeader(); renderOverview(); renderDownloads(); applyStaticHelp();
     const fs=$('#footstamp'); if(fs)fs.textContent='Snapshot built '+(DATA._built_pacific||'')+'. Licensed Apache-2.0.';
     showView(location.hash.slice(1)||'overview');
   }catch(e){ $('#loading').textContent='⚠ failed to load data.json — '+e; }
@@ -690,7 +848,7 @@ function renderOverview(){
     {k:'Governed assets', v:String(assets.length), e:'', sub:fmt(totRows)+' counted rows'},
     {k:'Last freeze', v: mm?MONTHS[+mm[2]-1]:'—', e: mm?"'"+mm[1].slice(2):'', sub:'prospective open'}
   ];
-  $('#metrics').innerHTML=metrics.map(m=>`<div class="metric"><div class="k">${esc(m.k)}</div><div class="v"><b>${esc(m.v)}</b>${m.e?`<em>${esc(m.e)}</em>`:''}</div><div class="s">${esc(m.sub)}</div></div>`).join('');
+  $('#metrics').innerHTML=metrics.map(m=>`<div class="metric"><div class="k">${h(m.k,metricCardHelp(m.k,m.v,m.sub))}</div><div class="v"><b>${esc(m.v)}</b>${m.e?`<em>${esc(m.e)}${helpQ(metricCardHelp(m.k,m.v,m.sub))}</em>`:''}${!m.e?helpQ(metricCardHelp(m.k,m.v,m.sub)):''}</div><div class="s">${h(m.sub,subMetricHelp(m.k,m.sub))}</div></div>`).join('');
 
   const gates=s.gates||[];
   const ov=(s.overall_status||'UNKNOWN');
@@ -709,8 +867,8 @@ function renderOverview(){
     'Null results matter: when a driver, model, or transfer idea fails, it stays in the record so the next experiment starts from the truth.',
     'The open frontier is prospective scoring — testing new rows after the freeze date before calling a retrospective result final.'
   ];
-  $('#donelist').innerHTML=done.map(d=>`<div class="li"><span class="ck">✓</span><span class="tx">${esc(d)}</span></div>`).join('');
-  $('#sayslist').innerHTML=says.map(d=>`<div class="li"><span class="bd"></span><span class="tx">${esc(d)}</span></div>`).join('');
+  $('#donelist').innerHTML=done.map(d=>`<div class="li"><span class="ck">✓</span><span class="tx">${esc(d)}${helpQ(statementHelp(d))}</span></div>`).join('');
+  $('#sayslist').innerHTML=says.map(d=>`<div class="li"><span class="bd"></span><span class="tx">${esc(d)}${helpQ(statementHelp(d))}</span></div>`).join('');
 
   // evidence gates (real)
   const gv={PASS:{mark:'✓',dot:'#0f8a84',tone:'#0f7a74',bg:'#f3f9f8',border:'#dcebe9'},
@@ -719,9 +877,9 @@ function renderOverview(){
   const pretty=id=>String(id||'').replace(/_/g,' ').replace(/\b\w/g,ch=>ch.toUpperCase());
   $('#checkgrid').innerHTML=gates.map(g=>{const st=(g.overall_status||'').toUpperCase();const v=gv[st]||{mark:'•',dot:'#9aa0a7',tone:'#5b6168',bg:'#f7f9f9',border:'#e7e9e9'};
     return `<div class="check" style="background:${v.bg};border-color:${v.border}">
-      <div class="top"><i style="background:${v.dot}">${v.mark}</i><span style="color:${v.tone}">${esc(st||'—')}</span></div>
-      <div class="nm">${esc(pretty(g.gate_id))}</div>
-      <div class="age">${g.age_days!=null?'updated '+g.age_days+'d ago':''}</div></div>`;}).join('')
+      <div class="top"><i style="background:${v.dot}">${v.mark}</i><span style="color:${v.tone}">${esc(st||'—')}</span>${helpQ(gateStatusExplain(st))}</div>
+      <div class="nm">${esc(pretty(g.gate_id))}${helpQ(gateExplain(g))}</div>
+      <div class="age">${g.age_days!=null?'updated '+g.age_days+'d ago':''}${helpQ(gateAgeExplain(g.age_days))}</div></div>`;}).join('')
     || '<div class="lhempty">No gates in this snapshot.</div>';
 
   renderChips('');
@@ -769,7 +927,7 @@ function renderChips(filter){
   } else { list=starterQuestions(); }
   box.classList.toggle('typeahead',typeahead);
   if(lbl)lbl.textContent = typeahead ? (list.length?'Did you mean:':'No suggestion — press Ask to try it anyway') : 'Try one of these — they all have answers:';
-  box.innerHTML=list.map(x=>`<button class="chip" data-q="${esc(x.q)}"><span class="cg">${esc(x.g)}</span>${esc(x.q)}</button>`).join('');
+  box.innerHTML=list.map(x=>`<button class="chip" data-q="${esc(x.q)}"><span class="cg">${esc(x.g)}${helpQ('This is the question category, like results, data, models, topics, or words.')}</span>${esc(x.q)}${helpQ('Click this starter question to ask something the snapshot is prepared to answer with evidence.')}</button>`).join('');
   document.querySelectorAll('#qachips .chip').forEach(b=>b.onclick=()=>askChip(b.dataset.q));
 }
 
@@ -783,7 +941,7 @@ function renderFindings(){
   const all=findingsSorted();
   const cnt=st=>all.filter(x=>x.st===st).length;
   const defs=[['all','All',all.length],['Supported','Supported',cnt('Supported')],['Caveated','Caveated',cnt('Caveated')],['Null','Null',cnt('Null')]];
-  $('#filterbar').innerHTML=`<span class="fl-label">Filter</span>`+defs.map(([k,l,c])=>`<button class="fpill${FFILTER===k?' active':''}" data-k="${k}">${esc(l)}<span class="c">${c}</span></button>`).join('');
+  $('#filterbar').innerHTML=`<span class="fl-label">Filter${helpQ('Filters let you switch between all findings, supported results, caveated results, and null results.')}</span>`+defs.map(([k,l,c])=>`<button class="fpill${FFILTER===k?' active':''}" data-k="${k}">${esc(l)}${helpQ(k==='all'?'Show every finding in the snapshot.':statusExplain(l))}<span class="c">${c}${helpQ('This number is how many findings are in this filter.')}</span></button>`).join('');
   document.querySelectorAll('#filterbar .fpill').forEach(b=>b.onclick=()=>{FFILTER=b.dataset.k;renderFindings();});
 
   const list=all.filter(x=>FFILTER==='all'||x.st===FFILTER);
@@ -794,49 +952,52 @@ function renderFindings(){
     const topic=f.kind==='null'||f.kind==='negative_result'?'Null result':(f.id&&/algae|hab|domoic/i.test(f.id)?'Algae':(f.id&&/hypox|oxygen/i.test(f.id)?'Oxygen':(f.id&&/sampl/i.test(f.id)?'Sampling':'Bacteria')));
     return `<div class="fcard${open?' open':''}" data-i="${i}">
       <div class="toprow">
-        <span class="topic">${esc(topic)}</span>
-        <span class="badge" style="background:${b.bg};color:${b.text}"><i style="background:${b.text}"></i>${st}</span>
+        <span class="topic">${esc(topic)}${helpQ(topicExplain(topic))}</span>
+        <span class="badge" style="background:${b.bg};color:${b.text}"><i style="background:${b.text}"></i>${st}${helpQ(statusExplain(st))}</span>
       </div>
-      <h3>${esc(f.title)}</h3>
-      <p class="plain">${esc(f.plain||f.headline||'')}</p>
+      <h3>${esc(f.title)}${helpQ('This is the tested claim or result name. Click the card to see how it was checked.')}</h3>
+      <p class="plain">${esc(f.plain||f.headline||'')}${helpQ(statementHelp(f.plain||f.headline||''))}</p>
       <div class="fbottom">
-        <div><div class="minilbl">Evidence strength</div><div class="segs">${segs}<em style="color:${b.text}">${STRENGTH_LABEL[strength]}</em></div></div>
-        <div class="metricbox"><div class="minilbl">${esc(met.label)}</div><div class="mv">${esc(met.value)}</div></div>
+        <div><div class="minilbl">Evidence strength${helpQ(evidenceStrengthExplain(st))}</div><div class="segs">${segs}<em style="color:${b.text}">${STRENGTH_LABEL[strength]}${helpQ(evidenceStrengthExplain(st))}</em></div></div>
+        <div class="metricbox"><div class="minilbl">${esc(met.label)}${helpQ(metricExplain(met.label,met.value))}</div><div class="mv">${esc(met.value)}${helpQ(metricExplain(met.label,met.value))}</div></div>
       </div>
-      <div class="ffoot"><span class="mean">${esc(STATUS_MEANING[st])}</span><span class="cta">${open?'Hide details':'View details →'}</span></div>
+      <div class="ffoot"><span class="mean">${esc(STATUS_MEANING[st])}${helpQ(statusExplain(st))}</span><span class="cta">${open?'Hide details':'View details →'}${helpQ('Open the technical read, metrics, caveats, and raw evidence when available.')}</span></div>
       ${open?findingDetail(f):''}
     </div>`;
   }).join('') || '<div class="lhempty">No findings in this filter.</div>';
 
   document.querySelectorAll('#fgrid .fcard').forEach(card=>card.onclick=e=>{
-    if(e.target.closest('.lnk')||e.target.closest('pre.ev'))return;
+    if(e.target.closest('.lnk')||e.target.closest('pre.ev')||e.target.closest('.helpq'))return;
     const i=+card.dataset.i; OPENF=(OPENF===i?null:i); renderFindings();
   });
 }
 function findingDetail(f){
   const m=f.metrics||{};
+  const domain=mapDomainFor((f.id||'')+' '+(f.title||'')+' '+(f.plain||'')+' '+(f.evidence||''));
+  const spatial=domain?mapLink(domain,'grid'):`<p class="footnote" style="margin:12px 0 0;color:var(--ink5)">No honest public spatial layer for this finding yet.${helpQ('Some findings are about time series, licensed basins, or non-spatial tests. We only show maps when the snapshot has public location support.')}</p>`;
   let cm='';
   if(hasCM(f)){
     cm=`<div class="cmwrap">
-      <div class="cm"><span></span><span class="hh">act +</span><span class="hh">act −</span>
-        <span class="rh">pred +</span><span class="cell tp">${fmt(m.tp)}</span><span class="cell fp">${fmt(m.fp)}</span>
-        <span class="rh">pred −</span><span class="cell fn">${fmt(m.fn)}</span><span class="cell tn">${fmt(m.tn)}</span></div>
-      <div class="cmnote">held-out beach-days<br><span style="color:#1a7a4f">green</span> = right · <span style="color:#b4453c">red/amber</span> = wrong${m.precision!=null?'<br>precision '+pct(m.precision)+(m.recall!=null?' · recall '+pct(m.recall):''):''}</div>
+      <div class="cm"><span></span><span class="hh">act +${helpQ('Actual positive means the event really happened in the held-out data.')}</span><span class="hh">act −${helpQ('Actual negative means the event did not happen in the held-out data.')}</span>
+        <span class="rh">pred +${helpQ('Predicted positive means the model flagged this case.')}</span><span class="cell tp">${fmt(m.tp)}${helpQ('True positives: model flagged it and the event really happened.')}</span><span class="cell fp">${fmt(m.fp)}${helpQ('False positives: model flagged it but the event did not happen.')}</span>
+        <span class="rh">pred −${helpQ('Predicted negative means the model did not flag this case.')}</span><span class="cell fn">${fmt(m.fn)}${helpQ('False negatives: model missed an event that really happened.')}</span><span class="cell tn">${fmt(m.tn)}${helpQ('True negatives: model did not flag it and no event happened.')}</span></div>
+      <div class="cmnote">held-out beach-days${helpQ('Held-out means rows kept separate from fitting so the test is more honest.')}<br><span style="color:#1a7a4f">green</span> = right${helpQ('Green cells are correct model decisions.')} · <span style="color:#b4453c">red/amber</span> = wrong${helpQ('Wrong cells are false alarms or missed events.')}${m.precision!=null?'<br>precision '+pct(m.precision)+helpQ('Precision means: when the model warns, how often is it right?')+(m.recall!=null?' · recall '+pct(m.recall)+helpQ('Recall means: of all real events, how many did the model catch?'):''):''}</div>
     </div>`;
   }
   // real metrics KV (numbers only, compact)
   const skip=new Set(['tp','fp','fn','tn']);
   const kvs=Object.entries(m).filter(([k,v])=>!skip.has(k)&&(typeof v==='number'||typeof v==='string'||typeof v==='boolean')).slice(0,8)
-    .map(([k,v])=>`<span class="k">${esc(k)}</span><span class="vv">${esc(typeof v==='number'?(Math.abs(v)<1&&v!==0?v.toFixed(4):v.toLocaleString()):v)}</span>`).join('');
-  const evbtn = f.evidence&&EVID[f.evidence] ? `<div class="evbtn"><button class="lnk" onclick="toggleEv(this,'${esc(f.evidence)}')">show raw evidence JSON</button></div>` : '';
+    .map(([k,v])=>`<span class="k">${esc(k)}${helpQ('This is a saved metric name from the evidence artifact.')}</span><span class="vv">${esc(typeof v==='number'?(Math.abs(v)<1&&v!==0?v.toFixed(4):v.toLocaleString()):v)}${helpQ(metricExplain(k,String(v)))}</span>`).join('');
+  const evbtn = f.evidence&&EVID[f.evidence] ? `<div class="evbtn"><button class="lnk" onclick="toggleEv(this,'${esc(f.evidence)}')">show raw evidence JSON${helpQ('Raw evidence JSON is the saved machine-readable report behind this card. It is for checking, not casual reading.')}</button></div>` : '';
   return `<div class="fdetail">
-    <div class="minilbl">Technical read</div>
-    <p class="tr">${esc(f.how||f.note||f.plain||'See raw evidence.')}</p>
-    ${f.note&&f.how?`<p class="tr" style="color:var(--ink4)"><b style="color:var(--ink3)">Caveat:</b> ${esc(f.note)}</p>`:''}
+    <div class="minilbl">Technical read${helpQ('This explains how the result was checked, usually with holdouts, baselines, or audits.')}</div>
+    <p class="tr">${esc(f.how||f.note||f.plain||'See raw evidence.')}${helpQ(statementHelp(f.how||f.note||f.plain||''))}</p>
+    ${f.note&&f.how?`<p class="tr" style="color:var(--ink4)"><b style="color:var(--ink3)">Caveat:${helpQ('A caveat is a limit that keeps the claim honest.')}</b> ${esc(f.note)}${helpQ(statementHelp(f.note))}</p>`:''}
     ${kvs?`<div class="kv">${kvs}</div>`:''}
     ${cm}
     ${evbtn}
-    ${(()=>{const d=mapDomainFor((f.id||'')+' '+(f.title||''));return d?('<div style="margin-top:12px">'+mapLink(d)+'</div>'):'';})()}
+    <div class="dlabel" style="margin-top:16px">Spatial evidence${helpQ('This shows whether the finding can be connected to public station/lake locations. The grid groups nearby observations and confidence where possible.')}</div>
+    ${spatial}
   </div>`;
 }
 function toggleEv(btn,key){
@@ -851,15 +1012,15 @@ function renderModels(){
   const rows=(DATA.models||[]).map((m,i)=>{
     const st=modelStatus(m.status); const b=STATUS_BADGE[st];
     return `<div class="trow click m-grid" data-i="${i}">
-      <div><div class="nm">${esc(m.model_id)}${m.claimable?' <span style="color:var(--acc)">●</span>':''}</div><div class="note">${esc(m.status)}</div></div>
-      <span class="cellmuted hide-sm">${esc(m.family||'—')}</span>
-      <span class="cellmono">${esc(m.task||'—')}</span>
-      <span class="sbadge hide-sm" style="background:${b.bg};color:${b.text}">${st}</span>
-      <span class="chev">→</span>
+      <div><div class="nm">${esc(m.model_id)}${helpQ(modelFieldHelp('model',m))}${m.claimable?' <span style="color:var(--acc)">●</span>'+helpQ('The dot means this model is marked claimable in the snapshot.'):''}</div><div class="note">${esc(m.status)}${helpQ('This is the detailed registry status for the model.')}</div></div>
+      <span class="cellmuted hide-sm">${esc(m.family||'—')}${helpQ(modelFieldHelp('family',m))}</span>
+      <span class="cellmono">${esc(m.task||'—')}${helpQ(modelFieldHelp('task',m))}</span>
+      <span class="sbadge hide-sm" style="background:${b.bg};color:${b.text}">${st}${helpQ(modelFieldHelp('status',m))}</span>
+      <span class="chev">→${helpQ('Click the row to open the full model card.')}</span>
     </div>`;
   }).join('');
   $('#modelrows').innerHTML=rows || '<div class="lhempty" style="padding:18px 22px">No models in this snapshot.</div>';
-  document.querySelectorAll('#modelrows .trow').forEach(r=>r.onclick=()=>{DETAIL={type:'model',idx:+r.dataset.i};renderDrawer();});
+  document.querySelectorAll('#modelrows .trow').forEach(r=>r.onclick=e=>{if(e.target.closest('.helpq'))return;DETAIL={type:'model',idx:+r.dataset.i};renderDrawer();});
 }
 
 /* ---------- lakehouse ---------- */
@@ -867,26 +1028,26 @@ function lakeAssets(){return (DATA.data_assets||[]).filter(a=>a.exists!==false);
 function shadowAssets(){return (((DATA.inventory||{}).shadow||{}).datasets)||[];}
 function renderLake(){
   const lake=lakeAssets(), shadow=shadowAssets();
-  $('#lakesub').textContent=lake.length+' datasets · governed';
-  $('#shadowsub').textContent=shadow.length+' datasets · experimental';
-  $('#lakelist').innerHTML=lake.map((a,i)=>`<div class="lhrow" data-t="lake" data-i="${i}"><span class="nm">${esc(a.asset_id)}</span><span class="r"><span class="rows">${a.rows!=null?fmt(a.rows):mb(a.size_mb)}</span><span class="chev">→</span></span></div>`).join('')
+  $('#lakesub').innerHTML=lake.length+' datasets · governed'+helpQ('Governed datasets are the production assets in the public snapshot ledger.');
+  $('#shadowsub').innerHTML=shadow.length+' datasets · experimental'+helpQ('Shadow datasets are tracked experiments or work-in-progress assets that are not promoted to production yet.');
+  $('#lakelist').innerHTML=lake.map((a,i)=>`<div class="lhrow" data-t="lake" data-i="${i}"><span class="nm">${esc(a.asset_id)}${helpQ(datasetFieldHelp('name',a,'Production'))}</span><span class="r"><span class="rows">${a.rows!=null?fmt(a.rows):mb(a.size_mb)}${helpQ(a.rows!=null?datasetFieldHelp('rows',a,'Production'):datasetFieldHelp('size',a,'Production'))}</span><span class="chev">→${helpQ('Click to see source, size, row count, and date range.')}</span></span></div>`).join('')
     || '<div class="lhempty">No row-counted assets in this snapshot.</div>';
-  $('#shadowlist').innerHTML=shadow.map((d,i)=>`<div class="lhrow" data-t="shadow" data-i="${i}"><span class="nm">${esc(d.name)}</span><span class="r"><span class="rows">${d.rows!=null?fmt(d.rows):mb(d.size_mb)}</span><span class="chev">→</span></span></div>`).join('')
+  $('#shadowlist').innerHTML=shadow.map((d,i)=>`<div class="lhrow" data-t="shadow" data-i="${i}"><span class="nm">${esc(d.name)}${helpQ(datasetFieldHelp('name',d,'Shadow'))}</span><span class="r"><span class="rows">${d.rows!=null?fmt(d.rows):mb(d.size_mb)}${helpQ(d.rows!=null?datasetFieldHelp('rows',d,'Shadow'):datasetFieldHelp('size',d,'Shadow'))}</span><span class="chev">→${helpQ('Click to see the shadow dataset details.')}</span></span></div>`).join('')
     || '<div class="lhempty">No shadow datasets in this snapshot.</div>';
 
   const tbl=lake.map((a,i)=>({t:'lake',i,name:a.asset_id,rows:a.rows,src:a.kind||'parquet',tier:'Production'}))
     .concat(shadow.map((d,i)=>({t:'shadow',i,name:d.name,rows:d.rows,src:d.source||'—',tier:'Shadow'})));
   $('#datasetrows').innerHTML=tbl.map(r=>{const b=STATUS_BADGE[r.tier];
     return `<div class="trow click d-grid" data-t="${r.t}" data-i="${r.i}">
-      <span class="cellmono" style="font-weight:500;color:var(--ink)">${esc(r.name)}</span>
-      <span class="cellmono">${r.rows!=null?fmt(r.rows):'—'}</span>
-      <span class="cellmuted hide-sm">${esc(r.src)}</span>
-      <span class="sbadge hide-sm" style="background:${b.bg};color:${b.text}">${r.tier}</span>
-      <span class="chev">→</span></div>`;}).join('')
+      <span class="cellmono" style="font-weight:500;color:var(--ink)">${esc(r.name)}${helpQ(datasetFieldHelp('name',r,r.tier))}</span>
+      <span class="cellmono">${r.rows!=null?fmt(r.rows):'—'}${helpQ(datasetFieldHelp('rows',r,r.tier))}</span>
+      <span class="cellmuted hide-sm">${esc(r.src)}${helpQ(datasetFieldHelp('source',r,r.tier))}</span>
+      <span class="sbadge hide-sm" style="background:${b.bg};color:${b.text}">${r.tier}${helpQ(datasetFieldHelp('tier',r,r.tier))}</span>
+      <span class="chev">→${helpQ('Click the row to open the dataset card.')}</span></div>`;}).join('')
     || '<div class="lhempty" style="padding:18px 22px">No datasets in this snapshot.</div>';
 
   document.querySelectorAll('#lakelist .lhrow, #shadowlist .lhrow, #datasetrows .trow').forEach(r=>
-    r.onclick=()=>{DETAIL={type:'dataset',store:r.dataset.t,idx:+r.dataset.i};renderDrawer();});
+    r.onclick=e=>{if(e.target.closest('.helpq'))return;DETAIL={type:'dataset',store:r.dataset.t,idx:+r.dataset.i};renderDrawer();});
 }
 
 /* ---------- vocabulary ---------- */
@@ -915,28 +1076,28 @@ function renderVocabulary(){
   $('#vocabgrid').innerHTML=v.map(c=>{
     const n=vocabItems(c.key).length;
     return `<div class="vcard clickable" data-k="${esc(c.key)}">
-    <div class="vk">${esc(c.key||'').replace(/_/g,' ')}</div>
-    <h3>${esc(c.label)}</h3>
-    <p class="vwhat">${esc(c.what)}</p>
-    <div class="vex">${(c.examples||[]).slice(0,4).map(e=>`<span>${esc(e)}</span>`).join('')}</div>
-    <div class="vcardfoot">See all ${n} ${esc(c.key.replace(/_/g,' '))}${n===1?'':'s'} →</div>
+    <div class="vk">${esc(c.key||'').replace(/_/g,' ')}${helpQ('This is the internal vocabulary key for this concept.')}</div>
+    <h3>${esc(c.label)}${helpQ(vocabHelp(c))}</h3>
+    <p class="vwhat">${esc(c.what)}${helpQ('This is the plain-English definition for the term.')}</p>
+    <div class="vex">${(c.examples||[]).slice(0,4).map(e=>`<span>${esc(e)}${helpQ('This is a real example of the vocabulary term in this project.')}</span>`).join('')}</div>
+    <div class="vcardfoot">See all ${n} ${esc(c.key.replace(/_/g,' '))}${n===1?'':'s'} →${helpQ('Open the drawer to see every item in this snapshot that matches this vocabulary concept.')}</div>
   </div>`;}).join('') || '<div class="lhempty">No vocabulary in this snapshot.</div>';
-  document.querySelectorAll('#vocabgrid .vcard').forEach(card=>card.onclick=()=>{DETAIL={type:'vocab',key:card.dataset.k};renderDrawer();});
+  document.querySelectorAll('#vocabgrid .vcard').forEach(card=>card.onclick=e=>{if(e.target.closest('.helpq'))return;DETAIL={type:'vocab',key:card.dataset.k};renderDrawer();});
 }
 function vocabDrawer(key){
   const c=(DATA.vocabulary||[]).find(v=>v.key===key); if(!c)return '';
   _vocabItems=vocabItems(key);
   const rows=_vocabItems.map((it,i)=>`<div class="vrow${it.open?' clickable':''}" data-i="${i}">
-      <div class="vmain"><span class="vname">${esc(it.label)}</span>${it.modality?` <span class="vmod">${esc(it.modality)}</span>`:''}${it.sub?`<span class="vsub">${esc(it.sub)}</span>`:''}</div>
-      <span class="vmeta">${it.chip?statusChip(it.chip):''}${it.verdicts?`<span class="vlist">${verdictChips(it.verdicts)}</span>`:''}${it.open?'<span class="chev">→</span>':''}</span>
+      <div class="vmain"><span class="vname">${esc(it.label)}${helpQ('This is one real item that matches the selected vocabulary term.')}</span>${it.modality?` <span class="vmod">${esc(it.modality)}${helpQ('Modality is the kind of signal or representation this item belongs to.')}</span>`:''}${it.sub?`<span class="vsub">${esc(it.sub)}${helpQ(statementHelp(it.sub))}</span>`:''}</div>
+      <span class="vmeta">${it.chip?statusChip(it.chip)+helpQ(statusExplain(it.chip)):''}${it.verdicts?`<span class="vlist">${verdictChips(it.verdicts)}${helpQ('These chips show how this signal performed for different targets: KEEP means useful, WASH means no lift, REJECT means it hurt, UNTESTED means not checked yet.')}</span>`:''}${it.open?'<span class="chev">→'+helpQ('Open the source card for this item.')+'</span>':''}</span>
     </div>`).join('');
   return `<div>
     <div class="dhead">
-      <div><div class="eb">Vocabulary · everything we have</div><div class="ti">${esc(c.label)}</div><div class="nt">${_vocabItems.length} item${_vocabItems.length===1?'':'s'}</div></div>
+      <div><div class="eb">Vocabulary · everything we have${helpQ('This drawer lists all snapshot items connected to the selected word.')}</div><div class="ti">${esc(c.label)}${helpQ(vocabHelp(c))}</div><div class="nt">${_vocabItems.length} item${_vocabItems.length===1?'':'s'}${helpQ('This count is how many matching items the snapshot currently has.')}</div></div>
       <button class="dclose" onclick="closeDrawer()">×</button>
     </div>
     <div class="dbody">
-      <p class="plain" style="margin-bottom:18px">${esc(c.what)}</p>
+      <p class="plain" style="margin-bottom:18px">${esc(c.what)}${helpQ('This is the definition used by the lab on this site.')}</p>
       ${rows||'<div class="lhempty">Nothing recorded for this concept yet.</div>'}
     </div>
   </div>`;
@@ -949,9 +1110,9 @@ function mapDomainFor(s){const t=String(s||'').toLowerCase();
   if(/bacteria|beach|enterococc|exceedance|station.?memory|clean.?to.?dirty|sampling/.test(t))return 'bacteria';
   return null;}
 const DOMAIN_LABEL={bacteria:'CA beach bacteria',cyano:'US lakes · cyano'};
-let _pendingDomain=null;
-function goMap(dom){_pendingDomain=dom||null; if(DETAIL){DETAIL=null;renderDrawer();} location.hash='map';}
-function mapLink(domain){return domain?`<button class="lnk maplink" onclick="goMap('${domain}')">📍 Where's the data &amp; how confident is the model? See the ${esc(DOMAIN_LABEL[domain]||domain)} map →</button>`:'';}
+let _pendingDomain=null,_pendingMode=null;
+function goMap(dom,mode){_pendingDomain=dom||null; _pendingMode=mode||null; if(DETAIL){DETAIL=null;renderDrawer();} location.hash='map';}
+function mapLink(domain,mode='grid'){return domain?`<button class="lnk maplink" onclick="goMap('${domain}','${mode}')">📍 Where's the data &amp; how confident is the model? See the ${esc(DOMAIN_LABEL[domain]||domain)} ${mode==='grid'?'evidence grid':'map'} →${helpQ('This opens the map view for the relevant dataset or target, so you can see where observations exist and where model confidence is honestly scoreable.')}</button>`:'';}
 const MAP_DOMAINS=[
   {key:'bacteria',label:'CA beach bacteria',file:'stations.geojson',unit:'samples',valueLabel:'exceedance (AB411 > 104)',siteWord:'stations',hasSkill:true},
   {key:'cyano',label:'US lakes · cyano',file:'lakes_cyano.geojson',unit:'obs-weeks',valueLabel:'bloom frequency',siteWord:'lakes',hasSkill:false}
@@ -960,14 +1121,72 @@ let _map=null,_mlayer=null,_feats=[],_mmax=1,_mmeta={},_domain=MAP_DOMAINS[0],_m
 function brColor(br){if(br==null)return '#b8bdc3';if(br<0.08)return '#1a7a4f';if(br<0.18)return '#3f9e6b';if(br<0.30)return '#c9a23a';if(br<0.45)return '#e0772f';return '#b4453c';}
 function aucColor(a){if(a==null)return null;if(a<0.6)return '#b4453c';if(a<0.7)return '#e0772f';if(a<0.8)return '#c9a23a';if(a<0.88)return '#3f9e6b';return '#1a7a4f';}
 function mRad(n){return 3+(Math.sqrt(Math.max(n,1))/Math.sqrt(_mmax))*13;}
+function gridStep(){return _domain.key==='bacteria'?0.5:2.5;}
+function gridOpacity(obs,maxObs){return Math.max(.16,Math.min(.82,.16+.66*Math.sqrt(Math.max(obs,0)/Math.max(maxObs,1))));}
+function buildGrid(){
+  const step=gridStep(), cells=new Map();
+  _feats.forEach(f=>{
+    const p=f.properties||{},c=(f.geometry&&f.geometry.coordinates)||[];
+    if(c.length<2)return;
+    const lon0=Math.floor(c[0]/step)*step, lat0=Math.floor(c[1]/step)*step, key=lat0.toFixed(4)+','+lon0.toFixed(4);
+    let cell=cells.get(key);
+    if(!cell){cell={lat0,lon0,obs:0,sites:0,test:0,events:0,rateN:0,rateD:0,aucN:0,aucD:0,memN:0,memD:0,low:0};cells.set(key,cell);}
+    const obs=Number(p.n_obs||0), test=Number(p.n_test||0);
+    cell.obs+=obs; cell.sites+=1; cell.test+=test; cell.events+=Number(p.events||0); if(p.low_support)cell.low+=1;
+    if(p.base_rate!=null&&obs>0){cell.rateN+=Number(p.base_rate)*obs;cell.rateD+=obs;}
+    if(p.model_auc!=null&&test>0){cell.aucN+=Number(p.model_auc)*test;cell.aucD+=test;}
+    if(p.mem_auc!=null&&test>0){cell.memN+=Number(p.mem_auc)*test;cell.memD+=test;}
+  });
+  const arr=[...cells.values()];
+  arr.forEach(c=>{c.rate=c.rateD?c.rateN/c.rateD:null;c.auc=c.aucD?c.aucN/c.aucD:null;c.mem=c.memD?c.memN/c.memD:null;});
+  return arr;
+}
+function gridPopup(c){
+  const model=c.auc!=null?`weighted model AUC ${c.auc.toFixed(2)}${c.mem!=null?` vs station-memory ${c.mem.toFixed(2)}`:''}`:'not enough held-out events for model confidence';
+  const rate=c.rate!=null?`${(_domain.key==='bacteria'?'observed exceedance':'observed bloom')} ${(100*c.rate).toFixed(0)}%`:'observed rate unknown';
+  return `<span class="pn">Evidence grid cell${helpQ('A grid cell groups nearby monitoring sites so you can see support and confidence by area.')}</span><br><span class="pm">${fmt(c.obs)} ${_domain.unit}${helpQ('This is the observation support in this map cell. More observations usually means stronger local support.')} · ${fmt(c.sites)} ${_domain.siteWord}${helpQ('This is how many monitoring places landed in the cell.')} · ${rate}${helpQ('This is the measured outcome rate inside the cell.')}<br>${model}${helpQ('Model confidence here is a held-out, support-weighted AUC when the snapshot has enough events. It is not a fresh live prediction.')}</span>`;
+}
+function drawGrid(){
+  const cells=buildGrid(), step=gridStep(), maxObs=Math.max(1,...cells.map(c=>c.obs));
+  cells.forEach(c=>{
+    const hasSkill=c.auc!=null, fill=_domain.hasSkill?(aucColor(c.auc)||'#cfd2d6'):brColor(c.rate);
+    const op=gridOpacity(c.obs,maxObs), stroke=hasSkill||!_domain.hasSkill?'#fff':'#8e969d';
+    L.rectangle([[c.lat0,c.lon0],[c.lat0+step,c.lon0+step]],{
+      color:stroke,weight:hasSkill?1.2:1,dashArray:hasSkill||!_domain.hasSkill?null:'3 3',
+      fillColor:fill,fillOpacity:op
+    }).bindPopup(gridPopup(c)).addTo(_mlayer);
+  });
+  const scored=cells.filter(c=>c.auc!=null).length;
+  if(_domain.hasSkill){
+    $('#mapnote').innerHTML=`Evidence grid: ${cells.length.toLocaleString()} map cells aggregate ${fmt(cells.reduce((a,c)=>a+c.obs,0))} observations. Color shows support-weighted held-out model AUC where enough events exist; opacity shows observation support. Cells without enough events are gray/dashed. ${helpQ('This is the honest map-pixel equivalent: nearby stations are grouped into cells. It is not an interpolated prediction surface over unsampled water.')}`;
+    $('#maplegend').innerHTML=`<div class="lt">Evidence grid${helpQ('Grid cells summarize nearby observations and model confidence.')}</div>
+      <div class="lrow"><span class="sw" style="background:#b4453c"></span>low confidence / AUC &lt; 0.60${helpQ('The model did not rank events well in this area.')}</div>
+      <div class="lrow"><span class="sw" style="background:#c9a23a"></span>moderate confidence${helpQ('The model has some local ranking skill here.')}</div>
+      <div class="lrow"><span class="sw" style="background:#1a7a4f"></span>high confidence / AUC &gt; 0.88${helpQ('The model ranked held-out events strongly in this cell.')}</div>
+      <div class="lrow"><span class="ring"></span>not enough held-out events${helpQ('There may be observations here, but not enough event cases for an honest local confidence score.')}</div>
+      <div class="lt" style="margin-top:9px">opacity = observation support${helpQ('Darker cells have more observations behind them.')}</div>`;
+  }else{
+    $('#mapnote').innerHTML=`Evidence grid: ${cells.length.toLocaleString()} map cells aggregate ${fmt(cells.reduce((a,c)=>a+c.obs,0))} observed lake-weeks. This domain has coverage only; the snapshot does not publish an honest per-lake confidence layer. ${helpQ('For this domain, grid cells show observation support and observed bloom frequency, not model confidence.')}`;
+    $('#maplegend').innerHTML=`<div class="lt">Coverage grid${helpQ('Grid cells summarize nearby lake observations.')}</div>
+      <div class="lrow"><span class="sw" style="background:#1a7a4f"></span>low observed rate${helpQ('The measured condition was uncommon in this cell.')}</div>
+      <div class="lrow"><span class="sw" style="background:#c9a23a"></span>moderate observed rate${helpQ('The measured condition appeared sometimes in this cell.')}</div>
+      <div class="lrow"><span class="sw" style="background:#b4453c"></span>high observed rate${helpQ('The measured condition appeared often in this cell.')}</div>
+      <div class="lt" style="margin-top:9px">opacity = observation support${helpQ('Darker cells have more observed lake-weeks behind them.')}</div>`;
+  }
+}
 function mPopup(p,mode){
-  const head=`<span class="pn">${esc(p.name)}</span><br><span class="pm">${esc(p.county||'')} · ${fmt(p.n_obs)} ${_domain.unit}`;
+  const head=`<span class="pn">${esc(p.name)}${helpQ('This is the monitoring site or lake name from the map data.')}</span><br><span class="pm">${esc(p.county||'')}${helpQ('This is the county or area label when available.')} · ${fmt(p.n_obs)} ${_domain.unit}${helpQ('This is how many observations or records are attached to this place.')}`;
   if(mode==='skill'){const a=p.model_auc;
-    return head+` · ${fmt(p.n_test)} held-out (${fmt(p.events)} events)`+(a!=null?` · model AUC ${a.toFixed(2)} vs station-memory ${(p.mem_auc!=null?p.mem_auc.toFixed(2):'—')}`:` · too few events to score`)+`</span>`;}
-  return head+` · ${esc(_domain.valueLabel.split(' (')[0])} ${p.base_rate!=null?(100*p.base_rate).toFixed(0)+'%':'—'}${p.low_support?' · low support':''}</span>`;
+    return head+` · ${fmt(p.n_test)} held-out (${fmt(p.events)} events)${helpQ('Held-out records were kept separate for a more honest test. Events are the actual positive cases. ')}`+(a!=null?` · model AUC ${a.toFixed(2)} vs station-memory ${(p.mem_auc!=null?p.mem_auc.toFixed(2):'—')}${helpQ('This compares model ranking skill against station-memory at this place.')}`:` · too few events to score${helpQ('There are not enough held-out events here for a trustworthy local skill number.')}`)+`</span>`;}
+  return head+` · ${esc(_domain.valueLabel.split(' (')[0])} ${p.base_rate!=null?(100*p.base_rate).toFixed(0)+'%':'—'}${helpQ('This is the observed rate for the mapped condition at this place.')}${p.low_support?' · low support'+helpQ('Low support means the site has too few observations for high confidence.'):''}</span>`;
 }
 function mDraw(mode){
   if(!_mlayer)return; _mode=mode; _mlayer.clearLayers();
+  if(mode==='grid'){
+    drawGrid();
+    document.querySelectorAll('#maptoggle button').forEach(b=>b.classList.toggle('active',b.dataset.m===mode));
+    return;
+  }
   _feats.forEach(f=>{const p=f.properties,c=f.geometry.coordinates;let fill,op,stroke,wt,dash;
     if(mode==='skill'){const a=p.model_auc;
       if(a==null){fill='#cfd2d6';op=0.14;stroke='#9aa0a7';wt=1;dash='2 2';}
@@ -976,45 +1195,48 @@ function mDraw(mode){
     L.circleMarker([c[1],c[0]],{radius:mRad(p.n_obs),fillColor:fill,fillOpacity:op,color:stroke,weight:wt,dashArray:dash}).bindPopup(mPopup(p,mode)).addTo(_mlayer);});
   const sc=_mmeta.scored_stations||0,tot=(_mmeta.stations||_feats.length),sw=_domain.siteWord;
   if(mode==='skill'){
-    $('#mapnote').textContent=`${sc.toLocaleString()} of ${tot.toLocaleString()} ${sw} have enough held-out events to score honestly; the rest stay hollow. Per-station AUC is noisy at low counts, so we mask rather than colour them. ${_mmeta.note||''}`;
-    $('#maplegend').innerHTML=`<div class="lt">Held-out model skill (AUC)</div>
-      <div class="lrow"><span class="sw" style="background:#b4453c"></span>poor (&lt; 0.60)</div>
-      <div class="lrow"><span class="sw" style="background:#c9a23a"></span>moderate (~0.75)</div>
-      <div class="lrow"><span class="sw" style="background:#1a7a4f"></span>strong (&gt; 0.88)</div>
-      <div class="lrow"><span class="ring"></span>too few events to score</div>
-      <div class="lt" style="margin-top:9px">marker size = ${esc(_domain.unit)}</div>`;
+    $('#mapnote').innerHTML=`${sc.toLocaleString()} of ${tot.toLocaleString()} ${sw} have enough held-out events to score honestly; the rest stay hollow. Per-station AUC is noisy at low counts, so we mask rather than colour them. ${esc(_mmeta.note||'')}${helpQ('The map only colors model skill where there is enough held-out data. Empty or hollow sites mean the site is real, but not safely scoreable.')}`;
+    $('#maplegend').innerHTML=`<div class="lt">Held-out model skill (AUC)${helpQ('AUC is model ranking skill. 0.5 is random; closer to 1 is better.')}</div>
+      <div class="lrow"><span class="sw" style="background:#b4453c"></span>poor (&lt; 0.60)${helpQ('Poor means the model barely ranks events better than random at that site.')}</div>
+      <div class="lrow"><span class="sw" style="background:#c9a23a"></span>moderate (~0.75)${helpQ('Moderate means the model has useful but not excellent ranking skill.')}</div>
+      <div class="lrow"><span class="sw" style="background:#1a7a4f"></span>strong (&gt; 0.88)${helpQ('Strong means the model ranks event days much higher than non-event days at that site.')}</div>
+      <div class="lrow"><span class="ring"></span>too few events to score${helpQ('Too few events means the site exists, but there are not enough held-out events for an honest local score.')}</div>
+      <div class="lt" style="margin-top:9px">marker size = ${esc(_domain.unit)}${helpQ('Bigger markers mean more observations or records for that place.')}</div>`;
   }else{
-    $('#mapnote').textContent=`${tot.toLocaleString()} ${sw} with a known location. ${_mmeta.note||''}`;
-    $('#maplegend').innerHTML=`<div class="lt">Observed ${esc(_domain.valueLabel)}</div>
-      <div class="lrow"><span class="sw" style="background:#1a7a4f"></span>low</div>
-      <div class="lrow"><span class="sw" style="background:#c9a23a"></span>moderate</div>
-      <div class="lrow"><span class="sw" style="background:#b4453c"></span>high</div>
-      <div class="lrow"><span class="ring"></span>thin support</div>
-      <div class="lt" style="margin-top:9px">marker size = ${esc(_domain.unit)}</div>`;
+    $('#mapnote').innerHTML=`${tot.toLocaleString()} ${sw} with a known location. ${esc(_mmeta.note||'')}${helpQ('Known location means the site can be shown on the map. This is observation coverage, not a prediction surface.')}`;
+    $('#maplegend').innerHTML=`<div class="lt">Observed ${esc(_domain.valueLabel)}${helpQ('Observed means measured in the data, not guessed by the model.')}</div>
+      <div class="lrow"><span class="sw" style="background:#1a7a4f"></span>low${helpQ('Low means this condition was uncommon at the observed site.')}</div>
+      <div class="lrow"><span class="sw" style="background:#c9a23a"></span>moderate${helpQ('Moderate means this condition showed up sometimes.')}</div>
+      <div class="lrow"><span class="sw" style="background:#b4453c"></span>high${helpQ('High means this condition was common in the observations.')}</div>
+      <div class="lrow"><span class="ring"></span>thin support${helpQ('Thin support means not enough observations to treat the color as very reliable.')}</div>
+      <div class="lt" style="margin-top:9px">marker size = ${esc(_domain.unit)}${helpQ('Bigger markers mean more observations or records for that place.')}</div>`;
   }
   document.querySelectorAll('#maptoggle button').forEach(b=>b.classList.toggle('active',b.dataset.m===mode));
 }
 function selectDomain(key){
   const d=MAP_DOMAINS.find(x=>x.key===key)||MAP_DOMAINS[0]; _domain=d;
   document.querySelectorAll('#mapdomain button').forEach(b=>b.classList.toggle('active',b.dataset.d===d.key));
-  const tog=$('#maptoggle'); if(tog)tog.style.display=d.hasSkill?'inline-flex':'none';
-  if(!d.hasSkill)_mode='coverage';
+  const tog=$('#maptoggle'); if(tog)tog.style.display='inline-flex';
+  const skillBtn=document.querySelector('#maptoggle button[data-m="skill"]'); if(skillBtn)skillBtn.style.display=d.hasSkill?'':'none';
+  if(!d.hasSkill&&_mode==='skill')_mode='grid';
+  const requested=_pendingMode||_mode||'coverage';
+  _mode=(!d.hasSkill&&requested==='skill')?'grid':requested;
   const done=fc=>{_feats=fc.features||[]; _mmeta=fc.meta||{}; _mmax=1; _feats.forEach(f=>_mmax=Math.max(_mmax,f.properties.n_obs||0));
     if(_mlayer)_mlayer.clearLayers(); else _mlayer=L.featureGroup().addTo(_map);
-    mDraw(d.hasSkill?_mode:'coverage');
+    mDraw(_mode);
     try{_map.fitBounds(_mlayer.getBounds().pad(0.06));setTimeout(()=>_map.invalidateSize(),60);}catch(e){}};
   if(_dcache[key])done(_dcache[key]);
-  else{$('#mapnote').textContent='Loading '+d.label+'…';fetch(d.file,{cache:'no-cache'}).then(r=>r.json()).then(fc=>{_dcache[key]=fc;done(fc);}).catch(()=>{$('#mapnote').textContent='Could not load '+d.label+' data.';});}
+  else{$('#mapnote').innerHTML='Loading '+esc(d.label)+'…'+helpQ('The map data is loaded from a published GeoJSON file.');fetch(d.file,{cache:'no-cache'}).then(r=>r.json()).then(fc=>{_dcache[key]=fc;done(fc);}).catch(()=>{$('#mapnote').innerHTML='Could not load '+esc(d.label)+' data.'+helpQ('The map file was unavailable, but the rest of the snapshot can still load.');});}
 }
 function renderMap(){
   const host=$('#leafmap'); if(!host)return;
   if(!window.L){host.innerHTML='<div class="mapfail">The map library didn’t load (offline?). The station data is still downloadable in the footer below.</div>';return;}
-  if(_map){setTimeout(()=>_map.invalidateSize(),60);if(_pendingDomain){selectDomain(_pendingDomain);_pendingDomain=null;}return;}
+  if(_map){setTimeout(()=>_map.invalidateSize(),60);if(_pendingDomain||_pendingMode){selectDomain(_pendingDomain||_domain.key);_pendingDomain=null;_pendingMode=null;}return;}
   _map=L.map('leafmap',{scrollWheelZoom:false}).setView([37,-110],4);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO',subdomains:'abcd',maxZoom:19}).addTo(_map);
   document.querySelectorAll('#maptoggle button').forEach(b=>b.onclick=()=>mDraw(b.dataset.m));
   document.querySelectorAll('#mapdomain button').forEach(b=>b.onclick=()=>selectDomain(b.dataset.d));
-  selectDomain(_pendingDomain||'bacteria'); _pendingDomain=null;
+  selectDomain(_pendingDomain||'bacteria'); _pendingDomain=null; _pendingMode=null;
 }
 /* ---------- downloads footer (manifest-driven, allowlisted) ---------- */
 function renderDownloads(){
@@ -1022,7 +1244,7 @@ function renderDownloads(){
   const sz=b=>b>=1048576?(b/1048576).toFixed(1)+' MB':b>=1024?(b/1024).toFixed(0)+' KB':b+' B';
   const typ=t=>({'application/json':'JSON','text/csv':'CSV','application/geo+json':'GeoJSON','text/markdown':'Markdown'}[t]||t);
   fetch('downloads.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{
-    box.innerHTML=(d.items||[]).map(it=>`<div class="dl"><div class="di"><div class="dt">${esc(it.title)}</div><div class="dm">${typ(it.type)} · ${sz(it.bytes)} · sha256 ${esc(String(it.sha256).slice(0,16))}…</div></div><a class="dbtn" href="${esc(it.path)}" download>Download</a></div>`).join('')
+    box.innerHTML=(d.items||[]).map(it=>`<div class="dl"><div class="di"><div class="dt">${esc(it.title)}${helpQ('This is a downloadable evidence file from the published snapshot.')}</div><div class="dm">${typ(it.type)}${helpQ('This is the file format. JSON is structured data, CSV is a spreadsheet-like table, GeoJSON is map data, and Markdown is readable text.')} · ${sz(it.bytes)}${helpQ('This is the file size.')} · sha256 ${esc(String(it.sha256).slice(0,16))}…${helpQ('SHA-256 is a file fingerprint. It helps prove the downloaded file matches the published snapshot.')}</div></div><a class="dbtn" href="${esc(it.path)}" download>Download</a></div>`).join('')
       ||'<div class="footnote">No downloads in this snapshot.</div>';
   }).catch(()=>{box.innerHTML='<div class="footnote">Downloads manifest unavailable on this host.</div>';});
 }
@@ -1036,29 +1258,29 @@ function renderFrontiers(){
     const p=(t.plain||'');
     return `<div class="fcard" data-i="${i}">
       <div class="toprow">
-        <span class="topic">${esc(kind)}</span>
-        <span class="badge" style="background:${b.bg};color:${b.text}"><i style="background:${b.text}"></i>${esc(t.status)}</span>
+        <span class="topic">${esc(kind)}${helpQ(kind==='Method'?'A method is a reusable approach, not one specific hazard.':'A hazard is the coastal problem or event being studied.')}</span>
+        <span class="badge" style="background:${b.bg};color:${b.text}"><i style="background:${b.text}"></i>${esc(t.status)}${helpQ(statusExplain(t.status)||frontierHelp(t))}</span>
       </div>
-      <h3>${esc(t.label)}</h3>
-      ${t.question?`<p class="plain" style="font-style:italic;color:var(--ink4);margin:0 0 8px">${esc(t.question)}</p>`:''}
-      <p class="plain">${esc(p.slice(0,184))}${p.length>184?'…':''}</p>
-      <div class="ffoot"><span class="mean">${esc(STATUS_MEANING[t.status]||'Kept on the record')}</span><span class="cta">Drill in →</span></div>
+      <h3>${esc(t.label)}${helpQ(frontierHelp(t))}</h3>
+      ${t.question?`<p class="plain" style="font-style:italic;color:var(--ink4);margin:0 0 8px">${esc(t.question)}${helpQ('This is the research question the frontier is trying to answer.')}</p>`:''}
+      <p class="plain">${esc(p.slice(0,184))}${p.length>184?'…':''}${helpQ(statementHelp(p))}</p>
+      <div class="ffoot"><span class="mean">${esc(STATUS_MEANING[t.status]||'Kept on the record')}${helpQ(statusExplain(t.status)||frontierHelp(t))}</span><span class="cta">Drill in →${helpQ('Open the full frontier explanation, including the current limits.')}</span></div>
     </div>`;
   }).join('') || '<div class="lhempty">No research targets in this snapshot.</div>';
-  document.querySelectorAll('#frontiergrid .fcard').forEach(c=>c.onclick=()=>{DETAIL={type:'target',idx:+c.dataset.i};renderDrawer();});
+  document.querySelectorAll('#frontiergrid .fcard').forEach(c=>c.onclick=e=>{if(e.target.closest('.helpq'))return;DETAIL={type:'target',idx:+c.dataset.i};renderDrawer();});
 }
 function targetDrawer(){
   const t=(DATA.targets||[])[DETAIL.idx]; if(!t)return '';
   const b=frontierBadge(t.status); const kind=t.kind==='method'?'Method':'Research target';
   return `<div>
     <div class="dhead">
-      <div><div class="eb">${esc(kind)}</div><div class="ti">${esc(t.label)}</div>${t.question?`<div class="nt">${esc(t.question)}</div>`:''}</div>
+      <div><div class="eb">${esc(kind)}${helpQ(kind==='Method'?'A method is a reusable scientific approach.':'A research target is the event or question being studied.')}</div><div class="ti">${esc(t.label)}${helpQ(frontierHelp(t))}</div>${t.question?`<div class="nt">${esc(t.question)}${helpQ('This is the question the lab tested or wants to test for this frontier.')}</div>`:''}</div>
       <button class="dclose" onclick="closeDrawer()">×</button>
     </div>
     <div class="dbody">
-      <span class="badge" style="background:${b.bg};color:${b.text};margin-bottom:16px"><i style="background:${b.text}"></i>${esc(t.status)}</span>
-      <p class="plain">${esc(t.plain||'')}</p>
-      ${t.detail?`<div class="dlabel">The detail</div><p class="plain" style="font-size:14.5px;color:var(--ink2)">${esc(t.detail)}</p>`:''}
+      <span class="badge" style="background:${b.bg};color:${b.text};margin-bottom:16px"><i style="background:${b.text}"></i>${esc(t.status)}${helpQ(statusExplain(t.status)||frontierHelp(t))}</span>
+      <p class="plain">${esc(t.plain||'')}${helpQ(statementHelp(t.plain||''))}</p>
+      ${t.detail?`<div class="dlabel">The detail${helpQ('This gives more context than the short card. It may include limits, caveats, or why the result matters.')}</div><p class="plain" style="font-size:14.5px;color:var(--ink2)">${esc(t.detail)}${helpQ(statementHelp(t.detail))}</p>`:''}
       ${(()=>{const d=mapDomainFor(t.id||t.label);return d?mapLink(d):'<p class="footnote" style="margin-top:8px;color:var(--ink5)">No spatial coverage map for this result yet — it needs the run to emit per-location observations + held-out predictions.</p>';})()}
     </div>
   </div>`;
@@ -1076,7 +1298,7 @@ function renderDrawer(){
   host.innerHTML=`<div class="backdrop" id="backdrop"><div class="drawer" id="drawer">${inner}</div></div>`;
   $('#backdrop').onclick=closeDrawer;
   $('#drawer').onclick=e=>e.stopPropagation();
-  if(DETAIL.type==='vocab')document.querySelectorAll('#drawer .vrow.clickable').forEach(r=>r.onclick=()=>{const it=_vocabItems[+r.dataset.i];if(it&&it.open)it.open();});
+  if(DETAIL.type==='vocab')document.querySelectorAll('#drawer .vrow.clickable').forEach(r=>r.onclick=e=>{if(e.target.closest('.helpq'))return;const it=_vocabItems[+r.dataset.i];if(it&&it.open)it.open();});
 }
 function closeDrawer(){DETAIL=null;renderDrawer();}
 function modelDrawer(m){
@@ -1086,26 +1308,29 @@ function modelDrawer(m){
   if(m.beats_baseline) audit.push(m.beats_baseline);
   if(m.claimable_verified) audit.push('Claim independently verified against stored evidence.');
   if(m.evidence_exists) audit.push('Evidence artifact present in the snapshot.');
-  const evbtn = m.evidence&&EVID[m.evidence] ? `<div class="evbtn"><button class="lnk" onclick="toggleEv(this,'${esc(m.evidence)}')">show raw evidence JSON</button></div>` : '';
+  const evbtn = m.evidence&&EVID[m.evidence] ? `<div class="evbtn"><button class="lnk" onclick="toggleEv(this,'${esc(m.evidence)}')">show raw evidence JSON${helpQ('Raw evidence JSON is the saved machine-readable report behind this model card.')}</button></div>` : '';
+  const modelPlain=m.plain
+    ? `<p class="plain">${esc(m.plain)}${helpQ(statementHelp(m.plain))}</p>`
+    : `<p class="plain" style="color:var(--ink4)">No plain-English summary recorded for this model.${helpQ('This model exists in the registry, but the snapshot does not include a short human summary for it.')}</p>`;
   return `<div>
     <div class="dhead">
-      <div><div class="eb">Model card</div><div class="ti">${esc(m.model_id)}</div><div class="nt">${esc(m.status)}</div></div>
+      <div><div class="eb">Model card${helpQ('A model card is the detailed record for one fitted model or baseline.')}</div><div class="ti">${esc(m.model_id)}${helpQ(modelFieldHelp('model',m))}</div><div class="nt">${esc(m.status)}${helpQ('This is the registry status saved for this model.')}</div></div>
       <button class="dclose" onclick="closeDrawer()">×</button>
     </div>
     <div class="dbody">
-      <span class="badge" style="background:${b.bg};color:${b.text};margin-bottom:16px"><i style="background:${b.text}"></i>${st}</span>
-      ${m.plain?`<p class="plain">${esc(m.plain)}</p>`:'<p class="plain" style="color:var(--ink4)">No plain-English summary recorded for this model.</p>'}
+      <span class="badge" style="background:${b.bg};color:${b.text};margin-bottom:16px"><i style="background:${b.text}"></i>${st}${helpQ(statusExplain(st))}</span>
+      ${modelPlain}
       <div class="insetgrid">
-        <div class="inset"><div class="k">Family</div><div class="mid">${esc(m.family||'—')}</div></div>
-        <div class="inset"><div class="k">Claimable</div><div class="mid" style="color:${m.claimable?'var(--acc)':'var(--ink4)'}">${m.claimable?'Yes — verified':'No'}</div></div>
+        <div class="inset"><div class="k">Family${helpQ(modelFieldHelp('family',m))}</div><div class="mid">${esc(m.family||'—')}${helpQ(modelFieldHelp('family',m))}</div></div>
+        <div class="inset"><div class="k">Claimable${helpQ(modelFieldHelp('claimable',m))}</div><div class="mid" style="color:${m.claimable?'var(--acc)':'var(--ink4)'}">${m.claimable?'Yes — verified':'No'}${helpQ(modelFieldHelp('claimable',m))}</div></div>
       </div>
-      <div class="dlabel">How it's claimed</div>
+      <div class="dlabel">How it's claimed${helpQ('This section says what the model is allowed to claim based on the evidence.')}</div>
       <div style="margin-bottom:24px">
-        <div class="drow"><span class="a">Task</span><span class="b">${esc(m.task||'—')}</span></div>
-        <div class="drow"><span class="a">Baseline read</span><span class="b">${esc(m.beats_baseline||'—')}</span></div>
-        <div class="drow"><span class="a">Evidence</span><span class="b mono" style="font-size:12px">${esc(m.evidence||'—')}</span></div>
+        <div class="drow"><span class="a">Task${helpQ(modelFieldHelp('task',m))}</span><span class="b">${esc(m.task||'—')}${helpQ(modelFieldHelp('task',m))}</span></div>
+        <div class="drow"><span class="a">Baseline read${helpQ(modelFieldHelp('baseline',m))}</span><span class="b">${esc(m.beats_baseline||'—')}${helpQ(statementHelp(m.beats_baseline||'No baseline read recorded.'))}</span></div>
+        <div class="drow"><span class="a">Evidence${helpQ(modelFieldHelp('evidence',m))}</span><span class="b mono" style="font-size:12px">${esc(m.evidence||'—')}${helpQ(modelFieldHelp('evidence',m))}</span></div>
       </div>
-      ${audit.length?`<div class="dlabel">Audit notes</div>${audit.map(a=>`<div class="auditli"><i>✓</i><span>${esc(a)}</span></div>`).join('')}`:''}
+      ${audit.length?`<div class="dlabel">Audit notes${helpQ('Audit notes are checks that support or limit the model claim.')}</div>${audit.map(a=>`<div class="auditli"><i>✓</i><span>${esc(a)}${helpQ(statementHelp(a))}</span></div>`).join('')}`:''}
       ${evbtn}
       ${(()=>{const d=mapDomainFor((m.task||'')+' '+(m.model_id||''));return d?('<div style="margin-top:14px">'+mapLink(d)+'</div>'):'';})()}
     </div>
@@ -1125,19 +1350,19 @@ function datasetDrawer(){
     : `Experimental shadow dataset under validation before promotion to the governed lake.`;
   return `<div>
     <div class="dhead">
-      <div><div class="eb">Dataset</div><div class="ti mono">${esc(name)}</div></div>
+      <div><div class="eb">Dataset${helpQ('A dataset is a stored collection of records used by the project.')}</div><div class="ti mono">${esc(name)}${helpQ(datasetFieldHelp('name',a,tier))}</div></div>
       <button class="dclose" onclick="closeDrawer()">×</button>
     </div>
     <div class="dbody">
-      <span class="badge" style="background:${b.bg};color:${b.text};margin-bottom:16px">${tier}</span>
-      <p class="plain">${plain}</p>
+      <span class="badge" style="background:${b.bg};color:${b.text};margin-bottom:16px">${tier}${helpQ(datasetFieldHelp('tier',a,tier))}</span>
+      <p class="plain">${plain}${helpQ(statementHelp(plain))}</p>
       <div class="insetgrid">
-        <div class="inset"><div class="k">Rows</div><div class="big" style="font-family:var(--mono);font-size:19px">${a.rows!=null?fmt(a.rows):'—'}</div></div>
-        <div class="inset"><div class="k">Updated</div><div class="mid">${esc(updated)}</div></div>
-        <div class="inset"><div class="k">Source</div><div class="sm">${esc(src)}</div></div>
-        <div class="inset"><div class="k">${isLake?'Size':'Files'}</div><div class="sm">${isLake?mb(a.size_mb):fmt(a.files)}</div></div>
+        <div class="inset"><div class="k">Rows${helpQ(datasetFieldHelp('rows',a,tier))}</div><div class="big" style="font-family:var(--mono);font-size:19px">${a.rows!=null?fmt(a.rows):'—'}${helpQ(datasetFieldHelp('rows',a,tier))}</div></div>
+        <div class="inset"><div class="k">Updated${helpQ(datasetFieldHelp('updated',a,tier))}</div><div class="mid">${esc(updated)}${helpQ(datasetFieldHelp('updated',a,tier))}</div></div>
+        <div class="inset"><div class="k">Source${helpQ(datasetFieldHelp('source',a,tier))}</div><div class="sm">${esc(src)}${helpQ(datasetFieldHelp('source',a,tier))}</div></div>
+        <div class="inset"><div class="k">${isLake?'Size':'Files'}${helpQ(isLake?datasetFieldHelp('size',a,tier):'Files is the number of files grouped into this shadow dataset.')}</div><div class="sm">${isLake?mb(a.size_mb):fmt(a.files)}${helpQ(isLake?datasetFieldHelp('size',a,tier):'Files is the number of files grouped into this shadow dataset.')}</div></div>
       </div>
-      ${isLake&&a.date_min?`<div class="dlabel">Time range</div><div class="drow" style="border-top:none;padding-top:0"><span class="a">${a.time_column||'time'}</span><span class="b mono" style="font-size:12.5px">${esc(range)}</span></div><div class="drow"><span class="a">Status</span><span class="b">${esc(a.status||'—')}</span></div>`:''}
+      ${isLake&&a.date_min?`<div class="dlabel">Time range${helpQ(datasetFieldHelp('range',a,tier))}</div><div class="drow" style="border-top:none;padding-top:0"><span class="a">${a.time_column||'time'}${helpQ('This is the column used as the time or date field.')}</span><span class="b mono" style="font-size:12.5px">${esc(range)}${helpQ(datasetFieldHelp('range',a,tier))}</span></div><div class="drow"><span class="a">Status${helpQ('Dataset status tells whether the asset is current and accepted in the snapshot.')}</span><span class="b">${esc(a.status||'—')}${helpQ('Dataset status tells whether the asset is current and accepted in the snapshot.')}</span></div>`:''}
     </div>
   </div>`;
 }
@@ -1666,13 +1891,19 @@ function relatedQuestions(q,n=3){
 }
 function suggestRow(items,heading){
   items=(items&&items.length)?items:starterQuestions().slice(0,5);
-  return `<div style="margin-top:13px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#8c929a">${esc(heading||'Things I can answer')}</div><div class="qasuggest">${items.map(x=>`<button class="qs" data-q="${esc(x.q||x)}">${esc(x.q||x)}</button>`).join('')}</div>`;
+  return `<div style="margin-top:13px;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:#8c929a">${esc(heading||'Things I can answer')}${helpQ('These suggestions are safer because the snapshot has known evidence paths for them.')}</div><div class="qasuggest">${items.map(x=>`<button class="qs" data-q="${esc(x.q||x)}">${esc(x.q||x)}${helpQ('Click to ask this evidence-backed question instead.')}</button>`).join('')}</div>`;
 }
+// Map a grounding-source label (e.g. "Findings · Bacteria nowcast…", "Frontiers", "Models")
+// to the tab whose card explains it, so the chip can take the reader there to learn more.
+const _SRC_TAB={overview:'overview',findings:'findings',frontiers:'frontiers',models:'models',
+  lakehouse:'lakehouse',data:'lakehouse',map:'map',vocabulary:'vocabulary',vocab:'vocabulary'};
+function srcToTab(s){const head=String(s||'').split('·')[0].trim().toLowerCase();return _SRC_TAB[head]||null;}
 function showAns(who,text,sources,suggest){
-  const src=(sources&&sources.length)?`<div class="ground"><span class="g">Grounded in</span>${sources.map(s=>`<span class="s">${esc(s)}</span>`).join('')}</div>`:'';
+  const src=(sources&&sources.length)?`<div class="ground"><span class="g">Grounded in — tap a card to learn more${helpQ('These name the snapshot parts behind the answer. Tap a highlighted one to open that card; the rest have no dedicated page.')}</span>${sources.map(s=>{const t=srcToTab(s);return t?`<button type="button" class="s slink" data-tab="${t}">${esc(s)} ↗</button>`:`<span class="s">${esc(s)}${helpQ('This source/evidence group has no dedicated card to open.')}</span>`;}).join('')}</div>`:'';
   const sug=suggest?suggestRow(Array.isArray(suggest)?suggest:null,'You asked something I can’t answer — try one of these, which I can:'):'';
-  $('#qaout').innerHTML=`<div class="qaans"><div class="who">${who}</div><div class="txt">${esc(text)}</div>${src}${sug}</div>`;
+  $('#qaout').innerHTML=`<div class="qaans"><div class="who">${who}${helpQ('This line tells whether the answer came from local rules, vocabulary, or the evidence search model.')}</div><div class="txt">${esc(text)}${helpQ('This answer is supposed to be grounded in the published snapshot, not outside guesses.')}</div>${src}${sug}</div>`;
   if(suggest)document.querySelectorAll('#qaout .qs').forEach(b=>b.onclick=()=>askChip(b.dataset.q));
+  document.querySelectorAll('#qaout .slink').forEach(b=>b.onclick=()=>{go(b.dataset.tab);window.scrollTo({top:0,behavior:'smooth'});});
 }
 function showLoading(){$('#qaout').innerHTML=`<div class="qaload"><i></i>Searching evidence files…</div>`;}
 async function askData(){
