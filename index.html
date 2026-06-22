@@ -430,9 +430,9 @@
   <!-- ===== START HERE ===== -->
   <section class="view" id="overview">
     <div class="hero">
-      <div class="eyebrow">Monterey Bay AI Lab · public science snapshot</div>
-      <h1 class="page">Do exogenous drivers and bigger models beat persistence for rare coastal hazards?</h1>
-      <p class="lede">Mostly no — and that null is the finding. This lab tests, honestly and against real baselines, whether weather/runoff/ocean drivers and larger models can forecast rare coastal events (unsafe beaches, shellfish toxins, low-oxygen water, lake blooms) better than just persistence and season. We map the few places they genuinely do, ship the forecasts that clear an audit, and keep every null on the record beside the wins. Pick a thread below.</p>
+      <div class="eyebrow">Monterey Bay AI Lab</div>
+      <h1 class="page">Can AI tell you which days the coast is unsafe?</h1>
+      <p class="lede">Beaches too dirty to swim. Shellfish too toxic to eat. Water too low on oxygen. Lakes choked with algae. This is the lab's honest scorecard for forecasting those rare days. We test whether machine-learning models — fed weather, river, and ocean data — actually beat the simplest possible guess: <i>"today will look a lot like yesterday."</i> Usually they don't, so we keep the dead ends on the record right beside the wins — and show the data behind every claim. Pick a thread below.</p>
     </div>
 
     <!-- the two big things: the law + the shipped win (data-bound) -->
@@ -453,7 +453,7 @@
     </div>
 
     <!-- the escapes -->
-    <div class="secband"><h2>Where drivers actually win</h2><p>The exceptions to the null — each beats a real baseline.</p></div>
+    <div class="secband"><h2>Where the models actually win</h2><p>The exceptions — places a model genuinely beats that simple "like yesterday" forecast.</p></div>
     <div class="minigrid" id="escapelist"></div>
 
     <!-- honest nulls -->
@@ -898,17 +898,17 @@ function renderOverview(){
   // two big cards: the law + the shipped win (bacteria, data-bound)
   const bac=targetById('bacteria_exceedance');
   const lawCard=`<div class="card bigcard">
-    <div class="tag" style="color:var(--ink3)"><i style="background:#b8bdc3"></i>The law</div>
-    <h3>Exogenous drivers rarely beat persistence and season.</h3>
-    <p>Across hazards and basins, adding weather, runoff, and ocean drivers — or a bigger model — usually does <b>not</b> beat a fair baseline of "what just happened" plus the seasonal cycle. The lab treats that null as the default and demands a real, audited margin before believing an escape.</p>
+    <div class="tag" style="color:var(--ink3)"><i style="background:#b8bdc3"></i>The honest result</div>
+    <h3>Most of the time: no.</h3>
+    <p>Across every hazard we've tried, piling on more data — weather, river flow, satellites — or a bigger model usually does <b>not</b> beat the simple forecast of "what's happening now, plus the time of year." We treat that as the default and make a model earn its keep before we believe it. Knowing what <i>doesn't</i> work is most of the science here.</p>
     <div class="num">
-      <div><b>${ts.length}</b><span>research questions</span></div>
-      <div><b>${tSup}</b><span>with a supported escape</span></div>
-      <div><b>${tNull+nul}</b><span>nulls kept on record</span></div>
+      <div><b>${ts.length}</b><span>questions tested</span></div>
+      <div><b>${tSup}</b><span>where a model wins</span></div>
+      <div><b>${tNull+nul}</b><span>dead ends kept on record</span></div>
     </div></div>`;
   const winCard=bac?`<div class="card bigcard" style="cursor:pointer" onclick="openTarget('bacteria_exceedance')">
-    <div class="tag" style="color:#0f7a74"><i style="background:#0f8a84"></i>What shipped</div>
-    <h3>${esc(bac.label)} — a statewide nowcast.</h3>
+    <div class="tag" style="color:#0f7a74"><i style="background:#0f8a84"></i>What works</div>
+    <h3>A statewide beach-safety forecast that beats the status quo.</h3>
     <p>${esc((bac.plain||'').slice(0,230))}${(bac.plain||'').length>230?'…':''}</p>
     <div class="go" style="margin-top:13px;font-size:13px;font-weight:600;color:var(--acc)">Open the question →</div></div>`:'';
   $('#bigrow').innerHTML=lawCard+winCard;
