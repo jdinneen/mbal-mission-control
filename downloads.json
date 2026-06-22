@@ -30,7 +30,7 @@
    "type": "application/geo+json",
    "license": "Apache-2.0",
    "bytes": 264663,
-   "sha256": "7f2d620df97aae97326003be570939064b79325d3396362e37a8428f728322b2"
+   "sha256": "fa6ca2a5bf38e125209fe48defaef46a76b7964a3d2573e8036b75b27aaaaedf"
   },
   {
    "title": "US lake cyano coverage (GeoJSON)",
@@ -38,7 +38,23 @@
    "type": "application/geo+json",
    "license": "Public domain (EPA CyAN)",
    "bytes": 625536,
-   "sha256": "47de9540a9fd4a58b8028f8169459d3baa56c3c34b6ddd4600e30cc92e671e6b"
+   "sha256": "cdac56e016abe908db071d31c05651df2e5f7be39a42ceb852fafb4a27684985"
+  },
+  {
+   "title": "Domoic-acid pier coverage (GeoJSON)",
+   "path": "piers_domoic.geojson",
+   "type": "application/geo+json",
+   "license": "Public (CalHABMAP/SCCOOS)",
+   "bytes": 3334,
+   "sha256": "e7a511f8debee8b56c0228236bc02a3da68bba98d8658610ce080377ccc4ded3"
+  },
+  {
+   "title": "Ireland bathing-water coverage (GeoJSON)",
+   "path": "ireland_beaches.geojson",
+   "type": "application/geo+json",
+   "license": "Public (EPA Ireland / EU open data)",
+   "bytes": 73573,
+   "sha256": "e6b26ceb62849900dcb994b5a6e5167c1f5204a5b62ba176a53bbe9efb613869"
   },
   {
    "title": "Program results summary",

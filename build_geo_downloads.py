@@ -180,6 +180,70 @@ def build_cyano_lakes():
     print(f"lakes_cyano.geojson: {len(feats)} US lakes")
 
 
+# ---------- 1c. domoic-acid piers (CalHABMAP/SCCOOS — public; coverage only) ----------
+def build_da_piers():
+    import duckdb
+    con = duckdb.connect()
+    src = ROOT / "reports" / "hab" / "model_queue" / "panels" / "hab_sota_panel.parquet"
+    if not src.exists():
+        print("DA panel not found — skipping piers domain"); return
+    rows = con.execute(f"""
+        select station as sid, avg(latitude) as lk_lat, avg(longitude) as lk_lon,
+               count(*) as n_obs,
+               avg(case when try_cast(exceed as double) > 0 then 1.0 else 0.0 end) as base_rate
+        from read_parquet('{src.as_posix()}')
+        where latitude is not null and longitude is not null and station is not null
+        group by station
+    """).fetchall()
+    feats = [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [round(float(lon), 5), round(float(lat), 5)]},
+              "properties": {"station_id": sid, "name": sid, "county": "", "n_obs": int(n),
+                             "base_rate": (round(float(br), 4) if br is not None else None),
+                             "low_support": int(n) < 30, "hazard": "domoic", "n_test": 0, "events": 0,
+                             "model_auc": None, "mem_auc": None}}
+             for sid, lat, lon, n, br in rows]
+    fc = {"type": "FeatureCollection",
+          "meta": {"hazard": "domoic", "stations": len(feats), "scored_stations": 0,
+                   "unit": "samples", "value_label": "domoic-acid exceedance", "has_skill": False,
+                   "note": "CalHABMAP / SCCOOS pier network (public). Marker size = samples; color = "
+                           "share over the domoic-acid action level. Coverage only — note how sparse "
+                           "the pier network is; that sparsity is itself a limit on the forecast."},
+          "features": feats}
+    (HERE / "piers_domoic.geojson").write_text(json.dumps(fc, separators=(",", ":")), encoding="utf-8")
+    print(f"piers_domoic.geojson: {len(feats)} piers")
+
+
+# ---------- 1d. Ireland bathing water (public EU open data; coverage only) ----------
+def build_ireland():
+    import duckdb
+    con = duckdb.connect()
+    src = ROOT / "data" / "external_curated" / "ireland_bathing_water" / "ireland_bathing_water.parquet"
+    if not src.exists():
+        print("Ireland parquet not found — skipping"); return
+    rows = con.execute(f"""
+        select beach_id as sid, any_value(beach_name) as nm, any_value(county_name) as cty,
+               avg(latitude) as lk_lat, avg(longitude) as lk_lon, count(*) as n_obs,
+               avg(case when sample_water_quality_status not in ('Excellent','Good') then 1.0 else 0.0 end) as base_rate
+        from read_parquet('{src.as_posix()}')
+        where latitude is not null and longitude is not null and beach_id is not null
+        group by beach_id
+    """).fetchall()
+    feats = [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [round(float(lon), 5), round(float(lat), 5)]},
+              "properties": {"station_id": sid, "name": nm or sid, "county": cty or "", "n_obs": int(n),
+                             "base_rate": (round(float(br), 4) if br is not None else None),
+                             "low_support": int(n) < 10, "hazard": "ireland", "n_test": 0, "events": 0,
+                             "model_auc": None, "mem_auc": None}}
+             for sid, nm, cty, lat, lon, n, br in rows]
+    fc = {"type": "FeatureCollection",
+          "meta": {"hazard": "ireland", "stations": len(feats), "scored_stations": 0,
+                   "unit": "samples", "value_label": "below-Good rate", "has_skill": False,
+                   "note": "Ireland EPA designated bathing waters (public EU open data). Marker size = "
+                           "samples; color = share of samples classified below 'Good'. This is the "
+                           "region the CA bacteria model is transferred to — coverage only here."},
+          "features": feats}
+    (HERE / "ireland_beaches.geojson").write_text(json.dumps(fc, separators=(",", ":")), encoding="utf-8")
+    print(f"ireland_beaches.geojson: {len(feats)} beaches")
+
+
 # ---------- 2. CSV exports from data.json (can't drift) ----------
 def _csv(rows, cols):
     buf = io.StringIO()
@@ -220,6 +284,10 @@ def build_manifest(have_program):
     ]
     if (HERE / "lakes_cyano.geojson").exists():
         allow.append({"title": "US lake cyano coverage (GeoJSON)", "path": "lakes_cyano.geojson", "type": "application/geo+json", "license": "Public domain (EPA CyAN)"})
+    if (HERE / "piers_domoic.geojson").exists():
+        allow.append({"title": "Domoic-acid pier coverage (GeoJSON)", "path": "piers_domoic.geojson", "type": "application/geo+json", "license": "Public (CalHABMAP/SCCOOS)"})
+    if (HERE / "ireland_beaches.geojson").exists():
+        allow.append({"title": "Ireland bathing-water coverage (GeoJSON)", "path": "ireland_beaches.geojson", "type": "application/geo+json", "license": "Public (EPA Ireland / EU open data)"})
     if have_program:
         allow.append({"title": "Program results summary", "path": "downloads/PROGRAM_RESULTS.md", "type": "text/markdown", "license": APACHE})
     items = []
@@ -241,6 +309,8 @@ def main():
     state = json.load(open(HERE / "data.json", encoding="utf-8"))["state"]
     build_stations()
     build_cyano_lakes()
+    build_da_piers()
+    build_ireland()
     build_csvs(state)
     have = build_program_results()
     build_license()
