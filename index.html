@@ -127,7 +127,8 @@
   .plain .helpq,.subhead .helpq,.lede .helpq,.footnote .helpq{margin-left:6px}
 
   /* ---- findings ---- */
-  .filterbar{display:flex;align-items:center;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+  .filterbar{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
+  .filterrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .filterbar .fl-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink5);margin-right:2px}
   .fpill{appearance:none;cursor:pointer;display:flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);color:var(--ink3);border-radius:999px;padding:7px 14px;font-family:var(--sans);font-size:13px;font-weight:600;transition:all .14s}
   .fpill .c{font-family:var(--mono);font-size:11px;opacity:.7}
@@ -298,7 +299,76 @@
   .dl a.dbtn{flex:none;font-family:var(--mono);font-size:12px;font-weight:600;color:var(--acc);border:1px solid var(--border);border-radius:8px;padding:6px 11px;text-decoration:none;background:var(--surface)}
   .dl a.dbtn:hover{background:var(--acc);color:#fff;border-color:var(--acc)}
 
+  /* ---- start here (scientist-first landing) ---- */
+  .hero{max-width:840px;margin-bottom:26px}
+  .hero h1.page{margin:10px 0 14px}
+  .bigrow{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:26px}
+  .bigcard{padding:22px 24px}
+  .bigcard .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;margin-bottom:10px;display:inline-flex;align-items:center;gap:7px}
+  .bigcard .tag i{width:7px;height:7px;border-radius:50%}
+  .bigcard h3{margin:0 0 9px;font-size:18px;font-weight:600;line-height:1.25}
+  .bigcard p{margin:0;font-size:14.5px;line-height:1.58;color:var(--ink2);text-wrap:pretty}
+  .bigcard .num{display:flex;gap:22px;flex-wrap:wrap;margin-top:14px;padding-top:14px;border-top:1px solid var(--faint2)}
+  .bigcard .num div b{display:block;font-size:23px;font-weight:600;letter-spacing:-.02em;line-height:1}
+  .bigcard .num div span{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink5);margin-top:5px;display:block}
+  .secband{display:flex;align-items:baseline;gap:12px;margin:30px 0 14px;flex-wrap:wrap}
+  .secband h2{margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em}
+  .secband p{margin:0;font-size:14px;color:var(--ink4)}
+  .minigrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .minicard{background:var(--surface);border:1px solid var(--border);border-radius:13px;box-shadow:var(--card-sh);padding:17px 19px;cursor:pointer;transition:box-shadow .16s,transform .16s,border-color .16s}
+  .minicard:hover{box-shadow:var(--card-sh-hover);transform:translateY(-2px);border-color:#bfe0dc}
+  .minicard .mh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:7px}
+  .minicard .mt{font-size:15.5px;font-weight:600;line-height:1.25}
+  .minicard p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink3);text-wrap:pretty}
+  .minicard .go{font-size:12.5px;font-weight:600;color:var(--acc);margin-top:10px}
+  .paths{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:26px 0}
+  .pathcard{display:block;text-align:left;cursor:pointer;appearance:none;font-family:var(--sans);background:var(--acc-tint2);border:1px solid #cfe3e1;border-radius:14px;padding:20px 22px;transition:background .15s,transform .15s}
+  .pathcard:hover{background:var(--acc-tint);transform:translateY(-2px)}
+  .pathcard .pe{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--acc);font-weight:600;margin-bottom:8px}
+  .pathcard h3{margin:0 0 6px;font-size:17px;font-weight:600;color:var(--ink)}
+  .pathcard p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink3)}
+  details.primer{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--card-sh);margin:26px 0;overflow:hidden}
+  details.primer>summary{list-style:none;cursor:pointer;padding:16px 22px;font-size:15px;font-weight:600;display:flex;align-items:center;gap:10px}
+  details.primer>summary::-webkit-details-marker{display:none}
+  details.primer>summary::before{content:"＋";font-family:var(--mono);color:var(--acc);font-weight:700}
+  details.primer[open]>summary::before{content:"−"}
+  details.primer .pbody{padding:4px 22px 22px;border-top:1px solid var(--faint)}
+  details.primer .pbody dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:9px 16px;font-size:13.5px;line-height:1.5}
+  details.primer .pbody dt{font-weight:600;color:var(--ink)}
+  details.primer .pbody dd{margin:0;color:var(--ink3)}
+  details.primer .pbody h4{margin:18px 0 10px;font-size:12px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink5)}
+  .statstrip{display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap;padding:14px 20px;background:var(--subtle);border:1px solid var(--faint);border-radius:13px;margin-top:26px}
+  .statstrip .si{display:flex;align-items:baseline;gap:7px}
+  .statstrip .si b{font-size:16px;font-weight:600}
+  .statstrip .si span{font-size:12.5px;color:var(--ink4)}
+  .statstrip .gchip{font-family:var(--mono);font-size:11px;border-radius:6px;padding:3px 8px;display:inline-flex;align-items:center;gap:5px}
+  .statstrip .gchip i{width:6px;height:6px;border-radius:50%}
+  .statstrip .sep{flex:1}
+  /* ---- questions: family groups + hub drawer ---- */
+  .qgroup{margin-bottom:30px}
+  .qgroup .qgt{display:flex;align-items:baseline;gap:11px;margin:0 0 13px;flex-wrap:wrap}
+  .qgroup .qgt h2{margin:0;font-size:18px;font-weight:600;letter-spacing:-.01em}
+  .qgroup .qgt span{font-size:13.5px;color:var(--ink4)}
+  .qcardgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .hubsec{margin-top:22px}
+  .hubsec .hl{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink4);margin:0 0 11px;display:flex;align-items:center;gap:8px}
+  .hubsec .hl b{color:var(--acc);font-weight:600}
+  .hubrow{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:11px 0;border-top:1px solid var(--faint2)}
+  .hubrow.clickable{cursor:pointer;margin:0 -10px;padding:11px 10px;border-radius:9px;border-top:1px solid transparent}
+  .hubrow.clickable:hover{background:var(--acc-tint2)}
+  .hubrow .hm{min-width:0}
+  .hubrow .hnm{font-size:14px;font-weight:600;color:#2b3036}
+  .hubrow .hsub{display:block;font-size:12.5px;color:var(--ink4);margin-top:3px;line-height:1.45}
+  .hubrow .hr{flex:none;display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;max-width:46%}
+  .hubempty{font-size:13px;color:var(--ink5);padding:8px 0 2px;border-top:1px solid var(--faint2)}
+  /* ---- data & reproduce intro ---- */
+  .reprocard{padding:22px 24px;margin-bottom:24px}
+  .reprocard h3{margin:0 0 12px;font-size:16px;font-weight:600}
+  .reprocard ol{margin:0;padding-left:20px}
+  .reprocard li{font-size:14px;line-height:1.6;color:var(--ink2);margin-bottom:7px}
+  .reprocard code{font-family:var(--mono);font-size:12.5px;background:var(--faint3);border:1px solid var(--border);border-radius:5px;padding:1px 6px}
   @media (max-width:860px){
+    .bigrow,.minigrid,.paths,.qcardgrid{grid-template-columns:1fr}
     .hwrap{padding:12px 16px}
     nav.tabs{padding:0 16px}
     main{padding:24px 16px 64px}
@@ -313,9 +383,6 @@
     .snappill .b{display:none}
     .brand{min-width:0}
     .brand .name,.brand .eyebrow{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    /* surface Vocabulary (a core explanatory page) before Lakehouse on mobile */
-    nav.tabs button[data-v="vocabulary"]{order:4}
-    nav.tabs button[data-v="lakehouse"]{order:5}
     .footwrap{grid-template-columns:1fr;gap:24px;padding:28px 16px 40px}
     #leafmap{height:420px}
     .maplegend{max-width:170px;padding:9px 11px}
@@ -347,54 +414,82 @@
     </div>
   </div>
   <nav class="tabs">
-    <button data-v="overview" class="active">Overview</button>
+    <button data-v="overview" class="active">Start here</button>
+    <button data-v="questions">Questions</button>
     <button data-v="findings">Findings</button>
-    <button data-v="frontiers">Frontiers</button>
     <button data-v="models">Models</button>
-    <button data-v="lakehouse">Lakehouse</button>
     <button data-v="map">Map</button>
-    <button data-v="vocabulary">Vocabulary</button>
+    <button data-v="data">Data &amp; reproduce</button>
+    <button data-v="glossary">Glossary</button>
   </nav>
 </header>
 
 <main>
   <div id="loading" class="loadwrap">loading published snapshot…</div>
 
-  <!-- ===== OVERVIEW ===== -->
+  <!-- ===== START HERE ===== -->
   <section class="view" id="overview">
-    <div style="max-width:720px;margin-bottom:18px">
-      <div class="eyebrow">Science Overview</div>
-      <h1 class="page">A unified model of the ocean — and everything it can help us learn.</h1>
-      <p class="lede">We're building one shared model of the coastal ocean — how its physics, weather, runoff, waves, tides, and life all connect — so it can help us learn what's happening beneath the surface and what's coming next. This snapshot shows what we've tested, what held up under audit, and what still needs stronger proof: every claim tied to real evidence, with the failures kept on the record, right beside the wins.</p>
+    <div class="hero">
+      <div class="eyebrow">Monterey Bay AI Lab · public science snapshot</div>
+      <h1 class="page">Do exogenous drivers and bigger models beat persistence for rare coastal hazards?</h1>
+      <p class="lede">Mostly no — and that null is the finding. This lab tests, honestly and against real baselines, whether weather/runoff/ocean drivers and larger models can forecast rare coastal events (unsafe beaches, shellfish toxins, low-oxygen water, lake blooms) better than just persistence and season. We map the few places they genuinely do, ship the forecasts that clear an audit, and keep every null on the record beside the wins. Pick a thread below.</p>
     </div>
 
-    <!-- status / metrics -->
-    <div class="card statpanel">
-      <div class="head">
-        <div class="l">
-          <span class="dot"></span><span class="t">Evidence gate</span>
-          <span class="pill" id="gatepill">—</span>
-        </div>
-        <span class="cap">Retrospective results frozen · prospective scoring underway after the Jun 2026 freeze.</span>
-      </div>
-      <div class="metrics" id="metrics"></div>
+    <!-- the two big things: the law + the shipped win (data-bound) -->
+    <div class="bigrow" id="bigrow"></div>
+
+    <!-- two entry paths -->
+    <div class="paths">
+      <button class="pathcard" onclick="go('questions')">
+        <div class="pe">For domain scientists</div>
+        <h3>Browse by hazard →</h3>
+        <p>14 research questions — beach bacteria, HAB toxins, hypoxia, lake cyano, whales, floods — each with its status, evidence, models, signals, and map in one place.</p>
+      </button>
+      <button class="pathcard" onclick="go('questions')">
+        <div class="pe">For ML / forecasting researchers</div>
+        <h3>The methods story →</h3>
+        <p>The driver-null law, the escapes that beat it (slow-driver lead, first-flush onset, spring-neap tide), and label-free cross-region transfer via a physics "interlingua" — with baselines and CV schemes.</p>
+      </button>
     </div>
 
-    <div class="grid2">
-      <div class="card listcard">
-        <h3><span class="sq"></span>What we've done</h3>
-        <div id="donelist"></div>
-      </div>
-      <div class="card listcard">
-        <h3><span class="ci"></span>What the science says</h3>
-        <div id="sayslist"></div>
-      </div>
-    </div>
+    <!-- the escapes -->
+    <div class="secband"><h2>Where drivers actually win</h2><p>The exceptions to the null — each beats a real baseline.</p></div>
+    <div class="minigrid" id="escapelist"></div>
 
-    <div class="card checks">
-      <h3>Evidence gates <span class="helpq" tabindex="0" aria-label="Evidence gates are automated checks that ask: is the science snapshot fresh, complete, and safe enough to show?"><span>?</span><span class="tip" role="tooltip">Evidence gates are automated checks that ask: is the science snapshot fresh, complete, and safe enough to show?</span></span></h3>
-      <div class="checkgrid" id="checkgrid"></div>
-    </div>
+    <!-- honest nulls -->
+    <div class="secband"><h2>Kept on the record</h2><p>Tested fairly, didn't hold. Knowing this saves the next experiment.</p></div>
+    <div class="minigrid" id="nulllist"></div>
+
+    <!-- how to read primer -->
+    <details class="primer">
+      <summary>How to read this site</summary>
+      <div class="pbody">
+        <h4>Result grades</h4>
+        <dl>
+          <dt>Supported</dt><dd>Held up under audit — beat a real baseline on held-out data, with confidence intervals.</dd>
+          <dt>Caveated</dt><dd>A real signal, but with limits you should read (narrow slice, soft generalization, screening-only).</dd>
+          <dt>Null</dt><dd>Tested and did not clear the bar. Not hidden — kept visible so it isn't re-tried blindly.</dd>
+          <dt>Exploratory</dt><dd>An open lane; correlations exist but haven't survived strict cross-validation yet.</dd>
+        </dl>
+        <h4>Signal verdicts (what a feature did for a target)</h4>
+        <dl>
+          <dt>PRIMARY / KEEP</dt><dd>Added real, audited skill over the baseline.</dd>
+          <dt>WASH</dt><dd>No lift once the baseline was fair.</dd>
+          <dt>REJECT</dt><dd>Hurt the model.</dd>
+          <dt>UNTESTED</dt><dd>Not yet gated.</dd>
+        </dl>
+        <h4>The numbers</h4>
+        <dl>
+          <dt>AUC</dt><dd>Ranking skill: 0.5 ≈ random, 1.0 = perfect ordering of event vs non-event days.</dd>
+          <dt>AP</dt><dd>Average precision — for rare events, how high real events rank. ΔAP is the gain over a baseline.</dd>
+          <dt>Baseline</dt><dd>The honest comparator a model must beat — usually persistence (yesterday) or seasonal climatology, not a strawman.</dd>
+          <dt>Held-out / perm-null</dt><dd>Test rows kept out of fitting; a permutation null checks the lift isn't luck.</dd>
+        </dl>
+      </div>
+    </details>
+
+    <!-- demoted snapshot/build status -->
+    <div class="statstrip" id="statstrip"></div>
   </section>
 
   <!-- ===== FINDINGS ===== -->
@@ -407,13 +502,13 @@
     <div class="fgrid" id="fgrid"></div>
   </section>
 
-  <!-- ===== FRONTIERS ===== -->
-  <section class="view" id="frontiers">
-    <div style="margin-bottom:18px;max-width:760px">
-      <h1 class="sec">Frontiers</h1>
-      <p class="subhead">Everything the lab has taken on — across beaches, shellfish toxins, low-oxygen water, lakes, whales, floods, and the shared physics "language" that ports a model from one place to another. Wins, caveats, and honest nulls all on the record. Click any card to drill in.</p>
+  <!-- ===== QUESTIONS ===== -->
+  <section class="view" id="questions">
+    <div style="margin-bottom:22px;max-width:800px">
+      <h1 class="sec">The questions</h1>
+      <p class="subhead">The 14 research questions this lab is working on, grouped by topic. Each card is a real question with an honest status — open one to see its evidence, models, signals, map, and data gathered in a single place. Wins, caveats, and nulls sit side by side.</p>
     </div>
-    <div class="fgrid" id="frontiergrid"></div>
+    <div id="questionsgroups"></div>
   </section>
 
   <!-- ===== MODELS ===== -->
@@ -428,12 +523,25 @@
     </div>
   </section>
 
-  <!-- ===== LAKEHOUSE ===== -->
-  <section class="view" id="lakehouse">
-    <div style="margin-bottom:22px">
-      <h1 class="sec">Lakehouse</h1>
-      <p class="subhead">Production lake versus shadow. Click any dataset to see its size, source, and recency.</p>
+  <!-- ===== DATA & REPRODUCE ===== -->
+  <section class="view" id="data">
+    <div style="margin-bottom:22px;max-width:800px">
+      <h1 class="sec">Data &amp; reproduce</h1>
+      <p class="subhead">Everything here is open and exported from one frozen snapshot, so the findings, models, and map can't drift apart. Download any file, check its fingerprint, and trace a claim back to its evidence.</p>
     </div>
+    <div class="card reprocard">
+      <h3>Get the data</h3>
+      <div id="downloads" class="downloads"></div>
+    </div>
+    <div class="card reprocard">
+      <h3>Verify &amp; reproduce</h3>
+      <ol>
+        <li>Every download carries a <code>sha256</code> fingerprint. Recompute it (<code>shasum -a 256 &lt;file&gt;</code>) and confirm it matches the value shown — that proves the file is exactly the published snapshot, unchanged.</li>
+        <li>Findings, models, and map layers are all exported from the same <code>data.json</code>, so any claim on this site traces back to the evidence behind it rather than a hand-written summary.</li>
+        <li>The source is licensed Apache-2.0 — the repository is linked in the footer below.</li>
+      </ol>
+    </div>
+    <div class="secband"><h2>Datasets behind this snapshot</h2><p>Production (governed) vs experimental (shadow). Click any row for size, source, and recency.</p></div>
     <div class="lhlists">
       <div class="card lhcard">
         <div class="h"><i style="background:var(--acc)"></i><h3>Production lake</h3></div>
@@ -477,11 +585,11 @@
     <p class="mapnote" style="color:var(--ink5)">Other basins (e.g. Japan / Tokyo Bay) are held under a research-only license, so their station data isn't republished here.</p>
   </section>
 
-  <!-- ===== VOCABULARY ===== -->
-  <section class="view" id="vocabulary">
-    <div style="margin-bottom:18px;max-width:760px">
-      <h1 class="sec">What kind of thing is this?</h1>
-      <p class="subhead">The lab is careful about words. An untrained XGBoost or neural net is a <b>learner</b>, not a model — it only becomes a <b>trained model</b> once it's fitted, evaluated, and registered. A <b>baseline</b> is an honest comparator, not a discovery. A histogram is a <b>lens</b>. This is the working vocabulary, with real examples from the registry and signal catalog.</p>
+  <!-- ===== GLOSSARY ===== -->
+  <section class="view" id="glossary">
+    <div style="margin-bottom:18px;max-width:780px">
+      <h1 class="sec">Glossary</h1>
+      <p class="subhead">This lab is careful about words. An untrained XGBoost or neural net is a <b>learner</b>, not a model — it only becomes a <b>trained model</b> once it's fitted, evaluated, and registered. A <b>baseline</b> is an honest comparator, not a discovery; a <b>signal</b> carries verdicts (KEEP / WASH / REJECT) per target. Each term below links to its real examples from the registry and signal catalog.</p>
     </div>
     <div class="vocabgrid" id="vocabgrid"></div>
   </section>
@@ -490,13 +598,12 @@
 <footer class="sitefoot">
   <div class="footwrap">
     <div class="footcol">
-      <div class="eyebrow" style="margin-bottom:8px">Download the evidence</div>
-      <p class="footnote">Everything on this page is open. Each file carries a SHA-256 so you can verify it matches the published snapshot — the same reproducibility discipline the science is held to. Findings, models, and the station map are exported from the same snapshot, so they can't drift.</p>
-      <div id="downloads" class="downloads"></div>
+      <div class="eyebrow" style="margin-bottom:8px">About this snapshot</div>
+      <p class="footnote">A public science snapshot from the Monterey Bay AI Lab. Every result is graded honestly — <b>Supported</b> held up under audit, <b>Caveated</b> is real but limited, <b>Null</b> was tested and didn't hold — and nulls stay on the record beside the wins. The map shows observation coverage, never an extrapolated prediction surface. Downloads and reproduction live under <a href="#data">Data &amp; reproduce</a>.</p>
     </div>
     <div class="footcol">
-      <div class="eyebrow" style="margin-bottom:8px">How to read this site</div>
-      <p class="footnote">Results are graded honestly: <b>Supported</b> held up under audit, <b>Caveated</b> is real but limited, <b>Null</b> was tested and didn't hold. Signals carry the catalog verdicts (<b>PRIMARY/KEEP</b> kept, <b>WASH</b> no lift, <b>REJECT</b> hurt, <b>UNTESTED</b> not yet gated). Nulls and failures are kept on the record beside the wins. The map shows observation coverage, not an extrapolated prediction surface.</p>
+      <div class="eyebrow" style="margin-bottom:8px">Open source</div>
+      <p class="footnote">Licensed Apache-2.0. The site is a single static page rendered from one frozen <code style="font-family:var(--mono);font-size:12px">data.json</code>, so findings, models, and the map can't drift apart.</p>
       <p class="footnote" id="footstamp"></p>
     </div>
   </div>
@@ -505,7 +612,7 @@
 <div id="drawerhost"></div>
 
 <script>
-let DATA=null, EVID={}, PROJECT_DOCS=[], TAB='overview', FFILTER='all', OPENF=null, DETAIL=null;
+let DATA=null, EVID={}, PROJECT_DOCS=[], TAB='overview', FFILTER='all', FFAM='all', OPENF=null, DETAIL=null;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"'`]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[c]));
 const fmt=n=>n==null?'—':Number(n).toLocaleString();
@@ -530,7 +637,10 @@ const GATE_EXPLAIN={
   promotion_matrix:'Tracks which models or results earned promotion from experiment to serious candidate. Think of it like a scoreboard for what advanced.',
   data_health:'Checks whether the data looks usable: inventories exist, targets have coverage, driver files are tracked, and obvious data problems are not showing up.'
 };
-function helpQ(text){return `<span class="helpq" tabindex="0" aria-label="${esc(text)}" onclick="event.stopPropagation()" onmousedown="event.stopPropagation()">?<span class="tip" role="tooltip">${esc(text)}</span></span>`;}
+/* Tooltip-on-every-word was noise for scientists; definitions now live in the
+   "How to read this" primer (Start here) and the Glossary tab. helpQ is neutered
+   so the hundreds of inline callers render nothing, with no template surgery. */
+function helpQ(text){return '';}
 function h(text,help,cls=''){return `<span class="helped ${cls}">${esc(text)}${helpQ(help)}</span>`;}
 function gateStatusExplain(st){
   if(st==='PASS')return 'PASS means this check found no major problem. It does not mean perfect forever; it means this snapshot cleared that gate.';
@@ -689,15 +799,54 @@ function pickMetric(f){
 }
 function hasCM(f){const m=f.metrics||{};return ['tp','fp','fn','tn'].every(k=>typeof m[k]==='number');}
 
+/* ---------- question spine: families + curated linkage ---------- */
+// The 14 research questions (state.targets) grouped into reader-friendly families.
+const TARGET_FAMILIES=[
+  {title:'Beach water quality',         blurb:'Will the water be safe today?',                         ids:['bacteria_exceedance','ddpcr_culture_safe']},
+  {title:'Harmful algal blooms & toxins',blurb:'When do blooms start and turn toxic?',                  ids:['domoic_acid','cyano_onset']},
+  {title:'Low-oxygen water',            blurb:'Will bottom water suffocate — or recover?',              ids:['hypoxia_lead','renewal_onset']},
+  {title:'Transfer & the shared-physics language',blurb:'Does a model trained here work somewhere new?', ids:['cross_country_transfer','interlingua']},
+  {title:'Ecosystems & mortality',      blurb:'Can ocean drivers explain die-offs?',                    ids:['whale_mortality','sea_star_kelp_ecosystem']},
+  {title:'Floods & tsunamis',           blurb:'Rare, high-consequence coastal events.',                 ids:['sfbay_compound_flood','tsunami_halfduration_screen']},
+  {title:'Discovery & data infrastructure',blurb:'The engines and inputs behind the science.',          ids:['semantic_shadow_lakehouse','foundation_model_inputs']}
+];
+// Curated, by-hand finding->question links (accurate is the point; a wrong link is worse than none).
+const TARGET_FINDINGS={
+  bacteria_exceedance:['claim_bacteria_station_memory_supported','claim_clean_to_dirty_onset','claim_bacteria_decision_rule','claim_forward_2026_holdout_pass','claim_bacteria_honest_forecast_horizon','claim_adaptive_sampling_pilot','claim_catboost_champion_record_dont_ship','claim_lightgbm_catboost_paired_boosts','claim_wet_tail_driver_skill','claim_russian_river_advection_escape','claim_cache_slough_upstream_escape','claim_soil_moisture_gate_positive','claim_carte_numeric_shared_plane_benchmark','claim_new_source_signal_gate_keeps','claim_findings_campaign_targeted_l2_keeps','status_tide_range_data_gap','status_bacteria_breakthrough_lockbox','null_findings_campaign_dry_onset_interaction','null_findings_campaign_dry_onset_symbolic','null_estate_gpu_signal_search'],
+  ddpcr_culture_safe:['null_ddpcr_target_redefinition_artifact'],
+  domoic_acid:['claim_da_toxic_onset_ci_separated'],
+  cyano_onset:['claim_cyano_onset_latitude_law_scoped','claim_mcye_alberta_definitive_replication','claim_mcye_national_replication','null_national_microcystin_driver','null_erie_loading_driver_break'],
+  hypoxia_lead:['claim_hypoxia_gru_sequence_positive','claim_hypoxia_onset_forecast','claim_tokyo_shadow_lakehouse_positives','claim_tokyo_gpu_bottom_chl_positive'],
+  renewal_onset:['null_sog_central_relief_onset_underpowered'],
+  cross_country_transfer:['null_interlingua_eu_resolution_boundary'],
+  interlingua:['null_interlingua_cyano_daily_refutation','null_interlingua_eu_resolution_boundary'],
+  tsunami_halfduration_screen:['claim_tsunami_halfduration_warning_screen'],
+  semantic_shadow_lakehouse:['status_semantic_shadow_refresh_discovery_leads','claim_serendipity_couplings_supported','status_h1_trust_index','status_findings_campaign_10h_rerun'],
+  whale_mortality:[], sea_star_kelp_ecosystem:[], sfbay_compound_flood:[], foundation_model_inputs:[]
+};
+// model.task is the only model->question coupling available.
+const TASK_TARGET={bacteria_classification:'bacteria_exceedance',bacteria_event_detection:'bacteria_exceedance',domoic_acid_forecasting:'domoic_acid'};
+function targetById(id){return (DATA.targets||[]).find(t=>t.id===id);}
+function targetIndexById(id){return (DATA.targets||[]).findIndex(t=>t.id===id);}
+function findingsForTarget(id){const ids=TARGET_FINDINGS[id]||[];const byId={};(DATA.findings||[]).forEach(f=>byId[f.id]=f);return ids.map(x=>byId[x]).filter(Boolean);}
+function modelsForTarget(id){return (DATA.models||[]).filter(m=>TASK_TARGET[m.task]===id);}
+function signalsForTarget(id){return (DATA.signals||[]).map(g=>{const vs=(g.verdicts||[]).filter(v=>v.target===id||String(v.target||'').indexOf(id+'_')===0);return vs.length?{name:g.name,what:g.what,modality:g.modality,verdicts:vs}:null;}).filter(Boolean);}
+// reverse: first-match family for a finding (for grouping the Findings view)
+let _findingFamily={};
+function buildFindingFamily(){_findingFamily={};const fam={};TARGET_FAMILIES.forEach(F=>F.ids.forEach(id=>fam[id]=F.title));TARGET_FAMILIES.forEach(F=>F.ids.forEach(id=>(TARGET_FINDINGS[id]||[]).forEach(fid=>{if(!_findingFamily[fid])_findingFamily[fid]={family:fam[id],target:id};})));}
+function findingFamily(fid){return _findingFamily[fid]||{family:'Cross-cutting & methods',target:null};}
+
 /* ---------- routing ---------- */
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.v));
 function go(v){if(location.hash.slice(1)!==v)location.hash=v;else showView(v);}
+const VIEW_ALIAS={frontiers:'questions',lakehouse:'data',vocabulary:'glossary'};
 function showView(v){
-  if(!['overview','findings','frontiers','models','lakehouse','map','vocabulary'].includes(v))v='overview';
+  v=VIEW_ALIAS[v]||v;
+  if(!['overview','questions','findings','models','map','data','glossary'].includes(v))v='overview';
   TAB=v; if(DETAIL){DETAIL=null;renderDrawer();}
   document.querySelectorAll('nav.tabs button').forEach(b=>{const on=b.dataset.v===v;b.classList.toggle('active',on);if(on&&b.scrollIntoView)try{b.scrollIntoView({inline:'center',block:'nearest'});}catch(e){}});
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id===v));
-  if(DATA){if(v==='findings')renderFindings();if(v==='frontiers')renderFrontiers();if(v==='models')renderModels();if(v==='lakehouse')renderLake();if(v==='vocabulary')renderVocabulary();}
+  if(DATA){if(v==='questions')renderQuestions();if(v==='findings')renderFindings();if(v==='models')renderModels();if(v==='data')renderData();if(v==='glossary')renderVocabulary();}
   if(v==='map')renderMap();
   pv('/'+v,v);
 }
@@ -711,8 +860,9 @@ async function load(){
     const r=await fetch('data.json',{cache:'no-cache'}); const snap=await r.json();
     DATA=snap.state; EVID=snap.evidence||{}; PROJECT_DOCS=snap.project_docs||[];
     DATA._built_pacific=snap.built_pacific; DATA._built_iso=snap.built_iso;
+    buildFindingFamily();
     $('#loading').style.display='none';
-    renderHeader(); renderOverview(); renderDownloads(); applyStaticHelp();
+    renderHeader(); renderOverview(); renderDownloads();
     const fs=$('#footstamp'); if(fs)fs.textContent='Snapshot built '+(DATA._built_pacific||'')+'. Licensed Apache-2.0.';
     showView(location.hash.slice(1)||'overview');
   }catch(e){ $('#loading').textContent='⚠ failed to load data.json — '+e; }
@@ -725,56 +875,60 @@ function renderHeader(){
   $('#snaplabel').title = bp ? 'Built '+bp+' ('+ago(DATA._built_iso)+')' : '';
 }
 
-/* ---------- overview ---------- */
+/* ---------- start here ---------- */
+function openTarget(id){const i=targetIndexById(id);if(i>=0){DETAIL={type:'target',idx:i};renderDrawer();}}
+function targetMini(id){const t=targetById(id);if(!t)return '';const b=frontierBadge(t.status);const p=(t.plain||'');
+  return `<div class="minicard" onclick="openTarget('${esc(id)}')">
+    <div class="mh"><span class="mt">${esc(t.label)}</span><span class="badge" style="background:${b.bg};color:${b.text}"><i style="background:${b.text}"></i>${esc(t.status)}</span></div>
+    <p>${esc(p.slice(0,168))}${p.length>168?'…':''}</p>
+    <div class="go">Open the question →</div></div>`;}
 function renderOverview(){
   const s=DATA, c=s.counts||{};
   const fs=s.findings||[];
   const sup=fs.filter(f=>findingStatus(f.kind)==='Supported').length;
   const nul=fs.filter(f=>findingStatus(f.kind)==='Null').length;
   const assets=s.data_assets||[];
-  const shadowDs=((s.inventory||{}).shadow||{}).datasets||[];
   const totRows=assets.reduce((a,x)=>a+(x.rows||0),0);
+  const ts=s.targets||[];
+  const tSup=ts.filter(t=>t.status==='Supported').length, tNull=ts.filter(t=>t.status==='Null').length;
   const bp=s._built_pacific||''; const mm=/^(\d{4})-(\d{2})/.exec(bp);
-  const metrics=[
-    {k:'Findings', v:String(fs.length), e:'', sub:sup+' supported · '+nul+' null'},
-    {k:'Models', v:String((s.models||[]).length), e:'', sub:(c.claimable||0)+' claimable'},
-    {k:'Governed assets', v:String(assets.length), e:'', sub:fmt(totRows)+' counted rows'},
-    {k:'Last freeze', v: mm?MONTHS[+mm[2]-1]:'—', e: mm?"'"+mm[1].slice(2):'', sub:'prospective open'}
-  ];
-  $('#metrics').innerHTML=metrics.map(m=>`<div class="metric"><div class="k">${h(m.k,metricCardHelp(m.k,m.v,m.sub))}</div><div class="v"><b>${esc(m.v)}</b>${m.e?`<em>${esc(m.e)}${helpQ(metricCardHelp(m.k,m.v,m.sub))}</em>`:''}${!m.e?helpQ(metricCardHelp(m.k,m.v,m.sub)):''}</div><div class="s">${h(m.sub,subMetricHelp(m.k,m.sub))}</div></div>`).join('');
 
-  const gates=s.gates||[];
+  // two big cards: the law + the shipped win (bacteria, data-bound)
+  const bac=targetById('bacteria_exceedance');
+  const lawCard=`<div class="card bigcard">
+    <div class="tag" style="color:var(--ink3)"><i style="background:#b8bdc3"></i>The law</div>
+    <h3>Exogenous drivers rarely beat persistence and season.</h3>
+    <p>Across hazards and basins, adding weather, runoff, and ocean drivers — or a bigger model — usually does <b>not</b> beat a fair baseline of "what just happened" plus the seasonal cycle. The lab treats that null as the default and demands a real, audited margin before believing an escape.</p>
+    <div class="num">
+      <div><b>${ts.length}</b><span>research questions</span></div>
+      <div><b>${tSup}</b><span>with a supported escape</span></div>
+      <div><b>${tNull+nul}</b><span>nulls kept on record</span></div>
+    </div></div>`;
+  const winCard=bac?`<div class="card bigcard" style="cursor:pointer" onclick="openTarget('bacteria_exceedance')">
+    <div class="tag" style="color:#0f7a74"><i style="background:#0f8a84"></i>What shipped</div>
+    <h3>${esc(bac.label)} — a statewide nowcast.</h3>
+    <p>${esc((bac.plain||'').slice(0,230))}${(bac.plain||'').length>230?'…':''}</p>
+    <div class="go" style="margin-top:13px;font-size:13px;font-weight:600;color:var(--acc)">Open the question →</div></div>`:'';
+  $('#bigrow').innerHTML=lawCard+winCard;
+
+  // escapes (drivers genuinely beat the baseline) + honest nulls
+  $('#escapelist').innerHTML=['hypoxia_lead','renewal_onset','cross_country_transfer','cyano_onset'].map(targetMini).join('');
+  $('#nulllist').innerHTML=['whale_mortality','sfbay_compound_flood','ddpcr_culture_safe'].map(targetMini).join('');
+
+  // demoted snapshot/build status strip (gates live here now, not the headline)
   const ov=(s.overall_status||'UNKNOWN');
-  const gp=$('#gatepill'); gp.textContent = ov==='GREEN'?'PASS':ov==='YELLOW'?'PROSPECTIVE':ov==='RED'?'BLOCKED':ov;
-
-  const done=[
-    'Built a bacteria exceedance nowcast and compared it against station-memory and rule-based baselines on held-out beach-days.',
-    'Reframed the problem around clean-to-dirty surprises, focusing the science on events people cannot infer from yesterday alone.',
-    'Tested adaptive sampling replays to see whether model-ranked sampling catches more real exceedances under the same field effort.',
-    'Audited stronger model families, including cases where better ranking did not justify changing the scientific claim.',
-    'Tracked harmful-algae, domoic-acid, hypoxia, transfer, and cross-dataset experiments with positives, nulls, and caveats kept visible.'
-  ];
-  const says=[
-    'The strongest evidence is not a single score — it is the combination of baselines, holdouts, calibration, and failure analysis.',
-    'Some signals are real but narrow. A result can pass one audit and still carry a caveat about generalization, timing, or operating point.',
-    'Null results matter: when a driver, model, or transfer idea fails, it stays in the record so the next experiment starts from the truth.',
-    'The open frontier is prospective scoring — testing new rows after the freeze date before calling a retrospective result final.'
-  ];
-  $('#donelist').innerHTML=done.map(d=>`<div class="li"><span class="ck">✓</span><span class="tx">${esc(d)}${helpQ(statementHelp(d))}</span></div>`).join('');
-  $('#sayslist').innerHTML=says.map(d=>`<div class="li"><span class="bd"></span><span class="tx">${esc(d)}${helpQ(statementHelp(d))}</span></div>`).join('');
-
-  // evidence gates (real)
-  const gv={PASS:{mark:'✓',dot:'#0f8a84',tone:'#0f7a74',bg:'#f3f9f8',border:'#dcebe9'},
-            WARN:{mark:'◔',dot:'#c9a23a',tone:'#9a6a07',bg:'#fdfaf2',border:'#efe4cb'},
-            FAIL:{mark:'✕',dot:'#b4453c',tone:'#b4453c',bg:'#fbeceb',border:'#f0d3d0'}};
+  const ovTxt = ov==='GREEN'?'publishable':ov==='YELLOW'?'prospective scoring open':ov==='RED'?'blocked':ov;
+  const gv={PASS:{dot:'#0f8a84',tone:'#0f7a74',bg:'#eef4f3'},WARN:{dot:'#c9a23a',tone:'#9a6a07',bg:'#fdfaf2'},FAIL:{dot:'#b4453c',tone:'#b4453c',bg:'#fbeceb'}};
   const pretty=id=>String(id||'').replace(/_/g,' ').replace(/\b\w/g,ch=>ch.toUpperCase());
-  $('#checkgrid').innerHTML=gates.map(g=>{const st=(g.overall_status||'').toUpperCase();const v=gv[st]||{mark:'•',dot:'#9aa0a7',tone:'#5b6168',bg:'#f7f9f9',border:'#e7e9e9'};
-    return `<div class="check" style="background:${v.bg};border-color:${v.border}">
-      <div class="top"><i style="background:${v.dot}">${v.mark}</i><span style="color:${v.tone}">${esc(st||'—')}</span>${helpQ(gateStatusExplain(st))}</div>
-      <div class="nm">${esc(pretty(g.gate_id))}${helpQ(gateExplain(g))}</div>
-      <div class="age">${g.age_days!=null?'updated '+g.age_days+'d ago':''}${helpQ(gateAgeExplain(g.age_days))}</div></div>`;}).join('')
-    || '<div class="lhempty">No gates in this snapshot.</div>';
-
+  const gateChips=(s.gates||[]).map(g=>{const st=(g.overall_status||'').toUpperCase();const v=gv[st]||{dot:'#9aa0a7',tone:'#5b6168',bg:'#f1f1f3'};
+    return `<span class="gchip" style="background:${v.bg};color:${v.tone}" title="${esc(pretty(g.gate_id))}: ${esc(st)}"><i style="background:${v.dot}"></i>${esc(pretty(g.gate_id))}</span>`;}).join('');
+  $('#statstrip').innerHTML=
+    `<div class="si"><b>${fs.length}</b><span>findings · ${sup} supported · ${nul} null</span></div>
+     <div class="si"><b>${(s.models||[]).length}</b><span>models · ${c.claimable||0} claimable</span></div>
+     <div class="si"><b>${assets.length}</b><span>data assets · ${fmt(totRows)} rows</span></div>
+     <div class="sep"></div>
+     <div class="si"><span>${mm?MONTHS[+mm[2]-1]+" '"+mm[1].slice(2):''} snapshot · status: <b style="font-weight:600">${esc(ovTxt)}</b></span></div>
+     ${gateChips}`;
 }
 
 /* ---------- findings ---------- */
@@ -787,15 +941,21 @@ function renderFindings(){
   const all=findingsSorted();
   const cnt=st=>all.filter(x=>x.st===st).length;
   const defs=[['all','All',all.length],['Supported','Supported',cnt('Supported')],['Caveated','Caveated',cnt('Caveated')],['Null','Null',cnt('Null')]];
-  $('#filterbar').innerHTML=`<span class="fl-label">Filter${helpQ('Filters let you switch between all findings, supported results, caveated results, and null results.')}</span>`+defs.map(([k,l,c])=>`<button class="fpill${FFILTER===k?' active':''}" data-k="${k}">${esc(l)}${helpQ(k==='all'?'Show every finding in the snapshot.':statusExplain(l))}<span class="c">${c}${helpQ('This number is how many findings are in this filter.')}</span></button>`).join('');
-  document.querySelectorAll('#filterbar .fpill').forEach(b=>b.onclick=()=>{FFILTER=b.dataset.k;renderFindings();});
+  const famOrder=[...TARGET_FAMILIES.map(F=>F.title),'Cross-cutting & methods'];
+  const famPresent=famOrder.filter(fm=>all.some(x=>findingFamily(x.f.id).family===fm));
+  const famCnt=fm=>all.filter(x=>findingFamily(x.f.id).family===fm).length;
+  const statusRow=`<span class="fl-label">Grade</span>`+defs.map(([k,l,c])=>`<button class="fpill${FFILTER===k?' active':''}" data-k="${k}">${esc(l)}<span class="c">${c}</span></button>`).join('');
+  const famRow=`<span class="fl-label">Topic</span>`+[['all','All topics',all.length],...famPresent.map(fm=>[fm,fm,famCnt(fm)])].map(([k,l,c])=>`<button class="fpill fam${FFAM===k?' active':''}" data-f="${esc(k)}">${esc(l)}<span class="c">${c}</span></button>`).join('');
+  $('#filterbar').innerHTML=`<div class="filterrow">${statusRow}</div><div class="filterrow">${famRow}</div>`;
+  document.querySelectorAll('#filterbar .fpill:not(.fam)').forEach(b=>b.onclick=()=>{FFILTER=b.dataset.k;renderFindings();});
+  document.querySelectorAll('#filterbar .fpill.fam').forEach(b=>b.onclick=()=>{FFAM=b.dataset.f;renderFindings();});
 
-  const list=all.filter(x=>FFILTER==='all'||x.st===FFILTER);
+  const list=all.filter(x=>(FFILTER==='all'||x.st===FFILTER)&&(FFAM==='all'||findingFamily(x.f.id).family===FFAM));
   $('#fgrid').innerHTML=list.map(({f,i,st})=>{
     const b=STATUS_BADGE[st], seg=STATUS_SEG[st], strength=STATUS_STRENGTH[st];
     const segs=[0,1,2].map(n=>`<i style="background:${n<strength?seg:'var(--border)'}"></i>`).join('');
     const met=pickMetric(f); const open=OPENF===i;
-    const topic=f.kind==='null'||f.kind==='negative_result'?'Null result':(f.id&&/algae|hab|domoic/i.test(f.id)?'Algae':(f.id&&/hypox|oxygen/i.test(f.id)?'Oxygen':(f.id&&/sampl/i.test(f.id)?'Sampling':'Bacteria')));
+    const topic=findingFamily(f.id).family;
     return `<div class="fcard${open?' open':''}" data-i="${i}">
       <div class="toprow">
         <span class="topic">${esc(topic)}${helpQ(topicExplain(topic))}</span>
@@ -872,6 +1032,7 @@ function renderModels(){
 /* ---------- lakehouse ---------- */
 function lakeAssets(){return (DATA.data_assets||[]).filter(a=>a.exists!==false);}
 function shadowAssets(){return (((DATA.inventory||{}).shadow||{}).datasets)||[];}
+function renderData(){renderLake();}
 function renderLake(){
   const lake=lakeAssets(), shadow=shadowAssets();
   $('#lakesub').innerHTML=lake.length+' datasets · governed'+helpQ('Governed datasets are the production assets in the public snapshot ledger.');
@@ -1095,39 +1256,78 @@ function renderDownloads(){
   }).catch(()=>{box.innerHTML='<div class="footnote">Downloads manifest unavailable on this host.</div>';});
 }
 
-/* ---------- frontiers (all hazards + methods, drill-down) ---------- */
+/* ---------- questions (research-question spine, grouped by family) ---------- */
 function frontierBadge(st){return STATUS_BADGE[st]||{bg:'#eaf1fb',text:'#3a6ea5'};}
-function renderFrontiers(){
-  const ts=DATA.targets||[];
-  $('#frontiergrid').innerHTML=ts.map((t,i)=>{
-    const b=frontierBadge(t.status); const kind=t.kind==='method'?'Method':'Hazard';
-    const p=(t.plain||'');
-    return `<div class="fcard" data-i="${i}">
-      <div class="toprow">
-        <span class="topic">${esc(kind)}${helpQ(kind==='Method'?'A method is a reusable approach, not one specific hazard.':'A hazard is the coastal problem or event being studied.')}</span>
-        <span class="badge" style="background:${b.bg};color:${b.text}"><i style="background:${b.text}"></i>${esc(t.status)}${helpQ(statusExplain(t.status)||frontierHelp(t))}</span>
-      </div>
-      <h3>${esc(t.label)}${helpQ(frontierHelp(t))}</h3>
-      ${t.question?`<p class="plain" style="font-style:italic;color:var(--ink4);margin:0 0 8px">${esc(t.question)}${helpQ('This is the research question the frontier is trying to answer.')}</p>`:''}
-      <p class="plain">${esc(p.slice(0,184))}${p.length>184?'…':''}${helpQ(statementHelp(p))}</p>
-      <div class="ffoot"><span class="mean">${esc(STATUS_MEANING[t.status]||'Kept on the record')}${helpQ(statusExplain(t.status)||frontierHelp(t))}</span><span class="cta">Drill in →${helpQ('Open the full frontier explanation, including the current limits.')}</span></div>
-    </div>`;
-  }).join('') || '<div class="lhempty">No research targets in this snapshot.</div>';
-  document.querySelectorAll('#frontiergrid .fcard').forEach(c=>c.onclick=e=>{if(e.target.closest('.helpq'))return;DETAIL={type:'target',idx:+c.dataset.i};renderDrawer();});
+function questionCard(id){
+  const t=targetById(id); if(!t)return ''; const i=targetIndexById(id); const b=frontierBadge(t.status);
+  const nf=findingsForTarget(id).length, nm=modelsForTarget(id).length, ns=signalsForTarget(id).length;
+  const ev=[]; if(nf)ev.push(nf+' finding'+(nf>1?'s':'')); if(nm)ev.push(nm+' model'+(nm>1?'s':'')); if(ns)ev.push(ns+' signal'+(ns>1?'s':''));
+  const p=(t.plain||'');
+  return `<div class="fcard" data-i="${i}">
+    <div class="toprow"><span class="topic">${esc(t.kind==='method'?'Method':'Hazard')}</span>
+      <span class="badge" style="background:${b.bg};color:${b.text}"><i style="background:${b.text}"></i>${esc(t.status)}</span></div>
+    <h3>${esc(t.question||t.label)}</h3>
+    <p class="plain">${esc(p.slice(0,150))}${p.length>150?'…':''}</p>
+    <div class="ffoot"><span class="mean">${ev.length?esc(ev.join(' · ')):esc(t.label)}</span><span class="cta">Open →</span></div>
+  </div>`;
 }
+function renderQuestions(){
+  const host=$('#questionsgroups'); const have=new Set((DATA.targets||[]).map(t=>t.id)); const used=new Set();
+  let html=TARGET_FAMILIES.map(F=>{
+    const ids=F.ids.filter(id=>have.has(id)); if(!ids.length)return ''; ids.forEach(id=>used.add(id));
+    return `<div class="qgroup"><div class="qgt"><h2>${esc(F.title)}</h2><span>${esc(F.blurb)}</span></div>
+      <div class="qcardgrid">${ids.map(questionCard).join('')}</div></div>`;
+  }).join('');
+  const leftover=(DATA.targets||[]).map(t=>t.id).filter(id=>!used.has(id));
+  if(leftover.length)html+=`<div class="qgroup"><div class="qgt"><h2>Other</h2></div><div class="qcardgrid">${leftover.map(questionCard).join('')}</div></div>`;
+  host.innerHTML=html || '<div class="lhempty">No research questions in this snapshot.</div>';
+  document.querySelectorAll('#questionsgroups .fcard').forEach(c=>c.onclick=()=>{DETAIL={type:'target',idx:+c.dataset.i};renderDrawer();});
+}
+// jump from a hub to the matching finding card, expanded
+function openFindingById(id){
+  const i=(DATA.findings||[]).findIndex(f=>f.id===id); if(i<0)return;
+  OPENF=i; FFILTER='all'; DETAIL=null; go('findings');
+  setTimeout(()=>{const el=document.querySelector('#fgrid .fcard[data-i="'+i+'"]'); if(el)el.scrollIntoView({block:'center',behavior:'smooth'});},140);
+}
+/* ---------- the question hub (everything for one question in one place) ---------- */
+function hubFindings(id){const fl=findingsForTarget(id); if(!fl.length)return '';
+  return `<div class="hubsec"><div class="hl">Evidence · <b>${fl.length}</b> finding${fl.length>1?'s':''}</div>${
+    fl.map(f=>{const st=findingStatus(f.kind),bb=STATUS_BADGE[st],mt=pickMetric(f),tx=(f.plain||f.headline||'');
+      return `<div class="hubrow clickable" onclick="openFindingById('${esc(f.id)}')">
+        <div class="hm"><span class="hnm">${esc(f.title)}</span><span class="hsub">${esc(tx.slice(0,140))}${tx.length>140?'…':''}</span></div>
+        <div class="hr"><span class="vchip" style="background:${bb.bg};color:${bb.text}">${st}</span>${mt&&mt.label!=='Headline'&&mt.value!=='—'?`<span class="vchip" style="background:var(--faint3);color:var(--ink2)">${esc(mt.label)} ${esc(mt.value)}</span>`:''}<span class="chev">→</span></div>
+      </div>`;}).join('')}</div>`;}
+function hubModels(id){const ml=modelsForTarget(id); if(!ml.length)return '';
+  return `<div class="hubsec"><div class="hl">Models · <b>${ml.length}</b></div>${
+    ml.map(m=>{const st=modelStatus(m.status),bb=STATUS_BADGE[st],i=(DATA.models||[]).indexOf(m);
+      return `<div class="hubrow clickable" onclick="DETAIL={type:'model',idx:${i}};renderDrawer();">
+        <div class="hm"><span class="hnm mono" style="font-family:var(--mono);font-size:13px">${esc(m.model_id)}</span><span class="hsub">${esc([m.family,m.task].filter(Boolean).join(' · '))}</span></div>
+        <div class="hr"><span class="vchip" style="background:${bb.bg};color:${bb.text}">${st}</span><span class="chev">→</span></div>
+      </div>`;}).join('')}</div>`;}
+function hubSignals(id){const sl=signalsForTarget(id); if(!sl.length)return '';
+  const show=sl.slice(0,12);
+  return `<div class="hubsec"><div class="hl">Signals tested · <b>${sl.length}</b></div>${
+    show.map(g=>`<div class="hubrow"><div class="hm"><span class="hnm">${esc(g.name)}</span><span class="hsub">${esc((g.what||'').slice(0,120))}</span></div><div class="hr">${g.verdicts.map(v=>statusChip(v.status)).join('')}</div></div>`).join('')}
+    ${sl.length>12?`<div class="hubempty">+${sl.length-12} more — see Glossary → Signals.</div>`:''}</div>`;}
 function targetDrawer(){
   const t=(DATA.targets||[])[DETAIL.idx]; if(!t)return '';
-  const b=frontierBadge(t.status); const kind=t.kind==='method'?'Method':'Research target';
+  const b=frontierBadge(t.status); const kind=t.kind==='method'?'Method':'Research question';
+  const dom=mapDomainFor(t.id||t.label);
+  const mapBlock=`<div class="hubsec"><div class="hl">On the map</div>${dom?mapLink(dom):'<p class="footnote" style="margin:0;color:var(--ink5)">No public spatial layer for this question yet — it needs per-location observations + held-out predictions.</p>'}</div>`;
   return `<div>
     <div class="dhead">
-      <div><div class="eb">${esc(kind)}${helpQ(kind==='Method'?'A method is a reusable scientific approach.':'A research target is the event or question being studied.')}</div><div class="ti">${esc(t.label)}${helpQ(frontierHelp(t))}</div>${t.question?`<div class="nt">${esc(t.question)}${helpQ('This is the question the lab tested or wants to test for this frontier.')}</div>`:''}</div>
+      <div><div class="eb">${esc(kind)} · ${esc(t.status)}</div><div class="ti">${esc(t.label)}</div>${t.question?`<div class="nt">${esc(t.question)}</div>`:''}</div>
       <button class="dclose" onclick="closeDrawer()">×</button>
     </div>
     <div class="dbody">
-      <span class="badge" style="background:${b.bg};color:${b.text};margin-bottom:16px"><i style="background:${b.text}"></i>${esc(t.status)}${helpQ(statusExplain(t.status)||frontierHelp(t))}</span>
-      <p class="plain">${esc(t.plain||'')}${helpQ(statementHelp(t.plain||''))}</p>
-      ${t.detail?`<div class="dlabel">The detail${helpQ('This gives more context than the short card. It may include limits, caveats, or why the result matters.')}</div><p class="plain" style="font-size:14.5px;color:var(--ink2)">${esc(t.detail)}${helpQ(statementHelp(t.detail))}</p>`:''}
-      ${(()=>{const d=mapDomainFor(t.id||t.label);return d?mapLink(d):'<p class="footnote" style="margin-top:8px;color:var(--ink5)">No spatial coverage map for this result yet — it needs the run to emit per-location observations + held-out predictions.</p>';})()}
+      <span class="badge" style="background:${b.bg};color:${b.text};margin-bottom:16px"><i style="background:${b.text}"></i>${esc(t.status)} — ${esc(STATUS_MEANING[t.status]||'kept on the record')}</span>
+      <p class="plain">${esc(t.plain||'')}</p>
+      ${t.detail?`<div class="dlabel">The detail</div><p class="plain" style="font-size:14.5px;color:var(--ink2)">${esc(t.detail)}</p>`:''}
+      ${hubFindings(t.id)}
+      ${hubModels(t.id)}
+      ${hubSignals(t.id)}
+      ${mapBlock}
+      <div class="hubsec"><div class="hl">Reproduce</div><button class="lnk" onclick="go('data')">Get the data &amp; verify the snapshot →</button></div>
     </div>
   </div>`;
 }
