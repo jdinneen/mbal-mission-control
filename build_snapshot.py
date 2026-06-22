@@ -229,6 +229,79 @@ def _claim_card_findings():
     return out
 
 
+def _non_bacteria_claim_card_findings():
+    data = _local_json("reports/non_bacteria_claim_cards/claim_cards.json") or {}
+    out = []
+    for card in data.get("claim_cards") or []:
+        cid = card.get("id")
+        metrics = card.get("metrics") or {}
+        baseline = card.get("baseline") or {}
+        holdout = card.get("holdout") or {}
+        uncertainty = card.get("uncertainty") or {}
+        null_control = card.get("null_control") or {}
+        if not cid or not metrics:
+            continue
+        winner = baseline.get("winner")
+        best_ap = baseline.get(f"{winner}_ap") if winner else None
+        delta = metrics.get("delta_ap_vs_best_baseline")
+        ci = uncertainty.get("delta_ap_ci95")
+        perm_p = null_control.get("permutation_p")
+        title = card.get("title") or cid.replace("_", " ")
+        out.append(_finding(
+            f"claim_{cid}",
+            title,
+            "claim" if card.get("verdict") == "SUPPORTED_CURRENT_EVIDENCE" else "caveat",
+            (
+                f"AP {_r(metrics.get('model_ap'))} vs {winner or 'best baseline'} {_r(best_ap)}; "
+                f"dAP +{_r(delta)} CI {ci}; perm-p {_r(perm_p)}"
+            ),
+            card.get("claim") or "Leakage-guarded chronological holdout beats the best naive baseline.",
+            (
+                f"{holdout.get('type', 'chronological')} holdout at {holdout.get('cutoff')}; "
+                f"train/test rows {holdout.get('train_rows')}/{holdout.get('test_rows')} with "
+                f"{holdout.get('train_events')}/{holdout.get('test_events')} events. "
+                f"Best baseline is {winner}; dAP CI excludes zero: {uncertainty.get('ci_excludes_zero')}; "
+                f"permutation null passes: {null_control.get('passes')}. Source table: {card.get('source_table')}."
+            ),
+            "reports/non_bacteria_claim_cards/claim_cards.json",
+            {
+                "model_ap": _r(metrics.get("model_ap")),
+                "best_baseline": winner,
+                "best_baseline_ap": _r(best_ap),
+                "delta_ap": _r(delta),
+                "delta_ap_ci95": ci,
+                "model_auc": _r(metrics.get("model_auc")),
+                "perm_p": _r(perm_p),
+                "test_rows": holdout.get("test_rows"),
+                "test_events": holdout.get("test_events"),
+                "test_base_rate": _r(holdout.get("test_base_rate")),
+                "ci_excludes_zero": uncertainty.get("ci_excludes_zero"),
+            },
+            card.get("deployment_caveat"),
+        ))
+    non_promoted = data.get("non_promoted") or []
+    if non_promoted:
+        blocked = [x for x in non_promoted if x.get("status") == "BLOCKED"]
+        support = [x for x in non_promoted if x.get("status") == "SUPPORTING_ONLY"]
+        out.append(_finding(
+            "status_non_bacteria_night_run_tight_gate",
+            "Non-bacteria night run promoted only two guarded claims",
+            "status",
+            f"{len(out)} promoted; {len(blocked)} blocked; {len(support)} supporting-only",
+            "The new run did not headline every apparent lift. It promoted the HAB pDA exceedance and Gulf hypoxia cards, while sparse, descriptive, or target-leaky lanes stayed blocked or supporting-only.",
+            "Claim-card critic over the non-bacteria night-run bundle, enforcing chronological holdout, stronger baseline, bootstrap CI, permutation null, and leakage controls.",
+            "reports/non_bacteria_claim_cards/claim_cards.json",
+            {
+                "promoted_claims": len(out),
+                "blocked": len(blocked),
+                "supporting_only": len(support),
+                "verdict": data.get("verdict"),
+            },
+            "This is the anti-bloat card: the skipped lanes are recorded, not dressed up as discoveries.",
+        ))
+    return out
+
+
 def _science_breakthrough_findings():
     cards = _local_json("reports/science_breakthrough/science_claim_cards.json") or {}
     gate = _local_json("reports/bacteria/breakthrough_gate/breakthrough_gate.json") or {}
@@ -1175,6 +1248,7 @@ def _extra_findings():
     cards = []
     for maker in (
         _claim_card_findings,
+        _non_bacteria_claim_card_findings,
         _science_breakthrough_findings,
         _model_lab_findings,
         _bacteria_operational_findings,
@@ -1312,6 +1386,20 @@ def _append_latest_public_data_assets(state):
             "Semantic-shadow all-domain discovery runner; target profile metadata for scanned domains.",
             note="Public-safe metadata for the refreshed shadow-discovery read.",
         ),
+        _asset_entry(
+            "hab_sota_panel",
+            "lakehouse/silver/hab/hab_sota_panel.parquet",
+            "Strict-critic HAB panel for pDA exceedance using prior/as-of HAB state plus ocean and spill context.",
+            time_column="time",
+            note="Current pDA/tDA/dDA and same-sample HAB measurements are excluded from the promoted claim card.",
+        ),
+        _asset_entry(
+            "gulf_hypoxia_watch",
+            "lakehouse/silver/external_curated/gulf_hypoxia_watch/gulf_hypoxia_watch.parquet",
+            "Gulf hypoxia survey table for bottom-oxygen flag modeling, station geometry, cruise context, and season.",
+            time_column="date",
+            note="bottom_do_mgl defines the target and is excluded from the promoted model features.",
+        ),
     ]
     for item in additions:
         if item and item["asset_id"] not in existing:
@@ -1348,10 +1436,13 @@ def _augment_state(state):
         1 for f in state["findings"]
         if f.get("kind") in {"claim", "positive", "replication", "operational"}
     )
-    counts["caveated_findings"] = sum(1 for f in state["findings"] if f.get("kind") == "caveat")
+    counts["caveated_findings"] = sum(
+        1 for f in state["findings"]
+        if f.get("kind") in {"caveat", "status", "ablation"}
+    )
     counts["null_findings"] = sum(1 for f in state["findings"] if f.get("kind") in {"null", "negative"})
     state["counts"] = counts
-    note = "Static build joined cockpit state with H1 trust index, latest HAB/bacteria/tsunami/semantic-shadow claim cards, public data assets, and report evidence."
+    note = "Static build joined cockpit state with H1 trust index, latest non-bacteria/HAB/hypoxia/bacteria/tsunami/semantic-shadow claim cards, public data assets, and report evidence."
     actions = list(state.get("next_actions") or [])
     if note not in actions:
         actions.insert(0, note)
@@ -1682,13 +1773,13 @@ def _build_targets():
          "plain": "Our strongest result: a statewide nowcast at AP 0.5099 / ROC-AUC 0.868, calibrated, independently audited, out-of-time stable 2022–2026, and deploy-ready in 8 of 9 counties — beating station-memory, seasonal-naive, and the AB411 rain rule."},
         {"id": "domoic_acid", "label": "Domoic-acid shellfish toxin", "status": "Supported",
          "question": "Will a pier's next sample exceed particulate domoic acid 500 ng/L?",
-         "plain": "Scoped positive: the promoted claim is the prior-clean toxic-onset slice, where the updated model reaches AP 0.1347 versus seasonal-naive AP 0.0259, margin +0.1089 with station-clustered CI [0.0566, 0.2078] and permutation-p 0.002. The pooled model also ranks, but the headline is the onset gate; the older C-HARM framing remains rejected as a broken baseline."},
+         "plain": "Supported, with scope discipline: the strict-critic HAB pDA exceedance card reaches AP 0.2571 vs persistence AP 0.1415, dAP +0.1156 with CI [0.0468, 0.265] and permutation-p 0.005. The prior-clean toxic-onset slice also clears: AP 0.1347 versus seasonal-naive AP 0.0259, margin +0.1089 with station-clustered CI [0.0566, 0.2078] and permutation-p 0.002. These are retrospective held-out claims, not deployed warnings."},
         {"id": "cross_country_transfer", "label": "Cross-country zero-shot transfer", "status": "Caveated",
          "question": "Can a label-free model rank bacteria exceedance in a country with no local training labels?",
          "plain": "Real but modest: non-dimensional physics groups transfer US↔Ireland zero-shot at AP ~0.136 (~1.9× over a matched-prevalence baseline) and to Australia, but the regional-transfer story softens under tougher held-out audits."},
         {"id": "hypoxia_lead", "label": "Coastal hypoxia (low oxygen) lead", "status": "Supported",
          "question": "Will bottom water go hypoxic (DO ≤ 2 mg/L) 7–14 days ahead?",
-         "plain": "The driver-null's first clean escape: thermal stratification adds +0.021 AP of real lead-skill over persistence+season and survives a permutation null (p=0.005); wind, salinity, and chlorophyll wash out."},
+         "plain": "The low-oxygen lane now has two supported escapes. Gulf hypoxia flags clear a strict chronological card at AP 0.2698 vs persistence AP 0.1453, dAP +0.1245 with CI [0.0524, 0.2061] and permutation-p 0.005, with bottom DO excluded because it defines the target. The older coastal lead result remains: thermal stratification adds +0.021 AP of real lead-skill over persistence+season and survives a permutation null."},
         {"id": "renewal_onset", "label": "Fjord oxygen-renewal onset", "status": "Supported",
          "question": "Will a dense-water renewal re-oxygenate an anoxic fjord within ~3 weeks?",
          "plain": "Deep-water density gives +0.08 AP of renewal-onset lead-skill that is year-robust at ~21-day lead — the slow-driver principle partially transfers to a second basin once the carrier and objective match the physics."},

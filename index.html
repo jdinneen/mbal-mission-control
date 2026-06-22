@@ -816,14 +816,14 @@ const TARGET_FAMILIES=[
 const TARGET_FINDINGS={
   bacteria_exceedance:['claim_bacteria_station_memory_supported','claim_clean_to_dirty_onset','claim_bacteria_decision_rule','claim_forward_2026_holdout_pass','claim_bacteria_honest_forecast_horizon','claim_adaptive_sampling_pilot','claim_catboost_champion_record_dont_ship','claim_lightgbm_catboost_paired_boosts','claim_wet_tail_driver_skill','claim_russian_river_advection_escape','claim_cache_slough_upstream_escape','claim_soil_moisture_gate_positive','claim_carte_numeric_shared_plane_benchmark','claim_new_source_signal_gate_keeps','claim_findings_campaign_targeted_l2_keeps','status_tide_range_data_gap','status_bacteria_breakthrough_lockbox','null_findings_campaign_dry_onset_interaction','null_findings_campaign_dry_onset_symbolic','null_estate_gpu_signal_search'],
   ddpcr_culture_safe:['null_ddpcr_target_redefinition_artifact'],
-  domoic_acid:['claim_da_toxic_onset_ci_separated'],
+  domoic_acid:['claim_hab_exceed_strict_critic','claim_da_toxic_onset_ci_separated'],
   cyano_onset:['claim_cyano_onset_latitude_law_scoped','claim_mcye_alberta_definitive_replication','claim_mcye_national_replication','null_national_microcystin_driver','null_erie_loading_driver_break'],
-  hypoxia_lead:['claim_hypoxia_gru_sequence_positive','claim_hypoxia_onset_forecast','claim_tokyo_shadow_lakehouse_positives','claim_tokyo_gpu_bottom_chl_positive'],
+  hypoxia_lead:['claim_gulf_hypoxia_flag','claim_hypoxia_gru_sequence_positive','claim_hypoxia_onset_forecast','claim_tokyo_shadow_lakehouse_positives','claim_tokyo_gpu_bottom_chl_positive'],
   renewal_onset:['null_sog_central_relief_onset_underpowered'],
   cross_country_transfer:['null_interlingua_eu_resolution_boundary'],
   interlingua:['null_interlingua_cyano_daily_refutation','null_interlingua_eu_resolution_boundary'],
   tsunami_halfduration_screen:['claim_tsunami_halfduration_warning_screen'],
-  semantic_shadow_lakehouse:['status_semantic_shadow_refresh_discovery_leads','claim_serendipity_couplings_supported','status_h1_trust_index','status_findings_campaign_10h_rerun'],
+  semantic_shadow_lakehouse:['status_non_bacteria_night_run_tight_gate','status_semantic_shadow_refresh_discovery_leads','claim_serendipity_couplings_supported','status_h1_trust_index','status_findings_campaign_10h_rerun'],
   whale_mortality:[], sea_star_kelp_ecosystem:[], sfbay_compound_flood:[], foundation_model_inputs:[]
 };
 // model.task is the only model->question coupling available.
@@ -895,8 +895,10 @@ function renderOverview(){
   const tSup=ts.filter(t=>t.status==='Supported').length, tNull=ts.filter(t=>t.status==='Null').length;
   const bp=s._built_pacific||''; const mm=/^(\d{4})-(\d{2})/.exec(bp);
 
-  // two big cards: the law + the shipped win (bacteria, data-bound)
+  // two big cards: the law + the latest promoted non-bacteria wins when present.
   const bac=targetById('bacteria_exceedance');
+  const byId={}; fs.forEach(f=>byId[f.id]=f);
+  const latestWins=['claim_hab_exceed_strict_critic','claim_gulf_hypoxia_flag'].map(id=>byId[id]).filter(Boolean);
   const lawCard=`<div class="card bigcard">
     <div class="tag" style="color:var(--ink3)"><i style="background:#b8bdc3"></i>The honest result</div>
     <h3>Most of the time: no.</h3>
@@ -906,11 +908,15 @@ function renderOverview(){
       <div><b>${tSup}</b><span>where a model wins</span></div>
       <div><b>${tNull+nul}</b><span>dead ends kept on record</span></div>
     </div></div>`;
-  const winCard=bac?`<div class="card bigcard" style="cursor:pointer" onclick="openTarget('bacteria_exceedance')">
+  const winCard=latestWins.length?`<div class="card bigcard" style="cursor:pointer" onclick="openFinding('${esc(latestWins[0].id)}')">
+    <div class="tag" style="color:#0f7a74"><i style="background:#0f8a84"></i>Latest promoted wins</div>
+    <h3>HAB exceedance and Gulf hypoxia now beat persistence.</h3>
+    <p>${latestWins.map(f=>esc(f.title+': '+(f.headline||''))).join('<br>')}</p>
+    <div class="go" style="margin-top:13px;font-size:13px;font-weight:600;color:var(--acc)">Open the evidence →</div></div>`:(bac?`<div class="card bigcard" style="cursor:pointer" onclick="openTarget('bacteria_exceedance')">
     <div class="tag" style="color:#0f7a74"><i style="background:#0f8a84"></i>What works</div>
     <h3>A statewide beach-safety forecast that beats the status quo.</h3>
     <p>${esc((bac.plain||'').slice(0,230))}${(bac.plain||'').length>230?'…':''}</p>
-    <div class="go" style="margin-top:13px;font-size:13px;font-weight:600;color:var(--acc)">Open the question →</div></div>`:'';
+    <div class="go" style="margin-top:13px;font-size:13px;font-weight:600;color:var(--acc)">Open the question →</div></div>`:'');
   $('#bigrow').innerHTML=lawCard+winCard;
 
   // escapes (drivers genuinely beat the baseline) + honest nulls
