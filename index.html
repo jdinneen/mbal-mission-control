@@ -65,10 +65,10 @@
   .snappill>.b{font-family:var(--mono);font-size:11px;color:#a3a9b0}
   nav.tabs{max-width:1120px;margin:0 auto;padding:0 28px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
   nav.tabs::-webkit-scrollbar{display:none}
-  nav.tabs button{position:relative;appearance:none;border:none;background:none;cursor:pointer;padding:12px 14px 14px;font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ink3);transition:color .15s;white-space:nowrap}
-  nav.tabs button:hover{color:var(--ink)}
-  nav.tabs button.active{color:var(--acc)}
-  nav.tabs button.active::after{content:"";position:absolute;left:14px;right:14px;bottom:-1px;height:2px;background:var(--acc);border-radius:2px}
+  nav.tabs button, nav.tabs a{position:relative;appearance:none;border:none;background:none;cursor:pointer;padding:12px 14px 14px;font-family:var(--sans);font-size:14px;font-weight:600;color:var(--ink3);transition:color .15s;white-space:nowrap;text-decoration:none;display:inline-block;}
+  nav.tabs button:hover, nav.tabs a:hover{color:var(--ink)}
+  nav.tabs button.active, nav.tabs a.active{color:var(--acc)}
+  nav.tabs button.active::after, nav.tabs a.active::after{content:"";position:absolute;left:14px;right:14px;bottom:-1px;height:2px;background:var(--acc);border-radius:2px}
 
   main{max-width:1120px;margin:0 auto;padding:36px 28px 80px}
   .view{display:none}
@@ -495,6 +495,7 @@
     <button data-v="ledger">Ledger</button>
     <button data-v="data">Data &amp; reproduce</button>
     <button data-v="glossary">Glossary</button>
+    <a href="https://jdinneen.github.io/monterey-bay-today/" target="_blank">Monterey Bay Today ↗</a>
   </nav>
 </header>
 
