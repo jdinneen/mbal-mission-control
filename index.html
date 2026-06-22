@@ -310,6 +310,8 @@
   .loadwrap{padding:80px 28px;text-align:center;color:var(--ink4);font-family:var(--mono);font-size:14px}
 
   /* ---- map ---- */
+  .maplink{display:inline-flex;align-items:center;gap:6px;border:1px solid #cfe3e1!important;background:var(--acc-tint2)!important;color:var(--acc)!important;font-family:var(--sans)!important;font-weight:600;font-size:13px!important;padding:9px 13px!important;line-height:1.35;text-align:left}
+  .maplink:hover{background:var(--acc)!important;color:#fff!important;border-color:var(--acc)!important}
   .mapcontrols{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
   .mapdomain{display:inline-flex;gap:3px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:3px;box-shadow:var(--card-sh)}
   .mapdomain button{appearance:none;border:none;background:none;cursor:pointer;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink3);padding:7px 14px;border-radius:8px;transition:all .14s}
@@ -834,6 +836,7 @@ function findingDetail(f){
     ${kvs?`<div class="kv">${kvs}</div>`:''}
     ${cm}
     ${evbtn}
+    ${(()=>{const d=mapDomainFor((f.id||'')+' '+(f.title||''));return d?('<div style="margin-top:12px">'+mapLink(d)+'</div>'):'';})()}
   </div>`;
 }
 function toggleEv(btn,key){
@@ -940,6 +943,15 @@ function vocabDrawer(key){
 }
 
 /* ---------- map: multi-domain (CA bacteria / US lakes), honest views ---------- */
+// which map domain (if any) a result/model belongs to — null = no spatial map yet
+function mapDomainFor(s){const t=String(s||'').toLowerCase();
+  if(/cyano|\blake/.test(t))return 'cyano';
+  if(/bacteria|beach|enterococc|exceedance|station.?memory|clean.?to.?dirty|sampling/.test(t))return 'bacteria';
+  return null;}
+const DOMAIN_LABEL={bacteria:'CA beach bacteria',cyano:'US lakes · cyano'};
+let _pendingDomain=null;
+function goMap(dom){_pendingDomain=dom||null; if(DETAIL){DETAIL=null;renderDrawer();} location.hash='map';}
+function mapLink(domain){return domain?`<button class="lnk maplink" onclick="goMap('${domain}')">📍 Where's the data &amp; how confident is the model? See the ${esc(DOMAIN_LABEL[domain]||domain)} map →</button>`:'';}
 const MAP_DOMAINS=[
   {key:'bacteria',label:'CA beach bacteria',file:'stations.geojson',unit:'samples',valueLabel:'exceedance (AB411 > 104)',siteWord:'stations',hasSkill:true},
   {key:'cyano',label:'US lakes · cyano',file:'lakes_cyano.geojson',unit:'obs-weeks',valueLabel:'bloom frequency',siteWord:'lakes',hasSkill:false}
@@ -997,12 +1009,12 @@ function selectDomain(key){
 function renderMap(){
   const host=$('#leafmap'); if(!host)return;
   if(!window.L){host.innerHTML='<div class="mapfail">The map library didn’t load (offline?). The station data is still downloadable in the footer below.</div>';return;}
-  if(_map){setTimeout(()=>_map.invalidateSize(),60);return;}
+  if(_map){setTimeout(()=>_map.invalidateSize(),60);if(_pendingDomain){selectDomain(_pendingDomain);_pendingDomain=null;}return;}
   _map=L.map('leafmap',{scrollWheelZoom:false}).setView([37,-110],4);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO',subdomains:'abcd',maxZoom:19}).addTo(_map);
   document.querySelectorAll('#maptoggle button').forEach(b=>b.onclick=()=>mDraw(b.dataset.m));
   document.querySelectorAll('#mapdomain button').forEach(b=>b.onclick=()=>selectDomain(b.dataset.d));
-  selectDomain('bacteria');
+  selectDomain(_pendingDomain||'bacteria'); _pendingDomain=null;
 }
 /* ---------- downloads footer (manifest-driven, allowlisted) ---------- */
 function renderDownloads(){
@@ -1047,6 +1059,7 @@ function targetDrawer(){
       <span class="badge" style="background:${b.bg};color:${b.text};margin-bottom:16px"><i style="background:${b.text}"></i>${esc(t.status)}</span>
       <p class="plain">${esc(t.plain||'')}</p>
       ${t.detail?`<div class="dlabel">The detail</div><p class="plain" style="font-size:14.5px;color:var(--ink2)">${esc(t.detail)}</p>`:''}
+      ${(()=>{const d=mapDomainFor(t.id||t.label);return d?mapLink(d):'<p class="footnote" style="margin-top:8px;color:var(--ink5)">No spatial coverage map for this result yet — it needs the run to emit per-location observations + held-out predictions.</p>';})()}
     </div>
   </div>`;
 }
@@ -1094,6 +1107,7 @@ function modelDrawer(m){
       </div>
       ${audit.length?`<div class="dlabel">Audit notes</div>${audit.map(a=>`<div class="auditli"><i>✓</i><span>${esc(a)}</span></div>`).join('')}`:''}
       ${evbtn}
+      ${(()=>{const d=mapDomainFor((m.task||'')+' '+(m.model_id||''));return d?('<div style="margin-top:14px">'+mapLink(d)+'</div>'):'';})()}
     </div>
   </div>`;
 }
