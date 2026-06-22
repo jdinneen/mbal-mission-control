@@ -10,6 +10,7 @@ published snapshot, then commit + push data.json.
 Usage:  python build_snapshot.py
 """
 import json
+import math
 import os
 import re
 import subprocess
@@ -126,8 +127,20 @@ def _local_text(rel, max_chars=12000):
 
 def _r(v, n=4):
     if isinstance(v, float):
+        if not math.isfinite(v):
+            return None
         return round(v, n)
     return v
+
+
+def _json_safe(obj):
+    if isinstance(obj, float):
+        return obj if math.isfinite(obj) else None
+    if isinstance(obj, dict):
+        return {k: _json_safe(v) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [_json_safe(v) for v in obj]
+    return obj
 
 
 def _short_feature(name):
@@ -156,23 +169,26 @@ def _claim_card_findings():
         model = bac.get("model", {})
         base = bac.get("baseline", {})
         margin = bac.get("margin", {})
+        model_ap = model.get("ap") or bac.get("candidate_ap")
+        base_ap = base.get("ap") or bac.get("baseline_ap")
+        model_ece = model.get("ece") or bac.get("candidate_ece")
         out.append(_finding(
             "claim_bacteria_station_memory_supported",
             "Bacteria nowcast beats station-memory status quo",
             "claim",
-            f"AP {_r(model.get('ap'))} vs {_r(base.get('ap'))} · dAP +{_r(margin.get('margin_ap'))}",
+            f"AP {_r(model_ap)} vs {_r(base_ap)} · dAP +{_r(margin.get('margin_ap'))}",
             "On the EXCLUDE_SAN_DIEGO 2022+ deployable stratum, the calibrated bacteria model beats the station-memory baseline with a clustered-bootstrap AP margin whose CI excludes zero.",
             "Frozen temporal holdout, n=89,321 / 8,999 events, compared against a station-memory baseline and checked by decision-curve net benefit.",
             "reports/_eval_cards/claim_cards.json",
             {
                 "n": bac.get("n"),
                 "events": bac.get("events"),
-                "model_ap": _r(model.get("ap")),
-                "station_memory_ap": _r(base.get("ap")),
+                "model_ap": _r(model_ap),
+                "station_memory_ap": _r(base_ap),
                 "margin_ap": _r(margin.get("margin_ap")),
                 "ci95": margin.get("ci95"),
                 "roc_auc": _r(model.get("roc_auc")),
-                "ece": _r(model.get("ece")),
+                "ece": _r(model_ece),
             },
             "This is the stronger public bacteria headline than the stale pooled/Monterey-only table row.",
         ))
@@ -181,22 +197,35 @@ def _claim_card_findings():
         model = tide.get("model", {})
         base = tide.get("baseline", {})
         margin = tide.get("margin", {})
-        out.append(_finding(
-            "claim_tide_range_caveated_positive",
-            "Harmonic tide range adds a small pooled bacteria lift",
-            "caveat",
-            f"dAP +{_r(margin.get('margin_ap'))} over rain+discharge",
-            "The spring-neap/tide-table feature has a real pooled temporal lift, but the broader regional-transfer story was later softened by the expanded holdout audit.",
-            "Claim-card margin test plus later H1 trust-index caveat: pooled lift holds; robust across-region generalization does not yet clear the bar.",
-            "reports/_eval_cards/claim_cards.json",
-            {
-                "model_ap": _r(model.get("ap")),
-                "baseline_ap": _r(base.get("ap")),
-                "margin_ap": _r(margin.get("margin_ap")),
-                "ci95": margin.get("ci95"),
-            },
-            "Keep as a caveated positive, not as a broad deployed feature claim.",
-        ))
+        if margin.get("margin_ap") is not None:
+            out.append(_finding(
+                "claim_tide_range_caveated_positive",
+                "Harmonic tide range adds a small pooled bacteria lift",
+                "caveat",
+                f"dAP +{_r(margin.get('margin_ap'))} over rain+discharge",
+                "The spring-neap/tide-table feature has a real pooled temporal lift, but the broader regional-transfer story was later softened by the expanded holdout audit.",
+                "Claim-card margin test plus later H1 trust-index caveat: pooled lift holds; robust across-region generalization does not yet clear the bar.",
+                "reports/_eval_cards/claim_cards.json",
+                {
+                    "model_ap": _r(model.get("ap")),
+                    "baseline_ap": _r(base.get("ap")),
+                    "margin_ap": _r(margin.get("margin_ap")),
+                    "ci95": margin.get("ci95"),
+                },
+                "Keep as a caveated positive, not as a broad deployed feature claim.",
+            ))
+        else:
+            out.append(_finding(
+                "status_tide_range_data_gap",
+                "Harmonic tide-range claim card is blocked by source-data gaps",
+                "status",
+                str(tide.get("verdict") or "DATA-GAP"),
+                "The current tide-range card is not promoted as a positive claim because the harmonic-range cache and beach-to-gauge map are not materialized.",
+                "Claim-card readout records the missing inputs instead of reporting a lift.",
+                "reports/_eval_cards/claim_cards.json",
+                {"reasons": tide.get("reasons") or []},
+                "Rebuild the harmonic range features before re-testing this candidate.",
+            ))
     return out
 
 
@@ -643,6 +672,238 @@ def _cyano_findings():
     return out
 
 
+def _latest_research_findings():
+    out = []
+
+    da = _local_json("reports/hab/da_forecast.json") or {}
+    h = da.get("headline") or {}
+    onset = da.get("onset_unit_primary") or {}
+    if h and onset:
+        out.append(_finding(
+            "claim_da_toxic_onset_ci_separated",
+            "Domoic-acid toxic-onset forecast clears the scoped gate",
+            "claim",
+            f"onset AP {_r(h.get('onset_model_ap'))} vs {h.get('onset_strongest_baseline')} {_r(h.get('onset_strongest_baseline_ap'))}",
+            "The updated domoic-acid result is strongest on the decision-relevant toxic-onset slice: prior-clean pier visits where persistence is degenerate.",
+            "Train <=2018, calibration 2019-2020, test >2020; station-clustered bootstrap and permutation-null read on prior-clean toxic-onset rows.",
+            "reports/hab/da_forecast.json",
+            {
+                "n": h.get("onset_n"),
+                "events": h.get("onset_events"),
+                "model_ap": _r(h.get("onset_model_ap")),
+                "strongest_baseline": h.get("onset_strongest_baseline"),
+                "strongest_baseline_ap": _r(h.get("onset_strongest_baseline_ap")),
+                "margin_ap": _r(h.get("onset_margin_ap")),
+                "ci95": h.get("onset_cluster_boot_ci95"),
+                "perm_p": h.get("onset_perm_p"),
+                "pooled_model_ap": _r(h.get("pooled_model_ap")),
+                "pooled_best_baseline_ap": _r(h.get("pooled_best_baseline_ap")),
+                "loso_model_beats_seasonal": h.get("loso_model_beats_seasonal"),
+            },
+            "Scope discipline: this promotes the prior-clean onset unit, not the older pooled persistence comparison or the broken C-HARM framing.",
+        ))
+
+    cyano = _local_json("reports/hab/cyano/cyano_onset_claim_card_redteam.json") or {}
+    cyano_law = _local_json("reports/hab/cyano/cyano_onset_law.json") or {}
+    law = cyano.get("law_evidence_original") or {}
+    state_cv = law.get("lat_quad_leave_one_state") or {}
+    met_cv = (((cyano.get("adversarial_checks") or {}).get("forecast_valid_prior_winter_met_competitor") or {})
+              .get("cv") or {}).get("leave_one_state_out", {}).get("models", {}).get("lat_quad+winter_met") or {}
+    if cyano and state_cv:
+        out.append(_finding(
+            "claim_cyano_onset_latitude_law_scoped",
+            "Cyano onset has a scoped cold-start phenology law",
+            "positive",
+            f"lat-quad skill {_r(state_cv.get('skill_vs_global'))} CI {state_cv.get('skill_ci')}",
+            "Latitude/quadratic geography gives a real cold-start cyanobacteria bloom-onset timing prior under held-out state, lat-band, and year tests.",
+            "Continental lake-year onset panel with adversarial red-team checks: current-year censoring, held-out state/lat-band/year CV, and prior-winter meteorology hardening.",
+            "reports/hab/cyano/cyano_onset_claim_card_redteam.json",
+            {
+                "n_lake_years": cyano_law.get("n_lake_years") or state_cv.get("n_test"),
+                "n_lakes": cyano_law.get("n_lakes"),
+                "n_states": cyano_law.get("n_states"),
+                "year_range": cyano_law.get("year_range"),
+                "original_leave_one_state_skill": _r(state_cv.get("skill_vs_global")),
+                "original_leave_one_state_ci95": state_cv.get("skill_ci"),
+                "winter_met_rows": ((cyano.get("adversarial_checks") or {}).get("forecast_valid_prior_winter_met_competitor") or {}).get("n_lake_years_with_met"),
+                "lat_quad_plus_winter_met_skill": _r(met_cv.get("skill_vs_global")),
+                "lat_quad_plus_winter_met_ci95": met_cv.get("skill_ci"),
+            },
+            "Claim onset timing/sampling-start prior only; the photoperiod-only mechanism is explicitly not the claim anchor.",
+        ))
+
+    cyano_pi = _local_json("reports/hab/interlingua_cyano_transfer_daily_report.json") or {}
+    daily = cyano_pi.get("freshwater_pi_daily") or {}
+    if daily:
+        out.append(_finding(
+            "null_interlingua_cyano_daily_refutation",
+            "Daily freshwater cyano interlingua still does not beat seasonality",
+            "null",
+            f"pi AP {_r(daily.get('mean_ap_pi'))} vs calendar {_r(daily.get('mean_ap_calendar'))}",
+            "Daily meteorology narrows the freshwater cyano interlingua gap but does not flip the prior null: physics π features do not separate from calendar or persistence on held-out lakes.",
+            "Leave-one-state/region-out daily-met π features against calendar and persistence controls.",
+            "reports/hab/interlingua_cyano_transfer_daily_report.json",
+            {
+                "n_lakes": cyano_pi.get("n_lakes"),
+                "n_regions": daily.get("n_regions"),
+                "n_rows_total": daily.get("n_rows_total"),
+                "mean_ap_pi": _r(daily.get("mean_ap_pi")),
+                "mean_ap_calendar": _r(daily.get("mean_ap_calendar")),
+                "mean_ap_persistence": _r(daily.get("mean_ap_persistence")),
+                "pi_minus_calendar_ci95": daily.get("pi_minus_calendar_ci95"),
+                "pi_minus_persistence_ci95": daily.get("pi_minus_persistence_ci95"),
+            },
+            cyano_pi.get("verdict"),
+        ))
+
+    eu = _local_json("reports/interlingua_eu_transfer.json") or {}
+    panel = eu.get("eu_panel") or {}
+    if eu:
+        out.append(_finding(
+            "null_interlingua_eu_resolution_boundary",
+            "EU annual bathing-water transfer exposes an interlingua boundary",
+            "null",
+            str(eu.get("verdict") or "BOUNDARY"),
+            "The donor π signal survives annual coarsening, but it still does not outrank calendar plus site-memory on held-out EU coasts, so the manifold does not generalize to annual EU bathing-water classes.",
+            "Leave-country-out EU annual-class transfer plus a resolution-control donor test separating data resolution from geography.",
+            "reports/interlingua_eu_transfer.json",
+            {
+                "n_site_years": panel.get("n_site_years"),
+                "n_countries": panel.get("n_countries"),
+                "n_sites": panel.get("n_sites"),
+                "bad_base_rate": _r(panel.get("bad_base_rate")),
+                "pi_finite_frac": _r(panel.get("pi_finite_frac")),
+            },
+            eu.get("verdict_reason") or eu.get("data_resolution_caveat"),
+        ))
+
+    ddpcr = _local_json("reports/bacteria/ddpcr_real_vs_artifact.json") or {}
+    ctrl = ddpcr.get("confound_control_vs_culture_history") or {}
+    raw = ddpcr.get("future_culture_exceed_within_14d") or {}
+    if ddpcr:
+        out.append(_finding(
+            "null_ddpcr_target_redefinition_artifact",
+            "ddPCR-positive/culture-safe days are mostly a persistence artifact",
+            "null",
+            f"raw lift { _r(raw.get('delta_pos_minus_neg'))}; controlled dAUC {_r(ctrl.get('ddpcr_adds_auc'))}",
+            "Same-day ddPCR positives among culture-safe San Diego beach-days have raw forward culture-exceedance lift, but ddPCR does not add clean signal after full culture-memory controls.",
+            "San Diego culture-safe station-days with same-day ddPCR call; full culture-memory baseline plus bootstrap CI and within-history-tertile checks.",
+            "reports/bacteria/ddpcr_real_vs_artifact.json",
+            {
+                "n_culture_safe_with_future": ddpcr.get("n_culture_safe_with_future"),
+                "ddpcr_pos_n": ddpcr.get("ddpcr_pos_n"),
+                "ddpcr_neg_n": ddpcr.get("ddpcr_neg_n"),
+                "future_exc_given_ddpcr_pos": _r(raw.get("given_ddpcr_pos")),
+                "future_exc_given_ddpcr_neg": _r(raw.get("given_ddpcr_neg")),
+                "raw_delta_ci95": raw.get("delta_ci95"),
+                "history_only_auc": _r(ctrl.get("oof_auc_full_history_only")),
+                "history_plus_ddpcr_auc": _r(ctrl.get("oof_auc_full_history_plus_ddpcr")),
+                "ddpcr_adds_auc": _r(ctrl.get("ddpcr_adds_auc")),
+                "ddpcr_adds_auc_ci95": ctrl.get("ddpcr_adds_auc_ci95"),
+            },
+            ddpcr.get("verdict"),
+        ))
+
+    sog = _local_json("reports/predict10x/sog_central_onset.json") or {}
+    if sog:
+        out.append(_finding(
+            "null_sog_central_relief_onset_underpowered",
+            "SoG Central relief-onset transfer auto-rejects as underpowered",
+            "null",
+            f"{sog.get('n_onset_events')} events < gate {((sog.get('power_gate') or {}).get('min_events'))}",
+            "The pre-registered Saanich-to-SoG relief-onset transfer test does not fit a model because SoG Central has too few locked-definition deep-oxygen relief onsets.",
+            "Locked hypoxia-line relief-onset definition, event-count power gate, and no model fit after gate failure.",
+            "reports/predict10x/sog_central_onset.json",
+            {
+                "n_days": sog.get("n_days"),
+                "date_range": sog.get("date_range"),
+                "n_onset_events": sog.get("n_onset_events"),
+                "min_events": ((sog.get("power_gate") or {}).get("min_events")),
+                "power_gate_passed": ((sog.get("power_gate") or {}).get("passed")),
+            },
+            sog.get("read") or sog.get("honest_verdict"),
+        ))
+
+    semantic = _local_json("lakehouse/semantic_shadow/gold/discovery_runs/latest.json") or {}
+    if semantic:
+        top_corr = (semantic.get("top_correlations") or [{}])[0]
+        top_model = (semantic.get("top_model_lifts") or [{}])[0]
+        out.append(_finding(
+            "status_semantic_shadow_refresh_discovery_leads",
+            "Semantic shadow refresh produced discovery leads, not claims",
+            "caveat",
+            f"{semantic.get('targets_scanned')} targets · {semantic.get('correlation_rows')} correlations",
+            "The universal shadow-lakehouse refresh found cross-domain correlations and temporal-holdout model lifts, but they remain discovery leads until independently reproduced.",
+            "All-domain semantic-shadow discovery runner over bacteria, HAB, and whale targets with temporal holdouts and target-namespace exclusions.",
+            "reports/semantic_lakehouse/semantic_shadow_discovery.md",
+            {
+                "run_id": semantic.get("run_id"),
+                "targets_scanned": semantic.get("targets_scanned"),
+                "model_rows": semantic.get("model_rows"),
+                "correlation_rows": semantic.get("correlation_rows"),
+                "top_correlation_domain": top_corr.get("domain"),
+                "top_correlation_target": top_corr.get("target"),
+                "top_correlation_feature": top_corr.get("feature"),
+                "top_correlation_rho": _r(top_corr.get("rho")),
+                "top_correlation_ci95": [top_corr.get("ci_low"), top_corr.get("ci_high")],
+                "top_model_domain": top_model.get("domain"),
+                "top_model_target": top_model.get("target"),
+                "top_model_delta_vs_baseline": _r(top_model.get("delta_vs_baseline")),
+            },
+            "Promote only after a pre-registered reproduction job with a permutation/null control.",
+        ))
+
+    tsunami = _local_json("reports/tsunami/tsunami_warning_value.json") or {}
+    if tsunami:
+        fa80 = (tsunami.get("false_alarm_reduction_at_fixed_recall") or [{}])[0]
+        out.append(_finding(
+            "claim_tsunami_halfduration_warning_screen",
+            "Rupture half-duration can reduce tsunami false alarms at fixed recall",
+            "positive",
+            f"{fa80.get('pct_reduced')}% fewer false alarms at 80% recall",
+            "Adding rupture half-duration to magnitude+depth reduces false alarms in the NOAA tsunami label screen at 80% and 90% fixed recall, but not at 95% recall.",
+            "Leave-one-region-out seismic/tsunami screen over recorded tsunamis, comparing magnitude+depth to magnitude+depth+half-duration.",
+            "reports/tsunami/tsunami_warning_value.json",
+            {
+                "n_eqs": tsunami.get("n_eqs"),
+                "recorded_tsunamis": tsunami.get("recorded_tsunamis"),
+                "base_rate": _r(tsunami.get("base_rate")),
+                "held_out": tsunami.get("held_out"),
+                "false_alarm_reduction_at_fixed_recall": tsunami.get("false_alarm_reduction_at_fixed_recall"),
+            },
+            "Screening value only; not a public warning deployment claim.",
+        ))
+
+    carte = _local_json("reports/bacteria/carte_critic.json") or {}
+    auc = carte.get("primary_seed_auc") or {}
+    cis = carte.get("decisive_cis_primary_seed") or {}
+    if carte:
+        out.append(_finding(
+            "claim_carte_numeric_shared_plane_benchmark",
+            "CARTE-style shared-plane benchmark adds bacteria ranking signal",
+            "positive",
+            f"numeric-only AUC {_r(auc.get('carte_numeric_only'))} vs raw {_r(auc.get('raw'))}",
+            "A CARTE-style tabular shared-plane benchmark improves held-out bacteria ranking over raw and fair-ID baselines in the small pilot/critic read.",
+            "Pilot plus critic stability read on held-out bacteria rows with bootstrap deltas against raw, memory, and fair-ID baselines.",
+            "reports/bacteria/carte_critic.json",
+            {
+                "n_test": carte.get("n_test"),
+                "test_events": carte.get("test_events"),
+                "base_rate": _r(carte.get("base_rate")),
+                "memory_auc": _r(auc.get("memory")),
+                "raw_auc": _r(auc.get("raw")),
+                "fair_id_baseline_auc": _r(auc.get("fair_id_baseline")),
+                "carte_full_auc": _r(auc.get("carte_full")),
+                "carte_numeric_only_auc": _r(auc.get("carte_numeric_only")),
+                "carte_full_minus_fair_ci95": cis.get("carte_full_minus_fair"),
+                "carte_numeric_only_minus_raw_ci95": cis.get("carte_numeric_only_minus_raw"),
+            },
+            "Benchmark lead, not the shipped champion; operational threshold value still needs a deployment-style gate.",
+        ))
+
+    return out
+
+
 def _source_signal_findings():
     out = []
     soil = _local_json("reports/bacteria/new_source_signal_gate/soil_permutation_null.json") or {}
@@ -694,11 +955,17 @@ def _findings_campaign_findings():
     ledger = _local_json("reports/findings_campaign/final_evidence_ledger.json") or {}
     if ledger:
         counts = ledger.get("counts") or {}
+        missing = counts.get("missing_output", 0) or 0
         frontier = {
             j.get("id"): j.get("category")
             for j in ledger.get("jobs", [])
             if j.get("priority", 999) < 100
         }
+        missing_text = (
+            "no declared outputs are missing in the current ledger"
+            if missing == 0
+            else f"{missing} declared output{' is' if missing == 1 else 's are'} still pending"
+        )
         out.append(_finding(
             "status_findings_campaign_10h_rerun",
             "10-hour findings campaign rerun is mostly complete",
@@ -706,9 +973,9 @@ def _findings_campaign_findings():
             (
                 f"{counts.get('claim_or_keep', 0)} keep · "
                 f"{counts.get('strong_null_or_refutation', 0)} null/refutation · "
-                f"{counts.get('missing_output', 0)} pending"
+                f"{missing} pending"
             ),
-            "Fresh dry-onset outputs now synthesize into the final evidence ledger; the one remaining missing output is the deep top-100 serendipity gate.",
+            f"Fresh dry-onset outputs now synthesize into the final evidence ledger; {missing_text}.",
             "Campaign synthesis reads the declared 10-hour job queue plus prior evidence reports and categorizes each output without recomputing science.",
             "reports/findings_campaign/final_evidence_ledger.json",
             {
@@ -914,6 +1181,7 @@ def _extra_findings():
         _experiment_program_findings,
         _hypoxia_tokyo_findings,
         _cyano_findings,
+        _latest_research_findings,
         _source_signal_findings,
         _findings_campaign_findings,
         _serendipity_findings,
@@ -962,6 +1230,97 @@ def _augment_models(state):
                     f"REAL BOOST vs HGBT: dAP +{_r(lg.get('delta_ap_vs_hgbt'))}, "
                     f"paired CI {lg.get('boot_ci95')} excludes zero."
                 )
+        if m.get("model_id") == "da_forecast_hgbt":
+            da = _local_json("reports/hab/da_forecast.json") or {}
+            h = da.get("headline") or {}
+            if h:
+                m["evidence"] = "reports/hab/da_forecast.json"
+                m["evidence_exists"] = True
+                m["beats_baseline"] = (
+                    "SUPPORTED on toxic-onset prior-clean slice: "
+                    f"AP {_r(h.get('onset_model_ap'))} vs {h.get('onset_strongest_baseline')} "
+                    f"{_r(h.get('onset_strongest_baseline_ap'))}, "
+                    f"dAP +{_r(h.get('onset_margin_ap'))}, CI {h.get('onset_cluster_boot_ci95')}, "
+                    f"perm-p {h.get('onset_perm_p')}. Pooled AP {_r(h.get('pooled_model_ap'))} vs "
+                    f"best pooled baseline {_r(h.get('pooled_best_baseline_ap'))}; headline stays scoped to onset."
+                )
+                m["plain"] = (
+                    "The updated DA/HAB model is a scoped toxic-onset warning candidate: "
+                    "use the prior-clean onset gate as the claim, not the older pooled persistence or C-HARM framing."
+                )
+    return state
+
+
+def _asset_entry(asset_id, rel, source, status="ready", time_column=None, note=None):
+    p = SOURCE_ROOT / rel
+    if not p.exists():
+        return None
+    rows, est = _count_rows(str(p))
+    item = {
+        "asset_id": asset_id,
+        "path": rel,
+        "kind": p.suffix.lstrip(".") or "file",
+        "exists": True,
+        "size_mb": round(p.stat().st_size / (1024 * 1024), 3),
+        "modified_utc": datetime.fromtimestamp(p.stat().st_mtime, timezone.utc).isoformat().replace("+00:00", "Z"),
+        "age_days": round((time.time() - p.stat().st_mtime) / 86400, 1),
+        "rows": rows,
+        "time_column": time_column,
+        "status": status,
+        "source": source,
+    }
+    if est:
+        item["rows_estimated"] = True
+    if note:
+        item["note"] = note
+    return item
+
+
+def _append_latest_public_data_assets(state):
+    assets = list(state.get("data_assets") or [])
+    existing = {a.get("asset_id") for a in assets}
+    additions = [
+        _asset_entry(
+            "merra2_prithvi_ee_surface_sample",
+            "data/external_raw/merra2_prithvi_input/merra2_ee_surface_sample.parquet",
+            "NASA MERRA-2 surface variables via Google Earth Engine; no GES DISC EULA needed for station-level surface features.",
+            time_column="date",
+            note="Prithvi-WxC surface input sample at CA coastal points; 3D pressure-level/global rollout path still needs GES DISC authorization.",
+        ),
+        _asset_entry(
+            "sentinel3_olci_chlorophyll_adapter",
+            "data/external_curated/sentinel3_olci_chl/sentinel3_olci_chl.parquet",
+            "ESA Copernicus Sentinel-3 OLCI/SLSTR chlorophyll source adapter for Granite-Ocean/NPP/HAB work.",
+            time_column="time",
+            note="Source data present locally; original 512k Granite-Ocean pretraining images are not publicly released.",
+        ),
+        _asset_entry(
+            "semantic_shadow_model_scores",
+            "lakehouse/semantic_shadow/gold/discovery_runs/model_scores.parquet",
+            "Semantic-shadow all-domain discovery runner; temporal-holdout model score table.",
+            note="Discovery leads only until independent reproduction.",
+        ),
+        _asset_entry(
+            "semantic_shadow_candidate_correlations",
+            "lakehouse/semantic_shadow/gold/discovery_runs/candidate_correlations.parquet",
+            "Semantic-shadow all-domain discovery runner; deseasonalized lead/lag candidate correlations.",
+            note="Candidate correlations are not promoted claims without a pre-registered reproduction gate.",
+        ),
+        _asset_entry(
+            "semantic_shadow_target_profiles",
+            "lakehouse/semantic_shadow/gold/discovery_runs/target_profiles.parquet",
+            "Semantic-shadow all-domain discovery runner; target profile metadata for scanned domains.",
+            note="Public-safe metadata for the refreshed shadow-discovery read.",
+        ),
+    ]
+    for item in additions:
+        if item and item["asset_id"] not in existing:
+            assets.append(item)
+            existing.add(item["asset_id"])
+    state["data_assets"] = assets
+    counts = dict(state.get("counts") or {})
+    counts["data_assets"] = len(assets)
+    state["counts"] = counts
     return state
 
 
@@ -980,6 +1339,7 @@ def _augment_state(state):
             legacy_keep.append(f)
     state["findings"] = extra + legacy_keep + legacy_archive
     _augment_models(state)
+    _append_latest_public_data_assets(state)
     counts = dict(state.get("counts") or {})
     counts["findings"] = len(state["findings"])
     counts["models"] = len(state.get("models") or [])
@@ -991,7 +1351,7 @@ def _augment_state(state):
     counts["caveated_findings"] = sum(1 for f in state["findings"] if f.get("kind") == "caveat")
     counts["null_findings"] = sum(1 for f in state["findings"] if f.get("kind") in {"null", "negative"})
     state["counts"] = counts
-    note = "Static build joined cockpit state with H1 trust index, findings campaign ledger, claim cards, and report evidence."
+    note = "Static build joined cockpit state with H1 trust index, latest HAB/bacteria/tsunami/semantic-shadow claim cards, public data assets, and report evidence."
     actions = list(state.get("next_actions") or [])
     if note not in actions:
         actions.insert(0, note)
@@ -1060,6 +1420,10 @@ def _project_doc_priority(rel):
         "MODEL_SUITE.md": 960,
         "PRODUCTION_READINESS.md": 940,
         "MBAL_PRODUCTION_LAKEHOUSE_CONTRACTS.md": 930,
+        "reports/semantic_lakehouse/semantic_shadow_discovery.md": 928,
+        "reports/data_fetch/foundation_models/ACQUISITION.md": 927,
+        "reports/hab/cyano/cyano_onset_claim_card_redteam.md": 926,
+        "reports/hab/da_forecast.md": 925,
         "REMOTE_RESEARCH_CONTRACT.md": 900,
         "docs/VALUE_GATE.md": 890,
         "docs/open_source_readiness.md": 870,
@@ -1068,6 +1432,7 @@ def _project_doc_priority(rel):
         "research/bacteria/reproduce/REPRODUCE.md": 840,
         "research/bacteria/reproduce/PAPER_DRAFT.md": 835,
         "research/bacteria/reproduce/FROZEN_HEADLINE.json": 830,
+        "reports/research_loop/summary.md": 735,
     }
     if rel in root_docs:
         return root_docs[rel]
@@ -1077,6 +1442,16 @@ def _project_doc_priority(rel):
         return 740
     if rel.startswith("reports/meta_synthesis/") and rel.endswith(".md"):
         return 730
+    if rel.startswith("reports/hab/") and rel.endswith((".md", ".json")):
+        return 725
+    if rel.startswith("reports/bacteria/") and rel.endswith((".md", ".json")):
+        return 715
+    if rel.startswith("reports/tsunami/") and rel.endswith((".md", ".json")):
+        return 710
+    if rel.startswith("reports/data_fetch/") and rel.endswith(".md"):
+        return 705
+    if rel.startswith("reports/semantic_lakehouse/") and rel.endswith(".md"):
+        return 700
     if rel.startswith("reports/experiment_program/H1/") and rel.endswith((".md", ".json")):
         return 720
     if rel.startswith("research/cross_dataset/") and rel.endswith(".md"):
@@ -1085,7 +1460,11 @@ def _project_doc_priority(rel):
         return 690
     name = rel.rsplit("/", 1)[-1].upper()
     if rel.startswith("reports/") and rel.endswith(".md") and any(
-        token in name for token in ("FINDINGS", "DIRECTION", "NEXT", "THESIS", "REVALIDATION", "BENCHMARK", "READINESS")
+        token in name for token in (
+            "FINDINGS", "DIRECTION", "NEXT", "THESIS", "REVALIDATION",
+            "BENCHMARK", "READINESS", "ACQUISITION", "DISCOVERY",
+            "FORECAST", "REDTEAM", "CLAIM", "VALIDATION",
+        )
     ):
         return 650
     if rel.startswith("docs/") and rel.endswith(".md") and any(
@@ -1147,9 +1526,18 @@ def _split_doc(text, max_chars=5200, max_chunks=3):
 
 
 def _build_project_docs():
+    latest_public_docs = {
+        "reports/semantic_lakehouse/semantic_shadow_discovery.md",
+        "reports/hab/cyano/cyano_onset_claim_card_redteam.md",
+    }
     docs = []
+    candidates = set(_tracked_files())
+    candidates.update(
+        rel for rel in latest_public_docs
+        if (SOURCE_ROOT / rel).exists() and _project_doc_priority(rel) > 0
+    )
     files = sorted(
-        [p for p in _tracked_files() if _is_project_doc(p)],
+        [p for p in candidates if _is_project_doc(p) or p in latest_public_docs],
         key=lambda p: (-_project_doc_priority(p), p),
     )
     for rel in files:
@@ -1204,6 +1592,9 @@ def _build_lab_memory():
         {"id": "learn_driver_null", "kind": "learning",
          "claim": "Across many tested inputs, external rainfall is the main clear driver of beach-bacteria risk; most other candidate drivers — including waves and tide level — wash out against a full baseline. We call this the driver-null pattern.",
          "basis": "experiment record"},
+        {"id": "learn_scoped_claims", "kind": "learning",
+         "claim": "The current strongest new claims are intentionally scoped: domoic acid is promoted on prior-clean toxic-onset rows, cyanobacteria is promoted as an onset-timing prior, and warning-screen work is not treated as a deployed alert system.",
+         "basis": "claim-card record"},
         {"id": "learn_evidence_is_combination", "kind": "learning",
          "claim": "The strongest evidence is a combination — honest baselines, held-out tests, calibration, and failure analysis — not any single score.",
          "basis": "operating principles"},
@@ -1213,6 +1604,12 @@ def _build_lab_memory():
         {"id": "learn_breadth_over_depth", "kind": "learning",
          "claim": "Broad station coverage tends to matter more than long history at a single site when the goal is a statewide model.",
          "basis": "experiment record"},
+        {"id": "data_foundation_model_inputs", "kind": "data",
+         "claim": "The latest data acquisition work separates usable surface inputs from blocked global rollout inputs: MERRA-2 surface fields are available through Earth Engine for station-level features, Sentinel-3 chlorophyll source data is present locally, and full global Prithvi pressure-level rollout still needs the NASA GES DISC agreement.",
+         "basis": "data acquisition record"},
+        {"id": "learn_semantic_shadow_leads", "kind": "learning",
+         "claim": "The semantic-shadow lakehouse is now useful as a question generator across bacteria, HAB, and whale targets, but its correlations and temporal-holdout lifts remain discovery leads until a reproduction job turns them into evidence.",
+         "basis": "discovery-run record"},
         {"id": "reject_foundation_models", "kind": "rejected",
          "claim": "Time-series foundation models repeatedly failed to beat a simple persistence baseline on the mooring data, so they were pruned rather than promoted.",
          "basis": "rejected-ideas record"},
@@ -1224,6 +1621,9 @@ def _build_lab_memory():
          "basis": "open questions"},
         {"id": "open_driver_aware_neural", "kind": "open_question",
          "claim": "Can driver-aware neural models overcome the modest or negative skill seen in early multi-driver forecasting runs?",
+         "basis": "open questions"},
+        {"id": "open_foundation_rollouts", "kind": "open_question",
+         "claim": "Can the acquired Prithvi and Granite source adapters create reusable coastal features that beat existing tabular baselines, once they are evaluated under the same held-out gates as the current registry?",
          "basis": "open questions"},
     ]
     return cards
@@ -1280,9 +1680,9 @@ def _build_targets():
         {"id": "bacteria_exceedance", "label": "Beach bacteria exceedance", "status": "Supported",
          "question": "Will a beach exceed the AB411 enterococcus standard (>104 MPN/100 mL)?",
          "plain": "Our strongest result: a statewide nowcast at AP 0.5099 / ROC-AUC 0.868, calibrated, independently audited, out-of-time stable 2022–2026, and deploy-ready in 8 of 9 counties — beating station-memory, seasonal-naive, and the AB411 rain rule."},
-        {"id": "domoic_acid", "label": "Domoic-acid shellfish toxin", "status": "Caveated",
+        {"id": "domoic_acid", "label": "Domoic-acid shellfish toxin", "status": "Supported",
          "question": "Will a pier's next sample exceed particulate domoic acid 500 ng/L?",
-         "plain": "Suggestive, not established: about a week of lead in some seasons (AP 0.203, ROC-AUC 0.842, permutation-p 0.005 so the ranking is real), but the station-clustered bootstrap CI crosses zero and it is underpowered (17 piers). The old '~10× over C-HARM' framing was a broken-baseline mirage — C-HARM is sub-random at pier points."},
+         "plain": "Scoped positive: the promoted claim is the prior-clean toxic-onset slice, where the updated model reaches AP 0.1347 versus seasonal-naive AP 0.0259, margin +0.1089 with station-clustered CI [0.0566, 0.2078] and permutation-p 0.002. The pooled model also ranks, but the headline is the onset gate; the older C-HARM framing remains rejected as a broken baseline."},
         {"id": "cross_country_transfer", "label": "Cross-country zero-shot transfer", "status": "Caveated",
          "question": "Can a label-free model rank bacteria exceedance in a country with no local training labels?",
          "plain": "Real but modest: non-dimensional physics groups transfer US↔Ireland zero-shot at AP ~0.136 (~1.9× over a matched-prevalence baseline) and to Australia, but the regional-transfer story softens under tougher held-out audits."},
@@ -1292,9 +1692,9 @@ def _build_targets():
         {"id": "renewal_onset", "label": "Fjord oxygen-renewal onset", "status": "Supported",
          "question": "Will a dense-water renewal re-oxygenate an anoxic fjord within ~3 weeks?",
          "plain": "Deep-water density gives +0.08 AP of renewal-onset lead-skill that is year-robust at ~21-day lead — the slow-driver principle partially transfers to a second basin once the carrier and objective match the physics."},
-        {"id": "cyano_onset", "label": "Lake cyanobacteria bloom onset", "status": "Caveated",
+        {"id": "cyano_onset", "label": "Lake cyanobacteria bloom onset", "status": "Supported",
          "question": "When will a lake's cyanobacteria bloom season start?",
-         "plain": "A national onset-triage allocator over ~2,200 lakes gives a real but modest capture gain (+4–5.5% when 10–50% of lakes are sampled) over a lake-memory baseline; the driver-null holds — no strong meteorological driver. Antecedent winter weather explains only a small, clean part of the year-to-year onset shift."},
+         "plain": "Claimable but scoped: latitude/quadratic geography is a real cold-start bloom-onset timing prior under held-out state, lat-band, year, and red-team checks. The claim is onset timing and sampling-start prior, not abundance prediction; photoperiod-only is not the anchor, and daily meteorology/interlingua transfer remains null."},
         {"id": "whale_mortality", "label": "Whale (cetacean) mortality", "status": "Null",
          "question": "Do prior ocean drivers predict California whale mortality beyond seasonal climatology?",
          "plain": "We reconstructed the 2019–2023 gray-whale die-off from citizen-science (iNaturalist) records and tested prey-collapse, climate, and domoic-acid pathways. Honest result: the prey-collapse link (krill, rockfish) is SUGGESTIVE but NOT robust — it fails a 17-year cluster bootstrap — and the domoic-acid→death link does not hold. The ecology/mortality lane is largely signal-poor; we keep it on the record as an open frontier, not a win."},
@@ -1304,10 +1704,22 @@ def _build_targets():
         {"id": "sfbay_compound_flood", "label": "SF Bay compound coastal flood", "status": "Null",
          "question": "Will SF Bay see an extreme still-water-level (coastal-flood) day, and is it compound (rain + tide/surge)?",
          "plain": "A driver-lift wash: the free harmonic tide table alone is the best naive predictor (AP 0.223 / AUROC 0.945); adding weather/runoff drivers (AP 0.294) is NOT CI-separated from tide-only, so there is no demonstrated driver lift yet."},
+        {"id": "ddpcr_culture_safe", "label": "ddPCR-positive culture-safe days", "status": "Null",
+         "question": "Are same-day ddPCR positives among culture-safe beach-days a real early warning target?",
+         "plain": "No clean target yet. In San Diego, ddPCR-positive/culture-safe days have raw forward exceedance lift, but that lift largely disappears after full culture-history controls: ddPCR adds only +0.0147 AUC with CI crossing zero. Treat the raw effect as persistence/history structure, not a promoted molecular early-warning claim."},
+        {"id": "tsunami_halfduration_screen", "label": "Tsunami half-duration warning screen", "status": "Caveated",
+         "question": "Can rupture half-duration reduce tsunami false alarms at fixed recall?",
+         "plain": "Promising screening value, not a deployment claim: adding rupture half-duration to magnitude+depth reduces false alarms at 80% and 90% fixed recall in leave-one-region-out NOAA tsunami labels, but not at 95% recall. This belongs in a warning-screen research lane, not public alert automation."},
+        {"id": "semantic_shadow_lakehouse", "label": "Semantic-shadow discovery lakehouse", "status": "Exploratory", "kind": "method",
+         "question": "Can one lakehouse generate better cross-domain research questions from bacteria, HAB, and ecology data?",
+         "plain": "Yes as a discovery engine: the latest refresh scanned bacteria, HAB, and whale targets and produced model-lift and lead-lag correlation tables. No correlation is promoted as a claim until it survives an independent reproduction/null-control run."},
+        {"id": "foundation_model_inputs", "label": "Foundation-model coastal inputs", "status": "Exploratory", "kind": "data",
+         "question": "Which foundation-model source data is ready for coastal-hazard experiments?",
+         "plain": "Source adapters are now separated by readiness: Sentinel-3 OLCI/SLSTR chlorophyll data is present locally for Granite-Ocean style work, and MERRA-2 surface variables are available through Earth Engine for station-level Prithvi inputs. Full global Prithvi-WxC pressure-level rollouts still need NASA GES DISC authorization."},
         {"id": "interlingua", "label": "Interlingua — a shared physics language", "status": "Caveated", "kind": "method",
          "question": "Can different regions' coastal data be re-encoded onto one physics 'language' that transfers without local labels?",
-         "plain": "Yes — and the surprise is that the winner is hand-built non-dimensional π-groups (Buckingham-π), not learned neural encoders. The same physics coordinates let a model trained in one place rank dirty-water days in another zero-shot (US↔Ireland AP ~0.136, ~1.9–2.25× over a matched-prevalence baseline; it also transfers to Australia).",
-         "detail": "We re-encoded everything onto a label-free physics manifold and raced learned encoders against hand-built π-groups. The π-groups won — they beat the learned Koopman / self-supervised / Gromov–Wasserstein encoders and survive 50 permutation nulls, so physics, not a bigger model, is the shared language. A deeper information-theoretic analysis then measured the honest ceiling: our interlingua channels carry essentially zero genuine governing dimensionless numbers (the 'π-groups' are normalized quantities), so the real bottleneck is substrate poverty — too few independent physical channels — not the method. The portable axis is low UV-dose. And the manifold is NOT universal across hazards (a bacteria language does not carry to domoic acid), so it is a shared coordinate system per signal, not one universal vector. The cheapest keyless enrichment identified is adding a length+time pair (tide period + water depth)."},
+         "plain": "Caveated yes: hand-built non-dimensional π-groups remain the cleanest label-free cross-region bacteria language, but the newer audits define hard boundaries. The same representation does not carry annual EU bathing-water classes past calendar+memory, and daily freshwater cyano π features do not beat calendar or persistence.",
+         "detail": "We re-encoded coastal data onto a label-free physics manifold and raced learned encoders against hand-built π-groups. The π-groups won the US/Ireland/Australia bacteria transfer lane and survived permutation-null checks, but the later boundary tests matter: annual EU class resolution and freshwater cyano daily-met transfer do not promote. Interlingua is a useful coordinate system per signal family, not one universal vector across hazards."},
     ]
 
 
@@ -1369,6 +1781,12 @@ def main():
     state["vocabulary"] = _build_vocabulary()
     state["targets"] = _build_targets()
     state["signals"] = _build_signals()
+    project_docs = _build_project_docs()
+    counts = dict(state.get("counts") or {})
+    counts["targets"] = len(state["targets"])
+    counts["signals"] = len(state["signals"])
+    counts["project_docs"] = len(project_docs)
+    state["counts"] = counts
 
     # bundle the evidence JSON each finding/model points at (so drill-downs work offline)
     evidence = {}
@@ -1396,10 +1814,10 @@ def main():
         "built_pacific": time.strftime("%Y-%m-%d %H:%M %Z"),
         "state": state,
         "evidence": evidence,
-        "project_docs": _build_project_docs(),
+        "project_docs": project_docs,
     }
     out = HERE / "data.json"
-    text = json.dumps(snap, separators=(",", ":"))
+    text = json.dumps(_json_safe(snap), separators=(",", ":"), allow_nan=False)
     # final scrub: strip any absolute local prefixes that survived inside strings
     user = os.environ.get("USERNAME") or os.environ.get("USER") or ""
     # strip absolute local prefixes (generic user segment) so no machine paths/usernames leak
