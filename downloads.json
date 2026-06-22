@@ -5,24 +5,24 @@
    "path": "data.json",
    "type": "application/json",
    "license": "Apache-2.0",
-   "bytes": 997418,
-   "sha256": "fe24774632e488a046ed1d990e976f534532f6de54f7421e3a9d67e1da42027c"
+   "bytes": 1045502,
+   "sha256": "307a908f9fb3db14f14b31a0ee01ca16c5f3e1adaf041ec9fcaaa6a1b2383c22"
   },
   {
    "title": "Findings table (CSV)",
    "path": "downloads/findings.csv",
    "type": "text/csv",
    "license": "Apache-2.0",
-   "bytes": 8243,
-   "sha256": "bff66b474578f3b9442cdce21ded6d097b1cea4be48beec884cb5da5e38b1bb3"
+   "bytes": 10978,
+   "sha256": "b02dd47cc570b9e92d45dc51f4ea972087f8674b9120357cf54d460414b922a5"
   },
   {
    "title": "Models registry (CSV)",
    "path": "downloads/models.csv",
    "type": "text/csv",
    "license": "Apache-2.0",
-   "bytes": 3547,
-   "sha256": "492134020c34c08e120bcdd31fdd74b67e3f126dd9d794a245430ced86ad8353"
+   "bytes": 3239,
+   "sha256": "c514b6c4c0ebeb68aaaa4453b24facad19daaf574cb75a2cbf982c83b6f19eab"
   },
   {
    "title": "Beach-station coverage + model skill (GeoJSON)",
@@ -30,7 +30,7 @@
    "type": "application/geo+json",
    "license": "Apache-2.0",
    "bytes": 264663,
-   "sha256": "fa6ca2a5bf38e125209fe48defaef46a76b7964a3d2573e8036b75b27aaaaedf"
+   "sha256": "3bfa32d5854a55db6ee9af607787be971502962734c233dbd00f239942cdc7ff"
   },
   {
    "title": "US lake cyano coverage (GeoJSON)",
@@ -38,7 +38,7 @@
    "type": "application/geo+json",
    "license": "Public domain (EPA CyAN)",
    "bytes": 625536,
-   "sha256": "cdac56e016abe908db071d31c05651df2e5f7be39a42ceb852fafb4a27684985"
+   "sha256": "d76a03444776dd804304501f08fad41bff483b4db19926b307803186796522be"
   },
   {
    "title": "Domoic-acid pier coverage (GeoJSON)",
@@ -46,7 +46,7 @@
    "type": "application/geo+json",
    "license": "Public (CalHABMAP/SCCOOS)",
    "bytes": 3334,
-   "sha256": "e7a511f8debee8b56c0228236bc02a3da68bba98d8658610ce080377ccc4ded3"
+   "sha256": "b75055af4c127593ef835299de5484790a9ce6536ba67a89b2602de86187c8de"
   },
   {
    "title": "Ireland bathing-water coverage (GeoJSON)",
@@ -54,7 +54,7 @@
    "type": "application/geo+json",
    "license": "Public (EPA Ireland / EU open data)",
    "bytes": 73573,
-   "sha256": "e6b26ceb62849900dcb994b5a6e5167c1f5204a5b62ba176a53bbe9efb613869"
+   "sha256": "32e160f91e12d9c76a1d7df19e5725c0cbde02322eaad353aaeb037aacece657"
   },
   {
    "title": "Program results summary",
