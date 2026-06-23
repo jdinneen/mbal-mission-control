@@ -333,8 +333,24 @@
   .dl a.dbtn:hover{background:var(--acc);color:#fff;border-color:var(--acc)}
 
   /* ---- start here (scientist-first landing) ---- */
-  .hero{max-width:840px;margin-bottom:26px}
+  .hero{max-width:840px;margin-bottom:26px;min-width:0}
   .hero h1.page{margin:10px 0 14px}
+  .featurevideo{display:grid;grid-template-columns:minmax(0,.88fr) minmax(420px,1.12fr);gap:18px;align-items:stretch;margin:0 0 28px;max-width:100%;min-width:0}
+  .featurecopy{min-width:0;padding:24px;background:linear-gradient(135deg,#fff 0%,#fff 58%,var(--acc-tint2) 100%);border:1px solid #d8e7e5;border-radius:16px;box-shadow:var(--card-sh)}
+  .featurecopy .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--acc);font-weight:600;margin-bottom:10px}
+  .featurecopy h2{margin:0 0 10px;font-size:24px;line-height:1.18;font-weight:600;letter-spacing:-.015em;color:var(--ink);overflow-wrap:anywhere}
+  .featurecopy p{margin:0;font-size:14.8px;line-height:1.58;color:var(--ink2);text-wrap:pretty;overflow-wrap:anywhere}
+  .featurepoints{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px}
+  .featurepoint{min-width:0;border:1px solid var(--faint);background:rgba(255,255,255,.72);border-radius:12px;padding:12px 13px}
+  .featurepoint b{display:block;font-size:13.5px;color:var(--ink);margin-bottom:3px}
+  .featurepoint span{display:block;font-size:12.5px;line-height:1.4;color:var(--ink4);overflow-wrap:anywhere}
+  .featuremedia{min-width:0;max-width:100%;overflow:hidden;border:1px solid #111827;border-radius:16px;background:#0b0f1a;box-shadow:0 14px 34px rgba(16,24,40,.16)}
+  .featuremedia video{display:block;width:100%;aspect-ratio:16/9;background:#0b0f1a}
+  .featurebar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-top:1px solid #1e293b;background:#101827;flex-wrap:wrap}
+  .featurebar span{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:#9fb0c7}
+  .featurelinks{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .featurelinks a{font-family:var(--mono);font-size:11.5px;font-weight:600;color:#2dd4bf;border:1px solid #254256;border-radius:8px;padding:5px 9px;background:#111827}
+  .featurelinks a:hover{background:#2dd4bf;border-color:#2dd4bf;color:#06111f}
   .bigrow{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:26px}
   .bigcard{padding:22px 24px}
   .bigcard .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;margin-bottom:10px;display:inline-flex;align-items:center;gap:7px}
@@ -433,11 +449,12 @@
   .reprocard li{font-size:14px;line-height:1.6;color:var(--ink2);margin-bottom:7px}
   .reprocard code{font-family:var(--mono);font-size:12.5px;background:var(--faint3);border:1px solid var(--border);border-radius:5px;padding:1px 6px}
   @media (max-width:860px){
-    .bigrow,.minigrid,.paths,.qcardgrid,.storyintro,.storyflow,.storycompare{grid-template-columns:1fr}
+    .featurevideo,.bigrow,.minigrid,.paths,.qcardgrid,.storyintro,.storyflow,.storycompare{grid-template-columns:1fr}
     .hwrap{padding:12px 16px}
     nav.tabs{padding:0 16px}
     main{padding:24px 16px 64px}
     h1.page{font-size:27px}
+    .hero h1.page,.lede{overflow-wrap:anywhere}
     .metrics,.ledgerstats{grid-template-columns:1fr 1fr}
     .metric:nth-child(odd){border-right:1px solid var(--faint)}
     .metric:nth-child(1),.metric:nth-child(2){border-bottom:1px solid var(--faint)}
@@ -467,6 +484,9 @@
     .ledgersearch input,.ledgerselect{flex-basis:100%;width:100%}
     .storyscore{grid-template-columns:1fr}
     .storyimage{height:220px}
+    .featurepoints{grid-template-columns:1fr}
+    .featurecopy{padding:21px 18px}
+    .featurecopy h2{font-size:21px}
   }
 </style>
 </head>
@@ -509,6 +529,34 @@
       <h1 class="page">Can AI tell you which days the coast is unsafe?</h1>
       <p class="lede">Beaches too dirty to swim. Shellfish too toxic to eat. Water too low on oxygen. Lakes choked with algae. This is the lab's honest scorecard for forecasting those rare days. We test whether machine-learning models — fed weather, river, and ocean data — actually beat the simplest possible guess: <i>"today will look a lot like yesterday."</i> Usually they don't, so we keep the dead ends on the record right beside the wins — and show the data behind every claim. Pick a thread below.</p>
     </div>
+
+    <section class="featurevideo" aria-label="Featured lakehouse explainer video">
+      <div class="featurecopy">
+        <div class="tag">Featured explainer · narrated · closed captions</div>
+        <h2>How the data machine turns messy public data into checked evidence.</h2>
+        <p>Start here for the plain-English walkthrough: where data lands in the lakehouse, how transforms clean it, where the tables and outputs live, which model engines run, and how results become claim cards.</p>
+        <div class="featurepoints" aria-label="Lakehouse explainer topics">
+          <div class="featurepoint"><b>Lakehouse</b><span>Bronze, Silver, and Gold tables keep raw data, clean features, and results separate.</span></div>
+          <div class="featurepoint"><b>Transforms</b><span>Units, joins, dates, features, and leakage checks make the data trustworthy.</span></div>
+          <div class="featurepoint"><b>Model engines</b><span>Rankers, boosters, neural nets, tensor factors, and zero-shot readouts get graded.</span></div>
+          <div class="featurepoint"><b>Evidence gates</b><span>Holdouts, baselines, null checks, and critics decide which claims survive.</span></div>
+        </div>
+      </div>
+      <div class="featuremedia">
+        <video controls preload="metadata" playsinline poster="videos/lakehouse_pipeline_8th_grade_poster.jpg" aria-label="Narrated eighth-grade explainer video about the MBAL lakehouse pipeline">
+          <source src="videos/lakehouse_pipeline_8th_grade_narrated.mp4" type="video/mp4">
+          <track src="videos/lakehouse_pipeline_8th_grade_captions.srt" kind="captions" srclang="en" label="English captions" default>
+          <a href="videos/lakehouse_pipeline_8th_grade_narrated.mp4">Open the lakehouse pipeline explainer video.</a>
+        </video>
+        <div class="featurebar">
+          <span>2:20 classroom explainer</span>
+          <div class="featurelinks">
+            <a href="lakehouse-pipeline-video.html">Share page</a>
+            <a href="videos/lakehouse_pipeline_8th_grade_narrated.mp4">MP4</a>
+          </div>
+        </div>
+      </div>
+    </section>
 
     <!-- the two big things: the law + the shipped win (data-bound) -->
     <div class="bigrow" id="bigrow"></div>

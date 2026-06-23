@@ -1,0 +1,74 @@
+1
+00:00:00,450 --> 00:00:11,000
+Here is the whole machine. We collect public data,
+organize it in a lakehouse, transform it into clues,
+run model engines, and keep only evidence that passes
+checks.
+
+2
+00:00:12,450 --> 00:00:22,450
+First, raw data lands safely. Beach lab samples,
+weather, sensors, water quality, and research feeds
+arrive before we change names, units, or dates.
+
+3
+00:00:24,450 --> 00:00:35,125
+The lakehouse has three shelves. Bronze keeps the
+original files. Silver holds cleaned tables. Gold
+stores model runs, predictions, metrics, and
+leaderboards.
+
+4
+00:00:37,450 --> 00:00:47,925
+Transforms are the cleanup team. They fix units, match
+stations, join sources by time and place, build
+features, and block future answers from leaking into
+training.
+
+5
+00:00:50,450 --> 00:01:01,750
+The folders act like rooms in a school lab. Source-
+shaped datasets, silver tables, gold results, research
+engines, reports, and the Mission Control site each
+have a clear home.
+
+6
+00:01:03,450 --> 00:01:14,175
+Feature builders turn tables into useful clues: recent
+history, rain and runoff, physics pi groups, tensor
+factors, and oxygen covariates for stress screening.
+
+7
+00:01:16,450 --> 00:01:27,475
+Then the engines compete. Simple logistic models, tree
+boosters, neural nets, tensor factorization, and zero-
+shot readouts all get graded on the same target
+question.
+
+8
+00:01:29,450 --> 00:01:41,000
+Each target engine asks one exact question. Beach
+bacteria, surprise-onset events, oxygen stress,
+harmful algae signals, and state QA each use its own
+grading rule.
+
+9
+00:01:42,450 --> 00:01:53,325
+A result is not trusted just because it looks good.
+Holdout tests, baselines, confidence intervals, null
+checks, calibration, and critic reviews decide what
+survives.
+
+10
+00:01:55,450 --> 00:02:05,675
+Right now, several findings survive. The strongest
+story is not one magic model. It is a set of checked
+claims, with some ideas held and weaker stories
+dropped.
+
+11
+00:02:08,450 --> 00:02:18,625
+Mission Control is the human layer. It turns those
+files into dashboards, claim cards, reports, and
+videos so people can see what happened and why it
+matters.
