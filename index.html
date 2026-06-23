@@ -351,6 +351,17 @@
   .featurelinks{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .featurelinks a{font-family:var(--mono);font-size:11.5px;font-weight:600;color:#2dd4bf;border:1px solid #254256;border-radius:8px;padding:5px 9px;background:#111827}
   .featurelinks a:hover{background:#2dd4bf;border-color:#2dd4bf;color:#06111f}
+  .videoqueue{margin:-6px 0 28px}
+  .videolinkcard{display:grid;grid-template-columns:210px minmax(0,1fr) auto;gap:18px;align-items:center;padding:14px;background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:var(--card-sh);transition:box-shadow .16s,transform .16s,border-color .16s}
+  .videolinkcard:hover{box-shadow:var(--card-sh-hover);transform:translateY(-2px);border-color:#bfe0dc}
+  .videolinkthumb{overflow:hidden;border-radius:10px;border:1px solid #172033;background:#0b0f1a}
+  .videolinkthumb img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+  .videolinkcopy{min-width:0}
+  .videolinkcopy .tag{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--acc);font-weight:600;margin-bottom:5px}
+  .videolinkcopy h3{margin:0 0 5px;font-size:17px;line-height:1.25;font-weight:600;color:var(--ink)}
+  .videolinkcopy p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink3);text-wrap:pretty}
+  .videolinkgo{font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--acc);border:1px solid var(--border);border-radius:8px;padding:7px 10px;white-space:nowrap;background:var(--acc-tint2)}
+  .videolinkcard:hover .videolinkgo{background:var(--acc);border-color:var(--acc);color:#fff}
   .bigrow{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:26px}
   .bigcard{padding:22px 24px}
   .bigcard .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;margin-bottom:10px;display:inline-flex;align-items:center;gap:7px}
@@ -474,6 +485,8 @@
     .fieldgrid{grid-template-columns:1fr}
     .storyscore{grid-template-columns:1fr 1fr}
     .storyimage{height:260px}
+    .videolinkcard{grid-template-columns:150px minmax(0,1fr);align-items:start}
+    .videolinkgo{grid-column:2}
   }
   @media (max-width:480px){
     .metrics,.ledgerstats{grid-template-columns:1fr}
@@ -487,6 +500,8 @@
     .featurepoints{grid-template-columns:1fr}
     .featurecopy{padding:21px 18px}
     .featurecopy h2{font-size:21px}
+    .videolinkcard{grid-template-columns:1fr}
+    .videolinkgo{grid-column:auto;justify-self:start}
   }
 </style>
 </head>
@@ -556,6 +571,20 @@
           </div>
         </div>
       </div>
+    </section>
+
+    <section class="videoqueue" aria-label="More shareable explainer videos">
+      <a class="videolinkcard" href="clean-to-dirty-tensor-video.html">
+        <span class="videolinkthumb" aria-hidden="true">
+          <img src="videos/clean_to_dirty_tensor_8th_grade_poster.jpg" alt="">
+        </span>
+        <span class="videolinkcopy">
+          <span class="tag">New finding explainer · 1:54 · captions</span>
+          <h3>Why physics-pi plus tensor context improves surprise bacteria spike warning.</h3>
+          <p>AP rises from 0.2992 to 0.3418 by combining local spike physics with a broader coastal-state readout.</p>
+        </span>
+        <span class="videolinkgo">Share page</span>
+      </a>
     </section>
 
     <!-- the two big things: the law + the shipped win (data-bound) -->
