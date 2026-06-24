@@ -1,8 +1,9 @@
 1
-00:00:00,450 --> 00:00:11,000
+00:00:00,450 --> 00:00:11,800
 Here is the whole machine. We collect public data,
 organize it in a lakehouse, transform it into clues,
-run model engines, and keep only evidence that passes
+choose target engines so the question is fair, run
+model engines, and keep only evidence that passes
 checks.
 
 2
@@ -26,11 +27,11 @@ features, and block future answers from leaking into
 training.
 
 5
-00:00:50,450 --> 00:01:01,750
+00:00:50,450 --> 00:01:01,650
 The folders act like rooms in a school lab. Source-
 shaped datasets, silver tables, gold results, research
-engines, reports, and the Mission Control site each
-have a clear home.
+engines, reports, and the explainer website each have
+a clear home.
 
 6
 00:01:03,450 --> 00:01:14,175
@@ -39,18 +40,18 @@ history, rain and runoff, physics pi groups, tensor
 factors, and oxygen covariates for stress screening.
 
 7
-00:01:16,450 --> 00:01:27,475
-Then the engines compete. Simple logistic models, tree
-boosters, neural nets, tensor factorization, and zero-
-shot readouts all get graded on the same target
-question.
-
-8
-00:01:29,450 --> 00:01:41,000
+00:01:16,450 --> 00:01:28,000
 Each target engine asks one exact question. Beach
 bacteria, surprise-onset events, oxygen stress,
 harmful algae signals, and state QA each use its own
 grading rule.
+
+8
+00:01:29,450 --> 00:01:41,700
+Then the model engines compete on that target. Simple
+logistic models, tree boosters, neural nets, tensor
+factorization, and zero-shot readouts all get graded
+against honest baselines.
 
 9
 00:01:42,450 --> 00:01:53,325
@@ -60,15 +61,13 @@ checks, calibration, and critic reviews decide what
 survives.
 
 10
-00:01:55,450 --> 00:02:05,675
-Right now, several findings survive. The strongest
-story is not one magic model. It is a set of checked
-claims, with some ideas held and weaker stories
-dropped.
-
-11
-00:02:08,450 --> 00:02:18,625
-Mission Control is the human layer. It turns those
-files into dashboards, claim cards, reports, and
-videos so people can see what happened and why it
-matters.
+00:01:55,450 --> 00:02:16,800
+Here is what survived. Fixed physics clues can rank
+bacteria risk in coastal places the model did not
+train on, which is useful for first-pass triage, not
+official advisories. The surprise-onset model helps
+spot clean beaches that may turn dirty. The oxygen
+screen can warn when oxygen sensors are missing.
+Tensor patterns help check and fill a tide-density
+sensor signal. The big foundation-model story was
+dropped because it did not beat simpler physics.
