@@ -62,12 +62,14 @@ survives.
 
 10
 00:01:55,450 --> 00:02:16,800
-Here is what survived. Fixed physics clues can rank
-bacteria risk in coastal places the model did not
-train on, which is useful for first-pass triage, not
-official advisories. The surprise-onset model helps
-spot clean beaches that may turn dirty. The oxygen
-screen can warn when oxygen sensors are missing.
-Tensor patterns help check and fill a tide-density
-sensor signal. The big foundation-model story was
-dropped because it did not beat simpler physics.
+Here is what survived. In tested held-out coastal
+datasets, fixed physics clues ranked bacteria risk
+better than normal-rate guessing. That is useful for
+first-pass triage, not official advisories. On a
+California surprise-onset slice, the model helped spot
+recently clean beaches that later turned dirty. The
+oxygen screen helped flag low-oxygen stress from other
+water-quality clues. Tensor patterns helped check and
+fill one tide-density sensor signal. The big
+foundation-model story was dropped because it did not
+beat simpler physics.
