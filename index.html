@@ -339,6 +339,26 @@
   /* ---- start here (scientist-first landing) ---- */
   .hero{max-width:840px;margin-bottom:26px;min-width:0}
   .hero h1.page{margin:10px 0 14px}
+  .heroactions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px}
+  .herocta{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border:1px solid rgba(15,138,132,.35);border-radius:8px;background:var(--surface);font-size:13.5px;font-weight:700;color:var(--acc)}
+  .herocta.primary{background:var(--acc);border-color:var(--acc);color:#fff;box-shadow:0 8px 18px rgba(15,138,132,.18)}
+  .herocta:hover{border-color:var(--acc);background:var(--acc-tint2);color:var(--acc)}
+  .herocta.primary:hover{background:var(--acc-hover);border-color:var(--acc-hover);color:#fff}
+  .pipelinefeature{display:grid;grid-template-columns:minmax(0,.82fr) minmax(420px,1.18fr);gap:18px;align-items:stretch;margin:0 0 28px;padding:18px;background:linear-gradient(135deg,#fff 0%,#fff 54%,#eef8f7 100%);border:1px solid #d6e6e4;border-radius:16px;box-shadow:var(--card-sh);min-width:0}
+  .pipelinecopy{min-width:0;padding:6px 4px 6px 6px}
+  .pipelinecopy .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--acc);font-weight:600;margin-bottom:10px}
+  .pipelinecopy h2{margin:0 0 10px;font-size:25px;line-height:1.14;font-weight:600;letter-spacing:-.015em;color:var(--ink);overflow-wrap:anywhere}
+  .pipelinecopy p{margin:0;font-size:14.8px;line-height:1.58;color:var(--ink2);text-wrap:pretty;overflow-wrap:anywhere}
+  .pipelinepoints{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px}
+  .pipelinepoints span{display:block;border:1px solid var(--faint);background:rgba(255,255,255,.72);border-radius:10px;padding:9px 10px;font-size:12.4px;line-height:1.35;color:var(--ink3)}
+  .pipelinepoints b{display:block;margin-bottom:2px;color:var(--ink);font-size:12.8px}
+  .pipelineactions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:16px}
+  .pipelineactions a{font-family:var(--mono);font-size:11.5px;font-weight:700;color:var(--acc);border:1px solid #cfe3e1;border-radius:8px;padding:7px 10px;background:#fff}
+  .pipelineactions a.primary{background:var(--acc);border-color:var(--acc);color:#fff}
+  .pipelineactions a:hover{background:var(--acc-tint2);border-color:var(--acc);color:var(--acc)}
+  .pipelineactions a.primary:hover{background:var(--acc-hover);border-color:var(--acc-hover);color:#fff}
+  .pipelinepreview{display:block;min-width:0;overflow:hidden;border:1px solid #dbe2ec;border-radius:12px;background:#fcfdff;box-shadow:0 10px 26px rgba(16,24,40,.10)}
+  .pipelinepreview img{display:block;width:100%;height:100%;min-height:320px;object-fit:cover;object-position:left top;background:#fcfdff}
   .featurevideo{display:grid;grid-template-columns:minmax(0,.88fr) minmax(420px,1.12fr);gap:18px;align-items:stretch;margin:0 0 28px;max-width:100%;min-width:0}
   .featurecopy{min-width:0;padding:24px;background:linear-gradient(135deg,#fff 0%,#fff 58%,var(--acc-tint2) 100%);border:1px solid #d8e7e5;border-radius:16px;box-shadow:var(--card-sh)}
   .featurecopy .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--acc);font-weight:600;margin-bottom:10px}
@@ -460,11 +480,13 @@
   /* ---- data & reproduce intro ---- */
   .reprocard{padding:22px 24px;margin-bottom:24px}
   .reprocard h3{margin:0 0 12px;font-size:16px;font-weight:600}
+  .reprocard p{margin:0 0 12px;font-size:14px;line-height:1.58;color:var(--ink2)}
+  .pipeline-repro .herocta{min-height:36px}
   .reprocard ol{margin:0;padding-left:20px}
   .reprocard li{font-size:14px;line-height:1.6;color:var(--ink2);margin-bottom:7px}
   .reprocard code{font-family:var(--mono);font-size:12.5px;background:var(--faint3);border:1px solid var(--border);border-radius:5px;padding:1px 6px}
   @media (max-width:860px){
-    .featurevideo,.bigrow,.minigrid,.paths,.qcardgrid,.storyintro,.storyflow,.storycompare{grid-template-columns:1fr}
+    .featurevideo,.pipelinefeature,.bigrow,.minigrid,.paths,.qcardgrid,.storyintro,.storyflow,.storycompare{grid-template-columns:1fr}
     .hwrap{padding:12px 16px}
     nav.tabs{padding:0 16px}
     main{padding:24px 16px 64px}
@@ -502,8 +524,12 @@
     .storyscore{grid-template-columns:1fr}
     .storyimage{height:220px}
     .featurepoints{grid-template-columns:1fr}
+    .pipelinepoints{grid-template-columns:1fr}
     .featurecopy{padding:21px 18px}
     .featurecopy h2{font-size:21px}
+    .pipelinefeature{padding:15px}
+    .pipelinecopy h2{font-size:21px}
+    .herocta{width:100%}
     .videolinkcard{grid-template-columns:1fr}
     .videolinkgo{grid-column:auto;justify-self:start}
   }
@@ -527,6 +553,7 @@
   </div>
   <nav class="tabs">
     <button data-v="overview" class="active">Start here</button>
+    <a href="evidence-pipeline-map.html">Pipeline Map</a>
     <button data-v="questions">Questions</button>
     <button data-v="findings">Findings</button>
     <button data-v="models">Models</button>
@@ -546,7 +573,33 @@
       <div class="eyebrow">Monterey Bay AI Lab</div>
       <h1 class="page">Can AI tell you which days the coast is unsafe?</h1>
       <p class="lede">Beaches too dirty to swim. Shellfish too toxic to eat. Water too low on oxygen. Lakes choked with algae. This is the lab's honest scorecard for forecasting those rare days. We test whether machine-learning models — fed weather, river, and ocean data — actually beat the simplest possible guess: <i>"today will look a lot like yesterday."</i> Usually they don't, so we keep the dead ends on the record right beside the wins — and show the data behind every claim. Pick a thread below.</p>
+      <div class="heroactions" aria-label="Primary orientation links">
+        <a class="herocta primary" href="evidence-pipeline-map.html">Open the pipeline map</a>
+        <a class="herocta" href="#questions">Browse research questions</a>
+      </div>
     </div>
+
+    <section class="pipelinefeature" aria-label="Full-stack evidence pipeline map">
+      <div class="pipelinecopy">
+        <div class="tag">Full-stack map · scientist and student orientation</div>
+        <h2>See how the lab turns questions into checked evidence.</h2>
+        <p>The pipeline map is the fastest way to understand what MBAL has: research questions, public data, lakehouse tables, feature panels, model engines, evaluation gates, critic passes, ledgers, reports, and stop paths in one evidence trail.</p>
+        <div class="pipelinepoints" aria-label="Pipeline map entry points">
+          <span><b>For scientists</b>Trace each claim back to the target, baseline, holdout, and published evidence.</span>
+          <span><b>For AI/data students</b>Follow raw observations through features, models, null checks, and reproducible reports.</span>
+          <span><b>For collaborators</b>Spot useful gaps: missing data, blocked targets, weak baselines, or next validation work.</span>
+          <span><b>For reviewers</b>See why a model, chart, or embedding is not a claim until it survives the gates.</span>
+        </div>
+        <div class="pipelineactions">
+          <a class="primary" href="evidence-pipeline-map.html">Open full map</a>
+          <a href="evidence-pipeline-map.svg">SVG</a>
+          <a href="#data">Data trail</a>
+        </div>
+      </div>
+      <a class="pipelinepreview" href="evidence-pipeline-map.html" aria-label="Open the full MBAL stable evidence pipeline map">
+        <img src="evidence-pipeline-map.svg" alt="Preview of the MBAL full-stack evidence pipeline map.">
+      </a>
+    </section>
 
     <section class="featurevideo" aria-label="Featured lakehouse explainer video">
       <div class="featurecopy">
@@ -698,6 +751,14 @@
         <li>Findings, models, and map layers are all exported from the same <code>data.json</code>, so any claim on this site traces back to the evidence behind it rather than a hand-written summary.</li>
         <li>The source is licensed Apache-2.0 — the repository is linked in the footer below.</li>
       </ol>
+    </div>
+    <div class="card reprocard pipeline-repro">
+      <h3>Evidence pipeline map</h3>
+      <p>The full-stack map shows how questions, datasets, lakehouse tables, model engines, evaluation gates, ledgers, reports, decision surfaces, and stop paths connect inside this snapshot.</p>
+      <div class="heroactions">
+        <a class="herocta primary" href="evidence-pipeline-map.html">Open map</a>
+        <a class="herocta" href="evidence-pipeline-map.svg">SVG</a>
+      </div>
     </div>
     <div class="secband"><h2>Datasets behind this snapshot</h2><p>Production (governed) vs experimental (shadow). Click any row for size, source, and recency.</p></div>
     <div class="lhlists">
