@@ -236,6 +236,10 @@
   .lhempty{font-family:var(--mono);font-size:12.5px;color:var(--ink5);padding:14px 0 2px;border-top:1px solid var(--faint2)}
 
   /* ---- vocabulary ---- */
+  .vocabsections{display:flex;flex-direction:column;gap:28px}
+  .vocabsection .vh{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:0 0 12px}
+  .vocabsection .vh h2{margin:0;font-size:18px;font-weight:650;letter-spacing:0;color:#252b31}
+  .vocabsection .vh span{font-family:var(--mono);font-size:12px;color:var(--ink5)}
   .vocabgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
   .vcard{background:var(--surface);border:1px solid var(--border);border-radius:15px;box-shadow:var(--card-sh);padding:20px 21px;transition:box-shadow .18s,transform .18s}
   .vcard:hover{box-shadow:var(--card-sh-hover);transform:translateY(-2px)}
@@ -774,7 +778,7 @@
       <h1 class="sec">Glossary</h1>
       <p class="subhead">This lab is careful about words. An untrained XGBoost or neural net is a <b>learner</b>, not a model — it only becomes a <b>trained model</b> once it's fitted, evaluated, and registered. A <b>baseline</b> is an honest comparator, not a discovery; a <b>signal</b> carries verdicts (KEEP / WASH / REJECT) per target. Each term below links to its real examples from the registry and signal catalog.</p>
     </div>
-    <div class="vocabgrid" id="vocabgrid"></div>
+    <div class="vocabsections" id="vocabgrid"></div>
   </section>
 </main>
 
@@ -1391,7 +1395,7 @@ function ledgerRows(){
     add({type:'document',key:'document:'+i+':'+d.path,id:d.path,index:i,title:d.title||d.path,status:'Document',topic:d.path||'Project docs',desc:d.text||'',meta:[d.path,d.chunk!=null?'chunk '+d.chunk:null,d.priority!=null?'priority '+d.priority:null].filter(Boolean).join(' · '),raw:d});
   });
   (DATA.vocabulary||[]).forEach((c,i)=>{
-    add({type:'vocabulary',key:'vocabulary:'+c.key,id:c.key,index:i,title:c.label||c.key,status:'Vocabulary',topic:'Glossary',desc:c.what||'',meta:(c.examples||[]).slice(0,3).join(' · '),raw:c,source:{type:'vocab',key:c.key}});
+    add({type:'vocabulary',key:'vocabulary:'+c.key,id:c.key,index:i,title:c.label||c.key,status:'Vocabulary',topic:c.group||'Glossary',desc:c.what||'',meta:(c.examples||[]).slice(0,3).join(' · '),raw:c,source:{type:'vocab',key:c.key}});
   });
   (DATA.next_actions||[]).forEach((n,i)=>{
     add({type:'note',key:'note:next:'+i,id:'next_action_'+(i+1),index:i,title:'Build note '+(i+1),status:'Note',topic:'Build notes',desc:n,meta:'next_actions',raw:n});
@@ -1573,20 +1577,37 @@ let _vocabItems=[];
 // everything we have for a given concept, pulled from the real snapshot
 function vocabItems(key){
   const s=DATA||{};
-  if(key==='source_dataset') return lakeAssets().map((a,i)=>({label:a.asset_id,sub:(a.rows!=null?fmt(a.rows)+' rows':mb(a.size_mb))+' · production lake',open:()=>{DETAIL={type:'dataset',store:'lake',idx:i};renderDrawer();}}))
+  if(['source_dataset','data_asset','production_lake'].includes(key)) return lakeAssets().map((a,i)=>({label:a.asset_id,sub:(a.rows!=null?fmt(a.rows)+' rows':mb(a.size_mb))+' · production lake',open:()=>{DETAIL={type:'dataset',store:'lake',idx:i};renderDrawer();}}))
       .concat(shadowAssets().map((d,i)=>({label:d.name,sub:'shadow',open:()=>{DETAIL={type:'dataset',store:'shadow',idx:i};renderDrawer();}})));
+  if(key==='shadow_lake') return shadowAssets().map((d,i)=>({label:d.name,sub:[d.rows!=null?fmt(d.rows)+' rows':null,d.source||'shadow'].filter(Boolean).join(' · '),open:()=>{DETAIL={type:'dataset',store:'shadow',idx:i};renderDrawer();}}));
   if(key==='target') return (s.targets||[]).map((t,i)=>({label:t.label,chip:t.status,sub:t.question,open:()=>{DETAIL={type:'target',idx:i};renderDrawer();}}));
-  if(key==='finding') return (s.findings||[]).map(f=>({label:f.title,chip:findingStatus(f.kind),sub:f.plain||f.headline||''}));
-  if(key==='trained_model') return (s.models||[]).map((m,i)=>({label:m.model_id,chip:modelStatus(m.status),sub:[m.family,m.task].filter(Boolean).join(' · '),open:()=>{DETAIL={type:'model',idx:i};renderDrawer();}}));
+  if(key==='hazard_lane') return (s.targets||[]).map((t,i)=>({label:t.label,chip:t.status,sub:t.plain||t.question,open:()=>{DETAIL={type:'target',idx:i};renderDrawer();}}));
+  if(['finding','claim_card'].includes(key)) return (s.findings||[]).map(f=>({label:f.title,chip:findingStatus(f.kind),sub:f.plain||f.headline||''}));
+  if(['trained_model','model_registry'].includes(key)) return (s.models||[]).map((m,i)=>({label:m.model_id,chip:modelStatus(m.status),sub:[m.family,m.task].filter(Boolean).join(' · '),open:()=>{DETAIL={type:'model',idx:i};renderDrawer();}}));
+  if(key==='champion_model') return (s.models||[]).map((m,i)=>({m,i})).filter(o=>/champion|production_candidate|catboost|hgbt|forecast_hgbt/i.test([o.m.status,o.m.model_id,o.m.notes,o.m.beats_baseline].join(' '))).map(o=>({label:o.m.model_id,chip:modelStatus(o.m.status),sub:o.m.beats_baseline||o.m.task||'',open:()=>{DETAIL={type:'model',idx:o.i};renderDrawer();}}));
   if(key==='baseline') return (s.models||[]).map((m,i)=>({m,i})).filter(o=>modelStatus(o.m.status)==='Baseline'||o.m.family==='baseline').map(o=>({label:o.m.model_id,chip:'Baseline',sub:o.m.task||'',open:()=>{DETAIL={type:'model',idx:o.i};renderDrawer();}}));
   if(key==='learner'){const fam={};(s.models||[]).forEach(m=>{const f=m.family||'other';(fam[f]=fam[f]||[]).push(m.model_id);});return Object.entries(fam).map(([f,ms])=>({label:f+(f==='baseline'?' (comparators)':' learner'),sub:ms.length+' fitted: '+ms.join(', ')}));}
+  if(key==='model_family'){const fam={};(s.models||[]).forEach(m=>{const f=m.family||'other';(fam[f]=fam[f]||[]).push(m.model_id);});return Object.entries(fam).map(([f,ms])=>({label:f,sub:ms.length+' registry entries: '+ms.slice(0,6).join(', ')+(ms.length>6?'...':'')}));}
   if(key==='signal') return (s.signals||[]).map(g=>({label:g.name,sub:g.what,modality:g.modality,verdicts:g.verdicts}));
+  if(key==='modality'){const mods={};(s.signals||[]).forEach(g=>{const m=g.modality||'untyped';(mods[m]=mods[m]||[]).push(g.name);});return Object.entries(mods).map(([m,gs])=>({label:m,sub:gs.length+' signals: '+gs.slice(0,8).join(', ')+(gs.length>8?'...':'')}));}
+  if(key==='signal_verdict') return (s.signals||[]).flatMap(g=>(g.verdicts||[]).map(v=>({label:g.name,chip:v.status,sub:targetLabel(v.target),modality:g.modality})));
   if(key==='representation') return (s.signals||[]).filter(g=>g.modality==='derived').map(g=>({label:g.name,sub:g.what,verdicts:g.verdicts}));
+  if(key==='gate'||/gate$/.test(key)||['value_gate','critic_pass','promotion_gate','prospective_lockbox'].includes(key)) return (s.gates||[]).map(g=>({label:pretty(g.gate_id),chip:String(g.overall_status||'Gate').toUpperCase(),sub:gateExplain(g)}));
+  if(key==='evidence_artifact') return Object.entries(EVID||{}).map(([path,obj])=>({label:ledgerEvidenceTitle(path),sub:ledgerEvidenceSummary(obj)}));
+  if(key==='mission_control_snapshot') return [{label:'data.json',sub:`built ${s._built_pacific||'unknown'}`},{label:'index.html',sub:'static Mission Control app'},{label:'downloads.json',sub:'published downloadable artifacts'}];
+  if(key==='complete_ledger') return ledgerRows().slice(0,80).map(r=>({label:r.title,chip:r.status,sub:[r.typeLabel,r.topic].filter(Boolean).join(' · ')}));
   const c=(s.vocabulary||[]).find(v=>v.key===key);return ((c&&c.examples)||[]).map(e=>({label:e}));
 }
 function renderVocabulary(){
   const v=DATA.vocabulary||[];
-  $('#vocabgrid').innerHTML=v.map(c=>{
+  const groups=[];
+  v.forEach(c=>{
+    const g=c.group||'Core concepts';
+    let row=groups.find(x=>x.group===g);
+    if(!row){row={group:g,items:[]};groups.push(row);}
+    row.items.push(c);
+  });
+  const card=c=>{
     const n=vocabItems(c.key).length;
     return `<div class="vcard clickable" data-k="${esc(c.key)}">
     <div class="vk">${esc(c.key||'').replace(/_/g,' ')}${helpQ('This is the internal vocabulary key for this concept.')}</div>
@@ -1594,7 +1615,11 @@ function renderVocabulary(){
     <p class="vwhat">${esc(c.what)}${helpQ('This is the plain-English definition for the term.')}</p>
     <div class="vex">${(c.examples||[]).slice(0,4).map(e=>`<span>${esc(e)}${helpQ('This is a real example of the vocabulary term in this project.')}</span>`).join('')}</div>
     <div class="vcardfoot">See all ${n} ${esc(c.key.replace(/_/g,' '))}${n===1?'':'s'} →${helpQ('Open the drawer to see every item in this snapshot that matches this vocabulary concept.')}</div>
-  </div>`;}).join('') || '<div class="lhempty">No vocabulary in this snapshot.</div>';
+  </div>`;};
+  $('#vocabgrid').innerHTML=groups.map(g=>`<section class="vocabsection">
+    <div class="vh"><h2>${esc(g.group)}</h2><span>${g.items.length} terms</span></div>
+    <div class="vocabgrid">${g.items.map(card).join('')}</div>
+  </section>`).join('') || '<div class="lhempty">No vocabulary in this snapshot.</div>';
   document.querySelectorAll('#vocabgrid .vcard').forEach(card=>card.onclick=e=>{if(e.target.closest('.helpq'))return;DETAIL={type:'vocab',key:card.dataset.k};renderDrawer();});
 }
 function vocabDrawer(key){
@@ -1606,7 +1631,7 @@ function vocabDrawer(key){
     </div>`).join('');
   return `<div>
     <div class="dhead">
-      <div><div class="eb">Vocabulary · everything we have${helpQ('This drawer lists all snapshot items connected to the selected word.')}</div><div class="ti">${esc(c.label)}${helpQ(vocabHelp(c))}</div><div class="nt">${_vocabItems.length} item${_vocabItems.length===1?'':'s'}${helpQ('This count is how many matching items the snapshot currently has.')}</div></div>
+      <div><div class="eb">Vocabulary · ${esc(c.group||'everything we have')}${helpQ('This drawer lists all snapshot items connected to the selected word.')}</div><div class="ti">${esc(c.label)}${helpQ(vocabHelp(c))}</div><div class="nt">${_vocabItems.length} item${_vocabItems.length===1?'':'s'}${helpQ('This count is how many matching items the snapshot currently has.')}</div></div>
       <button class="dclose" onclick="closeDrawer()">×</button>
     </div>
     <div class="dbody">
