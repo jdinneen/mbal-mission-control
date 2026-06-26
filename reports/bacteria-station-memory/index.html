@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Bacteria Nowcast Beats Station Memory - Full Report</title>
+  <style>
+    :root{--ink:#20242a;--ink2:#3b4148;--ink3:#586069;--line:#dfe5e4;--soft:#f6f8f8;--acc:#0f8a84;--good:#1a7a4f;--warn:#9a6a07}
+    body{margin:0;background:#fbfcfc;color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
+    main{max-width:980px;margin:0 auto;padding:34px 20px 56px}
+    a{color:var(--acc);font-weight:700;text-decoration:none} a:hover{text-decoration:underline}
+    .back{font-size:13px;margin-bottom:22px;display:inline-block}
+    h1{font-size:34px;line-height:1.12;margin:0 0 10px;letter-spacing:-.02em}
+    h2{font-size:21px;margin:30px 0 10px}
+    p{margin:0 0 14px;color:var(--ink2)}
+    .deck{font-size:17px;color:var(--ink3);max-width:860px}
+    .stamp{font-family:Consolas,monospace;font-size:12px;color:var(--ink3);margin-top:14px}
+    .status{display:inline-block;background:#e3f3ef;color:var(--good);font-weight:700;border-radius:7px;padding:5px 10px;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+    .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:18px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+    th,td{text-align:left;border-bottom:1px solid var(--line);padding:10px 12px;vertical-align:top}
+    th{background:var(--soft);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink3)}
+    tr:last-child td{border-bottom:0}
+    code{font-family:Consolas,monospace;background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .metric{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:14px}
+    .metric b{display:block;font-size:24px;line-height:1.05;color:var(--ink)}
+    .metric span{display:block;font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;margin-top:6px}
+    .note{border-left:4px solid var(--warn);padding-left:14px;color:var(--ink2)}
+    @media(max-width:760px){.grid{grid-template-columns:1fr}h1{font-size:28px}}
+  </style>
+</head>
+<body>
+<main>
+  <a class="back" href="../../#findings">&larr; Back to Mission Control findings</a>
+  <div class="status">Supported current evidence</div>
+  <h1>Bacteria nowcast beats station-memory status quo</h1>
+  <p class="deck">The calibrated California bacteria model beats the station-memory baseline on the deployable 2022+ stratum that excludes San Diego. This is the core operational bacteria finding in the current public snapshot.</p>
+  <p class="stamp">Source: <code>data.json</code> built 2026-06-26 07:11 Pacific. Finding id: <code>claim_bacteria_station_memory_supported</code>.</p>
+
+  <section class="card">
+    <h2>Result</h2>
+    <p><b>Headline:</b> AP 0.4992 vs 0.2782; &Delta;AP +0.221.</p>
+    <p>The model was evaluated on 89,321 held-out beach-days with 8,999 exceedance events. The margin over station memory is supported by a clustered bootstrap interval that excludes zero: [0.1926, 0.2564].</p>
+  </section>
+
+  <section>
+    <h2>Key Metrics</h2>
+    <div class="grid">
+      <div class="metric"><b>0.4992</b><span>model AP</span></div>
+      <div class="metric"><b>0.2782</b><span>station-memory AP</span></div>
+      <div class="metric"><b>+0.221</b><span>AP lift</span></div>
+      <div class="metric"><b>89,321</b><span>held-out rows</span></div>
+      <div class="metric"><b>8,999</b><span>events</span></div>
+      <div class="metric"><b>0.0171</b><span>ECE</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Evidence Table</h2>
+    <table>
+      <tr><th>Field</th><th>Value</th></tr>
+      <tr><td>Finding kind</td><td>claim</td></tr>
+      <tr><td>Test stratum</td><td><code>EXCLUDE_SAN_DIEGO</code>, 2022+ deployable rows</td></tr>
+      <tr><td>Baseline</td><td>Station memory</td></tr>
+      <tr><td>Model AP</td><td>0.4992</td></tr>
+      <tr><td>Baseline AP</td><td>0.2782</td></tr>
+      <tr><td>Margin</td><td>+0.221 AP</td></tr>
+      <tr><td>95% clustered-bootstrap CI</td><td>[0.1926, 0.2564]</td></tr>
+      <tr><td>Calibration error</td><td>ECE 0.0171</td></tr>
+      <tr><td>Evidence artifact</td><td><code>reports/_eval_cards/claim_cards.json</code></td></tr>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>Why This Is Featured</h2>
+    <p>This is the largest public bacteria headline because it compares the calibrated model against the right operational memory baseline on a large held-out deployment stratum. It is not a Pi/interlingua claim and it is not a static placeholder report card.</p>
+    <p class="note"><b>Scope:</b> The claim is scoped to the deployable stratum that excludes San Diego. San Diego remains a known calibration/regime-shift caution rather than a polished deployment claim.</p>
+  </section>
+
+  <section>
+    <h2>Related Full Context</h2>
+    <p><a href="../bacteria-findings/">Open the comprehensive bacteria report</a> for the broader model comparison, county behavior, onset framing, and related operational findings.</p>
+  </section>
+</main>
+</body>
+</html>

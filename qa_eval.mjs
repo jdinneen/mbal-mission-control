@@ -35,10 +35,15 @@ for (const needle of forbidden) {
   assert(!html.includes(needle), `Ask functionality should not be present: ${needle}`);
 }
 
-const featuredReportLinks = [
+const previousReportLinks = [
   "reports/bacteria-findings/",
   "reports/pi-bacteria/",
   "reports/pi-memory-hybrid/",
+];
+const featuredReportLinks = [
+  "reports/bacteria-station-memory/",
+  "reports/clean-to-dirty-onset/",
+  "reports/forward-2026-holdout/",
 ];
 const featuredFindingIds = [
   "claim_bacteria_station_memory_supported",
@@ -49,6 +54,7 @@ const featuredFindingIds = [
 assert(html.includes("FFILTER='featured'"), "Findings should land on the Featured filter by default");
 assert(html.includes("['featured','Featured',featuredCount]"), "Findings filter should expose a data-backed Featured category");
 assert(html.includes("FEATURED_FINDING_IDS"), "Featured should be driven by current finding ids");
+assert(html.includes("FEATURED_FINDING_REPORTS"), "Featured findings should map to full report URLs");
 assert(!html.includes("FEATURED_REPORTS"), "Featured should not be hardcoded report placeholder cards");
 assert(!html.includes('id="featuredFindings"'), "Featured should render normal data.json finding cards");
 
@@ -58,7 +64,12 @@ const actualFeaturedFindingIds = [...featuredArrayMatch[1].matchAll(/'([^']+)'/g
 assert.deepEqual(actualFeaturedFindingIds, featuredFindingIds, "Featured finding ids should be exactly the current top three");
 
 for (const link of featuredReportLinks) {
-  assert(fs.existsSync(`${link}index.html`), `Featured report page missing: ${link}index.html`);
+  assert(html.includes(link), `Featured card report link missing from index.html: ${link}`);
+  assert(fs.existsSync(`${link}index.html`), `Featured full report page missing: ${link}index.html`);
+}
+
+for (const link of previousReportLinks) {
+  assert(fs.existsSync(`${link}index.html`), `Previously published report page missing: ${link}index.html`);
 }
 
 for (const id of featuredFindingIds) {

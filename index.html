@@ -136,6 +136,7 @@
   .fpill.active{background:var(--acc);border-color:var(--acc);color:#fff}
   .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   .fcard{background:var(--surface);border:1px solid var(--border);border-radius:15px;box-shadow:var(--card-sh);padding:20px 21px;cursor:pointer;transition:box-shadow .18s,border-color .18s,transform .18s}
+  a.fcard{display:block;text-decoration:none;color:inherit}
   .fcard:hover{box-shadow:var(--card-sh-hover);transform:translateY(-2px)}
   .fcard.open{border-color:#bfe0dc}
   .fcard .toprow{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px}
@@ -972,6 +973,11 @@ const FEATURED_FINDING_IDS=[
   'claim_clean_to_dirty_onset',
   'claim_forward_2026_holdout_pass'
 ];
+const FEATURED_FINDING_REPORTS={
+  claim_bacteria_station_memory_supported:'reports/bacteria-station-memory/',
+  claim_clean_to_dirty_onset:'reports/clean-to-dirty-onset/',
+  claim_forward_2026_holdout_pass:'reports/forward-2026-holdout/'
+};
 const fmt=n=>n==null?'—':Number(n).toLocaleString();
 const pct=v=>v==null?'—':(100*v).toFixed(1)+'%';
 const mb=n=>n==null?'—':(n>=1024?(n/1024).toFixed(2)+' GB':Number(n).toFixed(1)+' MB');
@@ -1396,7 +1402,10 @@ function renderFindings(){
     const segs=[0,1,2].map(n=>`<i style="background:${n<strength?seg:'var(--border)'}"></i>`).join('');
     const met=pickMetric(f); const open=OPENF===i;
     const topic=findingFamily(f.id).family;
-    return `<div class="fcard${open?' open':''}" data-i="${i}">
+    const href=isFeatured?FEATURED_FINDING_REPORTS[f.id]:null;
+    const tag=href?'a':'div';
+    const attrs=href?`href="${esc(href)}" target="_blank" rel="noopener"`:`data-i="${i}"`;
+    return `<${tag} class="fcard${open?' open':''}" ${attrs}>
       <div class="toprow">
         <span class="topic">${esc(topic)}${helpQ(topicExplain(topic))}</span>
         <span class="badge" style="background:${b.bg};color:${b.text}"><i style="background:${b.text}"></i>${st}${helpQ(statusExplain(st))}</span>
@@ -1407,12 +1416,12 @@ function renderFindings(){
         <div><div class="minilbl">Evidence strength${helpQ(evidenceStrengthExplain(st))}</div><div class="segs">${segs}<em style="color:${b.text}">${STRENGTH_LABEL[strength]}${helpQ(evidenceStrengthExplain(st))}</em></div></div>
         <div class="metricbox"><div class="minilbl">${esc(met.label)}${helpQ(metricExplain(met.label,met.value))}</div><div class="mv">${esc(met.value)}${helpQ(metricExplain(met.label,met.value))}</div></div>
       </div>
-      <div class="ffoot"><span class="mean">${esc(STATUS_MEANING[st])}${helpQ(statusExplain(st))}</span><span class="cta">${open?'Hide details':'View details →'}${helpQ('Open the technical read, metrics, caveats, and raw evidence when available.')}</span></div>
+      <div class="ffoot"><span class="mean">${esc(STATUS_MEANING[st])}${helpQ(statusExplain(st))}</span><span class="cta">${href?'Open full report →':(open?'Hide details':'View details →')}${helpQ(href?'Open the full static report page for this current featured finding.':'Open the technical read, metrics, caveats, and raw evidence when available.')}</span></div>
       ${open?findingDetail(f):''}
-    </div>`;
+    </${tag}>`;
   }).join('') || '<div class="lhempty">No findings in this filter.</div>';
 
-  document.querySelectorAll('#fgrid .fcard').forEach(card=>card.onclick=e=>{
+  document.querySelectorAll('#fgrid .fcard[data-i]').forEach(card=>card.onclick=e=>{
     if(e.target.closest('.lnk')||e.target.closest('pre.ev')||e.target.closest('.helpq'))return;
     const i=+card.dataset.i; OPENF=(OPENF===i?null:i); renderFindings();
   });

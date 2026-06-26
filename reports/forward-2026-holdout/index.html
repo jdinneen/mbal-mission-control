@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Forward 2026 Bacteria Holdout - Full Report</title>
+  <style>
+    :root{--ink:#20242a;--ink2:#3b4148;--ink3:#586069;--line:#dfe5e4;--soft:#f6f8f8;--acc:#0f8a84;--good:#1a7a4f;--warn:#9a6a07}
+    body{margin:0;background:#fbfcfc;color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
+    main{max-width:980px;margin:0 auto;padding:34px 20px 56px}
+    a{color:var(--acc);font-weight:700;text-decoration:none} a:hover{text-decoration:underline}
+    .back{font-size:13px;margin-bottom:22px;display:inline-block}
+    h1{font-size:34px;line-height:1.12;margin:0 0 10px;letter-spacing:-.02em}
+    h2{font-size:21px;margin:30px 0 10px}
+    p{margin:0 0 14px;color:var(--ink2)}
+    .deck{font-size:17px;color:var(--ink3);max-width:860px}
+    .stamp{font-family:Consolas,monospace;font-size:12px;color:var(--ink3);margin-top:14px}
+    .status{display:inline-block;background:#e3f3ef;color:var(--good);font-weight:700;border-radius:7px;padding:5px 10px;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+    .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:18px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
+    th,td{text-align:left;border-bottom:1px solid var(--line);padding:10px 12px;vertical-align:top}
+    th{background:var(--soft);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink3)}
+    tr:last-child td{border-bottom:0}
+    code{font-family:Consolas,monospace;background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .metric{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:14px}
+    .metric b{display:block;font-size:24px;line-height:1.05;color:var(--ink)}
+    .metric span{display:block;font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;margin-top:6px}
+    .note{border-left:4px solid var(--warn);padding-left:14px;color:var(--ink2)}
+    @media(max-width:760px){.grid{grid-template-columns:1fr}h1{font-size:28px}}
+  </style>
+</head>
+<body>
+<main>
+  <a class="back" href="../../#findings">&larr; Back to Mission Control findings</a>
+  <div class="status">Supported held-from-fitting season</div>
+  <h1>Frozen bacteria model passes held-from-fitting 2026 season</h1>
+  <p class="deck">On the locked January 5, 2026 through March 5, 2026 season, the frozen model beats the strongest baseline and retains discrimination. This is the strongest single-number forward-season read in the current snapshot.</p>
+  <p class="stamp">Source: <code>data.json</code> built 2026-06-26 07:11 Pacific. Finding id: <code>claim_forward_2026_holdout_pass</code>.</p>
+
+  <section class="card">
+    <h2>Result</h2>
+    <p><b>Headline:</b> AP 0.6335 vs station-memory AP 0.3682.</p>
+    <p>The model scored 2,487 held-from-fitting rows with 463 events. The best baseline was station memory. The AP margin was +0.2653, with model ROC-AUC 0.848 and model ECE 0.023.</p>
+  </section>
+
+  <section>
+    <h2>Key Metrics</h2>
+    <div class="grid">
+      <div class="metric"><b>0.6335</b><span>model AP</span></div>
+      <div class="metric"><b>0.3682</b><span>station-memory AP</span></div>
+      <div class="metric"><b>+0.2653</b><span>AP lift</span></div>
+      <div class="metric"><b>2,487</b><span>holdout rows</span></div>
+      <div class="metric"><b>463</b><span>events</span></div>
+      <div class="metric"><b>0.848</b><span>ROC-AUC</span></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Evidence Table</h2>
+    <table>
+      <tr><th>Field</th><th>Value</th></tr>
+      <tr><td>Finding kind</td><td>positive</td></tr>
+      <tr><td>Holdout window</td><td>2026-01-05 to 2026-03-05</td></tr>
+      <tr><td>Best baseline</td><td>Station memory</td></tr>
+      <tr><td>Model AP</td><td>0.6335</td></tr>
+      <tr><td>Baseline AP</td><td>0.3682</td></tr>
+      <tr><td>Margin</td><td>+0.2653 AP</td></tr>
+      <tr><td>Model calibration</td><td>ECE 0.023</td></tr>
+      <tr><td>Evidence artifact</td><td><code>reports/experiment_program/F1/f1_scorecard.json</code></td></tr>
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>Why This Is Featured</h2>
+    <p>This finding is a clean forward-season check: the rows were held from fitting, and the frozen model still beats persistence, seasonal, and station-memory baselines.</p>
+    <p class="note"><b>Scope:</b> This is held-from-fitting forward-season evidence, not a pristine never-scored post-freeze lockbox. The pristine post-2026-06-18 lockbox was still empty because the public data ended on 2026-03-05.</p>
+  </section>
+
+  <section>
+    <h2>Related Full Context</h2>
+    <p><a href="../bacteria-findings/">Open the comprehensive bacteria report</a> for the broader validation context and how this forward-season result sits beside the operational and onset findings.</p>
+  </section>
+</main>
+</body>
+</html>
