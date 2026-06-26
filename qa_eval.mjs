@@ -68,6 +68,38 @@ for (const link of featuredReportLinks) {
   assert(fs.existsSync(`${link}index.html`), `Featured full report page missing: ${link}index.html`);
 }
 
+const featuredReportExpectations = {
+  "reports/bacteria-station-memory/": [
+    "Model And Baseline Comparison",
+    "Where It Works And Where It Does Not",
+    "Parameter Sets And Operating Points",
+    "What About Pi / Interlingua?",
+    "Gate Check",
+  ],
+  "reports/clean-to-dirty-onset/": [
+    "Clean-to-dirty onset",
+    "onset prev clean",
+    "Forecast Horizon",
+    "No onset-specific confusion matrix",
+    "Pi / Interlingua Context",
+  ],
+  "reports/forward-2026-holdout/": [
+    "2026-01-05 to 2026-03-05",
+    "not a pristine never-scored post-freeze lockbox",
+    "Relationship To The Frozen Operational Headline",
+    "County-By-County Context",
+    "Pi / Interlingua Relevance",
+  ],
+};
+
+for (const [link, needles] of Object.entries(featuredReportExpectations)) {
+  const reportHtml = fs.readFileSync(`${link}index.html`, "utf8");
+  assert(reportHtml.length > 15000, `Featured report is too thin: ${link}`);
+  for (const needle of needles) {
+    assert(reportHtml.includes(needle), `Featured report missing required content: ${link} :: ${needle}`);
+  }
+}
+
 for (const link of previousReportLinks) {
   assert(fs.existsSync(`${link}index.html`), `Previously published report page missing: ${link}index.html`);
 }

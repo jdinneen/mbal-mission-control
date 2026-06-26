@@ -5,81 +5,208 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Clean-to-Dirty Onset Bacteria Finding - Full Report</title>
   <style>
-    :root{--ink:#20242a;--ink2:#3b4148;--ink3:#586069;--line:#dfe5e4;--soft:#f6f8f8;--acc:#0f8a84;--good:#1a7a4f;--warn:#9a6a07}
+    :root{--ink:#20242a;--ink2:#3b4148;--ink3:#586069;--line:#dfe5e4;--soft:#f6f8f8;--acc:#0f8a84;--good:#1a7a4f;--warn:#9a6a07;--bad:#b4453c}
     body{margin:0;background:#fbfcfc;color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
-    main{max-width:980px;margin:0 auto;padding:34px 20px 56px}
+    main{max-width:1120px;margin:0 auto;padding:34px 20px 56px}
     a{color:var(--acc);font-weight:700;text-decoration:none} a:hover{text-decoration:underline}
     .back{font-size:13px;margin-bottom:22px;display:inline-block}
-    h1{font-size:34px;line-height:1.12;margin:0 0 10px;letter-spacing:-.02em}
-    h2{font-size:21px;margin:30px 0 10px}
+    h1{font-size:35px;line-height:1.1;margin:0 0 10px;letter-spacing:-.02em}
+    h2{font-size:22px;margin:32px 0 10px}
+    h3{font-size:16px;margin:18px 0 8px}
     p{margin:0 0 14px;color:var(--ink2)}
-    .deck{font-size:17px;color:var(--ink3);max-width:860px}
-    .stamp{font-family:Consolas,monospace;font-size:12px;color:var(--ink3);margin-top:14px}
-    .status{display:inline-block;background:#e3f3ef;color:var(--good);font-weight:700;border-radius:7px;padding:5px 10px;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
-    .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:18px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-    th,td{text-align:left;border-bottom:1px solid var(--line);padding:10px 12px;vertical-align:top}
+    .deck{font-size:17px;color:var(--ink3);max-width:900px}
+    .stamp,.mono{font-family:Consolas,monospace;font-size:12px;color:var(--ink3)}
+    .pill{display:inline-block;background:#e3f3ef;color:var(--good);font-weight:700;border-radius:7px;padding:5px 10px;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+    .card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:18px 20px;margin:18px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+    .warn{border-left:4px solid var(--warn);padding-left:14px}.bad{border-left:4px solid var(--bad);padding-left:14px}
+    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:10px 0 18px}
+    th,td{text-align:left;border-bottom:1px solid var(--line);padding:9px 11px;vertical-align:top}
     th{background:var(--soft);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink3)}
     tr:last-child td{border-bottom:0}
     code{font-family:Consolas,monospace;background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    .metric{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:14px}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .metric{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:14px}
     .metric b{display:block;font-size:24px;line-height:1.05;color:var(--ink)}
     .metric span{display:block;font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;margin-top:6px}
-    .note{border-left:4px solid var(--warn);padding-left:14px;color:var(--ink2)}
-    @media(max-width:760px){.grid{grid-template-columns:1fr}h1{font-size:28px}}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .bars{display:grid;gap:8px;margin:12px 0 18px}
+    .barrow{display:grid;grid-template-columns:180px 1fr 70px;gap:10px;align-items:center;color:var(--ink2)}
+    .track{background:#edf1f1;border:1px solid var(--line);height:16px;border-radius:4px;overflow:hidden}
+    .fill{display:block;height:100%;background:var(--acc)}
+    ul{color:var(--ink2)} li{margin-bottom:6px}
+    @media(max-width:820px){.grid,.two,.barrow{grid-template-columns:1fr}h1{font-size:28px}.barrow{gap:4px}}
   </style>
 </head>
 <body>
 <main>
   <a class="back" href="../../#findings">&larr; Back to Mission Control findings</a>
-  <div class="status">Supported retrospective evidence</div>
-  <h1>Clean-to-dirty beach surprise reframe passes retrospective gate</h1>
-  <p class="deck">The strongest public-health framing is not only "which sites are dirty"; it is "which currently clean sites are about to flip dirty." On that onset slice, the frozen statewide model beats station memory by a large margin.</p>
-  <p class="stamp">Source: <code>data.json</code> built 2026-06-26 07:11 Pacific. Finding id: <code>claim_clean_to_dirty_onset</code>.</p>
+  <div class="pill">Featured current finding</div>
+  <h1>Clean-to-dirty onset is the strongest public-health reframe</h1>
+  <p class="deck">The useful operational question is not just "which beaches are dirty now?" It is "which currently clean beach-days are most likely to flip into an exceedance?" On that onset slice, the frozen bacteria model beats station memory by a large margin.</p>
+  <p class="stamp">Sources: <code>data.json</code> built 2026-06-26 07:11 Pacific; <code>reports/bacteria_evidence_report_2026_06_26/index.html</code>; Pi context from <code>reports/pi_interlingua_explainer_2026_06_26/</code> and <code>reports/pi_coordinate_technical_appendix_2026_06_26/</code>.</p>
 
   <section class="card">
-    <h2>Result</h2>
-    <p><b>Headline:</b> AP 0.4177 vs station-memory AP 0.199.</p>
-    <p>Among currently clean beach-days, the model ranks later exceedance surprises far better than station memory. The absolute lift is +0.2187 AP, and the model AP is 2.1 times the station-memory AP on this decision-relevant slice.</p>
+    <h2>1) Verdict</h2>
+    <p><b><code>claim_clean_to_dirty_onset</code> - PASS retrospective / prospective lockbox pending.</b></p>
+    <p>The onset slice contains <b>80,951</b> rows and <b>6,022</b> events, with a base rate of about <b>0.074</b>. The model AP is <b>0.4177</b> versus <b>0.1990</b> for station memory and about <b>0.139</b> for AB411 rain. That is a +0.2187 AP margin and about a 2.1x ratio over station memory.</p>
+    <p><b>Held-out unit:</b> beach-day rows in the same frozen temporal evaluation family: train <= 2019, calibrate 2020-2021, test >= 2022. The final public breakthrough label remains gated until the post-2026-06-18 prospective lockbox has rows and is scored.</p>
   </section>
 
   <section>
-    <h2>Key Metrics</h2>
+    <h2>2) Headline Metrics</h2>
     <div class="grid">
-      <div class="metric"><b>0.4177</b><span>onset model AP</span></div>
-      <div class="metric"><b>0.1990</b><span>station-memory AP</span></div>
+      <div class="metric"><b>0.4177</b><span>onset AP</span></div>
+      <div class="metric"><b>0.1990</b><span>memory AP</span></div>
       <div class="metric"><b>+0.2187</b><span>AP lift</span></div>
-      <div class="metric"><b>80,951</b><span>onset rows</span></div>
-      <div class="metric"><b>6,022</b><span>events</span></div>
       <div class="metric"><b>2.1x</b><span>ratio vs memory</span></div>
+      <div class="metric"><b>80,951</b><span>rows</span></div>
+      <div class="metric"><b>6,022</b><span>events</span></div>
+      <div class="metric"><b>0.074</b><span>base rate</span></div>
+      <div class="metric"><b>15/15</b><span>LOCO wins vs memory</span></div>
+    </div>
+    <div class="bars" aria-label="AP comparison for onset slice">
+      <div class="barrow"><b>Model</b><div class="track"><span class="fill" style="width:41.77%"></span></div><span>0.4177</span></div>
+      <div class="barrow"><b>Station memory</b><div class="track"><span class="fill" style="width:19.90%"></span></div><span>0.1990</span></div>
+      <div class="barrow"><b>AB411 rain</b><div class="track"><span class="fill" style="width:13.90%"></span></div><span>0.139</span></div>
+      <div class="barrow"><b>Base rate</b><div class="track"><span class="fill" style="width:7.44%"></span></div><span>0.074</span></div>
     </div>
   </section>
 
   <section>
-    <h2>Evidence Table</h2>
+    <h2>3) What The Onset Slice Means</h2>
+    <p>The source names the slice <code>onset prev clean</code>. It filters to rows where the site was previously clean and asks whether the next observed condition flips into a bacteria exceedance. This is the right framing for surprise risk: it removes many obvious persistent-dirty cases and tests whether the model can rank new trouble before station memory alone would.</p>
     <table>
-      <tr><th>Field</th><th>Value</th></tr>
-      <tr><td>Finding kind</td><td>claim</td></tr>
-      <tr><td>Slice</td><td>Currently clean beach-days scored for clean-to-dirty exceedance surprises</td></tr>
-      <tr><td>Baseline</td><td>Station memory</td></tr>
-      <tr><td>Model AP</td><td>0.4177</td></tr>
-      <tr><td>Baseline AP</td><td>0.1990</td></tr>
-      <tr><td>Margin</td><td>+0.2187 AP</td></tr>
-      <tr><td>Base rate</td><td>0.0744</td></tr>
-      <tr><td>Evidence artifact</td><td><code>reports/science_breakthrough/science_claim_cards.json</code></td></tr>
+      <tr><th>Stratum</th><th>N</th><th>Events</th><th>Base rate</th><th>Model AP</th><th>Station memory AP</th><th>AB411 AP</th><th>Read</th></tr>
+      <tr><td>Whole deployable stratum</td><td>89,321</td><td>8,999</td><td>0.101</td><td>0.510</td><td>0.278</td><td>0.178</td><td>Best all-purpose operational read.</td></tr>
+      <tr><td><b>Onset prev clean</b></td><td><b>80,951</b></td><td><b>6,022</b></td><td><b>0.074</b></td><td><b>0.418</b></td><td><b>0.199</b></td><td><b>0.139</b></td><td><b>Featured surprise-risk finding.</b></td></tr>
+      <tr><td>Prev dirty</td><td>8,348</td><td>2,971</td><td>0.356</td><td>0.664</td><td>0.477</td><td>0.439</td><td>Persistent dirty cases are easier but less surprising.</td></tr>
+    </table>
+    <p>The onset finding is featured because the baseline prevalence is lower and the operational value is higher: the model is finding hard-to-see emergent risk, not merely re-identifying already dirty stations.</p>
+  </section>
+
+  <section>
+    <h2>4) Model And Baseline Context</h2>
+    <p>The onset result rides on the same selected bacteria nowcast stack: HGBT, harmonic tide, rain/discharge/local geometry inputs, reveal-lag discipline, and isotonic calibration. The selected full-stratum benchmark is included here because it explains why this model family was chosen before focusing on onset.</p>
+    <table>
+      <tr><th>Model / baseline</th><th>AP</th><th>AUROC</th><th>ECE</th><th>Recall@10%</th><th>Precision@10%</th></tr>
+      <tr><td>Base rate</td><td>0.101</td><td>0.500</td><td>0.024</td><td>0.070</td><td>0.071</td></tr>
+      <tr><td>Month climatology</td><td>0.153</td><td>0.647</td><td>0.022</td><td>0.170</td><td>0.171</td></tr>
+      <tr><td>Prior lab</td><td>0.185</td><td>0.632</td><td>0.128</td><td>0.333</td><td>0.336</td></tr>
+      <tr><td>Station memory</td><td>0.278</td><td>0.772</td><td>0.011</td><td>0.325</td><td>0.328</td></tr>
+      <tr><td>AB411 rain</td><td>0.178</td><td>0.649</td><td>0.163</td><td>0.267</td><td>0.269</td></tr>
+      <tr><td>Virtual Beach MLR</td><td>0.375</td><td>0.749</td><td>0.281</td><td>0.387</td><td>0.390</td></tr>
+      <tr><td>HGBT raw</td><td>0.522</td><td>0.868</td><td>0.226</td><td>0.506</td><td>0.509</td></tr>
+      <tr><td><b>HGBT calibrated</b></td><td><b>0.510</b></td><td><b>0.868</b></td><td><b>0.009</b></td><td><b>0.505</b></td><td><b>0.509</b></td></tr>
+    </table>
+    <p><b>Why this model, not raw HGBT?</b> Raw HGBT has slightly higher AP, but ECE is 0.226. The calibrated model keeps nearly the same discrimination while reducing ECE to 0.009, which matters if staff interpret scores as risk probabilities or use thresholds for sampling/advisory decisions.</p>
+  </section>
+
+  <section>
+    <h2>5) Forecast Horizon</h2>
+    <p>The onset finding should be treated as strongest at nowcast and next-day horizons. The source report shows the model lift over station memory shrinks with lead time and turns negative by day 3.</p>
+    <table>
+      <tr><th>Lead day</th><th>Delta AP vs station memory</th><th>95% CI</th><th>Interpretation</th></tr>
+      <tr><td>L=0</td><td>+0.159</td><td>[0.149, 0.168]</td><td>Strongest operational nowcast.</td></tr>
+      <tr><td>L=1</td><td>+0.076</td><td>[0.068, 0.084]</td><td>Still useful for next-day prioritization.</td></tr>
+      <tr><td>L=2</td><td>+0.016</td><td>[0.008, 0.023]</td><td>Small but positive.</td></tr>
+      <tr><td>L=3</td><td>-0.018</td><td>[-0.025, -0.010]</td><td>Do not claim useful three-day ranking lift.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>6) Operating Points And Confusion Matrices</h2>
+    <p class="warn"><b>No onset-specific confusion matrix is published in the source report.</b> The onset claim is an AP-ranking claim. The confusion matrices below are representative operating points from the broader deployable model artifact, included to show the decision tradeoff. They should not be relabeled as onset-specific thresholds.</p>
+    <table>
+      <tr><th>Operating point</th><th>Threshold</th><th>TP</th><th>FP</th><th>FN</th><th>TN</th><th>Precision</th><th>Recall</th><th>Flag rate</th></tr>
+      <tr><td>recall >= 0.70</td><td>0.0967</td><td>6,728</td><td>15,622</td><td>2,271</td><td>64,700</td><td>0.301</td><td>0.748</td><td>25.0%</td></tr>
+      <tr><td>recall >= 0.80</td><td>0.0635</td><td>7,189</td><td>20,571</td><td>1,810</td><td>59,751</td><td>0.259</td><td>0.799</td><td>31.1%</td></tr>
+      <tr><td>recall >= 0.90</td><td>0.0331</td><td>8,077</td><td>33,697</td><td>922</td><td>46,625</td><td>0.193</td><td>0.897</td><td>46.8%</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>7) County Behavior</h2>
+    <p>The full source report gives county-level validation for the overall bacteria nowcast, not a separate onset-only county table. For onset claims, the correct county statement is narrower: overall held-out county validation supports the model family, while onset-specific spatial heterogeneity still needs a dedicated artifact before making county-by-county onset claims.</p>
+    <table>
+      <tr><th>County</th><th>Model AP</th><th>Memory AP</th><th>AB411 AP</th><th>Model ECE</th><th>Deploy-ready</th><th>Read for onset report</th></tr>
+      <tr><td>San Diego</td><td>0.950</td><td>0.939</td><td>0.602</td><td>0.457</td><td>No</td><td>Ranking high, calibration failure; do not deploy without recalibration.</td></tr>
+      <tr><td>Los Angeles</td><td>0.553</td><td>0.313</td><td>0.251</td><td>0.046</td><td>Yes</td><td>Strong operational support.</td></tr>
+      <tr><td>Orange</td><td>0.349</td><td>0.194</td><td>0.104</td><td>0.014</td><td>Yes</td><td>Good calibration, lower AP due lower base rate.</td></tr>
+      <tr><td>San Mateo</td><td>0.538</td><td>0.418</td><td>0.241</td><td>0.058</td><td>Yes</td><td>Useful lift over both baselines.</td></tr>
+      <tr><td>Long Beach City</td><td>0.578</td><td>0.183</td><td>0.369</td><td>0.042</td><td>Yes</td><td>Large lift over station memory.</td></tr>
+      <tr><td>San Francisco</td><td>0.547</td><td>0.260</td><td>0.273</td><td>0.018</td><td>Yes</td><td>Good ranking and calibration.</td></tr>
+      <tr><td>Santa Cruz</td><td>0.405</td><td>0.163</td><td>0.207</td><td>0.023</td><td>Yes</td><td>Moderate lift.</td></tr>
+      <tr><td>Ventura</td><td>0.460</td><td>0.097</td><td>0.148</td><td>0.015</td><td>Yes</td><td>Good lift despite low base rate.</td></tr>
+      <tr><td>Santa Barbara</td><td>0.269</td><td>0.111</td><td>0.099</td><td>0.007</td><td>Yes</td><td>Positive but lower absolute AP.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>8) Inputs And Parameter Checks</h2>
+    <p>The onset story is not a special one-off model. It is consistent with the larger feature and parameter search: local geography, prior conditions, hydrology, rain, discharge, and harmonic tide matter; redundant or unstable candidates are not promoted.</p>
+    <div class="two">
+      <table>
+        <tr><th>Parameter set</th><th>Test AP</th><th>AUROC</th><th>Read</th></tr>
+        <tr><td>class_weight_balanced</td><td>0.497</td><td>0.858</td><td>Selected family; balances recall pressure without worse AP.</td></tr>
+        <tr><td>oversample_0.5</td><td>0.497</td><td>0.856</td><td>Tied AP, slightly lower AUROC.</td></tr>
+        <tr><td>oversample_1.0</td><td>0.487</td><td>0.854</td><td>Rejected for lower AP.</td></tr>
+      </table>
+      <table>
+        <tr><th>Input</th><th>Delta AP</th><th>Verdict</th></tr>
+        <tr><td>nbr_and_latlon</td><td>+0.028</td><td>KEEP</td></tr>
+        <tr><td>latlon</td><td>+0.027</td><td>KEEP</td></tr>
+        <tr><td>discharge</td><td>+0.014</td><td>KEEP</td></tr>
+        <tr><td>harmonic tide</td><td>+0.009</td><td>KEEP; CI [0.004, 0.014], p=0.0196</td></tr>
+        <tr><td>soil moisture</td><td>+0.014 alone / -0.006 with discharge</td><td>REAL but redundant</td></tr>
+        <tr><td>ocean color, generic tide, NBR lag</td><td>near zero or negative</td><td>Not shipped</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <h2>9) Pi / Interlingua Context</h2>
+    <p>Pi interlingua does not explain the onset win and should not be described as the deployed mechanism. It is a separate cold-start result: useful when there is no local memory, not strong enough to replace a mature local bacteria model.</p>
+    <table>
+      <tr><th>Question</th><th>Answer</th></tr>
+      <tr><td>Does zero-shot help outside California?</td><td>Yes, in a bounded cold-start sense. The pi+logistic screen has mean AP 0.1511 vs base 0.0909 across 12 held-out domains and beats its source-stratum null 12/12.</td></tr>
+      <tr><td>Does zero-shot beat target memory?</td><td>No. Unified Pi LOBO AUC is 0.6124 vs target-domain station-memory AUC 0.7637; Pi beats memory on 0/12 coasts.</td></tr>
+      <tr><td>Can Pi and memory be combined to boost the California model?</td><td>The combined tests did not justify a top finding. Pi groups added to the California nowcast were a wash or regression: pi_groups dAP about -0.0025 vs FEATS+rain+discharge, and unified 7-pi regressed about -0.0109.</td></tr>
+      <tr><td>How are coordinates calculated?</td><td>They are deterministic label-free weather proxies: <code>S*=S/200</code>, <code>P*=max(P,0)/5</code>, <code>W*=max(W,0)/5</code>, <code>k*=S* x 2^((T-20)/10)</code>; then source loading, Damkohler-like decay, UV dose, Peclet-like transport, and flushing coordinates.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>10) Gate Check</h2>
+    <table>
+      <tr><th>Gate</th><th>Status</th><th>Evidence</th></tr>
+      <tr><td>Honest baseline</td><td>PASS</td><td>Onset AP 0.4177 vs station memory 0.1990 and AB411 about 0.139.</td></tr>
+      <tr><td>Held-out split</td><td>PASS for retrospective</td><td>Uses frozen temporal split family and held-out 2022+ rows.</td></tr>
+      <tr><td>Spatial stress</td><td>SUPPORTED by model family</td><td>Overall LOCO beats station memory and AB411 9/9; onset-specific county table not published.</td></tr>
+      <tr><td>Calibration</td><td>PASS at main model level, caveated by county</td><td>Selected model ECE 0.009; San Diego county calibration is not deploy-ready.</td></tr>
+      <tr><td>Prospective lockbox</td><td>BLOCKED</td><td>Post-2026-06-18 lockbox had no scored rows in source state.</td></tr>
+      <tr><td>Confusion matrix</td><td>PARTIAL</td><td>No onset-specific thresholded matrix; broader operating-point matrices are available.</td></tr>
     </table>
   </section>
 
   <section class="card">
-    <h2>Why This Is Featured</h2>
-    <p>This result changes the operational question from retrospective status labeling to early warning on the transition that matters for sampling and advisories. It uses the same frozen bacteria model and reveal-lag discipline, but evaluates the harder onset slice.</p>
-    <p class="note"><b>Scope:</b> This is a retrospective pass. The final breakthrough label remains blocked until the post-2026-06-18 prospective lockbox has rows and is scored.</p>
+    <h2>11) So What</h2>
+    <p>This is the decision-relevant bacteria finding for sampling triage: the model is especially useful when a site was clean before and staff need to decide where new risk is likely to emerge. The result is strong enough for retrospective scientific reporting and internal operational planning, but not for final prospective-lockbox breakthrough language yet.</p>
+    <p><a href="../bacteria-findings/">Open the comprehensive bacteria report</a> for the broader source report, and <a href="../pi-bacteria/">open the Pi bacteria report</a> for the separate cold-start interlingua story.</p>
   </section>
 
   <section>
-    <h2>Related Full Context</h2>
-    <p><a href="../bacteria-findings/">Open the comprehensive bacteria report</a> for the model-validation context, county behavior, and operational comparisons around this onset finding.</p>
+    <h2>Source Paths</h2>
+    <ul>
+      <li><code>data.json</code> finding <code>claim_clean_to_dirty_onset</code></li>
+      <li><code>reports/science_breakthrough/science_claim_cards.json</code></li>
+      <li><code>research/bacteria/reproduce/expected/onset_slice.json</code></li>
+      <li><code>research/bacteria/reproduce/expected/operational_benchmark.json</code></li>
+      <li><code>research/bacteria/reproduce/expected/spatial_holdout.json</code></li>
+      <li><code>reports/bacteria/operating_point/operating_point_analysis.json</code></li>
+      <li><code>reports/bacteria_evidence_report_2026_06_26/index.html</code></li>
+      <li><code>reports/pi_interlingua_explainer_2026_06_26/index.html</code></li>
+      <li><code>reports/pi_coordinate_technical_appendix_2026_06_26/index.html</code></li>
+    </ul>
   </section>
 </main>
 </body>

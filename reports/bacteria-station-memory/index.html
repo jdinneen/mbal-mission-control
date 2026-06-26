@@ -5,82 +5,180 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Bacteria Nowcast Beats Station Memory - Full Report</title>
   <style>
-    :root{--ink:#20242a;--ink2:#3b4148;--ink3:#586069;--line:#dfe5e4;--soft:#f6f8f8;--acc:#0f8a84;--good:#1a7a4f;--warn:#9a6a07}
+    :root{--ink:#20242a;--ink2:#3b4148;--ink3:#586069;--line:#dfe5e4;--soft:#f6f8f8;--acc:#0f8a84;--good:#1a7a4f;--warn:#9a6a07;--bad:#b4453c}
     body{margin:0;background:#fbfcfc;color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
-    main{max-width:980px;margin:0 auto;padding:34px 20px 56px}
+    main{max-width:1120px;margin:0 auto;padding:34px 20px 56px}
     a{color:var(--acc);font-weight:700;text-decoration:none} a:hover{text-decoration:underline}
     .back{font-size:13px;margin-bottom:22px;display:inline-block}
-    h1{font-size:34px;line-height:1.12;margin:0 0 10px;letter-spacing:-.02em}
-    h2{font-size:21px;margin:30px 0 10px}
+    h1{font-size:35px;line-height:1.1;margin:0 0 10px;letter-spacing:-.02em}
+    h2{font-size:22px;margin:32px 0 10px}
+    h3{font-size:16px;margin:18px 0 8px}
     p{margin:0 0 14px;color:var(--ink2)}
-    .deck{font-size:17px;color:var(--ink3);max-width:860px}
-    .stamp{font-family:Consolas,monospace;font-size:12px;color:var(--ink3);margin-top:14px}
-    .status{display:inline-block;background:#e3f3ef;color:var(--good);font-weight:700;border-radius:7px;padding:5px 10px;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+    .deck{font-size:17px;color:var(--ink3);max-width:900px}
+    .stamp,.mono{font-family:Consolas,monospace;font-size:12px;color:var(--ink3)}
+    .pill{display:inline-block;background:#e3f3ef;color:var(--good);font-weight:700;border-radius:7px;padding:5px 10px;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
     .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:18px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-    th,td{text-align:left;border-bottom:1px solid var(--line);padding:10px 12px;vertical-align:top}
+    .warn{border-left:4px solid var(--warn);padding-left:14px}.bad{border-left:4px solid var(--bad);padding-left:14px}
+    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:10px 0 18px}
+    th,td{text-align:left;border-bottom:1px solid var(--line);padding:9px 11px;vertical-align:top}
     th{background:var(--soft);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink3)}
     tr:last-child td{border-bottom:0}
     code{font-family:Consolas,monospace;background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
     .metric{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:14px}
     .metric b{display:block;font-size:24px;line-height:1.05;color:var(--ink)}
     .metric span{display:block;font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;margin-top:6px}
-    .note{border-left:4px solid var(--warn);padding-left:14px;color:var(--ink2)}
-    @media(max-width:760px){.grid{grid-template-columns:1fr}h1{font-size:28px}}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    ul{color:var(--ink2)} li{margin-bottom:6px}
+    @media(max-width:820px){.grid,.two{grid-template-columns:1fr}h1{font-size:28px}}
   </style>
 </head>
 <body>
 <main>
   <a class="back" href="../../#findings">&larr; Back to Mission Control findings</a>
-  <div class="status">Supported current evidence</div>
+  <div class="pill">Featured current finding</div>
   <h1>Bacteria nowcast beats station-memory status quo</h1>
-  <p class="deck">The calibrated California bacteria model beats the station-memory baseline on the deployable 2022+ stratum that excludes San Diego. This is the core operational bacteria finding in the current public snapshot.</p>
-  <p class="stamp">Source: <code>data.json</code> built 2026-06-26 07:11 Pacific. Finding id: <code>claim_bacteria_station_memory_supported</code>.</p>
+  <p class="deck">A calibrated bacteria nowcast beats the station-memory status quo on the 2022+ deployable California beach-bacteria test stratum. This page is the full focused report for the current Featured card, not a stale placeholder.</p>
+  <p class="stamp">Sources: <code>data.json</code> built 2026-06-26 07:11 Pacific; <code>reports/bacteria_evidence_report_2026_06_26/index.html</code> generated 2026-06-26 17:24 UTC; Pi context from <code>reports/pi_interlingua_explainer_2026_06_26/</code> and <code>reports/pi_coordinate_technical_appendix_2026_06_26/</code>.</p>
 
   <section class="card">
-    <h2>Result</h2>
-    <p><b>Headline:</b> AP 0.4992 vs 0.2782; &Delta;AP +0.221.</p>
-    <p>The model was evaluated on 89,321 held-out beach-days with 8,999 exceedance events. The margin over station memory is supported by a clustered bootstrap interval that excludes zero: [0.1926, 0.2564].</p>
+    <h2>1) Verdict</h2>
+    <p><b><code>claim_bacteria_station_memory_supported</code> - PASS retrospective / GATED prospective vs station memory, N=89,321 rows / 8,999 events.</b></p>
+    <p><b>Held-out unit:</b> beach-day rows in the temporal 2022+ test era. <b>CV / split:</b> train <= 2019, calibration 2020-2021, test >= 2022; county holdout is used as a spatial stress check.</p>
+    <p>The current snapshot card reports model AP 0.4992 vs station-memory AP 0.2782, delta AP +0.221 with clustered-bootstrap CI [0.1926, 0.2564] and ECE 0.0171. The broader bacteria evidence report's selected operational benchmark reports the calibrated HGBT + harmonic-tide model at AP 0.510, AUROC 0.868, ECE 0.009 on the same deployable EXCLUDE_SAN_DIEGO family of evaluation.</p>
   </section>
 
   <section>
-    <h2>Key Metrics</h2>
+    <h2>2) Headline Metrics</h2>
     <div class="grid">
-      <div class="metric"><b>0.4992</b><span>model AP</span></div>
+      <div class="metric"><b>0.4992</b><span>current card AP</span></div>
       <div class="metric"><b>0.2782</b><span>station-memory AP</span></div>
-      <div class="metric"><b>+0.221</b><span>AP lift</span></div>
-      <div class="metric"><b>89,321</b><span>held-out rows</span></div>
-      <div class="metric"><b>8,999</b><span>events</span></div>
-      <div class="metric"><b>0.0171</b><span>ECE</span></div>
+      <div class="metric"><b>+0.221</b><span>card AP lift</span></div>
+      <div class="metric"><b>[0.1926, 0.2564]</b><span>clustered CI</span></div>
+      <div class="metric"><b>0.510</b><span>selected benchmark AP</span></div>
+      <div class="metric"><b>0.868</b><span>selected AUROC</span></div>
+      <div class="metric"><b>0.009</b><span>selected ECE</span></div>
+      <div class="metric"><b>9/9</b><span>county AP wins</span></div>
     </div>
   </section>
 
   <section>
-    <h2>Evidence Table</h2>
+    <h2>3) Model And Baseline Comparison</h2>
+    <p>The operational report selects isotonic-calibrated HGBT + harmonic tide because it beats the strongest operational comparator by +0.135 AP and keeps calibration acceptable in the deployable stratum. San Diego is excluded from the headline because calibration is not deployment-ready there under the regime break.</p>
     <table>
-      <tr><th>Field</th><th>Value</th></tr>
-      <tr><td>Finding kind</td><td>claim</td></tr>
-      <tr><td>Test stratum</td><td><code>EXCLUDE_SAN_DIEGO</code>, 2022+ deployable rows</td></tr>
-      <tr><td>Baseline</td><td>Station memory</td></tr>
-      <tr><td>Model AP</td><td>0.4992</td></tr>
-      <tr><td>Baseline AP</td><td>0.2782</td></tr>
-      <tr><td>Margin</td><td>+0.221 AP</td></tr>
-      <tr><td>95% clustered-bootstrap CI</td><td>[0.1926, 0.2564]</td></tr>
-      <tr><td>Calibration error</td><td>ECE 0.0171</td></tr>
-      <tr><td>Evidence artifact</td><td><code>reports/_eval_cards/claim_cards.json</code></td></tr>
+      <tr><th>Model / baseline</th><th>AP</th><th>AUROC</th><th>ECE</th><th>Recall@10%</th><th>Precision@10%</th></tr>
+      <tr><td>Base rate</td><td>0.101</td><td>0.500</td><td>0.024</td><td>0.070</td><td>0.071</td></tr>
+      <tr><td>Month climatology</td><td>0.153</td><td>0.647</td><td>0.022</td><td>0.170</td><td>0.171</td></tr>
+      <tr><td>Prior lab</td><td>0.185</td><td>0.632</td><td>0.128</td><td>0.333</td><td>0.336</td></tr>
+      <tr><td>Station memory</td><td>0.278</td><td>0.772</td><td>0.011</td><td>0.325</td><td>0.328</td></tr>
+      <tr><td>AB411 rain</td><td>0.178</td><td>0.649</td><td>0.163</td><td>0.267</td><td>0.269</td></tr>
+      <tr><td>Virtual Beach MLR</td><td>0.375</td><td>0.749</td><td>0.281</td><td>0.387</td><td>0.390</td></tr>
+      <tr><td>HGBT raw</td><td>0.522</td><td>0.868</td><td>0.226</td><td>0.506</td><td>0.509</td></tr>
+      <tr><td><b>HGBT calibrated</b></td><td><b>0.510</b></td><td><b>0.868</b></td><td><b>0.009</b></td><td><b>0.505</b></td><td><b>0.509</b></td></tr>
+    </table>
+    <p class="warn"><b>One-number discipline:</b> the mission-control card and the broader evidence report are not byte-identical rows. The card is the current published snapshot claim (0.4992 vs 0.2782). The broader report is the selected operational benchmark (0.510 AP, ECE 0.009). Both support the same decision: the model beats station memory; do not mix them as one metric.</p>
+  </section>
+
+  <section>
+    <h2>4) Where It Works And Where It Does Not</h2>
+    <p>Held-out-county AP beats both station memory and AB411 in every listed county. The failure mode is not ranking in San Diego - San Diego AP is high - it is calibration/deployability under a 2022 regime shift.</p>
+    <table>
+      <tr><th>County</th><th>N</th><th>Events</th><th>Base rate</th><th>Model AP</th><th>Memory AP</th><th>AB411 AP</th><th>Model ECE</th><th>Deploy-ready</th></tr>
+      <tr><td>San Diego</td><td>26,326</td><td>15,918</td><td>0.605</td><td>0.950</td><td>0.939</td><td>0.602</td><td>0.457</td><td><b>No</b></td></tr>
+      <tr><td>Los Angeles</td><td>22,612</td><td>3,588</td><td>0.159</td><td>0.553</td><td>0.313</td><td>0.251</td><td>0.046</td><td>Yes</td></tr>
+      <tr><td>Orange</td><td>29,728</td><td>1,709</td><td>0.058</td><td>0.349</td><td>0.194</td><td>0.104</td><td>0.014</td><td>Yes</td></tr>
+      <tr><td>San Mateo</td><td>5,308</td><td>983</td><td>0.185</td><td>0.538</td><td>0.418</td><td>0.241</td><td>0.058</td><td>Yes</td></tr>
+      <tr><td>Long Beach City</td><td>4,014</td><td>704</td><td>0.175</td><td>0.578</td><td>0.183</td><td>0.369</td><td>0.042</td><td>Yes</td></tr>
+      <tr><td>San Francisco</td><td>4,256</td><td>607</td><td>0.143</td><td>0.547</td><td>0.260</td><td>0.273</td><td>0.018</td><td>Yes</td></tr>
+      <tr><td>Santa Cruz</td><td>3,931</td><td>415</td><td>0.106</td><td>0.405</td><td>0.163</td><td>0.207</td><td>0.023</td><td>Yes</td></tr>
+      <tr><td>Ventura</td><td>5,543</td><td>261</td><td>0.047</td><td>0.460</td><td>0.097</td><td>0.148</td><td>0.015</td><td>Yes</td></tr>
+      <tr><td>Santa Barbara</td><td>3,130</td><td>175</td><td>0.056</td><td>0.269</td><td>0.111</td><td>0.099</td><td>0.007</td><td>Yes</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>5) Parameter Sets And Operating Points</h2>
+    <p>The parameter sweep used the same deployable stratum and validation-selected thresholds. Class-weight-balanced and oversample 0.5 are effectively tied on AP; oversample 1.0 is worse.</p>
+    <div class="two">
+      <table>
+        <tr><th>Setting</th><th>Test AP</th><th>AUROC</th><th>N</th><th>Events</th></tr>
+        <tr><td>class_weight_balanced</td><td>0.497</td><td>0.858</td><td>89,321</td><td>8,999</td></tr>
+        <tr><td>oversample_0.5</td><td>0.497</td><td>0.856</td><td>89,321</td><td>8,999</td></tr>
+        <tr><td>oversample_1.0</td><td>0.487</td><td>0.854</td><td>89,321</td><td>8,999</td></tr>
+      </table>
+      <p class="warn"><b>Policy tradeoff:</b> raising recall from about 0.75 to about 0.90 increases flagged fraction from roughly 25-26% to 46-49%, with many more false positives. Cost-ratio operating points improve precision but miss more events.</p>
+    </div>
+    <h3>Representative confusion matrices from the operating-point artifact</h3>
+    <table>
+      <tr><th>Setting / operating point</th><th>Threshold</th><th>TP</th><th>FP</th><th>FN</th><th>TN</th><th>Precision</th><th>Recall</th><th>Flag rate</th></tr>
+      <tr><td>class_weight_balanced / recall >= 0.70</td><td>0.0967</td><td>6,728</td><td>15,622</td><td>2,271</td><td>64,700</td><td>0.301</td><td>0.748</td><td>25.0%</td></tr>
+      <tr><td>class_weight_balanced / recall >= 0.80</td><td>0.0635</td><td>7,189</td><td>20,571</td><td>1,810</td><td>59,751</td><td>0.259</td><td>0.799</td><td>31.1%</td></tr>
+      <tr><td>class_weight_balanced / recall >= 0.90</td><td>0.0331</td><td>8,077</td><td>33,697</td><td>922</td><td>46,625</td><td>0.193</td><td>0.897</td><td>46.8%</td></tr>
+      <tr><td>class_weight_balanced / FN_3x_FP</td><td>0.2526</td><td>4,623</td><td>4,833</td><td>4,376</td><td>75,489</td><td>0.489</td><td>0.514</td><td>10.6%</td></tr>
+      <tr><td>class_weight_balanced / FN_5x_FP</td><td>0.2308</td><td>5,227</td><td>6,783</td><td>3,772</td><td>73,539</td><td>0.435</td><td>0.581</td><td>13.5%</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>6) Inputs Tested</h2>
+    <p>Feature candidates are reported as delta AP over their stated baseline. The main critic point is that KEEP rows are not automatically full operational escapes if they fail the full rain+discharge headline baseline or are redundant.</p>
+    <table>
+      <tr><th>Input</th><th>AP</th><th>Delta AP</th><th>Verdict</th><th>Read</th></tr>
+      <tr><td>nbr_and_latlon</td><td>0.493</td><td>+0.028</td><td>KEEP</td><td>Static geography/neighborhood signal remains useful.</td></tr>
+      <tr><td>latlon</td><td>0.492</td><td>+0.027</td><td>KEEP</td><td>Location carries real residual structure.</td></tr>
+      <tr><td>discharge</td><td>0.479</td><td>+0.014</td><td>KEEP</td><td>Hydrologic forcing helps but does not explain everything.</td></tr>
+      <tr><td>tsfm</td><td>0.469</td><td>+0.004</td><td>WASH</td><td>Below promotion bar.</td></tr>
+      <tr><td>ocean_color</td><td>0.465</td><td>-0.001</td><td>WASH</td><td>Does not add reliable operational lift.</td></tr>
+      <tr><td>tide</td><td>0.462</td><td>-0.004</td><td>WASH in broad bakeoff</td><td>Separate harmonic spring-neap tide gate is ship-supported: headline delta AP +0.009, CI [0.004, 0.014], perm p 0.0196.</td></tr>
+      <tr><td>soil moisture</td><td>not shipped</td><td>+0.014 alone; -0.006 with discharge</td><td>REAL but redundant</td><td>Permutation p 0.0196 says not shuffled artifact, but discharge absorbs it.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>7) What About Pi / Interlingua?</h2>
+    <p>Pi is relevant background, but it is not this Featured operational finding. The Pi lane is a label-free cold-start ranking screen, not a calibrated advisory replacement for a mature local memory model.</p>
+    <table>
+      <tr><th>Question</th><th>Answer</th></tr>
+      <tr><td>Does zero-shot Pi work anywhere?</td><td>Yes as a ranking screen: 12-domain pi+logistic mean AP 0.1511 vs mean base 0.0909; mean lift 1.7524; source-stratum null beaten 12/12.</td></tr>
+      <tr><td>Does it beat local memory?</td><td>No. Unified Pi LOBO AUC 0.6124 vs target-domain memory AUC 0.7637; Pi beats memory on 0/12 coasts.</td></tr>
+      <tr><td>How are Pi coordinates calculated?</td><td>From exogenous daily weather only: <code>S*=S/200</code>, <code>P*=max(P,0)/5</code>, <code>W*=max(W,0)/5</code>, <code>k*=S* x 2^((T-20)/10)</code>, then <code>pi_damkohler</code>, <code>pi_loading</code>, <code>pi_uv_dose</code>, <code>pi_peclet</code>, and <code>pi_flushing</code>. No bacteria labels, exceedance history, county labels, or target labels enter the coordinate calculation.</td></tr>
+      <tr><td>Did we invent it?</td><td>We did not invent dimensional analysis, Damkohler, Peclet, Q10 temperature response, or FIB environmental controls. We engineered this exact five-coordinate proxy set and validated it as a cold-start bacteria ranking representation.</td></tr>
+      <tr><td>Should this be promoted over the nowcast?</td><td>No. The deployed bacteria model is local calibrated nowcasting with memory, prior lab, rain, discharge, harmonic tide, geometry, and calibration window.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>8) Gate Check</h2>
+    <table>
+      <tr><th>Gate</th><th>Status</th><th>Evidence</th></tr>
+      <tr><td>Beats honest baseline</td><td>PASS</td><td>Beats station memory and stronger operational comparators in the deployable stratum.</td></tr>
+      <tr><td>Held-out unit clean</td><td>PASS</td><td>Temporal 2022+ test, calibration window separated, county holdout stress check.</td></tr>
+      <tr><td>Leakage invariants</td><td>PASS with caveat</td><td>Reveal lag enforced for the headline; zero-shot inputs exclude FIB labels. Transfer clean-clone input freezing remains a caveat.</td></tr>
+      <tr><td>CI / null separates</td><td>YES for snapshot card</td><td>Clustered-bootstrap margin AP CI [0.1926, 0.2564] excludes zero.</td></tr>
+      <tr><td>Confusion/error reported</td><td>PARTIAL</td><td>Available for operating thresholds; AP-only cards do not get fabricated thresholds.</td></tr>
+      <tr><td>Calibration</td><td>PASS except San Diego</td><td>Selected benchmark ECE 0.009, but San Diego ECE 0.457 blocks deploy-ready wording there.</td></tr>
+      <tr><td>Prospective lockbox</td><td>BLOCKED</td><td>Post-2026-06-18 prospective lockbox had not been scored in the source report.</td></tr>
     </table>
   </section>
 
   <section class="card">
-    <h2>Why This Is Featured</h2>
-    <p>This is the largest public bacteria headline because it compares the calibrated model against the right operational memory baseline on a large held-out deployment stratum. It is not a Pi/interlingua claim and it is not a static placeholder report card.</p>
-    <p class="note"><b>Scope:</b> The claim is scoped to the deployable stratum that excludes San Diego. San Diego remains a known calibration/regime-shift caution rather than a polished deployment claim.</p>
+    <h2>9) So What</h2>
+    <p>Beach-water-quality staff can use this model as a retrospective deployment candidate to rank high-risk beach-days better than station memory, AB411 rain rules, and Virtual-Beach-class MLR. The practical use is advisory triage and sampling prioritization, with San Diego and prospective lockbox scoring called out as blockers for broad deployment language.</p>
+    <p><a href="../bacteria-findings/">Open the comprehensive bacteria report</a> for the broader source report. The Pi-specific reports remain live but are intentionally not promoted as top Featured findings.</p>
   </section>
 
   <section>
-    <h2>Related Full Context</h2>
-    <p><a href="../bacteria-findings/">Open the comprehensive bacteria report</a> for the broader model comparison, county behavior, onset framing, and related operational findings.</p>
+    <h2>Source Paths</h2>
+    <ul>
+      <li><code>data.json</code> finding <code>claim_bacteria_station_memory_supported</code></li>
+      <li><code>reports/_eval_cards/claim_cards.json</code></li>
+      <li><code>research/bacteria/reproduce/expected/operational_benchmark.json</code></li>
+      <li><code>research/bacteria/reproduce/expected/spatial_holdout.json</code></li>
+      <li><code>reports/bacteria/operating_point/operating_point_analysis.json</code></li>
+      <li><code>reports/bacteria_evidence_report_2026_06_26/index.html</code></li>
+      <li><code>reports/pi_interlingua_explainer_2026_06_26/index.html</code></li>
+      <li><code>reports/pi_coordinate_technical_appendix_2026_06_26/index.html</code></li>
+    </ul>
   </section>
 </main>
 </body>

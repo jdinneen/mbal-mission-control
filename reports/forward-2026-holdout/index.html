@@ -5,81 +5,197 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Forward 2026 Bacteria Holdout - Full Report</title>
   <style>
-    :root{--ink:#20242a;--ink2:#3b4148;--ink3:#586069;--line:#dfe5e4;--soft:#f6f8f8;--acc:#0f8a84;--good:#1a7a4f;--warn:#9a6a07}
+    :root{--ink:#20242a;--ink2:#3b4148;--ink3:#586069;--line:#dfe5e4;--soft:#f6f8f8;--acc:#0f8a84;--good:#1a7a4f;--warn:#9a6a07;--bad:#b4453c}
     body{margin:0;background:#fbfcfc;color:var(--ink);font-family:Arial,Helvetica,sans-serif;line-height:1.55}
-    main{max-width:980px;margin:0 auto;padding:34px 20px 56px}
+    main{max-width:1120px;margin:0 auto;padding:34px 20px 56px}
     a{color:var(--acc);font-weight:700;text-decoration:none} a:hover{text-decoration:underline}
     .back{font-size:13px;margin-bottom:22px;display:inline-block}
-    h1{font-size:34px;line-height:1.12;margin:0 0 10px;letter-spacing:-.02em}
-    h2{font-size:21px;margin:30px 0 10px}
+    h1{font-size:35px;line-height:1.1;margin:0 0 10px;letter-spacing:-.02em}
+    h2{font-size:22px;margin:32px 0 10px}
+    h3{font-size:16px;margin:18px 0 8px}
     p{margin:0 0 14px;color:var(--ink2)}
-    .deck{font-size:17px;color:var(--ink3);max-width:860px}
-    .stamp{font-family:Consolas,monospace;font-size:12px;color:var(--ink3);margin-top:14px}
-    .status{display:inline-block;background:#e3f3ef;color:var(--good);font-weight:700;border-radius:7px;padding:5px 10px;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
-    .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin:18px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:10px;overflow:hidden}
-    th,td{text-align:left;border-bottom:1px solid var(--line);padding:10px 12px;vertical-align:top}
+    .deck{font-size:17px;color:var(--ink3);max-width:900px}
+    .stamp,.mono{font-family:Consolas,monospace;font-size:12px;color:var(--ink3)}
+    .pill{display:inline-block;background:#e3f3ef;color:var(--good);font-weight:700;border-radius:7px;padding:5px 10px;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+    .card{background:#fff;border:1px solid var(--line);border-radius:8px;padding:18px 20px;margin:18px 0;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+    .warn{border-left:4px solid var(--warn);padding-left:14px}.bad{border-left:4px solid var(--bad);padding-left:14px}
+    table{width:100%;border-collapse:collapse;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:10px 0 18px}
+    th,td{text-align:left;border-bottom:1px solid var(--line);padding:9px 11px;vertical-align:top}
     th{background:var(--soft);font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:var(--ink3)}
     tr:last-child td{border-bottom:0}
     code{font-family:Consolas,monospace;background:var(--soft);border:1px solid var(--line);border-radius:5px;padding:1px 5px}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-    .metric{background:var(--soft);border:1px solid var(--line);border-radius:10px;padding:14px}
+    .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .metric{background:var(--soft);border:1px solid var(--line);border-radius:8px;padding:14px}
     .metric b{display:block;font-size:24px;line-height:1.05;color:var(--ink)}
     .metric span{display:block;font-size:12px;color:var(--ink3);text-transform:uppercase;letter-spacing:.04em;margin-top:6px}
-    .note{border-left:4px solid var(--warn);padding-left:14px;color:var(--ink2)}
-    @media(max-width:760px){.grid{grid-template-columns:1fr}h1{font-size:28px}}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+    .bars{display:grid;gap:8px;margin:12px 0 18px}
+    .barrow{display:grid;grid-template-columns:190px 1fr 70px;gap:10px;align-items:center;color:var(--ink2)}
+    .track{background:#edf1f1;border:1px solid var(--line);height:16px;border-radius:4px;overflow:hidden}
+    .fill{display:block;height:100%;background:var(--acc)}
+    ul{color:var(--ink2)} li{margin-bottom:6px}
+    @media(max-width:820px){.grid,.two,.barrow{grid-template-columns:1fr}h1{font-size:28px}.barrow{gap:4px}}
   </style>
 </head>
 <body>
 <main>
   <a class="back" href="../../#findings">&larr; Back to Mission Control findings</a>
-  <div class="status">Supported held-from-fitting season</div>
-  <h1>Frozen bacteria model passes held-from-fitting 2026 season</h1>
-  <p class="deck">On the locked January 5, 2026 through March 5, 2026 season, the frozen model beats the strongest baseline and retains discrimination. This is the strongest single-number forward-season read in the current snapshot.</p>
-  <p class="stamp">Source: <code>data.json</code> built 2026-06-26 07:11 Pacific. Finding id: <code>claim_forward_2026_holdout_pass</code>.</p>
+  <div class="pill">Featured current finding</div>
+  <h1>Frozen bacteria model passes the held-from-fitting 2026 season</h1>
+  <p class="deck">The January 5, 2026 to March 5, 2026 season gives the strongest single-number forward-season read in the current evidence ledger: the frozen model beats station memory with AP 0.6335 versus 0.3682.</p>
+  <p class="stamp">Sources: <code>data.json</code> built 2026-06-26 07:11 Pacific; <code>reports/bacteria_evidence_report_2026_06_26/index.html</code>; frozen headline and gate artifacts; Pi context from <code>reports/pi_interlingua_explainer_2026_06_26/</code> and <code>reports/pi_coordinate_technical_appendix_2026_06_26/</code>.</p>
 
   <section class="card">
-    <h2>Result</h2>
-    <p><b>Headline:</b> AP 0.6335 vs station-memory AP 0.3682.</p>
-    <p>The model scored 2,487 held-from-fitting rows with 463 events. The best baseline was station memory. The AP margin was +0.2653, with model ROC-AUC 0.848 and model ECE 0.023.</p>
+    <h2>1) Verdict</h2>
+    <p><b><code>claim_forward_2026_holdout_pass</code> - PASS for held-from-fitting forward-season evidence / GATED for pristine post-freeze lockbox.</b></p>
+    <p>The current finding reports <b>2,487</b> rows, <b>463</b> events, base rate <b>0.1862</b>, model AP <b>0.6335</b>, station-memory AP <b>0.3682</b>, AP margin <b>+0.2653</b>, ROC-AUC <b>0.848</b>, and ECE <b>0.023</b>.</p>
+    <p class="warn"><b>Scope discipline:</b> this is held from fitting and calibration, but it is not a pristine never-scored post-freeze lockbox. The source state defines the prospective lockbox cutoff as 2026-06-18; the public data ended on 2026-03-05, so that post-freeze lockbox had zero rows.</p>
   </section>
 
   <section>
-    <h2>Key Metrics</h2>
+    <h2>2) Headline Metrics</h2>
     <div class="grid">
-      <div class="metric"><b>0.6335</b><span>model AP</span></div>
-      <div class="metric"><b>0.3682</b><span>station-memory AP</span></div>
+      <div class="metric"><b>0.6335</b><span>2026 model AP</span></div>
+      <div class="metric"><b>0.3682</b><span>memory AP</span></div>
       <div class="metric"><b>+0.2653</b><span>AP lift</span></div>
-      <div class="metric"><b>2,487</b><span>holdout rows</span></div>
-      <div class="metric"><b>463</b><span>events</span></div>
       <div class="metric"><b>0.848</b><span>ROC-AUC</span></div>
+      <div class="metric"><b>0.023</b><span>ECE</span></div>
+      <div class="metric"><b>2,487</b><span>rows</span></div>
+      <div class="metric"><b>463</b><span>events</span></div>
+      <div class="metric"><b>0</b><span>post-freeze lockbox rows</span></div>
+    </div>
+    <div class="bars" aria-label="AP comparison for 2026 forward holdout">
+      <div class="barrow"><b>Model</b><div class="track"><span class="fill" style="width:63.35%"></span></div><span>0.6335</span></div>
+      <div class="barrow"><b>Station memory</b><div class="track"><span class="fill" style="width:36.82%"></span></div><span>0.3682</span></div>
+      <div class="barrow"><b>Base rate</b><div class="track"><span class="fill" style="width:18.62%"></span></div><span>0.1862</span></div>
     </div>
   </section>
 
   <section>
-    <h2>Evidence Table</h2>
+    <h2>3) What Was Held Out</h2>
+    <p>The 2026 finding is a forward-season check inside the frozen evidence program. It asks whether a model already selected under the earlier train/calibrate/test discipline still beats the strongest local incumbent on a later season.</p>
     <table>
-      <tr><th>Field</th><th>Value</th></tr>
-      <tr><td>Finding kind</td><td>positive</td></tr>
-      <tr><td>Holdout window</td><td>2026-01-05 to 2026-03-05</td></tr>
-      <tr><td>Best baseline</td><td>Station memory</td></tr>
-      <tr><td>Model AP</td><td>0.6335</td></tr>
-      <tr><td>Baseline AP</td><td>0.3682</td></tr>
-      <tr><td>Margin</td><td>+0.2653 AP</td></tr>
-      <tr><td>Model calibration</td><td>ECE 0.023</td></tr>
-      <tr><td>Evidence artifact</td><td><code>reports/experiment_program/F1/f1_scorecard.json</code></td></tr>
+      <tr><th>Field</th><th>Value</th><th>Why it matters</th></tr>
+      <tr><td>Window</td><td>2026-01-05 to 2026-03-05</td><td>Later than fitting/calibration windows.</td></tr>
+      <tr><td>Rows / events</td><td>2,487 / 463</td><td>Large enough to be meaningful, smaller than the full 2022+ test.</td></tr>
+      <tr><td>Best baseline</td><td>Station memory</td><td>The strongest incumbent for this slice.</td></tr>
+      <tr><td>Evidence artifact</td><td><code>reports/experiment_program/F1/f1_scorecard.json</code></td><td>Current finding-card source path.</td></tr>
+      <tr><td>Prospective lockbox cutoff</td><td>Samples strictly after 2026-06-18</td><td>Not scored yet because the source data ended 2026-03-05.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>4) Relationship To The Frozen Operational Headline</h2>
+    <p>There are two valid numbers that must not be collapsed into one. The full operational headline evaluates the broad 2022+ deployable stratum. The Featured 2026 card evaluates the held-from-fitting 2026 season.</p>
+    <table>
+      <tr><th>Evidence layer</th><th>N</th><th>Events</th><th>Base rate</th><th>Model AP</th><th>Best baseline AP</th><th>AUROC</th><th>ECE</th><th>Read</th></tr>
+      <tr><td>Operational frozen headline, EXCLUDE_SAN_DIEGO</td><td>89,321</td><td>8,999</td><td>0.1007</td><td>0.5099</td><td>0.3754 Virtual Beach MLR</td><td>0.8675</td><td>0.0087</td><td>Deployable retrospective headline.</td></tr>
+      <tr><td><b>Forward 2026 held-from-fitting season</b></td><td><b>2,487</b></td><td><b>463</b></td><td><b>0.1862</b></td><td><b>0.6335</b></td><td><b>0.3682 station memory</b></td><td><b>0.848</b></td><td><b>0.023</b></td><td><b>Featured forward-season check.</b></td></tr>
+    </table>
+    <p>The operational result explains the model choice; the 2026 result checks that the frozen model still ranks a later season better than local memory.</p>
+  </section>
+
+  <section>
+    <h2>5) Model Selection Context</h2>
+    <p>The chosen model family is not chosen because it maximizes raw AP at any cost. It is chosen because it beats practical incumbents while preserving calibration after isotonic calibration.</p>
+    <table>
+      <tr><th>Model / baseline</th><th>AP</th><th>AUROC</th><th>ECE</th><th>Recall@10%</th><th>Precision@10%</th></tr>
+      <tr><td>Base rate</td><td>0.101</td><td>0.500</td><td>0.024</td><td>0.070</td><td>0.071</td></tr>
+      <tr><td>Month climatology</td><td>0.153</td><td>0.647</td><td>0.022</td><td>0.170</td><td>0.171</td></tr>
+      <tr><td>Prior lab</td><td>0.185</td><td>0.632</td><td>0.128</td><td>0.333</td><td>0.336</td></tr>
+      <tr><td>Station memory</td><td>0.278</td><td>0.772</td><td>0.011</td><td>0.325</td><td>0.328</td></tr>
+      <tr><td>AB411 rain</td><td>0.178</td><td>0.649</td><td>0.163</td><td>0.267</td><td>0.269</td></tr>
+      <tr><td>Virtual Beach MLR</td><td>0.375</td><td>0.749</td><td>0.281</td><td>0.387</td><td>0.390</td></tr>
+      <tr><td>HGBT raw</td><td>0.522</td><td>0.868</td><td>0.226</td><td>0.506</td><td>0.509</td></tr>
+      <tr><td><b>HGBT calibrated</b></td><td><b>0.510</b></td><td><b>0.868</b></td><td><b>0.009</b></td><td><b>0.505</b></td><td><b>0.509</b></td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>6) Gates Passed And Gates Not Yet Passed</h2>
+    <table>
+      <tr><th>Gate</th><th>Status</th><th>Evidence</th></tr>
+      <tr><td>Forward-season AP lift</td><td>PASS</td><td>0.6335 vs 0.3682, delta +0.2653.</td></tr>
+      <tr><td>Held from fitting/calibration</td><td>PASS</td><td>Window is 2026-01-05 to 2026-03-05, separate from the train/calibration periods.</td></tr>
+      <tr><td>Calibration</td><td>WATCH</td><td>2026 ECE 0.023 is close to the 0.02 operational calibration threshold; broad frozen headline ECE is 0.0087.</td></tr>
+      <tr><td>Pristine post-freeze lockbox</td><td>BLOCKED</td><td>No rows strictly after the 2026-06-18 cutoff in the current source state.</td></tr>
+      <tr><td>Leakage discipline</td><td>PASS with caveat</td><td>Frozen config uses reveal-lag proxy; source notes about 0.02 AP inflation relative to true per-sample availability.</td></tr>
+      <tr><td>Deployment geography</td><td>PARTIAL</td><td>Overall county table supports 8/9 deploy-ready; San Diego calibration blocks broad deployment language.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>7) County-By-County Context</h2>
+    <p>The forward-2026 card itself is not a county-by-county artifact. The relevant deployment context is the broader spatial holdout table: the model beats station memory and AB411 in each county by AP, but San Diego is not deploy-ready because calibration fails.</p>
+    <table>
+      <tr><th>County</th><th>N</th><th>Events</th><th>Base rate</th><th>Model AP</th><th>Memory AP</th><th>AB411 AP</th><th>Model ECE</th><th>Deploy-ready</th></tr>
+      <tr><td>San Diego</td><td>26,326</td><td>15,918</td><td>0.605</td><td>0.950</td><td>0.939</td><td>0.602</td><td>0.457</td><td><b>No</b></td></tr>
+      <tr><td>Los Angeles</td><td>22,612</td><td>3,588</td><td>0.159</td><td>0.553</td><td>0.313</td><td>0.251</td><td>0.046</td><td>Yes</td></tr>
+      <tr><td>Orange</td><td>29,728</td><td>1,709</td><td>0.058</td><td>0.349</td><td>0.194</td><td>0.104</td><td>0.014</td><td>Yes</td></tr>
+      <tr><td>San Mateo</td><td>5,308</td><td>983</td><td>0.185</td><td>0.538</td><td>0.418</td><td>0.241</td><td>0.058</td><td>Yes</td></tr>
+      <tr><td>Long Beach City</td><td>4,014</td><td>704</td><td>0.175</td><td>0.578</td><td>0.183</td><td>0.369</td><td>0.042</td><td>Yes</td></tr>
+      <tr><td>San Francisco</td><td>4,256</td><td>607</td><td>0.143</td><td>0.547</td><td>0.260</td><td>0.273</td><td>0.018</td><td>Yes</td></tr>
+      <tr><td>Santa Cruz</td><td>3,931</td><td>415</td><td>0.106</td><td>0.405</td><td>0.163</td><td>0.207</td><td>0.023</td><td>Yes</td></tr>
+      <tr><td>Ventura</td><td>5,543</td><td>261</td><td>0.047</td><td>0.460</td><td>0.097</td><td>0.148</td><td>0.015</td><td>Yes</td></tr>
+      <tr><td>Santa Barbara</td><td>3,130</td><td>175</td><td>0.056</td><td>0.269</td><td>0.111</td><td>0.099</td><td>0.007</td><td>Yes</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>8) Forecast Horizon And Operational Meaning</h2>
+    <p>The forward-season result is not a license to make multi-day claims. The source horizon table supports nowcast and next-day use most strongly.</p>
+    <table>
+      <tr><th>Lead day</th><th>Delta AP vs station memory</th><th>95% CI</th><th>Use</th></tr>
+      <tr><td>L=0</td><td>+0.159</td><td>[0.149, 0.168]</td><td>Nowcast advisory/sampling ranking.</td></tr>
+      <tr><td>L=1</td><td>+0.076</td><td>[0.068, 0.084]</td><td>Next-day planning.</td></tr>
+      <tr><td>L=2</td><td>+0.016</td><td>[0.008, 0.023]</td><td>Weak but positive.</td></tr>
+      <tr><td>L=3</td><td>-0.018</td><td>[-0.025, -0.010]</td><td>Do not promote.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>9) Confusion Matrices And Operating Points</h2>
+    <p class="warn">The 2026 card is an AP/AUROC/calibration result and does not publish a dedicated 2026 thresholded confusion matrix. The broader operating-point matrix below shows the cost of choosing recall-heavy thresholds on the deployable stratum.</p>
+    <table>
+      <tr><th>Operating point</th><th>Threshold</th><th>TP</th><th>FP</th><th>FN</th><th>TN</th><th>Precision</th><th>Recall</th><th>Flag rate</th></tr>
+      <tr><td>recall >= 0.70</td><td>0.0967</td><td>6,728</td><td>15,622</td><td>2,271</td><td>64,700</td><td>0.301</td><td>0.748</td><td>25.0%</td></tr>
+      <tr><td>recall >= 0.80</td><td>0.0635</td><td>7,189</td><td>20,571</td><td>1,810</td><td>59,751</td><td>0.259</td><td>0.799</td><td>31.1%</td></tr>
+      <tr><td>recall >= 0.90</td><td>0.0331</td><td>8,077</td><td>33,697</td><td>922</td><td>46,625</td><td>0.193</td><td>0.897</td><td>46.8%</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>10) Pi / Interlingua Relevance</h2>
+    <p>Pi is useful context for transfer and cold-start questions, but it is not the reason the forward-2026 California model works. The forward result is a local calibrated bacteria nowcast with station history and environmental features.</p>
+    <table>
+      <tr><th>Question</th><th>Answer</th></tr>
+      <tr><td>Does zero-shot allow prediction outside California?</td><td>Only as a bounded cold-start ranking screen. Pi+logistic mean AP is 0.1511 vs base 0.0909 across 12 held-out domains, with the source-stratum null beaten 12/12.</td></tr>
+      <tr><td>Does it beat a mature local baseline?</td><td>No. Unified Pi LOBO AUC is 0.6124 vs memory AUC 0.7637; Pi beats memory on 0/12 coasts.</td></tr>
+      <tr><td>Do Pi and local memory combine to boost this model?</td><td>The attempted combined lane did not earn a featured claim: pi_groups dAP about -0.0025 vs FEATS+rain+discharge, and unified 7-pi regressed about -0.0109.</td></tr>
+      <tr><td>What are the coordinates?</td><td><code>pi_loading</code>, <code>pi_damkohler</code>, <code>pi_uv_dose</code>, <code>pi_peclet</code>, and <code>pi_flushing</code>, computed from exogenous weather and fixed formulas, with no bacteria labels or target-domain labels used in the coordinate calculation.</td></tr>
     </table>
   </section>
 
   <section class="card">
-    <h2>Why This Is Featured</h2>
-    <p>This finding is a clean forward-season check: the rows were held from fitting, and the frozen model still beats persistence, seasonal, and station-memory baselines.</p>
-    <p class="note"><b>Scope:</b> This is held-from-fitting forward-season evidence, not a pristine never-scored post-freeze lockbox. The pristine post-2026-06-18 lockbox was still empty because the public data ended on 2026-03-05.</p>
+    <h2>11) So What</h2>
+    <p>This finding is the forward-season sanity check: after model selection, the frozen model still wins on a later 2026 season. It should be shown as a strong held-from-fitting result, not overclaimed as a completed prospective post-freeze lockbox. The operational implication is that the model generalizes forward in time enough to justify continued prospective monitoring and lockbox scoring.</p>
+    <p><a href="../bacteria-findings/">Open the comprehensive bacteria report</a> for the broader source report, and <a href="../pi-bacteria/">open the Pi bacteria report</a> for the separate cold-start interlingua story.</p>
   </section>
 
   <section>
-    <h2>Related Full Context</h2>
-    <p><a href="../bacteria-findings/">Open the comprehensive bacteria report</a> for the broader validation context and how this forward-season result sits beside the operational and onset findings.</p>
+    <h2>Source Paths</h2>
+    <ul>
+      <li><code>data.json</code> finding <code>claim_forward_2026_holdout_pass</code></li>
+      <li><code>reports/experiment_program/F1/f1_scorecard.json</code></li>
+      <li><code>research/bacteria/reproduce/FROZEN_HEADLINE.json</code></li>
+      <li><code>reports/bacteria/prospective_scorecard.json</code></li>
+      <li><code>reports/bacteria/breakthrough_gate/breakthrough_gate.json</code></li>
+      <li><code>research/bacteria/reproduce/expected/operational_benchmark.json</code></li>
+      <li><code>research/bacteria/reproduce/expected/spatial_holdout.json</code></li>
+      <li><code>reports/bacteria_evidence_report_2026_06_26/index.html</code></li>
+      <li><code>reports/pi_interlingua_explainer_2026_06_26/index.html</code></li>
+      <li><code>reports/pi_coordinate_technical_appendix_2026_06_26/index.html</code></li>
+    </ul>
   </section>
 </main>
 </body>
