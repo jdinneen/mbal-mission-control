@@ -57,6 +57,8 @@ assert(html.includes("FEATURED_FINDING_IDS"), "Featured should be driven by curr
 assert(html.includes("FEATURED_FINDING_REPORTS"), "Featured findings should map to full report URLs");
 assert(!html.includes("FEATURED_REPORTS"), "Featured should not be hardcoded report placeholder cards");
 assert(!html.includes('id="featuredFindings"'), "Featured should render normal data.json finding cards");
+assert(html.includes("not 100% certain truths"), "Findings page should explain evidence-backed uncertainty in plain language");
+assert(html.includes("How to read the three Featured findings"), "Findings page should explain the three Featured cards for readers with no context");
 
 const featuredArrayMatch = html.match(/const FEATURED_FINDING_IDS=\[([\s\S]*?)\];/);
 assert(featuredArrayMatch, "FEATURED_FINDING_IDS array should be present");
@@ -70,6 +72,8 @@ for (const link of featuredReportLinks) {
 
 const featuredReportExpectations = {
   "reports/bacteria-station-memory/": [
+    "Plain-English Read First",
+    "not a 100% accurate bacteria detector",
     "Model And Baseline Comparison",
     "Where It Works And Where It Does Not",
     "Parameter Sets And Operating Points",
@@ -77,6 +81,8 @@ const featuredReportExpectations = {
     "Gate Check",
   ],
   "reports/clean-to-dirty-onset/": [
+    "Plain-English Read First",
+    "not a guarantee that every clean-to-dirty event will be caught",
     "Clean-to-dirty onset",
     "onset prev clean",
     "Forecast Horizon",
@@ -84,6 +90,8 @@ const featuredReportExpectations = {
     "Pi / Interlingua Context",
   ],
   "reports/forward-2026-holdout/": [
+    "Plain-English Read First",
+    "not 100% accurate",
     "2026-01-05 to 2026-03-05",
     "not a pristine never-scored post-freeze lockbox",
     "Relationship To The Frozen Operational Headline",

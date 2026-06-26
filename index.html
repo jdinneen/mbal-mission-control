@@ -811,7 +811,11 @@
   <section class="view" id="findings">
     <div style="margin-bottom:18px">
       <h1 class="sec">Findings</h1>
-      <p class="subhead">Strongest results first. Each card says — in plain words — what we asked, what we found, and how sure we are. Click for the technical read and, where the evidence has it, a confusion matrix.</p>
+      <p class="subhead">Strongest current bacteria results first. These are not 100% certain truths; they are the strongest evidence-backed claims in the frozen ledger right now. A finding means the model beat a real baseline on held-out data, with the caveats shown on the card and in the linked report.</p>
+      <div class="card" style="padding:16px 18px;margin-top:14px">
+        <p style="margin:0 0 8px;color:var(--ink2)"><b>How to read the three Featured findings:</b> the first says the bacteria nowcast ranks risky beach-days better than station memory; the second says it is especially useful for catching beaches that were clean and then flip dirty; the third says the frozen model still beat station memory on the January 5 to March 5, 2026 held-from-fitting season.</p>
+        <p style="margin:0;color:var(--ink5)">AP lift means better ranking of true exceedances near the top of the list, not perfect prediction. Held-out means the evaluated rows were separated from fitting/calibration. Gated means useful evidence exists, but a final prospective lockbox or deployment condition is still unresolved.</p>
+      </div>
     </div>
     <div class="filterbar" id="filterbar"></div>
     <div class="fgrid" id="fgrid"></div>
