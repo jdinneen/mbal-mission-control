@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pi + Memory Hybrid Finding Report</title>
+  <style>
+    :root {
+      --ink:#17202a; --muted:#607083; --line:#d9e1ea; --bg:#f5f7fa; --panel:#ffffff;
+      --blue:#2563eb; --green:#16805a; --orange:#b45309; --red:#b42318; --teal:#0f766e; --purple:#7c3aed;
+    }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Inter, "Segoe UI", Arial, sans-serif; background:var(--bg); color:var(--ink); line-height:1.5; }
+    header { padding:28px 34px 18px; background:#0b1220; color:white; }
+    header h1 { margin:0 0 8px; font-size:32px; letter-spacing:0; }
+    header p { margin:0; color:#cbd5e1; max-width:1120px; }
+    main { max-width:1480px; margin:0 auto; padding:24px 28px 48px; }
+    section { margin:0 0 26px; background:var(--panel); border:1px solid var(--line); border-radius:8px; padding:20px; }
+    h2 { margin:0 0 14px; font-size:22px; }
+    h3 { margin:18px 0 10px; font-size:16px; }
+    p { margin:0 0 12px; }
+    table { width:100%; border-collapse:collapse; margin:10px 0 16px; font-size:13px; }
+    th,td { border-bottom:1px solid var(--line); padding:8px 7px; text-align:left; vertical-align:top; }
+    th { background:#f8fafc; color:#334155; font-size:12px; text-transform:uppercase; letter-spacing:.02em; }
+    code, pre { font-family:"Cascadia Mono", "SFMono-Regular", Consolas, monospace; }
+    code { background:#f1f5f9; padding:2px 5px; border-radius:4px; }
+    pre { overflow-x:auto; border:1px solid var(--line); border-radius:8px; background:#fbfdff; padding:14px 16px; margin:10px 0 14px; line-height:1.45; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(245px,1fr)); gap:14px; }
+    .card { border:1px solid var(--line); border-radius:8px; padding:14px; background:#fff; }
+    .card h3 { margin:0 0 8px; }
+    .metric { font-size:28px; font-weight:760; margin:4px 0; line-height:1.1; }
+    .muted { color:var(--muted); }
+    .small { color:var(--muted); font-size:13px; }
+    .tag { display:inline-block; padding:3px 8px; border-radius:999px; font-size:12px; font-weight:700; background:#eef2f7; color:#334155; white-space:nowrap; }
+    .tag.good { background:#dcfce7; color:#166534; }
+    .tag.warn { background:#ffedd5; color:#9a3412; }
+    .tag.bad { background:#fee2e2; color:#991b1b; }
+    .tag.info { background:#dbeafe; color:#1e40af; }
+    .callout { border-left:5px solid var(--orange); background:#fff7ed; padding:12px 14px; border-radius:6px; margin:10px 0 14px; }
+    .callout.ok { border-left-color:var(--green); background:#f4fbf7; }
+    .callout.info { border-left-color:var(--blue); background:#f7fbff; }
+    .callout.critic { border-left-color:var(--red); background:#fff7f7; }
+    .two-col { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:16px; }
+    .bar-list { display:grid; gap:8px; }
+    .bar-row { display:grid; grid-template-columns:minmax(170px,290px) 1fr 76px; gap:9px; align-items:center; }
+    .bar-label { font-size:13px; font-weight:650; }
+    .bar-sub { color:var(--muted); font-size:11px; font-weight:500; margin-top:2px; }
+    .bar-track,.mini-track { height:16px; background:#edf2f7; border-radius:4px; overflow:hidden; border:1px solid #dbe3ed; }
+    .bar-fill { height:100%; }
+    .blue { background:var(--blue); } .green { background:var(--green); } .orange { background:var(--orange); }
+    .red { background:var(--red); } .teal { background:var(--teal); } .purple { background:var(--purple); }
+    .bar-value { font-variant-numeric:tabular-nums; font-size:13px; }
+    .grouped-bars { display:grid; grid-template-columns:210px 1fr; gap:8px 12px; }
+    .group-title { font-weight:750; border-top:1px solid var(--line); padding-top:8px; }
+    .group-lines { border-top:1px solid var(--line); padding-top:8px; }
+    .mini-row { display:grid; grid-template-columns:94px 1fr 62px; gap:8px; align-items:center; margin-bottom:5px; font-size:12px; }
+    .cm-wrap { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; }
+    .cm-card { border:1px solid var(--line); border-radius:8px; padding:12px; background:#fff; }
+    .cm-title { font-weight:760; font-size:13px; }
+    .cm-meta,.cm-foot { color:var(--muted); font-size:12px; margin:5px 0; }
+    .cm-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:8px; }
+    .cm-cell { min-height:72px; border-radius:6px; padding:8px; display:flex; flex-direction:column; justify-content:space-between; border:1px solid rgba(0,0,0,.08); }
+    .cm-cell.good { background:rgba(22,128,90,var(--alpha)); }
+    .cm-cell.bad { background:rgba(180,35,24,var(--alpha)); }
+    .cm-cell.warn { background:rgba(180,83,9,var(--alpha)); }
+    .cm-cell.quiet { background:rgba(37,99,235,var(--alpha)); }
+    .cm-cell span { font-size:12px; font-weight:800; }
+    .cm-cell b { font-size:20px; }
+    .cm-cell em { font-size:11px; color:#334155; font-style:normal; }
+    details { border:1px solid var(--line); border-radius:8px; padding:10px 12px; margin:12px 0; background:#fff; }
+    summary { cursor:pointer; font-weight:800; }
+    .source-list { columns:2; margin:6px 0; }
+    @media (max-width:900px) {
+      main { padding:14px; }
+      header { padding:22px 18px; }
+      .two-col { grid-template-columns:1fr; }
+      .bar-row { grid-template-columns:1fr; gap:4px; }
+      .grouped-bars { grid-template-columns:1fr; }
+      .source-list { columns:1; }
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>Pi + Memory Hybrid Finding Report</h1>
+  <p>Generated 2026-06-26 from the existing bacteria evidence report, the pi-coordinate technical appendix, and the new station-held-out hybrid gate artifacts. Scope: marine Enterococcus/FIB exceedance ranking, pi-coordinate residual value over station memory, model comparisons, pi-shuffle critic, and deployment caveats.</p>
+</header>
+<main>
+  <section>
+    <h2>Verdict</h2>
+    <div class="callout ok">
+      <b>F-PI-MEM bacteria exceedance ranking - PASS vs station-memory baseline.</b>
+      The direct HGBT hybrid using 36 memory features plus 5 label-free &pi; coordinates scores AP 0.6761 versus HGBT memory AP 0.6494 on station-grouped out-of-fold rows. The gain is +0.0267 AP with 95% bootstrap CI [0.0214, 0.0326].
+    </div>
+    <table>
+      <tr><th>House-style item</th><th>Result</th></tr>
+      <tr><td>Held-out unit</td><td>Station/site group. 3-fold <code>GroupKFold</code>, 824 groups, 475,669 rows, 59,710 events.</td></tr>
+      <tr><td>Primary body type</td><td><b>Ranking / triage</b>. Top-10% triage budget captures 53.9% of events with 67.7% precision.</td></tr>
+      <tr><td>Calibration status</td><td><span class="tag warn">GATED</span> Forward-time calibration passes, but county-held-out deployment fails the strict gate because the county-bootstrap &Delta;AP CI crosses zero and the &Delta;Brier CI barely crosses zero. Do not call this a deploy-ready probability model.</td></tr>
+      <tr><td>What this is good for</td><td>Use as a candidate ranking upgrade: prioritize site-days for bacteria risk review where local history exists but physics-weather context still adds residual signal.</td></tr>
+    </table>
+    <div class="grid">
+      <div class="card"><h3>Best model</h3><div class="metric">HGBT hybrid</div><p class="muted">41 features: memory + &pi;</p></div>
+      <div class="card"><h3>Lift over memory</h3><div class="metric">+0.0267 AP</div><p class="muted">CI excludes zero across station groups</p></div>
+      <div class="card"><h3>Adversarial check</h3><div class="metric">+0.0275 AP</div><p class="muted">real aligned &pi; vs shuffled &pi;</p></div>
+      <div class="card"><h3>Deployment</h3><div class="metric">GATED</div><p class="muted">forward pass; county gate fail</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What Was Tested</h2>
+    <div class="two-col">
+      <div>
+        <h3>Data</h3>
+        <table>
+          <tr><th>Field</th><th>Value</th></tr>
+          <tr><td>Training frame</td><td><code>bacteria_results/statewide/statewide_training_frame.parquet</code></td></tr>
+          <tr><td>&pi; panel</td><td><code>lakehouse/silver/unified_pi_panel/data.parquet</code></td></tr>
+          <tr><td>Rows / events</td><td>475,669 rows / 59,710 exceedance events</td></tr>
+          <tr><td>Base rate</td><td>0.1255</td></tr>
+          <tr><td>Counties present</td><td>17</td></tr>
+          <tr><td>&pi; complete fraction</td><td>0.8166</td></tr>
+        </table>
+      </div>
+      <div>
+        <h3>Input sets</h3>
+        <table>
+          <tr><th>Input set</th><th>Columns</th><th>Purpose</th></tr>
+          <tr><td>Memory</td><td>36</td><td>Day-of-year, prior/rolling lab history, prior exceedance, county prior, neighbor prior. These are shifted/history fields in the statewide frame.</td></tr>
+          <tr><td>&pi;</td><td>5</td><td>Label-free same-date physics-weather coordinates: <code>pi_damkohler</code>, <code>pi_loading</code>, <code>pi_uv_dose</code>, <code>pi_peclet</code>, <code>pi_flushing</code>.</td></tr>
+          <tr><td>Hybrid</td><td>41</td><td>Memory and &pi; together. This is the user's requested combined model test.</td></tr>
+        </table>
+      </div>
+    </div>
+    <p class="muted">No bacteria labels, concentration values, county labels, or target-domain labels are used to compute the &pi; coordinates. Labels enter only when training/evaluating the downstream exceedance model.</p>
+  </section>
+
+  <section>
+    <h2>Model Performance Under Input Sets</h2>
+    <p class="muted">Bars are AP scaled to 0.70. Each hybrid is judged against the better single-channel baseline for the same engine.</p>
+    <div class="grouped-bars">
+      <div class="group-title">Logistic</div>
+      <div class="group-lines">
+        <div class="mini-row"><span>memory</span><div class="mini-track"><div class="bar-fill green" style="width:86.1%"></div></div><b>0.602</b></div>
+        <div class="mini-row"><span>&pi;</span><div class="mini-track"><div class="bar-fill orange" style="width:30.8%"></div></div><b>0.215</b></div>
+        <div class="mini-row"><span>hybrid</span><div class="mini-track"><div class="bar-fill blue" style="width:88.1%"></div></div><b>0.617</b></div>
+      </div>
+      <div class="group-title">HGBT</div>
+      <div class="group-lines">
+        <div class="mini-row"><span>memory</span><div class="mini-track"><div class="bar-fill green" style="width:92.8%"></div></div><b>0.649</b></div>
+        <div class="mini-row"><span>&pi;</span><div class="mini-track"><div class="bar-fill orange" style="width:41.2%"></div></div><b>0.288</b></div>
+        <div class="mini-row"><span>hybrid</span><div class="mini-track"><div class="bar-fill blue" style="width:96.6%"></div></div><b>0.676</b></div>
+      </div>
+      <div class="group-title">ExtraTrees</div>
+      <div class="group-lines">
+        <div class="mini-row"><span>memory</span><div class="mini-track"><div class="bar-fill green" style="width:90.9%"></div></div><b>0.636</b></div>
+        <div class="mini-row"><span>&pi;</span><div class="mini-track"><div class="bar-fill orange" style="width:45.1%"></div></div><b>0.315</b></div>
+        <div class="mini-row"><span>hybrid</span><div class="mini-track"><div class="bar-fill blue" style="width:93.6%"></div></div><b>0.655</b></div>
+      </div>
+      <div class="group-title">Nested stack</div>
+      <div class="group-lines">
+        <div class="mini-row"><span>hybrid</span><div class="mini-track"><div class="bar-fill purple" style="width:94.0%"></div></div><b>0.658</b></div>
+      </div>
+    </div>
+
+    <h3>All model validation rows</h3>
+    <table>
+      <tr><th>Engine</th><th>Feature set</th><th>AP</th><th>AUC</th><th>Brier</th><th>Lift</th><th>Precision@top10</th><th>Recall@top10</th></tr>
+      <tr><td>logistic</td><td>memory</td><td>0.6024</td><td>0.8581</td><td>0.1396</td><td>4.80</td><td>0.6160</td><td>0.4908</td></tr>
+      <tr><td>logistic</td><td>&pi;</td><td>0.2153</td><td>0.6239</td><td>0.2325</td><td>1.72</td><td>0.2445</td><td>0.1948</td></tr>
+      <tr><td>logistic</td><td>hybrid</td><td>0.6165</td><td>0.8681</td><td>0.1335</td><td>4.91</td><td>0.6354</td><td>0.5062</td></tr>
+      <tr><td>hgbt</td><td>memory</td><td>0.6494</td><td>0.8750</td><td>0.0691</td><td>5.17</td><td>0.6475</td><td>0.5159</td></tr>
+      <tr><td>hgbt</td><td>&pi;</td><td>0.2884</td><td>0.7184</td><td>0.1002</td><td>2.30</td><td>0.2931</td><td>0.2335</td></tr>
+      <tr><td>hgbt</td><td>hybrid</td><td>0.6761</td><td>0.8874</td><td>0.0660</td><td>5.39</td><td>0.6769</td><td>0.5392</td></tr>
+      <tr><td>extratrees</td><td>memory</td><td>0.6365</td><td>0.8701</td><td>0.1258</td><td>5.07</td><td>0.6347</td><td>0.5056</td></tr>
+      <tr><td>extratrees</td><td>&pi;</td><td>0.3154</td><td>0.7505</td><td>0.1933</td><td>2.51</td><td>0.3068</td><td>0.2444</td></tr>
+      <tr><td>extratrees</td><td>hybrid</td><td>0.6552</td><td>0.8812</td><td>0.1203</td><td>5.22</td><td>0.6546</td><td>0.5215</td></tr>
+      <tr><td>stack_hgbt_logit_pi</td><td>hybrid_stack</td><td>0.6578</td><td>0.8780</td><td>0.1338</td><td>5.24</td><td>0.6583</td><td>0.5244</td></tr>
+    </table>
+
+    <h3>Hybrid lift gate</h3>
+    <table>
+      <tr><th>Engine</th><th>Best single baseline</th><th>Hybrid AP</th><th>Baseline AP</th><th>&Delta;AP</th><th>95% CI</th><th>Verdict</th></tr>
+      <tr><td>logistic</td><td>memory</td><td>0.6165</td><td>0.6024</td><td>+0.0141</td><td>[0.0102, 0.0196]</td><td><span class="tag good">PASS</span></td></tr>
+      <tr><td>hgbt</td><td>memory</td><td>0.6761</td><td>0.6494</td><td>+0.0267</td><td>[0.0214, 0.0326]</td><td><span class="tag good">PASS</span></td></tr>
+      <tr><td>extratrees</td><td>memory</td><td>0.6552</td><td>0.6365</td><td>+0.0187</td><td>[0.0152, 0.0223]</td><td><span class="tag good">PASS</span></td></tr>
+      <tr><td>stack_hgbt_logit_pi</td><td>hgbt memory</td><td>0.6578</td><td>0.6494</td><td>+0.0085</td><td>[0.0066, 0.0109]</td><td><span class="tag good">PASS</span></td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Why Select HGBT Hybrid</h2>
+    <table>
+      <tr><th>Selection criterion</th><th>Result</th></tr>
+      <tr><td>Highest AP</td><td>HGBT hybrid AP 0.6761, above ExtraTrees hybrid 0.6552, stack 0.6578, and logistic hybrid 0.6165.</td></tr>
+      <tr><td>Highest AUC</td><td>HGBT hybrid AUC 0.8874, also highest in the run.</td></tr>
+      <tr><td>Best Brier among tested rows</td><td>HGBT hybrid Brier 0.0660. This is better than HGBT memory 0.0691 and better than every non-HGBT row, but still not enough to call operational calibration complete.</td></tr>
+      <tr><td>Direct model beats stacker</td><td>The nested HGBT-memory + logistic-&pi; stack passes but AP 0.6578 is below direct HGBT hybrid AP 0.6761.</td></tr>
+      <tr><td>Mechanistic plausibility</td><td>HGBT can use nonlinear interactions between site memory and exogenous process coordinates without forcing a single linear effect.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Confusion Matrix And Triage</h2>
+    <p class="muted">Operating point is the top 10% highest-risk site-days from the best HGBT hybrid. This is a ranking threshold, not a fixed advisory probability threshold.</p>
+    <div class="cm-wrap">
+      <article class="cm-card">
+        <div class="cm-title">HGBT hybrid, top-10% triage</div>
+        <div class="cm-meta">N 475,669; events 59,710; precision 0.6769; recall 0.5392</div>
+        <div class="cm-grid">
+          <div class="cm-cell good" style="--alpha:0.32"><span>TP</span><b>32,197</b><em>actual exceedance, flagged</em></div>
+          <div class="cm-cell bad" style="--alpha:0.22"><span>FN</span><b>27,513</b><em>actual exceedance, missed by top 10%</em></div>
+          <div class="cm-cell warn" style="--alpha:0.18"><span>FP</span><b>15,370</b><em>clean day, flagged</em></div>
+          <div class="cm-cell quiet" style="--alpha:0.84"><span>TN</span><b>400,589</b><em>clean day, not flagged</em></div>
+        </div>
+        <div class="cm-foot">Random 10% triage would capture about 10% of events; this captures 53.9%.</div>
+      </article>
+      <article class="cm-card">
+        <div class="cm-title">HGBT memory, top-10% triage</div>
+        <div class="cm-meta">precision 0.6475; recall 0.5159</div>
+        <div class="cm-grid">
+          <div class="cm-cell good" style="--alpha:0.31"><span>TP</span><b>30,802</b><em>flagged event</em></div>
+          <div class="cm-cell bad" style="--alpha:0.23"><span>FN</span><b>28,908</b><em>missed event</em></div>
+          <div class="cm-cell warn" style="--alpha:0.19"><span>FP</span><b>16,765</b><em>false flag</em></div>
+          <div class="cm-cell quiet" style="--alpha:0.84"><span>TN</span><b>399,194</b><em>clean not flagged</em></div>
+        </div>
+        <div class="cm-foot">Hybrid adds 1,395 true positives and removes 1,395 false positives at the same top-10% budget.</div>
+      </article>
+    </div>
+  </section>
+
+  <section>
+    <h2>Adversarial Critic</h2>
+    <div class="callout critic">
+      <b>Critic question:</b> is the lift real row-specific &pi; information, or just extra columns / regularization / fold luck? The negative control keeps memory intact and shuffles &pi; rows within the same folds.
+    </div>
+    <table>
+      <tr><th>Check</th><th>AP / &Delta;AP</th><th>95% CI</th><th>Verdict</th></tr>
+      <tr><td>HGBT memory</td><td>0.6494</td><td>n/a</td><td>baseline</td></tr>
+      <tr><td>HGBT hybrid, real aligned &pi;</td><td>0.6761</td><td>n/a</td><td>candidate</td></tr>
+      <tr><td>HGBT hybrid, shuffled &pi;</td><td>0.6486</td><td>n/a</td><td>negative control</td></tr>
+      <tr><td>real hybrid - shuffled-&pi; hybrid</td><td>+0.0275</td><td>[0.0219, 0.0346]</td><td><span class="tag good">PASS</span></td></tr>
+      <tr><td>shuffled-&pi; hybrid - memory</td><td>-0.0007</td><td>[-0.0013, -0.0002]</td><td><span class="tag good">PASS, no fake boost</span></td></tr>
+    </table>
+    <p><b>Interpretation:</b> the marginal lift depends on the correct site-day alignment of the &pi; coordinates. Shuffling removes the boost, so the combined model is not winning merely because it has more columns.</p>
+  </section>
+
+  <section>
+    <h2>Forward And County Calibration</h2>
+    <div class="callout">
+      <b>Deployment verdict: GATED_NOT_DEPLOYABLE_PROBABILITY_MODEL.</b>
+      The forward-time gate passes, but the county-held-out gate does not meet the strict deployment rule. The hybrid remains useful as a ranking/triage candidate, not yet as an honest county-general probability model.
+    </div>
+    <h3>Forward-time gate</h3>
+    <p class="muted">Train before 2022-10-26, test on/after 2022-10-26. Test N=95,194, events=23,549, station groups=665.</p>
+    <table>
+      <tr><th>Model</th><th>AP</th><th>AUC</th><th>Brier</th><th>ECE10</th><th>Precision@top10</th><th>Recall@top10</th></tr>
+      <tr><td>memory</td><td>0.8383</td><td>0.9142</td><td>0.0879</td><td>0.0239</td><td>0.9649</td><td>0.3901</td></tr>
+      <tr><td>hybrid</td><td>0.8550</td><td>0.9246</td><td>0.0816</td><td>0.0137</td><td>0.9712</td><td>0.3926</td></tr>
+    </table>
+    <table>
+      <tr><th>Forward delta</th><th>Value</th><th>95% CI</th><th>Status</th></tr>
+      <tr><td>&Delta;AP hybrid-memory</td><td>+0.0167</td><td>[0.0110, 0.0250]</td><td><span class="tag good">PASS</span></td></tr>
+      <tr><td>&Delta;Brier hybrid-memory</td><td>-0.0062</td><td>[-0.0070, -0.0053]</td><td><span class="tag good">PASS; negative is better</span></td></tr>
+    </table>
+
+    <h3>County-held-out gate</h3>
+    <p class="muted">5-fold county-grouped holdout. N=475,669, events=59,710, counties=17.</p>
+    <table>
+      <tr><th>Model</th><th>AP</th><th>AUC</th><th>Brier</th><th>ECE10</th><th>Precision@top10</th><th>Recall@top10</th></tr>
+      <tr><td>memory</td><td>0.6053</td><td>0.8596</td><td>0.0735</td><td>0.0066</td><td>0.6162</td><td>0.4909</td></tr>
+      <tr><td>hybrid</td><td>0.6210</td><td>0.8717</td><td>0.0715</td><td>0.0098</td><td>0.6394</td><td>0.5094</td></tr>
+    </table>
+    <table>
+      <tr><th>County delta</th><th>Value</th><th>95% CI</th><th>Status</th></tr>
+      <tr><td>&Delta;AP hybrid-memory</td><td>+0.0157</td><td>[-0.0011, 0.0555]</td><td><span class="tag warn">FAIL strict gate; CI crosses 0</span></td></tr>
+      <tr><td>&Delta;Brier hybrid-memory</td><td>-0.0021</td><td>[-0.0044, 0.000009]</td><td><span class="tag warn">FAIL strict gate; CI crosses 0</span></td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>How The &pi; Coordinates Are Calculated</h2>
+    <div class="callout info">
+      The &pi; vector is a five-coordinate, label-free physics proxy. For each site-day, it converts globally available weather into process coordinates for source loading, UV/thermal decay-residence, delivered UV dose, wind transport, and flushing.
+    </div>
+    <h3>Input provenance</h3>
+    <table>
+      <tr><th>Step</th><th>What happens</th></tr>
+      <tr><td>Row keys</td><td>Bacteria monitoring rows provide site, latitude, longitude, and sample date. The bacteria concentration and exceedance label are not used as &pi; inputs.</td></tr>
+      <tr><td>Weather cells</td><td>Sites are snapped to a 0.5 degree grid cell for the NASA POWER daily weather grid.</td></tr>
+      <tr><td>Daily weather</td><td>NASA POWER provides daily air temperature, precipitation, wind, shortwave radiation, UV-B, and UV index. Shortwave and UV-B are converted from MJ/m^2/day to daily-mean W/m^2 where needed.</td></tr>
+      <tr><td>Optional SST variants</td><td>NOAA OISST can provide daily ocean temperature for A/B variants, but the core five used here are the weather-derived coordinates below.</td></tr>
+      <tr><td>Formula</td><td>Once <code>T</code>, <code>S</code>, <code>P</code>, and <code>W</code> exist for a site-day, the coordinates are direct arithmetic. There is no fitting step in coordinate calculation.</td></tr>
+    </table>
+    <h3>Core formula</h3>
+    <pre>S_star = S / 200
+P_star = max(P, 0) / 5
+W_star = max(W, 0) / 5
+k_star = S_star * 2 ** ((T - 20) / 10)
+
+pi_damkohler = k_star / (1 + W_star ** 2)
+pi_loading   = P_star / (1 + W_star)
+pi_uv_dose   = S_star / (1 + P_star)
+pi_peclet    = W_star ** 2 / (1 + W_star)
+pi_flushing  = W_star ** 2 / (1 + W_star ** 2)</pre>
+    <h3>Math and history</h3>
+    <table>
+      <tr><th>Coordinate</th><th>Interpretation</th></tr>
+      <tr><td><code>pi_damkohler</code></td><td>UV/thermal decay-residence proxy. It borrows the Damkohler-number idea: compare reaction or decay opportunity against transport/residence.</td></tr>
+      <tr><td><code>pi_loading</code></td><td>Rainfall loading proxy. Precipitation is treated as same-day source pressure, damped by wind-driven dilution/transport.</td></tr>
+      <tr><td><code>pi_uv_dose</code></td><td>Delivered germicidal radiation proxy. Shortwave radiation rises with clear-sky/solar input and is attenuated by precipitation as a cloud/turbidity/runoff proxy.</td></tr>
+      <tr><td><code>pi_peclet</code></td><td>Wind-driven transport proxy. It borrows the Peclet-number idea: advective transport versus mixing/diffusion scale.</td></tr>
+      <tr><td><code>pi_flushing</code></td><td>Bounded flushing proxy. It saturates toward 1 as wind forcing increases, preventing wind from dominating unboundedly.</td></tr>
+    </table>
+    <p><b>Did we invent it?</b> The exact five-coordinate proxy set, normalizers, damping choices, and validation protocol are our engineered implementation. The mathematical style is not invented here: it comes from dimensional analysis, Buckingham-pi style nondimensional groups, Damkohler/Peclet process ratios, and Q10-style temperature response. The honest wording is <b>physics-motivated proxy pi coordinates</b>, not a first-principles hydrodynamic solution.</p>
+  </section>
+
+  <section>
+    <h2>Zero-Shot Interlingua Context</h2>
+    <p>The coordinates are called an interlingua because the same axes mean the same thing in every geography. A model trained in one domain can score another domain zero-shot after both are mapped into this shared process-coordinate system.</p>
+    <table>
+      <tr><th>Question</th><th>Answer</th></tr>
+      <tr><td>Does zero-shot help predict bacteria outside California?</td><td>Yes for cold-start ranking. The prior 12-domain pi+logistic result scored mean AP 0.151 versus base 0.091, with 12/12 held-out domains beating the source-stratum null.</td></tr>
+      <tr><td>Is this a calibrated advisory model outside California?</td><td>No. The zero-shot evidence supports ranking/triage when local labels are absent. It does not establish honest probabilities for a new jurisdiction without calibration.</td></tr>
+      <tr><td>Why not just use zero-shot instead of memory?</td><td>When local history exists, memory is much stronger than &pi; alone in California. The new finding is that &pi; still adds residual value when combined with memory.</td></tr>
+      <tr><td>Is this the pi-tensor finding?</td><td>No. The bacteria result here is a hand-built physics-&pi; plus memory hybrid. The existing reports explicitly do not promote a tensor/foundation-model bacteria claim over the raw &pi; control.</td></tr>
+    </table>
+    <h3>Canonical zero-shot pi+logistic per-target context</h3>
+    <table>
+      <tr><th>Target</th><th>Rows</th><th>Events</th><th>Base</th><th>AP</th><th>Lift</th><th>AP-base CI95</th><th>Null p</th></tr>
+      <tr><td>AL</td><td>7,833</td><td>641</td><td>0.082</td><td>0.116</td><td>1.415</td><td>[0.020, 0.049]</td><td>0.005</td></tr>
+      <tr><td>AU_NSW</td><td>2,830</td><td>192</td><td>0.068</td><td>0.198</td><td>2.918</td><td>[0.038, 0.207]</td><td>0.005</td></tr>
+      <tr><td>CA_US</td><td>367,429</td><td>31,002</td><td>0.084</td><td>0.222</td><td>2.626</td><td>[0.124, 0.153]</td><td>0.005</td></tr>
+      <tr><td>FL</td><td>120,029</td><td>9,950</td><td>0.083</td><td>0.123</td><td>1.483</td><td>[0.035, 0.046]</td><td>0.005</td></tr>
+      <tr><td>HI</td><td>61,579</td><td>2,235</td><td>0.036</td><td>0.065</td><td>1.783</td><td>[0.019, 0.044]</td><td>0.005</td></tr>
+      <tr><td>IE</td><td>23,164</td><td>750</td><td>0.032</td><td>0.068</td><td>2.094</td><td>[0.025, 0.048]</td><td>0.005</td></tr>
+      <tr><td>NC</td><td>2,016</td><td>69</td><td>0.034</td><td>0.041</td><td>1.186</td><td>[0.001, 0.022]</td><td>0.005</td></tr>
+      <tr><td>NJ</td><td>24,531</td><td>1,758</td><td>0.072</td><td>0.115</td><td>1.605</td><td>[0.036, 0.052]</td><td>0.005</td></tr>
+      <tr><td>OR</td><td>2,805</td><td>792</td><td>0.282</td><td>0.385</td><td>1.365</td><td>[0.076, 0.133]</td><td>0.005</td></tr>
+      <tr><td>PR</td><td>9,323</td><td>1,333</td><td>0.143</td><td>0.182</td><td>1.274</td><td>[0.023, 0.059]</td><td>0.005</td></tr>
+      <tr><td>TX</td><td>68,264</td><td>7,793</td><td>0.114</td><td>0.215</td><td>1.885</td><td>[0.089, 0.115]</td><td>0.005</td></tr>
+      <tr><td>WA</td><td>18,534</td><td>1,113</td><td>0.060</td><td>0.084</td><td>1.395</td><td>[0.012, 0.040]</td><td>0.005</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>County-By-County Status</h2>
+    <div class="callout">
+      <b>Important separation:</b> the new hybrid gate is station-held-out and contains 17 counties, but <code>results.json</code> does not save per-county OOF predictions. Therefore this report does not fabricate county-by-county hybrid AP. The forward-time/county calibration gate was running when this report was written and is the right artifact for county hybrid claims.
+    </div>
+    <h3>Operational county context from the existing bacteria evidence report</h3>
+    <p class="muted">These rows are for the existing calibrated operational bacteria model, not the new pi+memory hybrid. They show where the established model works well and where calibration fails.</p>
+    <table>
+      <tr><th>County</th><th>N</th><th>Events</th><th>Base rate</th><th>Model AP</th><th>Memory AP</th><th>AB411 AP</th><th>Model ECE</th><th>Deploy-ready</th></tr>
+      <tr><td>San Diego</td><td>26,326</td><td>15,918</td><td>0.605</td><td>0.950</td><td>0.939</td><td>0.602</td><td>0.457</td><td><span class="tag bad">no</span></td></tr>
+      <tr><td>Los Angeles</td><td>22,612</td><td>3,588</td><td>0.159</td><td>0.553</td><td>0.313</td><td>0.251</td><td>0.046</td><td><span class="tag good">yes</span></td></tr>
+      <tr><td>Orange</td><td>29,728</td><td>1,709</td><td>0.058</td><td>0.349</td><td>0.194</td><td>0.104</td><td>0.014</td><td><span class="tag good">yes</span></td></tr>
+      <tr><td>San Mateo</td><td>5,308</td><td>983</td><td>0.185</td><td>0.538</td><td>0.418</td><td>0.241</td><td>0.058</td><td><span class="tag good">yes</span></td></tr>
+      <tr><td>Long Beach City</td><td>4,014</td><td>704</td><td>0.175</td><td>0.578</td><td>0.183</td><td>0.369</td><td>0.042</td><td><span class="tag good">yes</span></td></tr>
+      <tr><td>San Francisco</td><td>4,256</td><td>607</td><td>0.143</td><td>0.547</td><td>0.260</td><td>0.273</td><td>0.018</td><td><span class="tag good">yes</span></td></tr>
+      <tr><td>Santa Cruz</td><td>3,931</td><td>415</td><td>0.106</td><td>0.405</td><td>0.163</td><td>0.207</td><td>0.023</td><td><span class="tag good">yes</span></td></tr>
+      <tr><td>Ventura</td><td>5,543</td><td>261</td><td>0.047</td><td>0.460</td><td>0.097</td><td>0.148</td><td>0.015</td><td><span class="tag good">yes</span></td></tr>
+      <tr><td>Santa Barbara</td><td>3,130</td><td>175</td><td>0.056</td><td>0.269</td><td>0.111</td><td>0.099</td><td>0.007</td><td><span class="tag good">yes</span></td></tr>
+    </table>
+    <p><b>Read:</b> San Diego has high ranking AP but fails deployability because calibration breaks under the 2022 regime shift. The new hybrid model must pass its own county-held-out calibration gate before it can inherit any county deployment language.</p>
+  </section>
+
+  <section>
+    <h2>What Changed Versus The Earlier Report</h2>
+    <table>
+      <tr><th>Earlier claim boundary</th><th>New finding</th></tr>
+      <tr><td>The existing bacteria evidence report says &pi;/interlingua is real as a zero-shot ranking screen, not a calibrated advisory model.</td><td>Still true. This report does not promote zero-shot to advisory probabilities.</td></tr>
+      <tr><td>The escape ledger records &pi; added to the full FEATS+rain+discharge California nowcast as WASH/null.</td><td>This new gate is a different, narrower question: does the core five &pi; vector add residual station-held-out value over a memory-only baseline? Answer: yes, across all tested engines.</td></tr>
+      <tr><td>Learned tensor/interlingua variants did not beat the raw &pi; control on bacteria.</td><td>Still true. The winning component here is the raw physics-&pi; coordinates combined with local memory in HGBT.</td></tr>
+      <tr><td>County deployment requires calibration discipline.</td><td>Still true. The new hybrid is a ranking PASS and a deployment GATED result until forward/county calibration finishes and passes.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Gate Check</h2>
+    <table>
+      <tr><th>Gate</th><th>Status</th><th>Evidence</th></tr>
+      <tr><td>Beats honest baseline</td><td><span class="tag good">PASS</span></td><td>HGBT hybrid AP 0.6761 beats HGBT memory AP 0.6494 by +0.0267 AP.</td></tr>
+      <tr><td>Held-out unit clean</td><td><span class="tag good">PASS</span></td><td>Station/site grouped out-of-fold rows, 824 groups.</td></tr>
+      <tr><td>CI separates from baseline</td><td><span class="tag good">YES</span></td><td>Bootstrap CI [0.0214, 0.0326] excludes zero.</td></tr>
+      <tr><td>Adversarial default-refuted critic</td><td><span class="tag good">YES</span></td><td>Row-shuffled &pi; removes lift; shuffled-&pi; hybrid does not beat memory.</td></tr>
+      <tr><td>Leakage invariants</td><td><span class="tag good">PASS with caveat</span></td><td>&pi; is exogenous weather joined by cell/date; memory fields are shifted prior/rolling features. Clean-clone byte reproducibility was not rerun.</td></tr>
+      <tr><td>Forward-time validation</td><td><span class="tag warn">RUNNING / NOT FILED</span></td><td><code>calibration_gate.py</code> was running and had not emitted <code>calibration_results.json</code> at report freeze.</td></tr>
+      <tr><td>County-held-out calibration</td><td><span class="tag warn">RUNNING / NOT FILED</span></td><td>Required before county-by-county hybrid deployment language.</td></tr>
+      <tr><td>Byte-reproducible clean clone</td><td><span class="tag warn">NOT RUN</span></td><td>Artifacts are local generated outputs under <code>reports/pi_memory_hybrid_gate_2026_06_26/</code>.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>Sources</h2>
+    <ul class="source-list">
+      <li><code>reports/bacteria_evidence_report_2026_06_26/index.html</code></li>
+      <li><code>reports/pi_coordinate_technical_appendix_2026_06_26/index.html</code></li>
+      <li><code>reports/pi_memory_hybrid_gate_2026_06_26/results.json</code></li>
+      <li><code>reports/pi_memory_hybrid_gate_2026_06_26/critic_pi_shuffle.json</code></li>
+      <li><code>reports/pi_memory_hybrid_gate_2026_06_26/report.md</code></li>
+      <li><code>reports/pi_memory_hybrid_gate_2026_06_26/run_hybrid_gate.py</code></li>
+      <li><code>reports/pi_memory_hybrid_gate_2026_06_26/best_hybrid_model.joblib</code></li>
+      <li><code>research/bacteria/international/interlingua_substrate.py</code></li>
+      <li><code>bacteria_results/international/unified_zero_shot_gauntlet.json</code></li>
+      <li><code>bacteria_results/international/interlingua_model_gauntlet.json</code></li>
+      <li><code>bacteria_results/international/interlingua_program_summary.json</code></li>
+    </ul>
+  </section>
+</main>
+</body>
+</html>

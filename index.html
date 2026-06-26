@@ -128,6 +128,13 @@
   .plain .helpq,.subhead .helpq,.lede .helpq,.footnote .helpq{margin-left:6px}
 
   /* ---- findings ---- */
+  .findingsReports{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:0 0 20px}
+  .findingsReport{display:flex;flex-direction:column;min-height:176px;background:var(--surface);border:1px solid var(--border);border-radius:15px;box-shadow:var(--card-sh);padding:18px 19px;text-decoration:none;color:var(--ink);transition:box-shadow .18s,border-color .18s,transform .18s}
+  .findingsReport:hover{box-shadow:var(--card-sh-hover);border-color:#bfe0dc;transform:translateY(-2px)}
+  .findingsReport .rk{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--acc);font-weight:600;margin-bottom:10px}
+  .findingsReport h2{margin:0 0 8px;font-size:17px;font-weight:600;line-height:1.25;color:var(--ink)}
+  .findingsReport p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink3);text-wrap:pretty}
+  .findingsReport .go{margin-top:auto;padding-top:14px;font-size:13px;font-weight:600;color:var(--acc)}
   .filterbar{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
   .filterrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .filterbar .fl-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink5);margin-right:2px}
@@ -522,7 +529,7 @@
     .metrics,.ledgerstats{grid-template-columns:1fr 1fr}
     .metric:nth-child(odd){border-right:1px solid var(--faint)}
     .metric:nth-child(1),.metric:nth-child(2){border-bottom:1px solid var(--faint)}
-    .grid2,.fgrid,.lhlists{grid-template-columns:1fr}
+    .grid2,.fgrid,.lhlists,.findingsReports{grid-template-columns:1fr}
     .m-grid,.d-grid{grid-template-columns:1.6fr 1fr 22px}
     .l-grid{grid-template-columns:minmax(0,1fr) 92px 24px}
     .m-grid .hide-sm,.d-grid .hide-sm,.l-grid .hide-sm{display:none}
@@ -811,6 +818,26 @@
     <div style="margin-bottom:18px">
       <h1 class="sec">Findings</h1>
       <p class="subhead">Strongest results first. Each card says — in plain words — what we asked, what we found, and how sure we are. Click for the technical read and, where the evidence has it, a confusion matrix.</p>
+    </div>
+    <div class="findingsReports" aria-label="Featured bacteria reports">
+      <a class="findingsReport" href="reports/bacteria-findings/" target="_blank" rel="noopener">
+        <div class="rk">Finding 1 · bacteria model evidence</div>
+        <h2>General bacteria findings</h2>
+        <p>Full data-science readout: confirmed bacteria results, county-by-county behavior, model validation, confusion matrices, model comparisons, inputs, and parameter sweeps.</p>
+        <div class="go">Open full report →</div>
+      </a>
+      <a class="findingsReport" href="reports/pi-bacteria/" target="_blank" rel="noopener">
+        <div class="rk">Finding 2 · Pi interlingua</div>
+        <h2>Pi coordinates and bacteria</h2>
+        <p>Technical report on how Pi coordinates were calculated, why the interlingua idea was tested, and whether zero-shot transfer helps bacteria prediction beyond California.</p>
+        <div class="go">Open full report →</div>
+      </a>
+      <a class="findingsReport" href="reports/pi-memory-hybrid/" target="_blank" rel="noopener">
+        <div class="rk">Finding 3 · combined model test</div>
+        <h2>Pi plus station memory hybrid</h2>
+        <p>Direct test of using Pi interlingua and station-memory signals together, across engines and parameter sets, with the boost/no-boost result kept explicit.</p>
+        <div class="go">Open full report →</div>
+      </a>
     </div>
     <div class="filterbar" id="filterbar"></div>
     <div class="fgrid" id="fgrid"></div>
