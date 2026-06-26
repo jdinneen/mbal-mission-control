@@ -1,0 +1,31 @@
+1
+00:00:00,000 --> 00:00:19,426
+Question: can the same physics clues rank bacteria risk on a beach the model has never trained on?
+
+2
+00:00:19,426 --> 00:00:36,833
+Target: enterococcus above 104, a high-bacteria beach-water warning line.
+
+3
+00:00:36,833 --> 00:00:56,880
+Clean inputs: sun, rain, wind, heat, and flushing. No beach names or lab history.
+
+4
+00:00:56,880 --> 00:01:14,241
+Fair test: hide a whole basin, train elsewhere, then rank the hidden basin.
+
+5
+00:01:14,241 --> 00:01:30,608
+Result: useful cold-start FIB ranking, not just random chance.
+
+6
+00:01:30,608 --> 00:01:49,024
+Catch: local history usually wins after a beach has enough samples.
+
+7
+00:01:49,024 --> 00:02:10,100
+Negative controls failed: hypoxia and domoic acid are not explained by the FIB recipe.
+
+8
+00:02:10,100 --> 00:02:27,087
+Bottom line: real cold-start FIB ranking, not a universal ocean brain.

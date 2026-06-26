@@ -1,0 +1,66 @@
+WEBVTT
+
+1
+00:00:00.450 --> 00:00:11.800
+This video explains one finding in plain English. A
+beach can look clean, then suddenly spike. The goal is
+to rank which clean beaches deserve attention before
+that surprise happens.
+
+2
+00:00:12.450 --> 00:00:24.800
+The model improved in three steps. The unified onset
+model scored zero point two nine nine two AP. Adding
+physics pi raised it to zero point three three four
+eight. Adding the strict causal tensor raised it again
+to zero point three four one eight.
+
+3
+00:00:25.450 --> 00:00:37.100
+Physics pi tells us why a spike might happen. Rain can
+move bacteria toward the beach. Heat, sunlight, and
+flushing can change whether bacteria grow, die, clear
+out, or get trapped.
+
+4
+00:00:38.450 --> 00:00:50.800
+The strict causal tensor tells us something different.
+It reads public ocean, weather, station, seasonal,
+regional, and water quality context, then asks whether
+the whole coast is in an unusual state today.
+
+5
+00:00:51.450 --> 00:01:02.800
+Together, the two ideas help the ranker. Physics
+explains local causes. The tensor adds the wider coast
+state. The result is a better list of clean beaches
+that may suddenly become risky.
+
+6
+00:01:03.450 --> 00:01:15.800
+For counties, this is triage. It is not an official
+closure button. It is a way to decide which clean
+beaches should be inspected or sampled first after
+rain, heat, wind, flushing, or regional state changes.
+
+7
+00:01:16.450 --> 00:01:28.800
+For new markets, physics pi can help early because
+rain, sun, runoff, and flushing exist everywhere. The
+tensor adds a smaller extra signal after enough public
+cross-source context exists.
+
+8
+00:01:29.450 --> 00:01:41.800
+That is the product difference. Many tools mostly use
+station memory, rain rules, or local history. This
+ranker also reads a broader coastal estate state
+across weather, ocean, sources, and region.
+
+9
+00:01:42.450 --> 00:01:53.800
+Bottom line: the physics says why a spike might
+happen. The tensor says the coast is acting weird
+today. Together they improve the early-warning ranker
+for the event customers care about.
+

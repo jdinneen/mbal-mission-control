@@ -386,6 +386,33 @@
   .videolinkcopy p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink3);text-wrap:pretty}
   .videolinkgo{font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--acc);border:1px solid var(--border);border-radius:8px;padding:7px 10px;white-space:nowrap;background:var(--acc-tint2)}
   .videolinkcard:hover .videolinkgo{background:var(--acc);border-color:var(--acc);color:#fff}
+  .videohub{display:grid;grid-template-columns:minmax(0,.78fr) minmax(360px,1.22fr);gap:18px;align-items:stretch;margin-bottom:22px}
+  .videohubcopy{padding:24px;background:linear-gradient(135deg,#fff 0%,#fff 58%,#eef8f7 100%);border:1px solid #d8e7e5;border-radius:16px;box-shadow:var(--card-sh)}
+  .videohubcopy .tag,.vcard .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--acc);font-weight:600}
+  .videohubcopy h1{margin:9px 0 10px;font-size:31px;line-height:1.08;letter-spacing:-.02em;font-weight:650}
+  .videohubcopy p{margin:0;font-size:15px;line-height:1.6;color:var(--ink2);text-wrap:pretty}
+  .videohubstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:17px}
+  .videohubstats span{display:block;border:1px solid var(--faint);border-radius:10px;padding:10px;background:rgba(255,255,255,.75);font-size:12.5px;line-height:1.35;color:var(--ink4)}
+  .videohubstats b{display:block;margin-bottom:3px;color:var(--ink);font-size:18px;line-height:1}
+  .videofeature{display:grid;grid-template-columns:minmax(0,1fr);background:#0b0f1a;border:1px solid #111827;border-radius:16px;overflow:hidden;box-shadow:0 14px 34px rgba(16,24,40,.16)}
+  .videofeature img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#101820}
+  .videofeaturebody{padding:15px;background:#101827;color:#dce8ee}
+  .videofeaturebody .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:#2dd4bf;font-weight:600}
+  .videofeaturebody h2{margin:7px 0 6px;font-size:20px;line-height:1.2;color:#fff}
+  .videofeaturebody p{margin:0;color:#b7c5d3;font-size:13.5px;line-height:1.48}
+  .videofeaturelinks,.vlinks{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .videofeaturelinks a,.vlinks a{font-family:var(--mono);font-size:11.5px;font-weight:700;text-decoration:none;border-radius:8px;padding:7px 10px}
+  .videofeaturelinks a{color:#06111f;background:#2dd4bf;border:1px solid #2dd4bf}
+  .videofeaturelinks a.secondary{color:#2dd4bf;background:#111827;border-color:#254256}
+  .videogrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+  .vcard{display:flex;flex-direction:column;min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--card-sh);overflow:hidden}
+  .vcard img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#101820;border-bottom:1px solid var(--faint)}
+  .vbody{display:flex;flex:1;flex-direction:column;padding:14px}
+  .vbody h3{margin:6px 0 7px;font-size:17px;line-height:1.24;font-weight:650;color:var(--ink);overflow-wrap:anywhere}
+  .vbody p{margin:0;color:var(--ink3);font-size:13.5px;line-height:1.5;text-wrap:pretty}
+  .vlinks{margin-top:auto;padding-top:13px}
+  .vlinks a{color:var(--acc);background:var(--acc-tint2);border:1px solid #cfe3e1}
+  .vlinks a.primary{color:#fff;background:var(--acc);border-color:var(--acc)}
   .bigrow{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:26px}
   .bigcard{padding:22px 24px}
   .bigcard .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;margin-bottom:10px;display:inline-flex;align-items:center;gap:7px}
@@ -486,7 +513,7 @@
   .reprocard li{font-size:14px;line-height:1.6;color:var(--ink2);margin-bottom:7px}
   .reprocard code{font-family:var(--mono);font-size:12.5px;background:var(--faint3);border:1px solid var(--border);border-radius:5px;padding:1px 6px}
   @media (max-width:860px){
-    .featurevideo,.pipelinefeature,.bigrow,.minigrid,.paths,.qcardgrid,.storyintro,.storyflow,.storycompare{grid-template-columns:1fr}
+    .featurevideo,.pipelinefeature,.videohub,.videogrid,.bigrow,.minigrid,.paths,.qcardgrid,.storyintro,.storyflow,.storycompare{grid-template-columns:1fr}
     .hwrap{padding:12px 16px}
     nav.tabs{padding:0 16px}
     main{padding:24px 16px 64px}
@@ -513,6 +540,7 @@
     .storyimage{height:260px}
     .videolinkcard{grid-template-columns:150px minmax(0,1fr);align-items:start}
     .videolinkgo{grid-column:2}
+    .videohubcopy h1{font-size:27px}
   }
   @media (max-width:480px){
     .metrics,.ledgerstats{grid-template-columns:1fr}
@@ -525,6 +553,8 @@
     .storyimage{height:220px}
     .featurepoints{grid-template-columns:1fr}
     .pipelinepoints{grid-template-columns:1fr}
+    .videohubstats{grid-template-columns:1fr}
+    .videohubcopy{padding:21px 18px}
     .featurecopy{padding:21px 18px}
     .featurecopy h2{font-size:21px}
     .pipelinefeature{padding:15px}
@@ -554,6 +584,7 @@
   <nav class="tabs">
     <button data-v="overview" class="active">Start here</button>
     <a href="evidence-pipeline-map.html">Pipeline Map</a>
+    <button data-v="videos">Videos</button>
     <button data-v="questions">Questions</button>
     <button data-v="findings">Findings</button>
     <button data-v="models">Models</button>
@@ -575,6 +606,7 @@
       <p class="lede">Beaches too dirty to swim. Shellfish too toxic to eat. Water too low on oxygen. Lakes choked with algae. This is the lab's honest scorecard for forecasting those rare days. We test whether machine-learning models — fed weather, river, and ocean data — actually beat the simplest possible guess: <i>"today will look a lot like yesterday."</i> Usually they don't, so we keep the dead ends on the record right beside the wins — and show the data behind every claim. Pick a thread below.</p>
       <div class="heroactions" aria-label="Primary orientation links">
         <a class="herocta primary" href="evidence-pipeline-map.html">Open the pipeline map</a>
+        <a class="herocta" href="#videos">Watch videos</a>
         <a class="herocta" href="#questions">Browse research questions</a>
       </div>
     </div>
@@ -616,11 +648,11 @@
       <div class="featuremedia">
         <video controls preload="metadata" playsinline poster="videos/lakehouse_pipeline_8th_grade_poster.jpg" aria-label="Narrated eighth-grade explainer video about the MBAL lakehouse pipeline">
           <source src="videos/lakehouse_pipeline_8th_grade_narrated.mp4" type="video/mp4">
-          <track src="videos/lakehouse_pipeline_8th_grade_captions.srt" kind="captions" srclang="en" label="English captions" default>
+          <track src="videos/lakehouse_pipeline_8th_grade_captions.vtt" kind="captions" srclang="en" label="English captions" default>
           <a href="videos/lakehouse_pipeline_8th_grade_narrated.mp4">Open the lakehouse pipeline explainer video.</a>
         </video>
         <div class="featurebar">
-          <span>2:20 classroom explainer</span>
+          <span>5:12 classroom explainer</span>
           <div class="featurelinks">
             <a href="lakehouse-pipeline-video.html">Share page</a>
             <a href="videos/lakehouse_pipeline_8th_grade_narrated.mp4">MP4</a>
@@ -701,6 +733,77 @@
 
     <!-- demoted snapshot/build status -->
     <div class="statstrip" id="statstrip"></div>
+  </section>
+
+  <!-- ===== VIDEOS ===== -->
+  <section class="view" id="videos">
+    <div class="videohub" aria-label="Mission Control explainer video library">
+      <div class="videohubcopy">
+        <div class="tag">Video library · classroom explainers · critic-scoped claims</div>
+        <h1>Start with the story, then inspect the evidence.</h1>
+        <p>These short narrated videos explain the lab's evidence pipeline and the most shareable findings in plain language. Each video keeps the scientific caveats visible: what worked, what failed, and what still needs stronger proof.</p>
+        <div class="videohubstats" aria-label="Video library summary">
+          <span><b>3</b>published explainers</span>
+          <span><b>8th</b>grade-friendly framing</span>
+          <span><b>0</b>universal-hazard claims</span>
+        </div>
+      </div>
+      <article class="videofeature" aria-label="Featured interlingua audit explainer">
+        <a href="interlingua-audit-video.html">
+          <img src="videos/interlingua_audit_8th_grade_poster.jpg" alt="Interlingua audit explainer poster.">
+        </a>
+        <div class="videofeaturebody">
+          <div class="tag">Newest · interlingua audit · 2:27 · captions</div>
+          <h2>Can one ocean AI language travel from coast to coast?</h2>
+          <p>Plain-English audit verdict: real cold-start FIB ranking, strong limits, and no universal ocean-hazard representation.</p>
+          <div class="videofeaturelinks">
+            <a href="interlingua-audit-video.html">Open share page</a>
+            <a class="secondary" href="videos/interlingua_audit_8th_grade.mp4">MP4</a>
+            <a class="secondary" href="videos/interlingua_audit_8th_grade.vtt">Captions</a>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <div class="secband"><h2>All explainers</h2><p>Built for sharing with students, collaborators, and reviewers before they dive into the full ledger.</p></div>
+    <div class="videogrid" aria-label="All Mission Control videos">
+      <article class="vcard">
+        <a href="interlingua-audit-video.html"><img src="videos/interlingua_audit_8th_grade_poster.jpg" alt="Interlingua audit explainer poster."></a>
+        <div class="vbody">
+          <div class="tag">Interlingua audit · 2:27</div>
+          <h3>Can one ocean AI language travel from coast to coast?</h3>
+          <p>The cross-region FIB transfer claim survives only as a narrow cold-start bacteria ranker, not as a universal ocean brain.</p>
+          <div class="vlinks">
+            <a class="primary" href="interlingua-audit-video.html">Share page</a>
+            <a href="videos/interlingua_audit_8th_grade.mp4">MP4</a>
+          </div>
+        </div>
+      </article>
+      <article class="vcard">
+        <a href="lakehouse-pipeline-video.html"><img src="videos/lakehouse_pipeline_8th_grade_poster.jpg" alt="Lakehouse pipeline explainer poster."></a>
+        <div class="vbody">
+          <div class="tag">Pipeline explainer · 5:12</div>
+          <h3>How the data machine turns messy public data into checked evidence.</h3>
+          <p>A guided tour from raw public records through Bronze, Silver, Gold, model engines, evidence gates, and claim cards.</p>
+          <div class="vlinks">
+            <a class="primary" href="lakehouse-pipeline-video.html">Share page</a>
+            <a href="videos/lakehouse_pipeline_8th_grade_narrated.mp4">MP4</a>
+          </div>
+        </div>
+      </article>
+      <article class="vcard">
+        <a href="clean-to-dirty-tensor-video.html"><img src="videos/clean_to_dirty_tensor_8th_grade_poster.jpg" alt="Clean-to-dirty tensor explainer poster."></a>
+        <div class="vbody">
+          <div class="tag">Finding explainer · 1:54</div>
+          <h3>Why physics-pi plus tensor context improves surprise bacteria spike warning.</h3>
+          <p>The clean-to-dirty story, with the audit caveat that tensor context is a scoped finding rather than a broad ocean shortcut.</p>
+          <div class="vlinks">
+            <a class="primary" href="clean-to-dirty-tensor-video.html">Share page</a>
+            <a href="videos/clean_to_dirty_tensor_8th_grade_narrated.mp4">MP4</a>
+          </div>
+        </div>
+      </article>
+    </div>
   </section>
 
   <!-- ===== FINDINGS ===== -->
@@ -993,7 +1096,7 @@ function appendHelpAll(selector,helps){
 function applyStaticHelp(){
   appendHelp('#snaplabel','Published snapshot means a frozen public copy of the current evidence, not a live private workspace.');
   appendHelp('#snapwhen','This is the month and year when the public snapshot was built.');
-  appendHelpAll('nav.tabs button',['Overview is the summary page.','Questions are research areas and hazards the lab has worked on.','Findings are tested science results.','Models are fitted systems and baselines in the registry.','Map shows data and model evidence by place.','Ledger is the full searchable audit trail.','Data and reproduce is the organized data inventory and downloads.','Glossary explains the lab words.']);
+  appendHelpAll('nav.tabs button',['Overview is the summary page.','Videos are shareable plain-language explainers.','Questions are research areas and hazards the lab has worked on.','Findings are tested science results.','Models are fitted systems and baselines in the registry.','Map shows data and model evidence by place.','Ledger is the full searchable audit trail.','Data and reproduce is the organized data inventory and downloads.','Glossary explains the lab words.']);
   appendHelp('#overview .eyebrow','This page starts with the big picture before showing the evidence cards and datasets.');
   appendHelp('#overview .page','A unified model means one project trying to connect many coastal signals: water, weather, runoff, tides, waves, biology, and observations.');
   appendHelp('#overview .lede','This paragraph is the plain-language mission: show wins, limits, and failures with evidence attached.');
@@ -1096,7 +1199,7 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';
 function resetRouteScroll(){window.scrollTo(0,0);setTimeout(()=>window.scrollTo(0,0),80);setTimeout(()=>window.scrollTo(0,0),220);}
 function showView(v){
   v=VIEW_ALIAS[v]||v;
-  if(!['overview','questions','findings','models','map','ledger','data','glossary'].includes(v))v='overview';
+  if(!['overview','videos','questions','findings','models','map','ledger','data','glossary'].includes(v))v='overview';
   TAB=v; if(DETAIL){DETAIL=null;renderDrawer();}
   document.querySelectorAll('nav.tabs button').forEach(b=>{const on=b.dataset.v===v;b.classList.toggle('active',on);if(on&&b.scrollIntoView)try{b.scrollIntoView({inline:'center',block:'nearest'});}catch(e){}});
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id===v));

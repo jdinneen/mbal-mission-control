@@ -1,0 +1,153 @@
+WEBVTT
+
+1
+00:00:00.450 --> 00:00:13.225
+Start with pi interlingua. Pi groups are physics
+balance clues. They translate rain, sunlight,
+flushing, and decay into numbers that can be compared
+across different coasts without copying the beach
+answer.
+
+2
+00:00:17.450 --> 00:00:28.800
+Here is the whole machine. The fetcher brings public
+data in, the lakehouse organizes it, transforms turn
+it into clues, target engines ask fair questions,
+models compete, and evidence gates decide what
+survives.
+
+3
+00:00:29.450 --> 00:00:41.925
+The fetcher is the front door for data. It can list
+sources, discover what is available, dry-run a plan,
+fetch or resume downloads, and validate the result
+before anything becomes a trusted table.
+
+4
+00:00:45.450 --> 00:00:59.150
+The fetcher grows through the registry. A new source
+adds a SourceSpec and either a custom adapter or a
+generic fetch plan. Then it uses the same buttons and
+creates the same manifest, coverage, and validation
+artifacts.
+
+5
+00:01:00.450 --> 00:01:13.800
+Raw data lands safely first. Beach lab samples,
+weather, sensors, water quality, and research feeds
+arrive before we change names, units, or dates. This
+keeps a copy of what the outside world actually gave
+us.
+
+6
+00:01:14.450 --> 00:01:25.125
+The lakehouse has three shelves. Bronze keeps the
+original files. Silver holds cleaned tables. Gold
+stores model runs, predictions, metrics, and
+leaderboards.
+
+7
+00:01:27.450 --> 00:01:36.325
+Transforms are the cleanup team. They fix units, match
+stations, join sources by time and place, and build
+features that a model can use.
+
+8
+00:01:40.450 --> 00:01:52.275
+Leakage is cheating by accident. If a feature uses
+tomorrow to explain today, or chooses columns using
+the test period, the model gets an unfair answer key.
+The firewall blocks that.
+
+9
+00:01:57.450 --> 00:02:08.650
+The folders act like rooms in a school lab. Source-
+shaped datasets, silver tables, gold results, research
+engines, reports, and the explainer website each have
+a clear home.
+
+10
+00:02:09.450 --> 00:02:20.175
+Feature builders turn tables into useful clues: recent
+history, rain and runoff, physics pi groups, tensor
+factors, and oxygen covariates for stress screening.
+
+11
+00:02:22.450 --> 00:02:37.600
+Tensorification is the four-dimensional part. We stack
+sparse signals by time, source, variable, and view.
+The factorization looks for shared state patterns
+across that cube, then only scoped, leakage-safe
+factors can support claims.
+
+12
+00:02:42.450 --> 00:02:54.000
+Each target engine asks one exact question. Beach
+bacteria, surprise-onset events, oxygen stress,
+harmful algae signals, and state QA each use its own
+grading rule.
+
+13
+00:02:55.450 --> 00:03:06.800
+Then the model engines compete on that target. Simple
+logistic models, tree boosters, neural nets, tensor
+factorization, and zero-shot readouts all get graded
+against honest baselines.
+
+14
+00:03:07.450 --> 00:03:18.325
+A result is not trusted just because it looks good.
+Holdout tests, baselines, confidence intervals, null
+checks, calibration, and critic reviews decide what
+survives.
+
+15
+00:03:19.450 --> 00:03:32.650
+The honesty gate is a gauntlet. First test on unseen
+time or place. Then beat the boring baseline. Then ask
+whether luck explains it. Then check leakage. Then let
+a critic try to break the claim.
+
+16
+00:03:39.450 --> 00:03:53.800
+Finding one: in tested held-out coastal datasets,
+fixed physics clues ranked bacteria risk better than
+normal-rate guessing. That is useful for first-pass
+triage in similar daily bacteria data, not official
+advisories.
+
+17
+00:03:56.450 --> 00:04:08.975
+Finding two: on the California surprise-onset slice,
+the model helped spot recently clean beach days that
+later turned dirty. That is a scoped clean-to-dirty
+claim, not every bacteria forecast.
+
+18
+00:04:13.450 --> 00:04:25.825
+Finding three: low-oxygen stress can be screened from
+other water-quality clues. This is useful when oxygen
+sensors are sparse, but it is still a screening lane
+that needs workflow and calibration.
+
+19
+00:04:30.450 --> 00:04:42.950
+Finding four: tensor patterns helped check and fill
+one tide-density sensor signal. That is useful for
+data quality and state reconstruction, not a customer
+bacteria warning model by itself.
+
+20
+00:04:47.450 --> 00:04:58.450
+Finding five: the generic foundation-model story was
+dropped. Bigger learned features did not beat simpler
+physics under fair gates, so the public story should
+not sell that claim.
+
+21
+00:05:02.450 --> 00:05:11.800
+Bottom line: the win is not magic AI. It is careful
+data plumbing, physics translation, leakage control,
+and honesty gates that show what held, what failed,
+and where the boundary is.
+
