@@ -135,6 +135,7 @@
   .findingsReport h2{margin:0 0 8px;font-size:17px;font-weight:600;line-height:1.25;color:var(--ink)}
   .findingsReport p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink3);text-wrap:pretty}
   .findingsReport .go{margin-top:auto;padding-top:14px;font-size:13px;font-weight:600;color:var(--acc)}
+  .findingsReports[hidden]{display:none}
   .filterbar{display:flex;flex-direction:column;gap:10px;margin-bottom:20px}
   .filterrow{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
   .filterbar .fl-label{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink5);margin-right:2px}
@@ -819,27 +820,8 @@
       <h1 class="sec">Findings</h1>
       <p class="subhead">Strongest results first. Each card says — in plain words — what we asked, what we found, and how sure we are. Click for the technical read and, where the evidence has it, a confusion matrix.</p>
     </div>
-    <div class="findingsReports" aria-label="Featured bacteria reports">
-      <a class="findingsReport" href="reports/bacteria-findings/" target="_blank" rel="noopener">
-        <div class="rk">Finding 1 · bacteria model evidence</div>
-        <h2>General bacteria findings</h2>
-        <p>Full data-science readout: confirmed bacteria results, county-by-county behavior, model validation, confusion matrices, model comparisons, inputs, and parameter sweeps.</p>
-        <div class="go">Open full report →</div>
-      </a>
-      <a class="findingsReport" href="reports/pi-bacteria/" target="_blank" rel="noopener">
-        <div class="rk">Finding 2 · Pi interlingua</div>
-        <h2>Pi coordinates and bacteria</h2>
-        <p>Technical report on how Pi coordinates were calculated, why the interlingua idea was tested, and whether zero-shot transfer helps bacteria prediction beyond California.</p>
-        <div class="go">Open full report →</div>
-      </a>
-      <a class="findingsReport" href="reports/pi-memory-hybrid/" target="_blank" rel="noopener">
-        <div class="rk">Finding 3 · combined model test</div>
-        <h2>Pi plus station memory hybrid</h2>
-        <p>Direct test of using Pi interlingua and station-memory signals together, across engines and parameter sets, with the boost/no-boost result kept explicit.</p>
-        <div class="go">Open full report →</div>
-      </a>
-    </div>
     <div class="filterbar" id="filterbar"></div>
+    <div class="findingsReports" id="featuredFindings" aria-label="Featured bacteria reports"></div>
     <div class="fgrid" id="fgrid"></div>
   </section>
 
@@ -990,10 +972,30 @@
 <div id="drawerhost"></div>
 
 <script>
-let DATA=null, EVID={}, PROJECT_DOCS=[], TAB='overview', FFILTER='all', FFAM='all', OPENF=null, DETAIL=null;
+let DATA=null, EVID={}, PROJECT_DOCS=[], TAB='overview', FFILTER='featured', FFAM='all', OPENF=null, DETAIL=null;
 let LEDGER_TYPE='all', LEDGER_STATUS='all', LEDGER_TOPIC='all', LEDGER_SORT='signal', LEDGER_QUERY='', LEDGER_ROWS=null;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"'`]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[c]));
+const FEATURED_REPORTS=[
+  {
+    href:'reports/bacteria-findings/',
+    label:'Featured 1 · bacteria model evidence',
+    title:'General bacteria findings',
+    desc:'Full data-science readout: confirmed bacteria results, county-by-county behavior, model validation, confusion matrices, model comparisons, inputs, and parameter sweeps.'
+  },
+  {
+    href:'reports/pi-bacteria/',
+    label:'Featured 2 · Pi interlingua',
+    title:'Pi coordinates and bacteria',
+    desc:'Technical report on how Pi coordinates were calculated, why the interlingua idea was tested, and whether zero-shot transfer helps bacteria prediction beyond California.'
+  },
+  {
+    href:'reports/pi-memory-hybrid/',
+    label:'Featured 3 · combined model test',
+    title:'Pi plus station memory hybrid',
+    desc:'Direct test of using Pi interlingua and station-memory signals together, across engines and parameter sets, with the boost/no-boost result kept explicit.'
+  }
+];
 const fmt=n=>n==null?'—':Number(n).toLocaleString();
 const pct=v=>v==null?'—':(100*v).toFixed(1)+'%';
 const mb=n=>n==null?'—':(n>=1024?(n/1024).toFixed(2)+' GB':Number(n).toFixed(1)+' MB');
@@ -1394,18 +1396,34 @@ function findingsSorted(){
   return (DATA.findings||[]).map((f,i)=>({f,i,st:findingStatus(f.kind)}))
     .sort((a,b)=>(order[a.st]-order[b.st])|| (a.i-b.i));
 }
+function renderFeaturedReports(){
+  return FEATURED_REPORTS.map(r=>`<a class="findingsReport" href="${esc(r.href)}" target="_blank" rel="noopener">
+    <div class="rk">${esc(r.label)}</div>
+    <h2>${esc(r.title)}</h2>
+    <p>${esc(r.desc)}</p>
+    <div class="go">Open full report →</div>
+  </a>`).join('');
+}
 function renderFindings(){
   const all=findingsSorted();
   const cnt=st=>all.filter(x=>x.st===st).length;
-  const defs=[['all','All',all.length],['Supported','Supported',cnt('Supported')],['Caveated','Caveated',cnt('Caveated')],['Null','Null',cnt('Null')]];
+  const defs=[['featured','Featured',FEATURED_REPORTS.length],['all','All findings',all.length],['Supported','Supported',cnt('Supported')],['Caveated','Caveated',cnt('Caveated')],['Null','Null',cnt('Null')]];
   const famOrder=[...TARGET_FAMILIES.map(F=>F.title),'Cross-cutting & methods'];
   const famPresent=famOrder.filter(fm=>all.some(x=>findingFamily(x.f.id).family===fm));
   const famCnt=fm=>all.filter(x=>findingFamily(x.f.id).family===fm).length;
-  const statusRow=`<span class="fl-label">Grade</span>`+defs.map(([k,l,c])=>`<button class="fpill${FFILTER===k?' active':''}" data-k="${k}">${esc(l)}<span class="c">${c}</span></button>`).join('');
+  const statusRow=`<span class="fl-label">Category</span>`+defs.map(([k,l,c])=>`<button class="fpill${FFILTER===k?' active':''}" data-k="${k}">${esc(l)}<span class="c">${c}</span></button>`).join('');
   const famRow=`<span class="fl-label">Topic</span>`+[['all','All topics',all.length],...famPresent.map(fm=>[fm,fm,famCnt(fm)])].map(([k,l,c])=>`<button class="fpill fam${FFAM===k?' active':''}" data-f="${esc(k)}">${esc(l)}<span class="c">${c}</span></button>`).join('');
-  $('#filterbar').innerHTML=`<div class="filterrow">${statusRow}</div><div class="filterrow">${famRow}</div>`;
-  document.querySelectorAll('#filterbar .fpill:not(.fam)').forEach(b=>b.onclick=()=>{FFILTER=b.dataset.k;renderFindings();});
+  const isFeatured=FFILTER==='featured';
+  $('#filterbar').innerHTML=`<div class="filterrow">${statusRow}</div>${isFeatured?'':`<div class="filterrow">${famRow}</div>`}`;
+  document.querySelectorAll('#filterbar .fpill:not(.fam)').forEach(b=>b.onclick=()=>{FFILTER=b.dataset.k;if(FFILTER==='featured'){FFAM='all';OPENF=null;}renderFindings();});
   document.querySelectorAll('#filterbar .fpill.fam').forEach(b=>b.onclick=()=>{FFAM=b.dataset.f;renderFindings();});
+  const featured=$('#featuredFindings');
+  if(isFeatured){
+    if(featured){featured.hidden=false;featured.innerHTML=renderFeaturedReports();}
+    $('#fgrid').innerHTML='';
+    return;
+  }
+  if(featured){featured.hidden=true;featured.innerHTML='';}
 
   const list=all.filter(x=>(FFILTER==='all'||x.st===FFILTER)&&(FFAM==='all'||findingFamily(x.f.id).family===FFAM));
   $('#fgrid').innerHTML=list.map(({f,i,st})=>{

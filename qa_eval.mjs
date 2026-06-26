@@ -35,6 +35,21 @@ for (const needle of forbidden) {
   assert(!html.includes(needle), `Ask functionality should not be present: ${needle}`);
 }
 
+const featuredReportLinks = [
+  "reports/bacteria-findings/",
+  "reports/pi-bacteria/",
+  "reports/pi-memory-hybrid/",
+];
+
+assert(html.includes("FFILTER='featured'"), "Findings should land on the Featured filter by default");
+assert(html.includes("['featured','Featured',FEATURED_REPORTS.length]"), "Findings filter should expose a Featured category");
+assert(html.includes('id="featuredFindings"'), "Findings page should have a dedicated Featured report container");
+
+for (const link of featuredReportLinks) {
+  assert(html.includes(`href:'${link}'`), `Featured report link missing from index.html: ${link}`);
+  assert(fs.existsSync(`${link}index.html`), `Featured report page missing: ${link}index.html`);
+}
+
 const scripts = [...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
 assert(scripts.length > 0, "index.html should include an app script");
 
