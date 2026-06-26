@@ -40,14 +40,32 @@ const featuredReportLinks = [
   "reports/pi-bacteria/",
   "reports/pi-memory-hybrid/",
 ];
+const featuredFindingIds = [
+  "claim_bacteria_station_memory_supported",
+  "claim_clean_to_dirty_onset",
+  "claim_forward_2026_holdout_pass",
+];
 
 assert(html.includes("FFILTER='featured'"), "Findings should land on the Featured filter by default");
-assert(html.includes("['featured','Featured',FEATURED_REPORTS.length]"), "Findings filter should expose a Featured category");
-assert(html.includes('id="featuredFindings"'), "Findings page should have a dedicated Featured report container");
+assert(html.includes("['featured','Featured',featuredCount]"), "Findings filter should expose a data-backed Featured category");
+assert(html.includes("FEATURED_FINDING_IDS"), "Featured should be driven by current finding ids");
+assert(!html.includes("FEATURED_REPORTS"), "Featured should not be hardcoded report placeholder cards");
+assert(!html.includes('id="featuredFindings"'), "Featured should render normal data.json finding cards");
+
+const featuredArrayMatch = html.match(/const FEATURED_FINDING_IDS=\[([\s\S]*?)\];/);
+assert(featuredArrayMatch, "FEATURED_FINDING_IDS array should be present");
+const actualFeaturedFindingIds = [...featuredArrayMatch[1].matchAll(/'([^']+)'/g)].map((m) => m[1]);
+assert.deepEqual(actualFeaturedFindingIds, featuredFindingIds, "Featured finding ids should be exactly the current top three");
 
 for (const link of featuredReportLinks) {
-  assert(html.includes(`href:'${link}'`), `Featured report link missing from index.html: ${link}`);
   assert(fs.existsSync(`${link}index.html`), `Featured report page missing: ${link}index.html`);
+}
+
+for (const id of featuredFindingIds) {
+  assert(html.includes(`'${id}'`), `Featured finding id missing from index.html: ${id}`);
+  const finding = snap.state.findings.find((f) => f.id === id);
+  assert(finding, `Featured finding id missing from data.json: ${id}`);
+  assert(!String(finding.kind || "").toLowerCase().includes("null"), `Featured finding must not be null: ${id}`);
 }
 
 const scripts = [...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
