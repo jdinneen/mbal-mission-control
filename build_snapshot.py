@@ -125,6 +125,55 @@ def _local_text(rel, max_chars=12000):
         return None
 
 
+def _rel_path(value):
+    if value is None:
+        return None
+    text = str(value).replace("\\", "/")
+    root = str(SOURCE_ROOT).replace("\\", "/")
+    if text.lower().startswith(root.lower() + "/"):
+        text = text[len(root) + 1:]
+    return text
+
+
+def _to_int(value, default=0):
+    try:
+        if value is None or value == "":
+            return default
+        return int(float(value))
+    except Exception:
+        return default
+
+
+def _clip(value, n=700):
+    if value is None:
+        return None
+    text = str(value).replace("\r\n", "\n").replace("\r", "\n").strip()
+    text = re.sub(r"\s+", " ", text)
+    if len(text) > n:
+        return text[:n - 1].rstrip() + "..."
+    return text
+
+
+def _last_jsonl(rel, max_bytes=1048576):
+    path = SOURCE_ROOT / rel
+    if not path.exists() or not path.is_file():
+        return None
+    try:
+        with path.open("rb") as f:
+            f.seek(0, os.SEEK_END)
+            size = f.tell()
+            f.seek(max(0, size - max_bytes))
+            text = f.read().decode("utf-8", errors="replace")
+        for line in reversed([ln.strip() for ln in text.splitlines() if ln.strip()]):
+            try:
+                return json.loads(line)
+            except Exception:
+                continue
+    except Exception:
+        return None
+    return None
+
+
 def _r(v, n=4):
     if isinstance(v, float):
         if not math.isfinite(v):
@@ -1244,6 +1293,214 @@ def _major_null_findings():
     return out
 
 
+def _data_ops_findings():
+    out = []
+    full = _local_json("reports/data_fetch/swarm_20/swarm_40_full_summary.json") or {}
+    promo = _local_json("reports/data_fetch/lakehouse_external_curated_promotion.json") or {}
+    critic = _local_json("reports/data_fetch/swarm_20/lakehouse_promotion_critic.json") or {}
+    overview = _local_json("reports/data_fetch/lakehouse_source_overview.json") or {}
+    sources = overview.get("sources") or []
+    total_rows = sum(_to_int(s.get("rows")) for s in sources)
+    layer_counts = {}
+    for s in sources:
+        layer = s.get("layer") or "unknown"
+        rec = layer_counts.setdefault(layer, {"sources": 0, "rows": 0})
+        rec["sources"] += 1
+        rec["rows"] += _to_int(s.get("rows"))
+    if full or promo or overview:
+        out.append(_finding(
+            "status_lakehouse_swarm40_source_native_promoted",
+            "Forty new full-data sources are visible in silver without normalized bloat",
+            "status",
+            f"{promo.get('promoted_sources') or 40} source-native sources; {_to_int(promo.get('promoted_rows') or full.get('total_rows')):,} rows",
+            "The new source sweep is promoted source-native only: the lakehouse can scan every completed dataset, while the rejected generic long-table expansion is not materialized.",
+            "Fetcher-all completion audit, source-native lakehouse promotion manifest, and explicit critic rejection of generic normalization.",
+            "reports/data_fetch/LAKEHOUSE_SOURCE_OVERVIEW.md",
+            {
+                "sources_completed": len(full.get("sources")) if isinstance(full.get("sources"), list) else full.get("sources"),
+                "promoted_sources": promo.get("promoted_sources"),
+                "active_ready_sources": promo.get("active_ready_sources"),
+                "promoted_rows": promo.get("promoted_rows") or full.get("total_rows"),
+                "total_cells": full.get("total_cells"),
+                "missing_planned_chunk_sources": full.get("missing_planned_chunk_sources"),
+                "boundary_unresolved": full.get("boundary_unresolved"),
+                "boundary_rows_supplemented": full.get("boundary_rows_supplemented"),
+                "verified_empty_year_markers": full.get("verified_empty_year_markers"),
+                "critic_verdict": critic.get("critic_verdict"),
+                "expected_normalized_rows_rejected": critic.get("expected_normalized_rows"),
+            },
+            "Value gate: DO_NOW because it answers the user's lakehouse-availability question with an additive source-native manifest. Critic: PROMOTE_SOURCE_NATIVE_ONLY; generic normalization rejected as bloat/leakage risk.",
+        ))
+    if sources:
+        out.append(_finding(
+            "status_lakehouse_inventory_329_sources",
+            "Lakehouse inventory now exposes every source/group in the public ledger",
+            "status",
+            f"{len(sources)} source/groups; {total_rows:,} entry-counted rows",
+            "The public snapshot now carries the source overview the page was missing: layer, source, row count, schema hint, date range, domain, materialization, and provenance basis.",
+            "Read-only inventory build over lakehouse silver manifests and standalone silver groups.",
+            "reports/data_fetch/LAKEHOUSE_SOURCE_OVERVIEW.md",
+            {
+                "source_groups": len(sources),
+                "entry_counted_rows": total_rows,
+                "layers": layer_counts,
+                "value_gate": overview.get("value_gate"),
+                "critic": overview.get("critic"),
+            },
+            "Rows are entry-counted across inventory entries, not deduplicated unique real-world observations.",
+        ))
+
+    status = _local_json("reports/operational_nowcast/refresh_status.json") or {}
+    fresh = status.get("freshness") or {}
+    signals = fresh.get("signals") or {}
+    beach = signals.get("beach_obs") or {}
+    county = beach.get("supplemental_county_tail") or {}
+    if fresh:
+        out.append(_finding(
+            "status_operational_nowcast_partial_fresh",
+            "Operational nowcast refresh is current only where public beach data is fresh",
+            "status",
+            f"freshness gate {fresh.get('gate')}; beach max {beach.get('max_date')}",
+            "The nowcast refresh succeeded, but field deployment remains blocked because only a partial county tail is fresh while statewide CEDEN is still behind.",
+            "Existing nowcast refresh plus audited Santa Cruz/Ventura county-tail supplementation.",
+            "reports/operational_nowcast/refresh_status.json",
+            {
+                "as_of": fresh.get("as_of"),
+                "gate": fresh.get("gate"),
+                "beach_obs_max_date": beach.get("max_date"),
+                "beach_obs_status": beach.get("status"),
+                "beach_obs_days_stale": beach.get("days_stale"),
+                "tail_rows_used": county.get("tail_rows_used"),
+                "tail_provider_rows_used": county.get("tail_provider_rows_used"),
+                "rainfall_max_date": (signals.get("rainfall") or {}).get("max_date"),
+                "discharge_max_date": (signals.get("discharge") or {}).get("max_date"),
+            },
+            "Do not publish as statewide-current or field-deploy-ready until statewide beach observations advance or more audited county feeds are added.",
+        ))
+
+    triage = _local_json("reports/sampling_triage/triage_eval.json") or {}
+    df = triage.get("data_freshness") or {}
+    if triage:
+        triage_config = triage.get("config") if isinstance(triage.get("config"), dict) else {}
+        out.append(_finding(
+            "caveat_sampling_triage_retrospective_gain_partial_fresh",
+            "Sampling triage beats site memory retrospectively but is not deploy-ready",
+            "caveat",
+            triage.get("headline") or "model beats site-memory at 20% budget",
+            "The priority queue has a real retrospective value signal, but the live field decision stays blocked by partial freshness coverage.",
+            "Nowcast-priority triage evaluation with conformal/by-regime outputs and an explicit deployment freshness gate.",
+            "reports/sampling_triage/triage_eval.json",
+            {
+                "budget": triage_config.get("budget_fraction"),
+                "fresh_station_days": df.get("fresh_station_days"),
+                "total_station_days": df.get("total_station_days"),
+                "fresh_station_day_fraction": df.get("fresh_station_day_fraction"),
+                "latest_sample_date": df.get("latest_sample_date"),
+                "field_deploy_ready": df.get("field_deploy_ready"),
+                "reason": df.get("reason"),
+            },
+            "Report as value evidence, not operational authority.",
+        ))
+    return out
+
+
+def _all_lakehouse_neural_findings():
+    run = "reports/model_lab/all_lakehouse_unsupervised_campaign/run_id=silver_all_20260626T1318Z"
+    elig = _local_json(f"{run}/eligible_files.json") or {}
+    status = _local_json(f"{run}/RUN_STATUS.json") or {}
+    critic = _local_json(f"{run}/critic.json") or {}
+    preflight = _local_json(f"{run}/preflight.json") or {}
+    summary = elig.get("summary") or {}
+    metric = _last_jsonl(f"{run}/unsupervised_autoencoder/metrics.jsonl") or status.get("last_metric") or {}
+    if not (summary or status):
+        return []
+    return [_finding(
+        "status_all_silver_unsupervised_ae_running",
+        "All-silver unsupervised neural run is scoped and running on GPU",
+        "status",
+        f"{summary.get('eligible_files') or status.get('eligible_files')} eligible files; {summary.get('eligible_rows') or status.get('eligible_rows'):,} rows; device {metric.get('device') or 'unknown'}",
+        "The neural campaign is research-only and manifest-driven: it scans eligible silver signal files, excludes duplicate/catalog/output/labelish files, and writes separate AE artifacts without mutating source data.",
+        "Value preflight, critic scope approval, eligibility audit, canary, and current metrics JSONL.",
+        f"{run}/critic.json",
+        {
+            "status": status.get("status"),
+            "run_id": status.get("run_id") or elig.get("run_id"),
+            "files_scanned": summary.get("files_scanned"),
+            "eligible_files": summary.get("eligible_files") or status.get("eligible_files"),
+            "eligible_sources": summary.get("eligible_sources") or status.get("eligible_sources"),
+            "eligible_rows": summary.get("eligible_rows") or status.get("eligible_rows"),
+            "eligible_bytes": summary.get("eligible_bytes"),
+            "scanned_rows": summary.get("scanned_rows"),
+            "excluded_files": summary.get("excluded_files"),
+            "excluded_reasons": summary.get("excluded_reasons"),
+            "layers": summary.get("layers"),
+            "last_metric": metric,
+            "critic_verdict": critic.get("verdict"),
+            "value_gate": {
+                "stakeholder_question": preflight.get("stakeholder_question"),
+                "valuable_now": preflight.get("valuable_now"),
+                "reversible": preflight.get("reversible"),
+                "kill_category": preflight.get("kill_category"),
+            },
+        },
+        "No final science claim yet: completion, label probes, permutation controls, and critic readout are still required.",
+    )]
+
+
+def _physics_and_tensor_findings():
+    out = []
+    tensor = _local_json("reports/tensor_discovery/tensor_pi_pipeline/tensor_pi_pipeline_report.json") or {}
+    qa = tensor.get("qa_metrics") or {}
+    if tensor:
+        out.append(_finding(
+            "null_tensor_pi_state_qa_only",
+            "Tensor-pi stays a state-QA artifact, not a promoted predictor",
+            "null",
+            f"tensor-aug RMSE skill {_r(qa.get('rmse_skill'))}",
+            "The tensor/physics-pi pipeline produced a usable state-QA/gapfill artifact, but the hardened predictive QA does not justify promoting it as a model improvement.",
+            "Tensor build, selected component/lag, and holdout QA against the baseline state model.",
+            "reports/tensor_discovery/tensor_pi_pipeline/tensor_pi_pipeline_report.json",
+            {
+                "value_verdict": tensor.get("value_verdict"),
+                "tensor_shape": (tensor.get("tensor") or {}).get("shape"),
+                "selected_component": tensor.get("selected_component"),
+                "selected_lag_days": tensor.get("selected_lag_days"),
+                "baseline_rmse": qa.get("baseline_rmse"),
+                "tensor_aug_rmse": qa.get("tensor_aug_rmse"),
+                "rmse_skill": qa.get("rmse_skill"),
+            },
+            "Keep for QA and gapfill research; do not count as a positive tensor/physics-pi result.",
+        ))
+
+    phys = _local_text("reports/physics_featurization/FINDINGS.md")
+    itpi = _local_json("reports/physics_featurization/it_pi_prescreen/report.json") or {}
+    if phys:
+        out.append(_finding(
+            "null_physics_pi_reencoding_robust",
+            "Dimensionless pi re-encoding is robustly null across physics tests",
+            "null",
+            "pi alone is worse than raw; pi+raw adds no useful lift",
+            "Recent critic-vetted physics work separates two ideas: physical measurements can help in scoped settings, but the dimensionless pi re-encoding/tensor direction does not improve ML and should stop being a predictor investment.",
+            "Tokyo hypoxia and CalCOFI oxygen physics featurization reports with clustered CIs, permutation controls, and IT-pi pre-screen diagnostics.",
+            "reports/physics_featurization/FINDINGS.md",
+            {
+                "it_pi_panel": [
+                    {
+                        "label": row.get("label"),
+                        "verdict": row.get("verdict"),
+                        "mutual_info_nats": row.get("mutual_info_nats"),
+                        "mi_perm_p": row.get("mi_perm_p"),
+                        "knn_cv_score": row.get("knn_cv_score"),
+                        "knn_cv_metric": row.get("knn_cv_metric"),
+                    }
+                    for row in (itpi.get("panel") or [])[:8]
+                ]
+            },
+            "Value: publish the negative because it changes the roadmap by killing generic pi/tensor predictor work and redirecting value to measurement coverage.",
+        ))
+    return out
+
+
 def _extra_findings():
     cards = []
     for maker in (
@@ -1261,6 +1518,9 @@ def _extra_findings():
         _serendipity_findings,
         _trust_index_findings,
         _major_null_findings,
+        _data_ops_findings,
+        _all_lakehouse_neural_findings,
+        _physics_and_tensor_findings,
     ):
         cards.extend(maker())
     seen = set()
@@ -1350,6 +1610,98 @@ def _asset_entry(asset_id, rel, source, status="ready", time_column=None, note=N
     return item
 
 
+def _lakehouse_source_asset(src):
+    source = src.get("source") or src.get("name") or src.get("id")
+    if not source:
+        return None
+    parquet_bytes = _to_int(src.get("parquet_bytes"), 0)
+    rows = _to_int(src.get("rows"), 0)
+    item = {
+        "asset_id": str(source),
+        "path": _rel_path(src.get("path")),
+        "kind": src.get("table_kind") or "source_native",
+        "exists": True,
+        "rows": rows,
+        "columns": _to_int(src.get("columns"), 0),
+        "size_mb": round(parquet_bytes / (1024 * 1024), 3) if parquet_bytes else None,
+        "date_min": src.get("date_min"),
+        "date_max": src.get("date_max"),
+        "time_column": "time" if (src.get("date_min") or src.get("date_max")) else None,
+        "status": src.get("status") or ("ready" if src.get("ready_for_modeling") else "review"),
+        "source": src.get("title") or str(source),
+        "lakehouse_layer": src.get("layer"),
+        "domain": src.get("domain"),
+        "what_it_has": _clip(src.get("what_it_has"), 900),
+        "schema_sample": _clip(src.get("variables_or_schema_sample"), 700),
+        "ready_for_modeling": bool(src.get("ready_for_modeling")),
+        "parquet_files": _to_int(src.get("parquet_files"), 0),
+        "readable_parquet_files": _to_int(src.get("readable_parquet_files"), 0),
+        "parquet_bytes": parquet_bytes,
+        "materialization": src.get("materialization"),
+        "inventory_basis": src.get("inventory_basis"),
+        "sha256": src.get("sha256"),
+    }
+    if src.get("source_endpoint"):
+        item["source_endpoint"] = src.get("source_endpoint")
+    return {k: v for k, v in item.items() if v is not None}
+
+
+def _augment_lakehouse_inventory(state):
+    overview = _local_json("reports/data_fetch/lakehouse_source_overview.json") or {}
+    sources = overview.get("sources") or []
+    if not sources:
+        return state
+
+    lake_assets = [a for a in (_lakehouse_source_asset(s) for s in sources) if a]
+    lake_assets.sort(key=lambda a: (a.get("lakehouse_layer") or "", a.get("asset_id") or ""))
+    existing = list(state.get("data_assets") or [])
+    lake_ids = {a["asset_id"] for a in lake_assets}
+    extras = [a for a in existing if a.get("asset_id") not in lake_ids]
+    state["data_assets"] = lake_assets + extras
+
+    inv = dict(state.get("inventory") or {})
+    inv["lake"] = {
+        "datasets": [
+            {
+                "name": a.get("asset_id"),
+                "rows": a.get("rows"),
+                "columns": a.get("columns"),
+                "source": a.get("source"),
+                "layer": a.get("lakehouse_layer"),
+                "status": a.get("status"),
+                "domain": a.get("domain"),
+                "date_min": a.get("date_min"),
+                "date_max": a.get("date_max"),
+                "path": a.get("path"),
+                "what_it_has": a.get("what_it_has"),
+                "sha256": a.get("sha256"),
+            }
+            for a in lake_assets
+        ]
+    }
+    inv.setdefault("shadow", {"datasets": []})
+    inv["built_iso"] = overview.get("generated_at") or inv.get("built_iso")
+    state["inventory"] = inv
+
+    layers = {}
+    for a in lake_assets:
+        layer = a.get("lakehouse_layer") or "unknown"
+        rec = layers.setdefault(layer, {"sources": 0, "rows": 0, "parquet_bytes": 0})
+        rec["sources"] += 1
+        rec["rows"] += _to_int(a.get("rows"))
+        rec["parquet_bytes"] += _to_int(a.get("parquet_bytes"))
+    state["lakehouse_summary"] = {
+        "generated_at": overview.get("generated_at"),
+        "source_groups": len(lake_assets),
+        "entry_counted_rows": sum(_to_int(a.get("rows")) for a in lake_assets),
+        "layers": layers,
+        "value_gate": overview.get("value_gate"),
+        "critic": overview.get("critic"),
+        "note": "Rows are entry-counted across inventory entries, not deduplicated unique real-world observations.",
+    }
+    return state
+
+
 def _append_latest_public_data_assets(state):
     assets = list(state.get("data_assets") or [])
     existing = {a.get("asset_id") for a in assets}
@@ -1428,10 +1780,14 @@ def _augment_state(state):
     state["findings"] = extra + legacy_keep + legacy_archive
     _augment_models(state)
     _append_latest_public_data_assets(state)
+    _augment_lakehouse_inventory(state)
     counts = dict(state.get("counts") or {})
     counts["findings"] = len(state["findings"])
     counts["models"] = len(state.get("models") or [])
     counts["claimable"] = sum(1 for m in state.get("models", []) if m.get("claimable"))
+    counts["lake_datasets"] = len((((state.get("inventory") or {}).get("lake") or {}).get("datasets") or []))
+    counts["shadow_datasets"] = len((((state.get("inventory") or {}).get("shadow") or {}).get("datasets") or []))
+    counts["data_assets"] = len(state.get("data_assets") or [])
     counts["positive_findings"] = sum(
         1 for f in state["findings"]
         if f.get("kind") in {"claim", "positive", "replication", "operational"}
@@ -1442,7 +1798,7 @@ def _augment_state(state):
     )
     counts["null_findings"] = sum(1 for f in state["findings"] if f.get("kind") in {"null", "negative"})
     state["counts"] = counts
-    note = "Static build joined cockpit state with H1 trust index, latest non-bacteria/HAB/hypoxia/bacteria/tsunami/semantic-shadow claim cards, public data assets, and report evidence."
+    note = "Static build joined cockpit state with H1 trust index, latest non-bacteria/HAB/hypoxia/bacteria/tsunami/semantic-shadow claim cards, source-native lakehouse inventory, data-fetch/nowcast/triage/AE status, public data assets, glossary, and report evidence."
     actions = list(state.get("next_actions") or [])
     if note not in actions:
         actions.insert(0, note)
@@ -1515,6 +1871,13 @@ def _project_doc_priority(rel):
         "reports/data_fetch/foundation_models/ACQUISITION.md": 927,
         "reports/hab/cyano/cyano_onset_claim_card_redteam.md": 926,
         "reports/hab/da_forecast.md": 925,
+        "reports/data_fetch/LAKEHOUSE_SOURCE_OVERVIEW.md": 924,
+        "reports/data_fetch/swarm_20/SWARM_40_FULL_COMPLETED.latest.md": 923,
+        "reports/data_fetch/swarm_20/LAKEHOUSE_PROMOTION_CRITIC.md": 922,
+        "reports/model_lab/all_lakehouse_unsupervised_campaign/run_id=silver_all_20260626T1318Z/RUN_STATUS.md": 921,
+        "reports/model_lab/all_lakehouse_unsupervised_campaign/run_id=silver_all_20260626T1318Z/CRITIC.md": 920,
+        "reports/physics_featurization/FINDINGS.md": 919,
+        "reports/tensor_discovery/tensor_pi_pipeline/TENSOR_PI_PIPELINE_REPORT.md": 918,
         "REMOTE_RESEARCH_CONTRACT.md": 900,
         "docs/VALUE_GATE.md": 890,
         "docs/open_source_readiness.md": 870,
@@ -1620,6 +1983,13 @@ def _build_project_docs():
     latest_public_docs = {
         "reports/semantic_lakehouse/semantic_shadow_discovery.md",
         "reports/hab/cyano/cyano_onset_claim_card_redteam.md",
+        "reports/data_fetch/LAKEHOUSE_SOURCE_OVERVIEW.md",
+        "reports/data_fetch/swarm_20/SWARM_40_FULL_COMPLETED.latest.md",
+        "reports/data_fetch/swarm_20/LAKEHOUSE_PROMOTION_CRITIC.md",
+        "reports/model_lab/all_lakehouse_unsupervised_campaign/run_id=silver_all_20260626T1318Z/RUN_STATUS.md",
+        "reports/model_lab/all_lakehouse_unsupervised_campaign/run_id=silver_all_20260626T1318Z/CRITIC.md",
+        "reports/physics_featurization/FINDINGS.md",
+        "reports/tensor_discovery/tensor_pi_pipeline/TENSOR_PI_PIPELINE_REPORT.md",
     }
     docs = []
     candidates = set(_tracked_files())
@@ -1728,7 +2098,7 @@ def _build_vocabulary():
     gates, GPU runners, and reporting docs without dumping internal paths or
     live-agent details into the public snapshot.
     """
-    return [
+    terms = [
         {"key": "source_dataset", "label": "Source dataset", "group": "Data pipeline",
          "what": "Raw, joinable evidence we collect — coverage, rows, recency, provenance. Not a model.",
          "examples": ["ASOS rainfall", "NOAA CO-OPS tide & water level", "CalHABMAP domoic-acid piers", "USGS river discharge", "MBARI M1/M2 moorings"]},
@@ -1756,12 +2126,66 @@ def _build_vocabulary():
         {"key": "data_asset", "label": "Data asset", "group": "Data pipeline",
          "what": "A named dataset in the public ledger with source, row count or size, date range, and status.",
          "examples": ["bacteria_observations", "hab_sota_panel", "gulf_hypoxia_watch", "semantic_shadow target profiles"]},
+        {"key": "source_native_promotion", "label": "Source-native promotion", "group": "Data pipeline",
+         "what": "Promoting a validated source in its original table shape so scanners can use it without creating a large generic derivative table.",
+         "examples": ["40 swarm20 sources promoted source-native", "hardlink materialization", "generic normalized expansion rejected"]},
+        {"key": "lakehouse_source_inventory", "label": "Lakehouse source inventory", "group": "Data pipeline",
+         "what": "The row-counted ledger of every lakehouse source/group: layer, source, rows, schema hint, date range, domain, and provenance basis.",
+         "examples": ["329 source/groups", "silver_external_curated", "silver_normalized_observations", "silver_standalone"]},
+        {"key": "entry_counted_rows", "label": "Entry-counted rows", "group": "Data pipeline",
+         "what": "A lakehouse inventory total that sums rows across entries. It is useful for scale, but it is not a deduplicated count of unique real-world observations.",
+         "examples": ["6.39B entry-counted lakehouse rows", "external curated plus normalized views", "standalone feature groups"]},
+        {"key": "normalization_bloat", "label": "Normalization bloat", "group": "Data pipeline",
+         "what": "A rejected data build where generic reshaping would create many more rows without a current model/value gate and could leak metadata or timestamps.",
+         "examples": ["1.16B-row generic swarm20 normalized preview rejected", "source-native accepted instead"]},
         {"key": "unified_panel", "label": "Unified panel", "group": "Data pipeline",
          "what": "A single table that aligns targets, features, sites, and dates so models and gates can compare like with like.",
          "examples": ["operational bacteria benchmark panel", "unified_pi_panel", "HAB pDA strict-critic panel"]},
         {"key": "feature_engineering", "label": "Feature engineering", "group": "Data pipeline",
          "what": "The transformation from raw observations into available-at-decision inputs such as lags, rolling history, rain totals, and physics features.",
          "examples": ["station-history features", "rainfall lags", "river-discharge lags", "harmonic tide range", "thermal stratification"]},
+        {"key": "observation_record", "label": "Observation record", "group": "Language stack",
+         "what": "The smallest source fact the lab can point at: a site, time, variable, value, unit, and provenance before it becomes a feature.",
+         "examples": ["one beach FIB sample", "one pier domoic-acid sample", "one gauge discharge day", "one M1/M2 oxygen reading"]},
+        {"key": "source", "label": "Source", "group": "Language stack",
+         "what": "The origin and provenance of a record: agency, file, feed, adapter, license, and retrieval context.",
+         "examples": ["CEDEN beach-lab feed", "NOAA CO-OPS station", "USGS NWIS gauge", "CalHABMAP pier table", "MBARI mooring source"]},
+        {"key": "time_coordinate", "label": "Time", "group": "Language stack",
+         "what": "When a record is true or usable. Time can be sample time, event time, valid time, issue time, or available-at time.",
+         "examples": ["sample_date", "event_time", "valid_time", "available_at", "reveal_lag_days"]},
+        {"key": "p_variable", "label": "p variable / place", "group": "Language stack",
+         "what": "The place or entity coordinate for a record: where the measurement belongs before joins, lags, pairs, or tensors.",
+         "examples": ["beach_id", "station_id", "pier_id", "gauge_id", "lake_id", "basin_id"]},
+        {"key": "v_variable", "label": "v variable / measured variable", "group": "Language stack",
+         "what": "The measured variable axis: what was observed or derived, separate from where and when it was observed.",
+         "examples": ["enterococcus", "rain_24h", "discharge_cfs", "domoic_acid_ng_l", "bottom_do_mg_l", "chlorophyll"]},
+        {"key": "feature", "label": "Feature", "group": "Language stack",
+         "what": "One model-readable input column available at decision time. A feature is a clue, not a claim.",
+         "examples": ["rain_48h", "station_prev_exceedance", "stage_mean_ft", "spring_neap_phase", "surface_bottom_delta_t"]},
+        {"key": "feature_family", "label": "Feature family", "group": "Language stack",
+         "what": "A related group of features with the same physical or data meaning, tested together or ablated together.",
+         "examples": ["station history", "rainfall lags", "runoff/discharge", "tide harmonics", "HAB state", "stratification"]},
+        {"key": "feature_pair", "label": "Feature pair", "group": "Language stack",
+         "what": "Two features or feature families tested as a coupled hypothesis. Pairs are where interactions, redundancy, and transfer candidates become explicit.",
+         "examples": ["rain x discharge", "upstream turbidity -> downstream turbidity", "HAB state x ocean conditions", "strandings x forage index"]},
+        {"key": "interaction_feature", "label": "Interaction feature", "group": "Language stack",
+         "what": "A derived feature that combines two inputs so the model can test whether their joint state matters beyond either input alone.",
+         "examples": ["dry-spell x rain", "discharge x precipitation", "stratification x season", "chlorophyll x temperature"]},
+        {"key": "pairwise_screen", "label": "Pairwise screen", "group": "Language stack",
+         "what": "A systematic search over many feature pairs, followed by family-wise error, bootstrap, and baseline checks before any pair is trusted.",
+         "examples": ["GPU dry-onset interaction scan", "474,825 interaction pairs", "USGS upstream/downstream gauge pairs", "cross-dataset hypothesis pairs"]},
+        {"key": "language_level", "label": "Language level", "group": "Language stack",
+         "what": "A rung in the lab's evidence language: source schema, record, feature, feature family, pair, interaction, representation, shared language, model, and claim.",
+         "examples": ["L0 source schema", "L1 observation record", "L2 feature", "L3 feature family", "L4 pair", "L9 claim"]},
+        {"key": "local_language", "label": "Local language", "group": "Language stack",
+         "what": "A target-specific feature dialect that works inside one lane or region but is not assumed to transfer elsewhere.",
+         "examples": ["California bacteria station-memory language", "CalHABMAP pier HAB language", "Tokyo Bay stratification language"]},
+        {"key": "shared_language", "label": "Shared language", "group": "Language stack",
+         "what": "A representation intended to line up different regions or hazards so transfer can be tested without pretending raw columns mean the same thing.",
+         "examples": ["non-dimensional physics groups", "cross-country FIB coordinates", "global lake cyano language", "source-linked HAB cockpit language"]},
+        {"key": "language_boundary", "label": "Language boundary", "group": "Language stack",
+         "what": "A documented place where a representation stops transferring or loses meaning against honest baselines.",
+         "examples": ["EU annual bathing-water boundary", "freshwater cyano daily interlingua null", "biomass-only HAB resolution wall"]},
         {"key": "reveal_lag_available_at", "label": "Reveal lag / available_at", "group": "Data pipeline",
          "what": "The rule that a feature can only use information that would have been known at decision time.",
          "examples": ["reveal_lag_days=2", "partner lab timestamps", "as-of HAB state", "no future labels"]},
@@ -1802,9 +2226,9 @@ def _build_vocabulary():
         {"key": "interlingua", "label": "Interlingua", "group": "Science targets",
          "what": "A shared physics language for cross-region transfer: re-encode different places into comparable variables before testing transfer.",
          "examples": ["US↔Ireland transfer", "Australia transfer", "physics coordinate system", "label-free transfer"]},
-        {"key": "pi_group", "label": "Pi-group / non-dimensional feature", "group": "Science targets",
-         "what": "A physics-derived, unitless pi-group representation built from ratios or scaled quantities so different regions can be compared fairly.",
-         "examples": ["Buckingham pi coordinates", "weather-only physics groups", "unified_pi_panel", "raw-pi transfer champion"]},
+        {"key": "pi_group", "label": "π-group / non-dimensional feature", "group": "Science targets",
+         "what": "A physics-derived, unitless representation built from ratios or scaled quantities so different regions can be compared fairly.",
+         "examples": ["Buckingham-π coordinates", "weather-only physics groups", "unified_pi_panel", "raw-π transfer champion"]},
 
         {"key": "signal", "label": "Signal / feature", "group": "Signals",
          "what": "A candidate explanatory input, tested through gates until it earns KEEP, WASH, or REJECT.",
@@ -1840,7 +2264,7 @@ def _build_vocabulary():
         {"key": "model_family", "label": "Model family", "group": "Models",
          "what": "The broad algorithm class, used to separate tree, neural, foundation, symbolic, detector, and baseline entries.",
          "examples": ["tree", "neural", "foundation", "symbolic", "detector", "baseline"]},
-        {"key": "champion_model", "label": "Champion model / incumbent", "group": "Models",
+        {"key": "champion_model", "label": "Champion / incumbent", "group": "Models",
          "what": "The current strongest frozen model for a target; challengers must beat it under the same split and gates before promotion.",
          "examples": ["bacteria HGBT incumbent", "CatBoost challenger", "frozen champion pair gate", "champion reproducibility gate"]},
         {"key": "baseline", "label": "Baseline / null", "group": "Models",
@@ -1849,8 +2273,8 @@ def _build_vocabulary():
         {"key": "calibration", "label": "Calibration", "group": "Models",
          "what": "Whether predicted probabilities mean what they say; a calibrated 70% risk should be right about 70% of the time.",
          "examples": ["isotonic calibration", "ECE", "Brier score", "calibration bins", "calibrated AP"]},
-        {"key": "hdc_vsa", "label": "HDC/VSA", "group": "Models",
-         "what": "HDC/VSA means hyperdimensional computing / vector-symbolic architecture tested as a reversible shadow comparator, not a product upgrade by default.",
+        {"key": "hdc_vsa", "label": "HDC / VSA", "group": "Models",
+         "what": "Hyperdimensional computing / vector-symbolic architecture tested as a reversible shadow comparator, not a product upgrade by default.",
          "examples": ["bacteria_hdc_vsa", "value binding", "prototype classifier", "champion pair gate"]},
         {"key": "neural_model", "label": "Neural model", "group": "Models",
          "what": "A fitted deep-learning system or neural comparator, used only when it beats the same honest baselines and gates.",
@@ -1933,6 +2357,42 @@ def _build_vocabulary():
          "what": "The standard for reporting results: value, baseline, split, metric, uncertainty, null checks, exact paths, and operational meaning.",
          "examples": ["docs/REPORTING_HOUSE_STYLE.md", "one number per claim", "null-verdict guard", "SO WHAT"]},
     ]
+    easy = {
+        "target": "Target = what you are predicting: the label/outcome and the decision question. Examples here include bacteria_exceedance, domoic_acid, hypoxia_lead, and renewal_onset.",
+        "signal": "Signal = what you predict with: a candidate predictor or engineered input fed to the model. Examples here include station lab history, rainfall, river discharge, tide range, HAB state, and surf/wave features.",
+        "source": "Source = where a record came from and how we know it: agency, file/feed, adapter, license, and retrieval provenance.",
+        "time_coordinate": "Time = when the evidence is valid or available. It can mean sample time, event time, forecast valid time, issue time, or available-at time.",
+        "p_variable": "p variable = the place/entity coordinate: the beach, station, gauge, pier, lake, basin, or other unit the record belongs to.",
+        "v_variable": "v variable = the measured-variable coordinate: what was measured or derived, such as enterococcus, rain, discharge, domoic acid, oxygen, or chlorophyll.",
+        "observation_record": "Observation record = one source fact before modeling: source, place/entity, time, variable, value, unit, and provenance.",
+        "feature": "Feature = one model-readable input column available at decision time, such as rain_48h or station_prev_exceedance.",
+        "feature_family": "Feature family = a set of related features tested together, such as rainfall lags, station history, runoff/discharge, or tide harmonics.",
+        "feature_pair": "Feature pair = two features or families tested as one coupled hypothesis, such as rain x discharge or upstream turbidity -> downstream turbidity.",
+        "interaction_feature": "Interaction feature = a derived input that says two conditions matter together, not just separately, such as dry-spell x rain.",
+        "pairwise_screen": "Pairwise screen = a systematic search over many feature pairs, followed by null and multiple-testing checks before trusting any hit.",
+        "language_level": "Language level = where an object sits in the evidence stack: source schema, record, feature, family, pair, interaction, representation, shared language, model, or claim.",
+        "local_language": "Local language = the feature dialect that works for one lane or place, such as California beach bacteria or Tokyo Bay hypoxia.",
+        "shared_language": "Shared language = a representation designed for transfer across places or hazards so different raw columns can be compared honestly.",
+        "language_boundary": "Language boundary = a tested place where a shared language stops transferring or stops beating honest baselines.",
+        "representation": "Representation = a transformed feature space that exposes structure, transfer, or regimes better than raw columns.",
+        "interlingua": "Interlingua = a shared physics language for transfer: encode different places into comparable variables, then test whether skill carries across.",
+        "pi_group": "Pi-group = a unitless physics feature made from scaled quantities or ratios so measurements from different places can be compared.",
+        "learner": "Learner = an algorithm before it is fitted. It is not a trained model yet.",
+        "trained_model": "Trained model = a fitted learner with evidence: data split, metrics, baseline comparison, calibration, and registry status.",
+        "baseline": "Baseline = the honest thing a model must beat, such as station memory, persistence, seasonal-naive, or the AB411 rain rule.",
+        "finding": "Finding = a tested scientific statement that survived the right baseline, split, uncertainty, and leakage checks.",
+        "claim_card": "Claim card = the compact proof packet for one claim: target, baseline, split, metric, uncertainty, caveats, and paths.",
+        "holdout": "Holdout = data withheld from fitting and calibration so performance is read on rows the model did not train on.",
+        "bootstrap_ci": "Bootstrap CI = an uncertainty interval around the measured lift, built by resampling the right independent units.",
+        "permutation_null": "Permutation null = a shuffled-label or swapped-prediction check asking whether the lift is bigger than luck or artifact.",
+        "confusion_matrix": "Confusion matrix = the true/false positive and negative counts at a chosen threshold.",
+        "calibration": "Calibration = whether predicted probabilities mean what they say, separate from ranking skill.",
+        "tensorification": "Tensorification = turning heterogeneous lakehouse records into aligned numeric arrays for representation learning.",
+        "embedding": "Embedding = a compact learned vector for a record, context, source, or regime.",
+    }
+    for term in terms:
+        term["easy"] = easy.get(term["key"], f"{term['label']} = {term['what']}")
+    return terms
 
 
 def _build_targets():
