@@ -1,0 +1,166 @@
+{
+  "updated": "2026-06-24",
+  "note": "Curated, human-approved answers drawn from the lab's audited findings. Every entry is a verdict someone signed off on — this is the instant-answer layer. Open-ended questions go to the grounded search assistant (and, if still unanswered, become a research request).",
+  "items": [
+    {
+      "id": "bacteria_headline",
+      "q": "Can a model warn about unsafe beach water before the lab result?",
+      "alt": ["beach bacteria nowcast", "enterococcus forecast", "fib exceedance", "is the beach safe to swim", "predict beach closure"],
+      "tags": ["bacteria", "nowcast", "headline"],
+      "grade": "Supported",
+      "a": "Yes — this is the lab's strongest result. A statewide California nowcast hits ROC-AUC 0.868 / average-precision 0.5099, calibrated and out-of-time stable on the 2022+ holdout, and is deploy-ready in 8 of 9 counties. It beats station-memory, seasonal-naive, and the AB411 rain rule. The culture lab takes 18–24h; this scores a same-day risk before the result lands.",
+      "evidence": "Open the bacteria question",
+      "action": "target:bacteria_exceedance"
+    },
+    {
+      "id": "rain_predicts_bacteria",
+      "q": "Does rainfall predict beach bacteria?",
+      "alt": ["does rain cause high bacteria", "rainfall signal fib", "runoff predictor", "wet weather advisory"],
+      "tags": ["bacteria", "rain", "signal"],
+      "grade": "Caveated",
+      "a": "Partly. Rain is a real but modest fresh signal (on the order of +0.01 AP). The backbone of the skill is actually the prior weekly sample plus beach-specific history and season — rain is the one input that is genuinely new at decision time. So rain helps, but it is not the engine.",
+      "evidence": "See the signal ledger",
+      "action": "view:findings"
+    },
+    {
+      "id": "ocean_color_bacteria",
+      "q": "Does satellite chlorophyll or turbidity predict bacteria?",
+      "alt": ["ocean color", "modis", "remote sensing fib", "satellite turbidity", "chlorophyll bacteria"],
+      "tags": ["bacteria", "satellite", "null"],
+      "grade": "Null",
+      "a": "No. Satellite turbidity/chlorophyll is the field's #2 named FIB predictor, but it washes out once the baseline is fair — even slice-conditioned. The only remaining lever on that axis is in-situ (in-water) turbidity, not satellite. Kept on the record so it isn't re-tried blindly.",
+      "evidence": "Kept on the record",
+      "action": "view:findings"
+    },
+    {
+      "id": "bacteria_forecast_lead",
+      "q": "Can you forecast bacteria a day ahead, not just nowcast?",
+      "alt": ["one day ahead", "lead time bacteria", "forecast not nowcast", "10x improvement"],
+      "tags": ["bacteria", "lead-time"],
+      "grade": "Caveated",
+      "a": "Almost for free, because the skill backbone is the prior weekly sample, which is already forecast-valid. Nowcast→next-day costs little (gated AP ~0.540→0.505). The often-quoted '10×' is lead-time/operational value, not a 10× jump in AP — a real-data leakage gate killed the inflated '+3 days free' version.",
+      "evidence": "Open the bacteria question",
+      "action": "target:bacteria_exceedance"
+    },
+    {
+      "id": "transfer_ireland",
+      "q": "Does the California model transfer to other countries (e.g. Ireland)?",
+      "alt": ["international transfer", "ireland beaches", "zero shot transfer", "europe", "new region"],
+      "tags": ["transfer", "bacteria"],
+      "grade": "Supported",
+      "a": "As a ranker, yes. The CA nowcast transfers zero-shot to Ireland (marine AP ~0.122, ~4.3× over base, CI-separated, permutation-null clean). It ranks dirty days well in a new country with no local labels — but calibration (the exact probability) needs local recalibration. Ranking travels; thresholds don't.",
+      "evidence": "Cross-country transfer",
+      "action": "target:cross_country_transfer"
+    },
+    {
+      "id": "transfer_australia",
+      "q": "Does the physics transfer add anything in Australia?",
+      "alt": ["australia", "physics transfer au", "pi transfer beats memory"],
+      "tags": ["transfer", "physics"],
+      "grade": "Caveated",
+      "a": "Pure physics-π transfer does NOT beat Australia's local station memory on its own. But the physics+memory combo is a confirmed augmentation: +0.10 AP (CI [0.043, 0.167]). The physics earns its keep as an addition to local history, not as a replacement.",
+      "evidence": "Browse the questions",
+      "action": "view:questions"
+    },
+    {
+      "id": "clean_to_dirty_onset",
+      "q": "Can you predict which clean beaches will suddenly turn dirty?",
+      "alt": ["onset", "surprise spike", "first flush", "clean to dirty", "tensor"],
+      "tags": ["bacteria", "onset", "physics"],
+      "grade": "Caveated",
+      "a": "Yes, as triage — not an official closure button. Reframing to clean-to-dirty onset, the model beats station-memory 16/16 forward-in-time. Adding physics-π then a strict causal tensor raised AP 0.2992 → 0.3348 → 0.3418 on the scoped gate. It tells counties which clean beaches to inspect first after rain/heat/flushing.",
+      "evidence": "Browse the questions",
+      "action": "view:questions"
+    },
+    {
+      "id": "drivers_beat_persistence",
+      "q": "Do more data and bigger models beat the simple 'like yesterday' forecast?",
+      "alt": ["driver null", "does ML beat persistence", "exogenous drivers", "bigger model", "the lab law"],
+      "tags": ["law", "method"],
+      "grade": "Null",
+      "a": "Usually no — this is the lab's default law. Across every hazard tried, piling on weather/river/satellite drivers or a bigger model does NOT beat 'what's happening now plus the time of year.' We treat that as the null and make a model earn its keep. The escapes are specific (slow-driver lead, first-flush onset, spring-neap tide), not general.",
+      "evidence": "The honest scorecard",
+      "action": "view:findings"
+    },
+    {
+      "id": "ddpcr_vs_culture",
+      "q": "Is the ddPCR molecular test a cleaner label than culture?",
+      "alt": ["ddpcr", "molecular labels", "label noise", "culture disagreement"],
+      "tags": ["bacteria", "labels"],
+      "grade": "Caveated",
+      "a": "Not 'cleaner' — different. On 909 paired samples, ddPCR and culture disagree ~48% of the time at the official cutoffs, asymmetrically. That points to a different measurement target, not a lower-noise version of the same thing. The frontier is the target definition, and molecular labels remain a real (unbuilt) lever.",
+      "evidence": "ddPCR vs culture-safe",
+      "action": "target:ddpcr_culture_safe"
+    },
+    {
+      "id": "domoic_acid_charm",
+      "q": "Does your domoic acid forecast beat C-HARM by 10x?",
+      "alt": ["domoic acid", "da forecast", "c-harm", "harmful algal bloom toxin", "10x charm"],
+      "tags": ["hab", "domoic-acid"],
+      "grade": "Caveated",
+      "a": "No 10× — that was a broken-baseline mirage (C-HARM is near-anti-skillful at pier points, AUC ~0.30). The honest lift over naive persistence is ~1.4×. Real, but small; domoic acid is largely persistence-ceilinged.",
+      "evidence": "Browse the questions",
+      "action": "view:questions"
+    },
+    {
+      "id": "cyano_lake_triage",
+      "q": "Can you triage cyanobacteria blooms across many lakes?",
+      "alt": ["cyano", "lake algae", "freshwater bloom", "national lakes", "watchlist"],
+      "tags": ["cyano", "triage", "shipped"],
+      "grade": "Supported",
+      "a": "Yes — shipped. A capture-at-budget allocator over 2,235 lakes adds +4–5.5% onset capture, keyless and deployable, plus a season-ahead per-state watchlist (5–20 weeks). It tells a limited monitoring crew which lakes to sample first.",
+      "evidence": "Browse the questions",
+      "action": "view:questions"
+    },
+    {
+      "id": "tokyo_hypoxia",
+      "q": "Does the onset law replicate in another basin, like Tokyo Bay?",
+      "alt": ["tokyo bay", "hypoxia", "low oxygen", "japan", "cross basin"],
+      "tags": ["hypoxia", "transfer"],
+      "grade": "Supported",
+      "a": "Yes. Onset-beats-memory replicates cross-basin and cross-hazard in Tokyo Bay hypoxia (+0.17 AP, ~3-day lead, permutation-null clean), and low-dissolved-oxygen stress can be screened from other water-quality clues. The pattern is not California-specific.",
+      "evidence": "Gulf / hypoxia finding",
+      "action": "target:hypoxia_lead"
+    },
+    {
+      "id": "tidal_spring_neap",
+      "q": "Does tide actually help predict bacteria?",
+      "alt": ["tide", "spring neap", "tidal range", "harmonic tide"],
+      "tags": ["bacteria", "tide", "escape"],
+      "grade": "Supported",
+      "a": "Yes — a confirmed escape. Harmonic spring-neap tidal range adds +0.011 AP (leave-one-basin-out, permutation-null p=0.02) and is shipped: it moved the statewide headline 0.4992 → 0.5099. One of the few drivers that genuinely beats persistence.",
+      "evidence": "See the findings",
+      "action": "view:findings"
+    },
+    {
+      "id": "whale_mortality",
+      "q": "Can you forecast whale mortality?",
+      "alt": ["whales", "whale deaths", "strandings", "gray whale ume", "prey index"],
+      "tags": ["whale", "exploratory", "null"],
+      "grade": "Exploratory",
+      "a": "Not yet. The official stranding database is request-walled; iNaturalist dead-annotations reconstruct the 2019–23 gray-whale die-off after the fact, but a forward forecast isn't there. Thermal stratification gives a real hypoxia lead; whale-forage (krill/rockfish) is suggestive but not yet robust. Open lane.",
+      "evidence": "Whale mortality",
+      "action": "target:whale_mortality"
+    },
+    {
+      "id": "interlingua_universal",
+      "q": "Is the physics 'interlingua' a universal model that works on any hazard?",
+      "alt": ["interlingua", "physics manifold", "pi groups", "universal transfer", "shared plane"],
+      "tags": ["physics", "method"],
+      "grade": "Caveated",
+      "a": "No — it's a shared ENCODING (a dimensionless coordinate system), not a universal model. The hand-built physics-π groups transfer zero-shot within marine-FIB onset across regions, but they go NULL at every cross-hazard jump (FIB→domoic acid, →cyano, →hypoxia). Same measuring stick; different per-signal physics.",
+      "evidence": "Browse the questions",
+      "action": "view:questions"
+    },
+    {
+      "id": "sfbay_flood",
+      "q": "Can you predict San Francisco Bay compound flooding?",
+      "alt": ["compound flood", "sf bay flood", "coastal flood", "storm surge"],
+      "tags": ["flood", "null"],
+      "grade": "Null",
+      "a": "Tested and did not clear the bar. Kept on the record as an honest null so the next experiment doesn't repeat it.",
+      "evidence": "Kept on the record",
+      "action": "view:findings"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "updated": "2026-06-24",
+  "note": "Curated hall-of-fame (editor's picks). Seeded with the lab's own work to show the bar — your contribution can replace these. Winners are chosen by hand from submissions; we publish the approach that actually worked, not just the idea.",
+  "lanes": [
+    {
+      "id": "question",
+      "title": "Best question",
+      "blurb": "A sharp question we hadn't answered — plus the approach that cracked it.",
+      "icon": "?",
+      "entries": [
+        {
+          "who": "Lab (seed)",
+          "title": "Which clean beaches will suddenly spike?",
+          "what": "Instead of 'is the water dirty now,' ask 'which currently-clean beaches are about to surprise us.'",
+          "approach": "Reframe the target to clean-to-dirty onset, pool stations into one model, add physics-π + a causal tensor.",
+          "result": "Beats station-memory 16/16 forward-in-time; AP 0.2992 → 0.3418.",
+          "action": "view:questions"
+        }
+      ]
+    },
+    {
+      "id": "suggestion",
+      "title": "Best suggestion",
+      "blurb": "Something we should try — a signal, an objective, a basin, a baseline.",
+      "icon": "✨",
+      "entries": [
+        {
+          "who": "Lab (seed)",
+          "title": "Try harmonic spring-neap tidal range as a driver.",
+          "what": "Most tide features wash; the spring-neap envelope might carry independent signal.",
+          "approach": "Harmonic decomposition, leave-one-basin-out, permutation null before believing it.",
+          "result": "Confirmed escape: +0.011 AP (perm-null p=0.02); shipped, moved the headline to 0.5099.",
+          "action": "view:findings"
+        }
+      ]
+    },
+    {
+      "id": "contribution",
+      "title": "Best contribution",
+      "blurb": "Data, code, a label set, or a reproduction we can fold straight in.",
+      "icon": "⚑",
+      "entries": [
+        {
+          "who": "Lab (seed)",
+          "title": "Ported the nowcast abroad with Irish + EU bathing-water data.",
+          "what": "Fetched Ireland EPA per-sample FIB (24.3k) + EEA pan-EU annual class (225k rows, 22k sites).",
+          "approach": "Standard fetch → silver → zero-shot transfer test with permutation null and local recalibration.",
+          "result": "CA nowcast transfers zero-shot to Ireland as a ranker (AP 0.122, ~4.3×, CI-separated).",
+          "action": "target:cross_country_transfer"
+        }
+      ]
+    }
+  ]
+}

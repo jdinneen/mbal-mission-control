@@ -136,11 +136,13 @@
   .fpill.active{background:var(--acc);border-color:var(--acc);color:#fff}
   .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   .fcard{background:var(--surface);border:1px solid var(--border);border-radius:15px;box-shadow:var(--card-sh);padding:20px 21px;cursor:pointer;transition:box-shadow .18s,border-color .18s,transform .18s}
-  a.fcard{display:block;text-decoration:none;color:inherit}
   .fcard:hover{box-shadow:var(--card-sh-hover);transform:translateY(-2px)}
   .fcard.open{border-color:#bfe0dc}
   .fcard .toprow{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px}
   .topic{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink5);background:var(--faint3);border-radius:6px;padding:3px 8px}
+  .statuschips{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+  .featurechip{flex:none;display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;font-weight:700;border-radius:7px;padding:4px 9px;color:#0f766e;background:#e7f5f2;border:1px solid #bfe0dc}
+  .featurechip i{width:6px;height:6px;border-radius:50%;background:#0f766e}
   .badge{flex:none;display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;border-radius:7px;padding:4px 9px}
   .badge i{width:6px;height:6px;border-radius:50%}
   .fcard h3{margin:0 0 8px;font-size:17px;font-weight:600;line-height:1.25}
@@ -172,6 +174,27 @@
   .lnk{appearance:none;background:none;border:1px solid var(--border);color:var(--ink3);border-radius:8px;padding:6px 11px;font-family:var(--mono);font-size:12px;cursor:pointer;transition:all .14s}
   .lnk:hover{border-color:#cfe3e1;color:var(--acc);background:var(--acc-tint2)}
   pre.ev{margin-top:10px;background:var(--subtle);border:1px solid var(--faint);border-radius:9px;padding:12px;overflow:auto;font-family:var(--mono);font-size:11.5px;color:var(--ink2);max-height:300px;white-space:pre-wrap;word-break:break-word}
+  .fullreport{margin-top:18px;border-top:1px solid var(--border);padding-top:18px}
+  .reporthero{display:grid;gap:10px;margin-bottom:16px}
+  .reportmeta{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink5)}
+  .reportverdict{font-size:16px;line-height:1.45;color:var(--ink);font-weight:600}
+  .reportscope{font-size:13.5px;line-height:1.55;color:var(--ink3)}
+  .reportstats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:14px 0 18px}
+  .reportstat{border:1px solid var(--border);border-radius:8px;padding:10px 11px;background:#fbfcfc;min-width:0}
+  .reportstat b{display:block;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;color:var(--ink5);font-weight:600;margin-bottom:5px}
+  .reportstat span{display:block;font-size:16px;line-height:1.25;color:var(--ink);font-weight:650;overflow-wrap:anywhere}
+  .reportstat em{display:block;font-style:normal;font-size:12px;line-height:1.35;color:var(--ink4);margin-top:4px}
+  .rsection{margin-top:18px}
+  .rsection h4{margin:0 0 8px;font-size:14px;line-height:1.3;color:var(--ink);font-weight:650}
+  .rsection p{margin:0 0 10px;font-size:13.5px;line-height:1.58;color:var(--ink3);text-wrap:pretty}
+  .rtabletitle{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:var(--ink5);margin:12px 0 6px}
+  .rtablewrap{overflow:auto;border:1px solid var(--border);border-radius:8px;margin:10px 0 14px;background:#fff}
+  table.rtable{width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.35}
+  .rtable th{position:sticky;top:0;background:#f6f8f8;color:var(--ink3);font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;text-align:left;border-bottom:1px solid var(--border);padding:8px 9px;white-space:nowrap}
+  .rtable td{border-bottom:1px solid #eef1f1;padding:8px 9px;vertical-align:top;color:var(--ink3);min-width:84px}
+  .rtable tr:last-child td{border-bottom:0}
+  .reportlist{margin:8px 0 0;padding-left:18px;color:var(--ink3);font-size:13.5px;line-height:1.55}
+  .reportlist li{margin:4px 0}
 
   /* ---- tables (models / datasets) ---- */
   .tbl{overflow:hidden}
@@ -237,10 +260,6 @@
   .lhempty{font-family:var(--mono);font-size:12.5px;color:var(--ink5);padding:14px 0 2px;border-top:1px solid var(--faint2)}
 
   /* ---- vocabulary ---- */
-  .vocabsections{display:flex;flex-direction:column;gap:28px}
-  .vocabsection .vh{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:0 0 12px}
-  .vocabsection .vh h2{margin:0;font-size:18px;font-weight:650;letter-spacing:0;color:#252b31}
-  .vocabsection .vh span{font-family:var(--mono);font-size:12px;color:var(--ink5)}
   .vocabgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:16px}
   .vcard{background:var(--surface);border:1px solid var(--border);border-radius:15px;box-shadow:var(--card-sh);padding:20px 21px;transition:box-shadow .18s,transform .18s}
   .vcard:hover{box-shadow:var(--card-sh-hover);transform:translateY(-2px)}
@@ -340,26 +359,6 @@
   /* ---- start here (scientist-first landing) ---- */
   .hero{max-width:840px;margin-bottom:26px;min-width:0}
   .hero h1.page{margin:10px 0 14px}
-  .heroactions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px}
-  .herocta{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:0 14px;border:1px solid rgba(15,138,132,.35);border-radius:8px;background:var(--surface);font-size:13.5px;font-weight:700;color:var(--acc)}
-  .herocta.primary{background:var(--acc);border-color:var(--acc);color:#fff;box-shadow:0 8px 18px rgba(15,138,132,.18)}
-  .herocta:hover{border-color:var(--acc);background:var(--acc-tint2);color:var(--acc)}
-  .herocta.primary:hover{background:var(--acc-hover);border-color:var(--acc-hover);color:#fff}
-  .pipelinefeature{display:grid;grid-template-columns:minmax(0,.82fr) minmax(420px,1.18fr);gap:18px;align-items:stretch;margin:0 0 28px;padding:18px;background:linear-gradient(135deg,#fff 0%,#fff 54%,#eef8f7 100%);border:1px solid #d6e6e4;border-radius:16px;box-shadow:var(--card-sh);min-width:0}
-  .pipelinecopy{min-width:0;padding:6px 4px 6px 6px}
-  .pipelinecopy .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--acc);font-weight:600;margin-bottom:10px}
-  .pipelinecopy h2{margin:0 0 10px;font-size:25px;line-height:1.14;font-weight:600;letter-spacing:-.015em;color:var(--ink);overflow-wrap:anywhere}
-  .pipelinecopy p{margin:0;font-size:14.8px;line-height:1.58;color:var(--ink2);text-wrap:pretty;overflow-wrap:anywhere}
-  .pipelinepoints{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:15px}
-  .pipelinepoints span{display:block;border:1px solid var(--faint);background:rgba(255,255,255,.72);border-radius:10px;padding:9px 10px;font-size:12.4px;line-height:1.35;color:var(--ink3)}
-  .pipelinepoints b{display:block;margin-bottom:2px;color:var(--ink);font-size:12.8px}
-  .pipelineactions{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:16px}
-  .pipelineactions a{font-family:var(--mono);font-size:11.5px;font-weight:700;color:var(--acc);border:1px solid #cfe3e1;border-radius:8px;padding:7px 10px;background:#fff}
-  .pipelineactions a.primary{background:var(--acc);border-color:var(--acc);color:#fff}
-  .pipelineactions a:hover{background:var(--acc-tint2);border-color:var(--acc);color:var(--acc)}
-  .pipelineactions a.primary:hover{background:var(--acc-hover);border-color:var(--acc-hover);color:#fff}
-  .pipelinepreview{display:block;min-width:0;overflow:hidden;border:1px solid #dbe2ec;border-radius:12px;background:#fcfdff;box-shadow:0 10px 26px rgba(16,24,40,.10)}
-  .pipelinepreview img{display:block;width:100%;height:100%;min-height:320px;object-fit:cover;object-position:left top;background:#fcfdff}
   .featurevideo{display:grid;grid-template-columns:minmax(0,.88fr) minmax(420px,1.12fr);gap:18px;align-items:stretch;margin:0 0 28px;max-width:100%;min-width:0}
   .featurecopy{min-width:0;padding:24px;background:linear-gradient(135deg,#fff 0%,#fff 58%,var(--acc-tint2) 100%);border:1px solid #d8e7e5;border-radius:16px;box-shadow:var(--card-sh)}
   .featurecopy .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--acc);font-weight:600;margin-bottom:10px}
@@ -387,33 +386,6 @@
   .videolinkcopy p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink3);text-wrap:pretty}
   .videolinkgo{font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--acc);border:1px solid var(--border);border-radius:8px;padding:7px 10px;white-space:nowrap;background:var(--acc-tint2)}
   .videolinkcard:hover .videolinkgo{background:var(--acc);border-color:var(--acc);color:#fff}
-  .videohub{display:grid;grid-template-columns:minmax(0,.78fr) minmax(360px,1.22fr);gap:18px;align-items:stretch;margin-bottom:22px}
-  .videohubcopy{padding:24px;background:linear-gradient(135deg,#fff 0%,#fff 58%,#eef8f7 100%);border:1px solid #d8e7e5;border-radius:16px;box-shadow:var(--card-sh)}
-  .videohubcopy .tag,.vcard .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--acc);font-weight:600}
-  .videohubcopy h1{margin:9px 0 10px;font-size:31px;line-height:1.08;letter-spacing:-.02em;font-weight:650}
-  .videohubcopy p{margin:0;font-size:15px;line-height:1.6;color:var(--ink2);text-wrap:pretty}
-  .videohubstats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px;margin-top:17px}
-  .videohubstats span{display:block;border:1px solid var(--faint);border-radius:10px;padding:10px;background:rgba(255,255,255,.75);font-size:12.5px;line-height:1.35;color:var(--ink4)}
-  .videohubstats b{display:block;margin-bottom:3px;color:var(--ink);font-size:18px;line-height:1}
-  .videofeature{display:grid;grid-template-columns:minmax(0,1fr);background:#0b0f1a;border:1px solid #111827;border-radius:16px;overflow:hidden;box-shadow:0 14px 34px rgba(16,24,40,.16)}
-  .videofeature img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#101820}
-  .videofeaturebody{padding:15px;background:#101827;color:#dce8ee}
-  .videofeaturebody .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:#2dd4bf;font-weight:600}
-  .videofeaturebody h2{margin:7px 0 6px;font-size:20px;line-height:1.2;color:#fff}
-  .videofeaturebody p{margin:0;color:#b7c5d3;font-size:13.5px;line-height:1.48}
-  .videofeaturelinks,.vlinks{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:12px}
-  .videofeaturelinks a,.vlinks a{font-family:var(--mono);font-size:11.5px;font-weight:700;text-decoration:none;border-radius:8px;padding:7px 10px}
-  .videofeaturelinks a{color:#06111f;background:#2dd4bf;border:1px solid #2dd4bf}
-  .videofeaturelinks a.secondary{color:#2dd4bf;background:#111827;border-color:#254256}
-  .videogrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-  .vcard{display:flex;flex-direction:column;min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--card-sh);overflow:hidden}
-  .vcard img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;background:#101820;border-bottom:1px solid var(--faint)}
-  .vbody{display:flex;flex:1;flex-direction:column;padding:14px}
-  .vbody h3{margin:6px 0 7px;font-size:17px;line-height:1.24;font-weight:650;color:var(--ink);overflow-wrap:anywhere}
-  .vbody p{margin:0;color:var(--ink3);font-size:13.5px;line-height:1.5;text-wrap:pretty}
-  .vlinks{margin-top:auto;padding-top:13px}
-  .vlinks a{color:var(--acc);background:var(--acc-tint2);border:1px solid #cfe3e1}
-  .vlinks a.primary{color:#fff;background:var(--acc);border-color:var(--acc)}
   .bigrow{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:26px}
   .bigcard{padding:22px 24px}
   .bigcard .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;margin-bottom:10px;display:inline-flex;align-items:center;gap:7px}
@@ -508,13 +480,11 @@
   /* ---- data & reproduce intro ---- */
   .reprocard{padding:22px 24px;margin-bottom:24px}
   .reprocard h3{margin:0 0 12px;font-size:16px;font-weight:600}
-  .reprocard p{margin:0 0 12px;font-size:14px;line-height:1.58;color:var(--ink2)}
-  .pipeline-repro .herocta{min-height:36px}
   .reprocard ol{margin:0;padding-left:20px}
   .reprocard li{font-size:14px;line-height:1.6;color:var(--ink2);margin-bottom:7px}
   .reprocard code{font-family:var(--mono);font-size:12.5px;background:var(--faint3);border:1px solid var(--border);border-radius:5px;padding:1px 6px}
   @media (max-width:860px){
-    .featurevideo,.pipelinefeature,.videohub,.videogrid,.bigrow,.minigrid,.paths,.qcardgrid,.storyintro,.storyflow,.storycompare{grid-template-columns:1fr}
+    .featurevideo,.bigrow,.minigrid,.paths,.qcardgrid,.storyintro,.storyflow,.storycompare{grid-template-columns:1fr}
     .hwrap{padding:12px 16px}
     nav.tabs{padding:0 16px}
     main{padding:24px 16px 64px}
@@ -541,7 +511,6 @@
     .storyimage{height:260px}
     .videolinkcard{grid-template-columns:150px minmax(0,1fr);align-items:start}
     .videolinkgo{grid-column:2}
-    .videohubcopy h1{font-size:27px}
   }
   @media (max-width:480px){
     .metrics,.ledgerstats{grid-template-columns:1fr}
@@ -553,17 +522,52 @@
     .storyscore{grid-template-columns:1fr}
     .storyimage{height:220px}
     .featurepoints{grid-template-columns:1fr}
-    .pipelinepoints{grid-template-columns:1fr}
-    .videohubstats{grid-template-columns:1fr}
-    .videohubcopy{padding:21px 18px}
     .featurecopy{padding:21px 18px}
     .featurecopy h2{font-size:21px}
-    .pipelinefeature{padding:15px}
-    .pipelinecopy h2{font-size:21px}
-    .herocta{width:100%}
     .videolinkcard{grid-template-columns:1fr}
     .videolinkgo{grid-column:auto;justify-self:start}
   }
+  /* ---- engagement: hero highlight, ask the lab, frontiers, leaderboard ---- */
+  .hero .page .hl{color:var(--acc);white-space:nowrap}
+  .asklab{margin:22px 0 8px;padding:22px;border:1px solid var(--acc);border-radius:16px;background:linear-gradient(180deg,var(--acc-tint2),var(--surface))}
+  .asklab .askhead h2{margin:0 0 4px;font-size:21px;color:var(--ink)}
+  .asklab .askhead p{margin:0 0 14px;color:var(--ink3);font-size:14px;max-width:760px}
+  .askrow{display:flex;gap:10px;flex-wrap:wrap}
+  .askrow input{flex:1;min-width:240px;padding:13px 15px;border:1px solid var(--ink5);border-radius:11px;font-size:15px;font-family:inherit;background:var(--surface);color:var(--ink)}
+  .askrow input:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-tint)}
+  .askrow button{padding:13px 22px;border:none;border-radius:11px;background:var(--acc);color:#fff;font-weight:600;font-size:15px;cursor:pointer}
+  .askrow button:hover{background:var(--acc-hover)}
+  .askchips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .askchips button{padding:7px 12px;border:1px solid var(--line,#e3e6e6);border-radius:999px;background:var(--surface);color:var(--ink2);font-size:12.5px;cursor:pointer;font-family:inherit}
+  .askchips button:hover{border-color:var(--acc);color:var(--acc)}
+  .askout{margin-top:16px}
+  .anscard{border:1px solid var(--line,#e3e6e6);border-left:4px solid var(--acc);border-radius:12px;padding:16px 18px;background:var(--surface);margin-bottom:12px}
+  .anscard .grade{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 9px;border-radius:6px;margin-bottom:9px}
+  .grade-Supported{background:#eef4f3;color:#0f7a74}.grade-Caveated{background:#fdfaf2;color:#9a6a07}
+  .grade-Null{background:#f1f1f3;color:#5b6168}.grade-Exploratory{background:#eef2fb;color:#3b5b9a}
+  .anscard h3{margin:0 0 7px;font-size:16px;color:var(--ink)}
+  .anscard p{margin:0 0 10px;color:var(--ink2);font-size:14.5px;line-height:1.55}
+  .anscard .ev{font-size:13px;font-weight:600;color:var(--acc);cursor:pointer;background:none;border:none;padding:0;font-family:inherit}
+  .ansmeta{font-size:12.5px;color:var(--ink4);font-family:var(--mono);margin:2px 0 12px}
+  .askcta{border:1px dashed var(--acc);border-radius:12px;padding:16px 18px;background:var(--acc-tint2)}
+  .askcta h3{margin:0 0 6px;font-size:15px;color:var(--ink)}
+  .askcta p{margin:0 0 12px;color:var(--ink2);font-size:14px}
+  .askcta a{display:inline-block;padding:10px 18px;border-radius:10px;background:var(--acc);color:#fff;text-decoration:none;font-weight:600;font-size:14px}
+  .lanes{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+  .lane{border:1px solid var(--line,#e3e6e6);border-radius:14px;padding:16px;background:var(--surface)}
+  .lane .lt{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;color:var(--ink);margin-bottom:2px}
+  .lane .lt .ic{width:26px;height:26px;display:grid;place-items:center;border-radius:8px;background:var(--acc-tint);color:var(--acc);font-size:14px}
+  .lane .lb{font-size:12.5px;color:var(--ink4);margin-bottom:12px}
+  .lentry{border-top:1px solid var(--subtle);padding-top:11px;margin-top:11px}
+  .lentry .lw{font-size:11.5px;font-family:var(--mono);color:var(--ink4);text-transform:uppercase;letter-spacing:.03em}
+  .lentry h4{margin:2px 0 5px;font-size:14.5px;color:var(--ink)}
+  .lentry .lr{font-size:13px;color:var(--ink2);line-height:1.5}
+  .lentry .lr b{color:var(--ink)}
+  .lentry .ev{font-size:12.5px;font-weight:600;color:var(--acc);cursor:pointer;background:none;border:none;padding:4px 0 0;font-family:inherit}
+  .contribute{margin-top:14px;border:1px solid var(--acc);border-radius:14px;padding:18px 20px;background:var(--acc-tint2);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+  .contribute div h3{margin:0 0 4px;font-size:16px;color:var(--ink)}
+  .contribute div p{margin:0;font-size:13.5px;color:var(--ink3);max-width:560px}
+  .contribute a{padding:12px 22px;border-radius:11px;background:var(--acc);color:#fff;text-decoration:none;font-weight:600;font-size:14.5px;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -584,8 +588,6 @@
   </div>
   <nav class="tabs">
     <button data-v="overview" class="active">Start here</button>
-    <a href="evidence-pipeline-map.html">Pipeline Map</a>
-    <button data-v="videos">Videos</button>
     <button data-v="questions">Questions</button>
     <button data-v="findings">Findings</button>
     <button data-v="models">Models</button>
@@ -593,6 +595,7 @@
     <button data-v="ledger">Ledger</button>
     <button data-v="data">Data &amp; reproduce</button>
     <button data-v="glossary">Glossary</button>
+    <a href="https://jdinneen.github.io/monterey-bay-today/" target="_blank">Monterey Bay Today ↗</a>
   </nav>
 </header>
 
@@ -602,36 +605,23 @@
   <!-- ===== START HERE ===== -->
   <section class="view" id="overview">
     <div class="hero">
-      <div class="eyebrow">Monterey Bay AI Lab</div>
-      <h1 class="page">Can AI tell you which days the coast is unsafe?</h1>
-      <p class="lede">Beaches too dirty to swim. Shellfish too toxic to eat. Water too low on oxygen. Lakes choked with algae. This is the lab's honest scorecard for forecasting those rare days. We test whether machine-learning models — fed weather, river, and ocean data — actually beat the simplest possible guess: <i>"today will look a lot like yesterday."</i> Usually they don't, so we keep the dead ends on the record right beside the wins — and show the data behind every claim. Pick a thread below.</p>
-      <div class="heroactions" aria-label="Primary orientation links">
-        <a class="herocta primary" href="evidence-pipeline-map.html">Open the pipeline map</a>
-        <a class="herocta" href="#videos">Watch videos</a>
-        <a class="herocta" href="#questions">Browse research questions</a>
-      </div>
+      <div class="eyebrow">Monterey Bay AI Lab · Mission Control</div>
+      <h1 class="page">A statewide beach-safety forecast — <span class="hl">AUC 0.868</span>, deployable in <span class="hl">8 of 9</span> California counties.</h1>
+      <p class="lede">That's the lab's strongest result, and the lab culture takes 18–24 hours — this scores the risk same-day. The rest of this site is the honest scorecard behind it: we test whether ML models — fed weather, river, and ocean data — actually beat the simplest guess, <i>"today will look a lot like yesterday."</i> Usually they don't, so the dead ends stay on the record beside the wins. <b>Ask the lab a question below</b> — if we've answered it, you get the audited result; if not, hand us the datasets and we'll run it.</p>
     </div>
 
-    <section class="pipelinefeature" aria-label="Full-stack evidence pipeline map">
-      <div class="pipelinecopy">
-        <div class="tag">Full-stack map · scientist and student orientation</div>
-        <h2>See how the lab turns questions into checked evidence.</h2>
-        <p>The pipeline map is the fastest way to understand what MBAL has: research questions, public data, lakehouse tables, feature panels, model engines, evaluation gates, critic passes, ledgers, reports, and stop paths in one evidence trail.</p>
-        <div class="pipelinepoints" aria-label="Pipeline map entry points">
-          <span><b>For scientists</b>Trace each claim back to the target, baseline, holdout, and published evidence.</span>
-          <span><b>For AI/data students</b>Follow raw observations through features, models, null checks, and reproducible reports.</span>
-          <span><b>For collaborators</b>Spot useful gaps: missing data, blocked targets, weak baselines, or next validation work.</span>
-          <span><b>For reviewers</b>See why a model, chart, or embedding is not a claim until it survives the gates.</span>
-        </div>
-        <div class="pipelineactions">
-          <a class="primary" href="evidence-pipeline-map.html">Open full map</a>
-          <a href="evidence-pipeline-map.svg">SVG</a>
-          <a href="#data">Data trail</a>
-        </div>
+    <!-- ask the lab: curated instant answers + grounded assistant + research request -->
+    <section class="asklab" id="asklab">
+      <div class="askhead">
+        <h2>Ask the lab</h2>
+        <p>Real questions, honest answers. We match your question to our audited findings instantly. Open-ended questions go to a search assistant grounded only in the published data — and anything we haven't run yet, you can hand us as a research request.</p>
       </div>
-      <a class="pipelinepreview" href="evidence-pipeline-map.html" aria-label="Open the full MBAL stable evidence pipeline map">
-        <img src="evidence-pipeline-map.svg" alt="Preview of the MBAL full-stack evidence pipeline map.">
-      </a>
+      <div class="askrow">
+        <input id="askq" type="text" placeholder="e.g. Does rainfall predict beach bacteria?" autocomplete="off" onkeydown="if(event.key==='Enter')askLab()" />
+        <button id="askbtn" onclick="askLab()">Ask</button>
+      </div>
+      <div class="askchips" id="askchips"></div>
+      <div class="askout" id="askout"></div>
     </section>
 
     <section class="featurevideo" aria-label="Featured lakehouse explainer video">
@@ -649,11 +639,11 @@
       <div class="featuremedia">
         <video controls preload="metadata" playsinline poster="videos/lakehouse_pipeline_8th_grade_poster.jpg" aria-label="Narrated eighth-grade explainer video about the MBAL lakehouse pipeline">
           <source src="videos/lakehouse_pipeline_8th_grade_narrated.mp4" type="video/mp4">
-          <track src="videos/lakehouse_pipeline_8th_grade_captions.vtt" kind="captions" srclang="en" label="English captions" default>
+          <track src="videos/lakehouse_pipeline_8th_grade_captions.srt" kind="captions" srclang="en" label="English captions" default>
           <a href="videos/lakehouse_pipeline_8th_grade_narrated.mp4">Open the lakehouse pipeline explainer video.</a>
         </video>
         <div class="featurebar">
-          <span>5:12 classroom explainer</span>
+          <span>2:20 classroom explainer</span>
           <div class="featurelinks">
             <a href="lakehouse-pipeline-video.html">Share page</a>
             <a href="videos/lakehouse_pipeline_8th_grade_narrated.mp4">MP4</a>
@@ -704,6 +694,15 @@
     <div class="secband"><h2>Kept on the record</h2><p>Tested fairly, didn't hold. Knowing this saves the next experiment.</p></div>
     <div class="minigrid" id="nulllist"></div>
 
+    <!-- open frontiers: the invitation -->
+    <div class="secband"><h2>Open frontiers — help us crack these</h2><p>The levers we think are still live. If you have data, an idea, or an approach for one of these, that's exactly what the lab wants.</p></div>
+    <div class="minigrid" id="frontierlist"></div>
+
+    <!-- leaderboard: curated hall-of-fame, three contribution lanes -->
+    <div class="secband"><h2>Leaderboard</h2><p>Editor's picks. Three ways to contribute — the best ones get published with the approach that actually worked.</p></div>
+    <div class="lanes" id="leaderboard"></div>
+    <div class="contribute" id="contribute"></div>
+
     <!-- how to read primer -->
     <details class="primer">
       <summary>How to read this site</summary>
@@ -736,86 +735,11 @@
     <div class="statstrip" id="statstrip"></div>
   </section>
 
-  <!-- ===== VIDEOS ===== -->
-  <section class="view" id="videos">
-    <div class="videohub" aria-label="Mission Control explainer video library">
-      <div class="videohubcopy">
-        <div class="tag">Video library · classroom explainers · critic-scoped claims</div>
-        <h1>Start with the story, then inspect the evidence.</h1>
-        <p>These short narrated videos explain the lab's evidence pipeline and the most shareable findings in plain language. Each video keeps the scientific caveats visible: what worked, what failed, and what still needs stronger proof.</p>
-        <div class="videohubstats" aria-label="Video library summary">
-          <span><b>3</b>published explainers</span>
-          <span><b>8th</b>grade-friendly framing</span>
-          <span><b>0</b>universal-hazard claims</span>
-        </div>
-      </div>
-      <article class="videofeature" aria-label="Featured interlingua audit explainer">
-        <a href="interlingua-audit-video.html">
-          <img src="videos/interlingua_audit_8th_grade_poster.jpg" alt="Interlingua audit explainer poster.">
-        </a>
-        <div class="videofeaturebody">
-          <div class="tag">Newest · interlingua audit · 2:27 · captions</div>
-          <h2>Can one ocean AI language travel from coast to coast?</h2>
-          <p>Plain-English audit verdict: real cold-start FIB ranking, strong limits, and no universal ocean-hazard representation.</p>
-          <div class="videofeaturelinks">
-            <a href="interlingua-audit-video.html">Open share page</a>
-            <a class="secondary" href="videos/interlingua_audit_8th_grade.mp4">MP4</a>
-            <a class="secondary" href="videos/interlingua_audit_8th_grade.vtt">Captions</a>
-          </div>
-        </div>
-      </article>
-    </div>
-
-    <div class="secband"><h2>All explainers</h2><p>Built for sharing with students, collaborators, and reviewers before they dive into the full ledger.</p></div>
-    <div class="videogrid" aria-label="All Mission Control videos">
-      <article class="vcard">
-        <a href="interlingua-audit-video.html"><img src="videos/interlingua_audit_8th_grade_poster.jpg" alt="Interlingua audit explainer poster."></a>
-        <div class="vbody">
-          <div class="tag">Interlingua audit · 2:27</div>
-          <h3>Can one ocean AI language travel from coast to coast?</h3>
-          <p>The cross-region FIB transfer claim survives only as a narrow cold-start bacteria ranker, not as a universal ocean brain.</p>
-          <div class="vlinks">
-            <a class="primary" href="interlingua-audit-video.html">Share page</a>
-            <a href="videos/interlingua_audit_8th_grade.mp4">MP4</a>
-          </div>
-        </div>
-      </article>
-      <article class="vcard">
-        <a href="lakehouse-pipeline-video.html"><img src="videos/lakehouse_pipeline_8th_grade_poster.jpg" alt="Lakehouse pipeline explainer poster."></a>
-        <div class="vbody">
-          <div class="tag">Pipeline explainer · 5:12</div>
-          <h3>How the data machine turns messy public data into checked evidence.</h3>
-          <p>A guided tour from raw public records through Bronze, Silver, Gold, model engines, evidence gates, and claim cards.</p>
-          <div class="vlinks">
-            <a class="primary" href="lakehouse-pipeline-video.html">Share page</a>
-            <a href="videos/lakehouse_pipeline_8th_grade_narrated.mp4">MP4</a>
-          </div>
-        </div>
-      </article>
-      <article class="vcard">
-        <a href="clean-to-dirty-tensor-video.html"><img src="videos/clean_to_dirty_tensor_8th_grade_poster.jpg" alt="Clean-to-dirty tensor explainer poster."></a>
-        <div class="vbody">
-          <div class="tag">Finding explainer · 1:54</div>
-          <h3>Why physics-pi plus tensor context improves surprise bacteria spike warning.</h3>
-          <p>The clean-to-dirty story, with the audit caveat that tensor context is a scoped finding rather than a broad ocean shortcut.</p>
-          <div class="vlinks">
-            <a class="primary" href="clean-to-dirty-tensor-video.html">Share page</a>
-            <a href="videos/clean_to_dirty_tensor_8th_grade_narrated.mp4">MP4</a>
-          </div>
-        </div>
-      </article>
-    </div>
-  </section>
-
   <!-- ===== FINDINGS ===== -->
   <section class="view" id="findings">
     <div style="margin-bottom:18px">
       <h1 class="sec">Findings</h1>
-      <p class="subhead">Strongest current bacteria results first. These are not 100% certain truths; they are the strongest evidence-backed claims in the frozen ledger right now. A finding means the model beat a real baseline on held-out data, with the caveats shown on the card and in the linked report.</p>
-      <div class="card" style="padding:16px 18px;margin-top:14px">
-        <p style="margin:0 0 8px;color:var(--ink2)"><b>How to read the three Featured findings:</b> the first says the bacteria nowcast ranks risky beach-days better than station memory; the second says it is especially useful for catching beaches that were clean and then flip dirty; the third says the frozen model still beat station memory on the January 5 to March 5, 2026 held-from-fitting season.</p>
-        <p style="margin:0;color:var(--ink5)">AP lift means better ranking of true exceedances near the top of the list, not perfect prediction. Held-out means the evaluated rows were separated from fitting/calibration. Gated means useful evidence exists, but a final prospective lockbox or deployment condition is still unresolved.</p>
-      </div>
+      <p class="subhead">Strongest results first. Each card says — in plain words — what we asked, what we found, and how sure we are. Click for the technical read and, where the evidence has it, a confusion matrix.</p>
     </div>
     <div class="filterbar" id="filterbar"></div>
     <div class="fgrid" id="fgrid"></div>
@@ -857,16 +781,8 @@
       <ol>
         <li>Every download carries a <code>sha256</code> fingerprint. Recompute it (<code>shasum -a 256 &lt;file&gt;</code>) and confirm it matches the value shown — that proves the file is exactly the published snapshot, unchanged.</li>
         <li>Findings, models, and map layers are all exported from the same <code>data.json</code>, so any claim on this site traces back to the evidence behind it rather than a hand-written summary.</li>
-        <li>The source is licensed Apache-2.0 — the repository is linked in the footer below.</li>
+        <li>Findings, models, and map layers are all exported from the same <code>data.json</code> snapshot, so every claim on this site traces back to its evidence.</li>
       </ol>
-    </div>
-    <div class="card reprocard pipeline-repro">
-      <h3>Evidence pipeline map</h3>
-      <p>The full-stack map shows how questions, datasets, lakehouse tables, model engines, evaluation gates, ledgers, reports, decision surfaces, and stop paths connect inside this snapshot.</p>
-      <div class="heroactions">
-        <a class="herocta primary" href="evidence-pipeline-map.html">Open map</a>
-        <a class="herocta" href="evidence-pipeline-map.svg">SVG</a>
-      </div>
     </div>
     <div class="secband"><h2>Datasets behind this snapshot</h2><p>Production (governed) vs experimental (shadow). Click any row for size, source, and recency.</p></div>
     <div class="lhlists">
@@ -947,7 +863,7 @@
       <h1 class="sec">Glossary</h1>
       <p class="subhead">This lab is careful about words. An untrained XGBoost or neural net is a <b>learner</b>, not a model — it only becomes a <b>trained model</b> once it's fitted, evaluated, and registered. A <b>baseline</b> is an honest comparator, not a discovery; a <b>signal</b> carries verdicts (KEEP / WASH / REJECT) per target. Each term below links to its real examples from the registry and signal catalog.</p>
     </div>
-    <div class="vocabsections" id="vocabgrid"></div>
+    <div class="vocabgrid" id="vocabgrid"></div>
   </section>
 </main>
 
@@ -958,8 +874,8 @@
       <p class="footnote">A public science snapshot from the Monterey Bay AI Lab. Every result is graded honestly — <b>Supported</b> held up under audit, <b>Caveated</b> is real but limited, <b>Null</b> was tested and didn't hold — and nulls stay on the record beside the wins. The map shows observation coverage, never an extrapolated prediction surface. Downloads and reproduction live under <a href="#data">Data &amp; reproduce</a>.</p>
     </div>
     <div class="footcol">
-      <div class="eyebrow" style="margin-bottom:8px">Open source</div>
-      <p class="footnote">Licensed Apache-2.0. The site is a single static page rendered from one frozen <code style="font-family:var(--mono);font-size:12px">data.json</code>, so findings, models, and the map can't drift apart.</p>
+      <div class="eyebrow" style="margin-bottom:8px">About the data</div>
+      <p class="footnote">This site is a single static page rendered from one frozen <code style="font-family:var(--mono);font-size:12px">data.json</code>, so findings, models, and the map can't drift apart.</p>
       <p class="footnote" id="footstamp"></p>
     </div>
   </div>
@@ -969,19 +885,18 @@
 
 <script>
 let DATA=null, EVID={}, PROJECT_DOCS=[], TAB='overview', FFILTER='featured', FFAM='all', OPENF=null, DETAIL=null;
+let ANSWERED=null, LEADERBOARD=null;
+/* ---- Ask the lab config ----
+   PROXY_URL: paste your deployed Cloudflare Worker URL to turn on the grounded search assistant
+              for open-ended questions (see README — `wrangler deploy`). Empty = curated answers only.
+   FORM_URL : paste your Google Form's pre-filled-link base to route research requests / suggestions /
+              contributions there. Empty = falls back to a pre-composed email to CONTACT_EMAIL. */
+const PROXY_URL = "https://mbal-search-957730565502.us-central1.run.app";
+const FORM_URL = "";
+const CONTACT_EMAIL = "jon.dinneen@gmail.com";
 let LEDGER_TYPE='all', LEDGER_STATUS='all', LEDGER_TOPIC='all', LEDGER_SORT='signal', LEDGER_QUERY='', LEDGER_ROWS=null;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"'`]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[c]));
-const FEATURED_FINDING_IDS=[
-  'claim_bacteria_station_memory_supported',
-  'claim_clean_to_dirty_onset',
-  'claim_forward_2026_holdout_pass'
-];
-const FEATURED_FINDING_REPORTS={
-  claim_bacteria_station_memory_supported:'reports/bacteria-station-memory/',
-  claim_clean_to_dirty_onset:'reports/clean-to-dirty-onset/',
-  claim_forward_2026_holdout_pass:'reports/forward-2026-holdout/'
-};
 const fmt=n=>n==null?'—':Number(n).toLocaleString();
 const pct=v=>v==null?'—':(100*v).toFixed(1)+'%';
 const mb=n=>n==null?'—':(n>=1024?(n/1024).toFixed(2)+' GB':Number(n).toFixed(1)+' MB');
@@ -1111,7 +1026,7 @@ function appendHelpAll(selector,helps){
 function applyStaticHelp(){
   appendHelp('#snaplabel','Published snapshot means a frozen public copy of the current evidence, not a live private workspace.');
   appendHelp('#snapwhen','This is the month and year when the public snapshot was built.');
-  appendHelpAll('nav.tabs button',['Overview is the summary page.','Videos are shareable plain-language explainers.','Questions are research areas and hazards the lab has worked on.','Findings are tested science results.','Models are fitted systems and baselines in the registry.','Map shows data and model evidence by place.','Ledger is the full searchable audit trail.','Data and reproduce is the organized data inventory and downloads.','Glossary explains the lab words.']);
+  appendHelpAll('nav.tabs button',['Overview is the summary page.','Questions are research areas and hazards the lab has worked on.','Findings are tested science results.','Models are fitted systems and baselines in the registry.','Map shows data and model evidence by place.','Ledger is the full searchable audit trail.','Data and reproduce is the organized data inventory and downloads.','Glossary explains the lab words.']);
   appendHelp('#overview .eyebrow','This page starts with the big picture before showing the evidence cards and datasets.');
   appendHelp('#overview .page','A unified model means one project trying to connect many coastal signals: water, weather, runoff, tides, waves, biology, and observations.');
   appendHelp('#overview .lede','This paragraph is the plain-language mission: show wins, limits, and failures with evidence attached.');
@@ -1182,12 +1097,12 @@ const TARGET_FAMILIES=[
 ];
 // Curated, by-hand finding->question links (accurate is the point; a wrong link is worse than none).
 const TARGET_FINDINGS={
-  bacteria_exceedance:['claim_bacteria_station_memory_supported','claim_clean_to_dirty_onset','claim_bacteria_decision_rule','claim_forward_2026_holdout_pass','claim_bacteria_honest_forecast_horizon','claim_adaptive_sampling_pilot','claim_catboost_champion_record_dont_ship','claim_lightgbm_catboost_paired_boosts','claim_wet_tail_driver_skill','claim_russian_river_advection_escape','claim_cache_slough_upstream_escape','claim_soil_moisture_gate_positive','claim_carte_numeric_shared_plane_benchmark','claim_new_source_signal_gate_keeps','claim_findings_campaign_targeted_l2_keeps','status_tide_range_data_gap','status_bacteria_breakthrough_lockbox','null_findings_campaign_dry_onset_interaction','null_findings_campaign_dry_onset_symbolic','null_estate_gpu_signal_search'],
+  bacteria_exceedance:['claim_bacteria_station_memory_supported','claim_clean_to_dirty_onset','claim_bacteria_decision_rule','claim_forward_2026_holdout_pass','claim_bacteria_honest_forecast_horizon','claim_adaptive_sampling_pilot','claim_catboost_champion_record_dont_ship','claim_lightgbm_catboost_paired_boosts','claim_wet_tail_driver_skill','claim_russian_river_advection_escape','claim_cache_slough_upstream_escape','claim_soil_moisture_gate_positive','claim_carte_numeric_shared_plane_benchmark','claim_new_source_signal_gate_keeps','claim_findings_campaign_targeted_l2_keeps','status_tide_range_data_gap','status_bacteria_breakthrough_lockbox','claim_pi_zero_shot_ranking_screen','claim_pi_memory_hybrid_ranking_candidate','caveat_pi_calibration_deployment_gate_failed','null_findings_campaign_dry_onset_interaction','null_findings_campaign_dry_onset_symbolic','null_estate_gpu_signal_search'],
   ddpcr_culture_safe:['null_ddpcr_target_redefinition_artifact'],
-  domoic_acid:['claim_hab_exceed_strict_critic','claim_da_toxic_onset_ci_separated'],
-  cyano_onset:['claim_cyano_onset_latitude_law_scoped','claim_mcye_alberta_definitive_replication','claim_mcye_national_replication','null_national_microcystin_driver','null_erie_loading_driver_break'],
-  hypoxia_lead:['claim_gulf_hypoxia_flag','claim_hypoxia_gru_sequence_positive','claim_hypoxia_onset_forecast','claim_tokyo_shadow_lakehouse_positives','claim_tokyo_gpu_bottom_chl_positive'],
-  renewal_onset:['null_sog_central_relief_onset_underpowered'],
+  domoic_acid:['claim_hab_exceed_strict_critic','claim_da_toxic_onset_ci_separated','claim_hab_external_proxy_support','null_charm_10x_broken_baseline'],
+  cyano_onset:['claim_cyano_onset_latitude_law_scoped','claim_mcye_alberta_definitive_replication','claim_mcye_national_replication','caveat_cyano_watchlist_lockbox_open','caveat_karenia_watchlist_lockbox_open','null_fresh_karenia_discovery_washed','null_national_microcystin_driver','null_erie_loading_driver_break'],
+  hypoxia_lead:['claim_gulf_hypoxia_flag','claim_hypoxia_gru_sequence_positive','claim_hypoxia_onset_forecast','claim_wqp_oxygen_stress_screening','claim_tokyo_shadow_lakehouse_positives','claim_tokyo_gpu_bottom_chl_positive'],
+  renewal_onset:['claim_sigma_m_tensor_gapfill_qa','null_tensor_pi_state_qa_only','null_sog_central_relief_onset_underpowered'],
   cross_country_transfer:['null_interlingua_eu_resolution_boundary'],
   interlingua:['null_interlingua_cyano_daily_refutation','null_interlingua_eu_resolution_boundary'],
   tsunami_halfduration_screen:['claim_tsunami_halfduration_warning_screen'],
@@ -1214,7 +1129,7 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';
 function resetRouteScroll(){window.scrollTo(0,0);setTimeout(()=>window.scrollTo(0,0),80);setTimeout(()=>window.scrollTo(0,0),220);}
 function showView(v){
   v=VIEW_ALIAS[v]||v;
-  if(!['overview','videos','questions','findings','models','map','ledger','data','glossary'].includes(v))v='overview';
+  if(!['overview','questions','findings','models','map','ledger','data','glossary'].includes(v))v='overview';
   TAB=v; if(DETAIL){DETAIL=null;renderDrawer();}
   document.querySelectorAll('nav.tabs button').forEach(b=>{const on=b.dataset.v===v;b.classList.toggle('active',on);if(on&&b.scrollIntoView)try{b.scrollIntoView({inline:'center',block:'nearest'});}catch(e){}});
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id===v));
@@ -1234,10 +1149,14 @@ async function load(){
     DATA=snap.state; EVID=snap.evidence||{}; PROJECT_DOCS=snap.project_docs||[];
     DATA._built_pacific=snap.built_pacific; DATA._built_iso=snap.built_iso;
     LEDGER_ROWS=null;
+    try{const[aj,lj]=await Promise.all([
+      fetch('answered.json',{cache:'no-cache'}).then(r=>r.json()).catch(()=>null),
+      fetch('leaderboard.json',{cache:'no-cache'}).then(r=>r.json()).catch(()=>null)]);
+      ANSWERED=aj; LEADERBOARD=lj;}catch(e){}
     buildFindingFamily();
     $('#loading').style.display='none';
     renderHeader(); renderOverview(); renderDownloads();
-    const fs=$('#footstamp'); if(fs)fs.textContent='Snapshot built '+(DATA._built_pacific||'')+'. Licensed Apache-2.0.';
+    const fs=$('#footstamp'); if(fs)fs.textContent='Snapshot built '+(DATA._built_pacific||'')+'';
     showView(location.hash.slice(1)||'overview');
   }catch(e){ $('#loading').textContent='⚠ failed to load data.json — '+e; }
 }
@@ -1320,6 +1239,118 @@ function renderBacteriaStory(){
     <p class="mapnote" style="margin-top:12px">The useful reframe is clean-to-dirty onset: among currently-clean beach-days, the model is ${esc(onsetLift)} over station memory on AP in the saved retrospective gate. The prospective post-freeze lockbox is still the honest next proof.</p>
   </section>`;
 }
+/* ================= Ask the lab ================= */
+function askAction(a){
+  if(!a)return; const i=a.indexOf(':'); if(i<0){go(a);return;}
+  const k=a.slice(0,i), v=a.slice(i+1);
+  if(k==='target'&&typeof openTarget==='function')openTarget(v);
+  else if(k==='finding'&&typeof openFinding==='function')openFinding(v);
+  else if(k==='view')go(v);
+  else if(k==='url')window.open(v,'_blank','noopener');
+}
+function requestRunHref(q){
+  const qq=(q||'').trim();
+  if(FORM_URL)return FORM_URL+(FORM_URL.indexOf('?')>=0?'&':'?')+'entry.QUESTION='+encodeURIComponent(qq);
+  const subj=encodeURIComponent('Research request: '+(qq.slice(0,80)||'a question for the lab'));
+  const body=encodeURIComponent((qq?('My question: '+qq+'\n\n'):'')+'If you can, name which of the lab\'s datasets you think apply, and which baseline it should beat.\n\n— sent from Mission Control');
+  return 'mailto:'+CONTACT_EMAIL+'?subject='+subj+'&body='+body;
+}
+function matchAnswered(q){
+  const items=(ANSWERED&&ANSWERED.items)||[]; if(!items.length)return [];
+  const toks=q.toLowerCase().replace(/[^a-z0-9 ]/g,' ').split(/\s+/).filter(w=>w.length>2);
+  if(!toks.length)return [];
+  const scored=items.map(it=>{
+    const hay=(it.q+' '+(it.alt||[]).join(' ')+' '+(it.tags||[]).join(' ')+' '+it.a).toLowerCase();
+    const alt=((it.alt||[]).join(' ')+' '+(it.tags||[]).join(' ')).toLowerCase();
+    let s=0; toks.forEach(t=>{if(hay.indexOf(t)>=0)s+=1; if(alt.indexOf(t)>=0)s+=1;});
+    return {item:it,score:s};
+  }).filter(x=>x.score>=2).sort((a,b)=>b.score-a.score);
+  return scored;
+}
+function renderAnswerCard(it){
+  const g=it.grade||'';
+  return `<div class="anscard"><span class="grade grade-${esc(g)}">${esc(g)}</span>`+
+    `<h3>${esc(it.q)}</h3><p>${esc(it.a)}</p>`+
+    (it.evidence?`<button class="ev" onclick="askAction('${esc(it.action||'')}')">${esc(it.evidence)} →</button>`:'')+`</div>`;
+}
+function renderWorkerCard(w){
+  const txt=esc(w.answer).replace(/\n/g,'<br>').replace(/(Bottom line:|Evidence:|Caveat:)/g,'<b>$1</b>');
+  return `<div class="anscard"><span class="grade grade-Caveated">assistant · grounded in published data</span>`+
+    `<p>${txt}</p><div class="ansmeta">Generated by the search assistant from this snapshot only — check it against the linked findings.</div></div>`;
+}
+function renderRequestCTA(q,secondary){
+  const href=requestRunHref(q);
+  if(secondary)return `<div class="ansmeta" style="margin-top:10px">Not what you needed? <a class="ev" href="${href}">Ask us to run this as a research request →</a></div>`;
+  return `<div class="askcta"><h3>We haven't run this one yet.</h3><p>Want us to? Send it as a research request — tell us which of our datasets you think apply and which baseline it should beat. If we can run it on the lab's hardware, we will, and the answer joins this page.</p><a href="${href}">Send a research request →</a></div>`;
+}
+function buildAskContext(){
+  if(!DATA)return '';
+  const L=[];
+  L.push('# FINDINGS (audited results)');
+  (DATA.findings||[]).forEach(f=>L.push(`- [${f.kind||''}] ${f.title||''}: ${String(f.plain||f.headline||'').slice(0,420)}`));
+  L.push('\n# RESEARCH QUESTIONS (targets)');
+  (DATA.targets||[]).forEach(t=>L.push(`- (${t.status||''}) ${t.id||''}: ${String(t.plain||'').slice(0,320)}`));
+  try{L.push('\n# SIGNAL VERDICTS');(DATA.signals||[]).slice(0,90).forEach(s=>L.push(`- ${s.name||s.id||''} for ${s.target||''}: ${s.verdict||''}`));}catch(e){}
+  let ctx=L.join('\n'); if(ctx.length>52000)ctx=ctx.slice(0,52000); return ctx;
+}
+async function callWorker(q){
+  const r=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({question:q,context:buildAskContext(),mode:'science'})});
+  return await r.json();
+}
+async function askLab(){
+  const inp=$('#askq'), out=$('#askout'); if(!inp||!out)return;
+  const q=(inp.value||'').trim();
+  if(q.length<4){out.innerHTML='<div class="ansmeta">Type a question — try one of the suggestions above.</div>';return;}
+  out.innerHTML='<div class="ansmeta">Searching the audited record…</div>';
+  const matches=matchAnswered(q);
+  let html='', usedWorker=false;
+  if(PROXY_URL){
+    try{const w=await callWorker(q); if(w&&w.answer){html+=renderWorkerCard(w);usedWorker=true;}}catch(e){}
+  }
+  if(matches.length){
+    if(usedWorker)html+='<div class="ansmeta">From the audited record:</div>';
+    html+=matches.slice(0,3).map(m=>renderAnswerCard(m.item)).join('');
+  }
+  if(!html){html=renderRequestCTA(q);} else {html+=renderRequestCTA(q,true);}
+  out.innerHTML=html;
+}
+function renderAsk(){
+  const chips=$('#askchips'); if(!chips)return;
+  const items=((ANSWERED&&ANSWERED.items)||[]).slice(0,5);
+  chips.innerHTML=items.map((it,i)=>`<button data-i="${i}">${esc(it.q)}</button>`).join('');
+  chips.querySelectorAll('button').forEach((b,i)=>{b.onclick=()=>{$('#askq').value=items[i].q;askLab();};});
+}
+function renderFrontiers(){
+  const el=$('#frontierlist'); if(!el)return;
+  const F=[
+    {title:'Dry-weather onset',why:'About 59% of missed exceedances are dry-day surprise onsets with no rain to lean on. The clean-to-dirty reframe cracked the wet ones; the dry ones are the open frontier.',needs:'sewage / outfall / spill-event feeds',action:'view:questions'},
+    {title:'A cleaner toxin label',why:'Culture and ddPCR disagree ~48% at the official cutoffs — which target best predicts actual health risk is wide open.',needs:'paired molecular (ddPCR / qPCR) label sets',action:'target:ddpcr_culture_safe'},
+    {title:'Credentialed currents & density',why:'Keyless physics rides already-washed rainfall. A genuinely new axis needs real ocean fields, not proxies.',needs:'FES tides, CMEMS currents/density, gauge access',action:'view:questions'},
+    {title:'In-situ turbidity',why:'Satellite ocean-color — the field\'s #2 named FIB predictor — washes out. In-water turbidity is the one lever left on that axis.',needs:'in-situ turbidity sensor series',action:'view:findings'}
+  ];
+  el.innerHTML=F.map(f=>`<div class="card" style="cursor:pointer" onclick="askAction('${f.action}')">`+
+    `<div class="tag" style="color:#9a6a07"><i style="background:#c9a23a"></i>Open frontier</div>`+
+    `<h3 style="margin:6px 0;font-size:15px">${esc(f.title)}</h3>`+
+    `<p style="font-size:13.5px;color:var(--ink2);line-height:1.5">${esc(f.why)}</p>`+
+    `<p style="font-size:12.5px;color:var(--ink4);margin-top:8px"><b>Needs:</b> ${esc(f.needs)}</p></div>`).join('');
+}
+function renderLeaderboard(){
+  const el=$('#leaderboard'); if(!el)return;
+  const lanes=(LEADERBOARD&&LEADERBOARD.lanes)||[];
+  el.innerHTML=lanes.map(lane=>`<div class="lane">`+
+    `<div class="lt"><span class="ic">${esc(lane.icon||'★')}</span>${esc(lane.title)}</div>`+
+    `<div class="lb">${esc(lane.blurb||'')}</div>`+
+    (lane.entries||[]).map(e=>`<div class="lentry"><div class="lw">${esc(e.who||'')}</div>`+
+      `<h4>${esc(e.title)}</h4>`+
+      `<div class="lr"><b>Approach:</b> ${esc(e.approach||'')}<br><b>Result:</b> ${esc(e.result||'')}</div>`+
+      (e.action?`<button class="ev" onclick="askAction('${esc(e.action)}')">See it →</button>`:'')+`</div>`).join('')+
+    `</div>`).join('');
+  const c=$('#contribute');
+  if(c)c.innerHTML=`<div><h3>Have a question, a suggestion, or something to contribute?</h3>`+
+    `<p>The best question we hadn't answered · the best thing we should try · the best data, code, or reproduction. Editor's picks get published with credit.</p></div>`+
+    `<a href="${requestRunHref('')}">Contribute →</a>`;
+}
 function renderOverview(){
   const s=DATA, c=s.counts||{};
   const fs=s.findings||[];
@@ -1331,10 +1362,10 @@ function renderOverview(){
   const tSup=ts.filter(t=>t.status==='Supported').length, tNull=ts.filter(t=>t.status==='Null').length;
   const bp=s._built_pacific||''; const mm=/^(\d{4})-(\d{2})/.exec(bp);
 
-  // two big cards: the law + the latest promoted non-bacteria wins when present.
+  // two big cards: the law + the latest scoped wins when present.
   const bac=targetById('bacteria_exceedance');
   const byId={}; fs.forEach(f=>byId[f.id]=f);
-  const latestWins=['claim_hab_exceed_strict_critic','claim_gulf_hypoxia_flag'].map(id=>byId[id]).filter(Boolean);
+  const latestWins=['claim_hab_exceed_strict_critic','status_tide_range_data_gap','claim_wqp_oxygen_stress_screening'].map(id=>byId[id]).filter(Boolean).filter(f=>findingStatus(f.kind)==='Supported');
   const lawCard=`<div class="card bigcard">
     <div class="tag" style="color:var(--ink3)"><i style="background:#b8bdc3"></i>The honest result</div>
     <h3>Most of the time: no.</h3>
@@ -1345,8 +1376,8 @@ function renderOverview(){
       <div><b>${tNull+nul}</b><span>dead ends kept on record</span></div>
     </div></div>`;
   const winCard=latestWins.length?`<div class="card bigcard" style="cursor:pointer" onclick="openFinding('${esc(latestWins[0].id)}')">
-    <div class="tag" style="color:#0f7a74"><i style="background:#0f8a84"></i>Latest promoted wins</div>
-    <h3>HAB exceedance and Gulf hypoxia now beat persistence.</h3>
+    <div class="tag" style="color:#0f7a74"><i style="background:#0f8a84"></i>Latest scoped wins</div>
+    <h3>Current wins are useful, narrow, and baseline-checked.</h3>
     <p>${latestWins.map(f=>esc(f.title+': '+(f.headline||''))).join('<br>')}</p>
     <div class="go" style="margin-top:13px;font-size:13px;font-weight:600;color:var(--acc)">Open the evidence →</div></div>`:(bac?`<div class="card bigcard" style="cursor:pointer" onclick="openTarget('bacteria_exceedance')">
     <div class="tag" style="color:#0f7a74"><i style="background:#0f8a84"></i>What works</div>
@@ -1359,6 +1390,7 @@ function renderOverview(){
   // escapes (drivers genuinely beat the baseline) + honest nulls
   $('#escapelist').innerHTML=['hypoxia_lead','renewal_onset','cross_country_transfer','cyano_onset'].map(targetMini).join('');
   $('#nulllist').innerHTML=['whale_mortality','sfbay_compound_flood','ddpcr_culture_safe'].map(targetMini).join('');
+  renderAsk(); renderFrontiers(); renderLeaderboard();
 
   // demoted snapshot/build status strip (gates live here now, not the headline)
   const ov=(s.overall_status||'UNKNOWN');
@@ -1380,39 +1412,32 @@ function renderOverview(){
 function findingsSorted(){
   const order={Supported:0,Caveated:1,Null:2};
   return (DATA.findings||[]).map((f,i)=>({f,i,st:findingStatus(f.kind)}))
-    .sort((a,b)=>(order[a.st]-order[b.st])|| (a.i-b.i));
+    .sort((a,b)=>(Number(!!b.f.featured)-Number(!!a.f.featured))||(order[a.st]-order[b.st])|| (a.i-b.i));
 }
 function renderFindings(){
   const all=findingsSorted();
   const cnt=st=>all.filter(x=>x.st===st).length;
-  const featuredIds=new Set(FEATURED_FINDING_IDS);
-  const featuredCount=all.filter(x=>featuredIds.has(x.f.id)).length;
-  const defs=[['featured','Featured',featuredCount],['all','All findings',all.length],['Supported','Supported',cnt('Supported')],['Caveated','Caveated',cnt('Caveated')],['Null','Null',cnt('Null')]];
+  const featCnt=all.filter(x=>x.f.featured).length;
+  const defs=[['featured','Featured',featCnt],['all','All',all.length],['Supported','Supported',cnt('Supported')],['Caveated','Caveated',cnt('Caveated')],['Null','Null',cnt('Null')]];
   const famOrder=[...TARGET_FAMILIES.map(F=>F.title),'Cross-cutting & methods'];
   const famPresent=famOrder.filter(fm=>all.some(x=>findingFamily(x.f.id).family===fm));
   const famCnt=fm=>all.filter(x=>findingFamily(x.f.id).family===fm).length;
-  const statusRow=`<span class="fl-label">Category</span>`+defs.map(([k,l,c])=>`<button class="fpill${FFILTER===k?' active':''}" data-k="${k}">${esc(l)}<span class="c">${c}</span></button>`).join('');
+  const statusRow=`<span class="fl-label">Grade</span>`+defs.map(([k,l,c])=>`<button class="fpill${FFILTER===k?' active':''}" data-k="${k}">${esc(l)}<span class="c">${c}</span></button>`).join('');
   const famRow=`<span class="fl-label">Topic</span>`+[['all','All topics',all.length],...famPresent.map(fm=>[fm,fm,famCnt(fm)])].map(([k,l,c])=>`<button class="fpill fam${FFAM===k?' active':''}" data-f="${esc(k)}">${esc(l)}<span class="c">${c}</span></button>`).join('');
-  const isFeatured=FFILTER==='featured';
-  $('#filterbar').innerHTML=`<div class="filterrow">${statusRow}</div>${isFeatured?'':`<div class="filterrow">${famRow}</div>`}`;
-  document.querySelectorAll('#filterbar .fpill:not(.fam)').forEach(b=>b.onclick=()=>{FFILTER=b.dataset.k;if(FFILTER==='featured'){FFAM='all';OPENF=null;}renderFindings();});
+  $('#filterbar').innerHTML=`<div class="filterrow">${statusRow}</div><div class="filterrow">${famRow}</div>`;
+  document.querySelectorAll('#filterbar .fpill:not(.fam)').forEach(b=>b.onclick=()=>{FFILTER=b.dataset.k;renderFindings();});
   document.querySelectorAll('#filterbar .fpill.fam').forEach(b=>b.onclick=()=>{FFAM=b.dataset.f;renderFindings();});
 
-  const list=isFeatured
-    ? all.filter(x=>featuredIds.has(x.f.id)).sort((a,b)=>FEATURED_FINDING_IDS.indexOf(a.f.id)-FEATURED_FINDING_IDS.indexOf(b.f.id))
-    : all.filter(x=>(FFILTER==='all'||x.st===FFILTER)&&(FFAM==='all'||findingFamily(x.f.id).family===FFAM));
+  const list=all.filter(x=>(FFILTER==='all'||(FFILTER==='featured'?x.f.featured:x.st===FFILTER))&&(FFAM==='all'||findingFamily(x.f.id).family===FFAM));
   $('#fgrid').innerHTML=list.map(({f,i,st})=>{
     const b=STATUS_BADGE[st], seg=STATUS_SEG[st], strength=STATUS_STRENGTH[st];
     const segs=[0,1,2].map(n=>`<i style="background:${n<strength?seg:'var(--border)'}"></i>`).join('');
     const met=pickMetric(f); const open=OPENF===i;
     const topic=findingFamily(f.id).family;
-    const href=isFeatured?FEATURED_FINDING_REPORTS[f.id]:null;
-    const tag=href?'a':'div';
-    const attrs=href?`href="${esc(href)}" target="_blank" rel="noopener"`:`data-i="${i}"`;
-    return `<${tag} class="fcard${open?' open':''}" ${attrs}>
+    return `<div class="fcard${f.featured?' featured':''}${open?' open':''}" data-i="${i}">
       <div class="toprow">
         <span class="topic">${esc(topic)}${helpQ(topicExplain(topic))}</span>
-        <span class="badge" style="background:${b.bg};color:${b.text}"><i style="background:${b.text}"></i>${st}${helpQ(statusExplain(st))}</span>
+        <span class="statuschips">${f.featured?`<span class="featurechip"><i></i>Featured${helpQ('Featured means this is one of the vetted supported wins selected for the first findings screen.')}</span>`:''}<span class="badge" style="background:${b.bg};color:${b.text}"><i style="background:${b.text}"></i>${st}${helpQ(statusExplain(st))}</span></span>
       </div>
       <h3>${esc(f.title)}${helpQ('This is the tested claim or result name. Click the card to see how it was checked.')}</h3>
       <p class="plain">${esc(f.plain||f.headline||'')}${helpQ(statementHelp(f.plain||f.headline||''))}</p>
@@ -1420,18 +1445,25 @@ function renderFindings(){
         <div><div class="minilbl">Evidence strength${helpQ(evidenceStrengthExplain(st))}</div><div class="segs">${segs}<em style="color:${b.text}">${STRENGTH_LABEL[strength]}${helpQ(evidenceStrengthExplain(st))}</em></div></div>
         <div class="metricbox"><div class="minilbl">${esc(met.label)}${helpQ(metricExplain(met.label,met.value))}</div><div class="mv">${esc(met.value)}${helpQ(metricExplain(met.label,met.value))}</div></div>
       </div>
-      <div class="ffoot"><span class="mean">${esc(STATUS_MEANING[st])}${helpQ(statusExplain(st))}</span><span class="cta">${href?'Open full report →':(open?'Hide details':'View details →')}${helpQ(href?'Open the full static report page for this current featured finding.':'Open the technical read, metrics, caveats, and raw evidence when available.')}</span></div>
+      <div class="ffoot"><span class="mean">${esc(STATUS_MEANING[st])}${helpQ(statusExplain(st))}</span><span class="cta">${open?'Hide details':'View details →'}${helpQ('Open the technical read, metrics, caveats, and raw evidence when available.')}</span></div>
       ${open?findingDetail(f):''}
-    </${tag}>`;
+    </div>`;
   }).join('') || '<div class="lhempty">No findings in this filter.</div>';
 
-  document.querySelectorAll('#fgrid .fcard[data-i]').forEach(card=>card.onclick=e=>{
+  document.querySelectorAll('#fgrid .fcard').forEach(card=>card.onclick=e=>{
     if(e.target.closest('.lnk')||e.target.closest('pre.ev')||e.target.closest('.helpq'))return;
     const i=+card.dataset.i; OPENF=(OPENF===i?null:i); renderFindings();
   });
 }
 function findingDetail(f){
   const m=f.metrics||{};
+  const sectionText=v=>esc(Array.isArray(v)?v.join('\n'):String(v||'')).replace(/\n/g,'<br>');
+  const detailSections=Array.isArray(f.sections)?f.sections.filter(s=>s&&s.title&&s.body).map(s=>`
+    <div class="dlabel" style="margin-top:14px">${esc(s.title)}</div>
+    <p class="tr">${sectionText(s.body)}</p>`).join(''):'';
+  const sources=Array.isArray(f.sources)&&f.sources.length?`
+    <div class="dlabel" style="margin-top:14px">Source files</div>
+    <p class="tr">${f.sources.map(s=>esc(s)).join('<br>')}</p>`:'';
   const domain=mapDomainFor((f.id||'')+' '+(f.title||'')+' '+(f.plain||'')+' '+(f.evidence||''));
   const spatial=domain?mapLink(domain,'grid'):`<p class="footnote" style="margin:12px 0 0;color:var(--ink5)">No honest public spatial layer for this finding yet.${helpQ('Some findings are about time series, licensed basins, or non-spatial tests. We only show maps when the snapshot has public location support.')}</p>`;
   let cm='';
@@ -1448,15 +1480,51 @@ function findingDetail(f){
   const kvs=Object.entries(m).filter(([k,v])=>!skip.has(k)&&(typeof v==='number'||typeof v==='string'||typeof v==='boolean')).slice(0,8)
     .map(([k,v])=>`<span class="k">${esc(k)}${helpQ('This is a saved metric name from the evidence artifact.')}</span><span class="vv">${esc(typeof v==='number'?(Math.abs(v)<1&&v!==0?v.toFixed(4):v.toLocaleString()):v)}${helpQ(metricExplain(k,String(v)))}</span>`).join('');
   const evbtn = f.evidence&&EVID[f.evidence] ? `<div class="evbtn"><button class="lnk" onclick="toggleEv(this,'${esc(f.evidence)}')">show raw evidence JSON${helpQ('Raw evidence JSON is the saved machine-readable report behind this card. It is for checking, not casual reading.')}</button></div>` : '';
+  const fullReport=f.full_report?renderFullReport(f.full_report):'';
   return `<div class="fdetail">
     <div class="minilbl">Technical read${helpQ('This explains how the result was checked, usually with holdouts, baselines, or audits.')}</div>
     <p class="tr">${esc(f.how||f.note||f.plain||'See raw evidence.')}${helpQ(statementHelp(f.how||f.note||f.plain||''))}</p>
     ${f.note&&f.how?`<p class="tr" style="color:var(--ink4)"><b style="color:var(--ink3)">Caveat:${helpQ('A caveat is a limit that keeps the claim honest.')}</b> ${esc(f.note)}${helpQ(statementHelp(f.note))}</p>`:''}
     ${kvs?`<div class="kv">${kvs}</div>`:''}
+    ${fullReport||detailSections}
+    ${fullReport?'':sources}
     ${cm}
     ${evbtn}
     <div class="dlabel" style="margin-top:16px">Spatial evidence${helpQ('This shows whether the finding can be connected to public station/lake locations. The grid groups nearby observations and confidence where possible.')}</div>
     ${spatial}
+  </div>`;
+}
+function renderReportTable(t){
+  if(!t||!Array.isArray(t.columns)||!Array.isArray(t.rows))return '';
+  const head=t.columns.map(c=>`<th>${esc(c)}</th>`).join('');
+  const body=t.rows.map(r=>{
+    const vals=Array.isArray(r)?r:t.columns.map(c=>r[c]);
+    return `<tr>${vals.map(v=>`<td>${esc(v==null?'not available':(typeof v==='object'?JSON.stringify(v):String(v)))}</td>`).join('')}</tr>`;
+  }).join('');
+  return `${t.title?`<div class="rtabletitle">${esc(t.title)}</div>`:''}<div class="rtablewrap"><table class="rtable"><thead><tr>${head}</tr></thead><tbody>${body}</tbody></table></div>`;
+}
+function renderFullReport(r){
+  const stats=Array.isArray(r.stats)?`<div class="reportstats">${r.stats.map(s=>`<div class="reportstat"><b>${esc(s.label||'Metric')}</b><span>${esc(s.value||'')}</span>${s.note?`<em>${esc(s.note)}</em>`:''}</div>`).join('')}</div>`:'';
+  const house=Array.isArray(r.house)?`<div class="rsection"><h4>House-Style Result Card</h4>${renderReportTable({columns:['Item','Read'],rows:r.house.map(x=>[x.item,x.read])})}</div>`:'';
+  const sections=Array.isArray(r.sections)?r.sections.map(sec=>{
+    const body=Array.isArray(sec.body)?sec.body.map(p=>`<p>${esc(p)}</p>`).join(''):(sec.body?`<p>${esc(sec.body)}</p>`:'');
+    const bullets=Array.isArray(sec.bullets)?`<ul class="reportlist">${sec.bullets.map(b=>`<li>${esc(b)}</li>`).join('')}</ul>`:'';
+    const tables=Array.isArray(sec.tables)?sec.tables.map(renderReportTable).join(''):'';
+    return `<div class="rsection"><h4>${esc(sec.title||'Report section')}</h4>${body}${bullets}${tables}</div>`;
+  }).join(''):'';
+  const gates=Array.isArray(r.gates)?`<div class="rsection"><h4>Gate Check</h4>${renderReportTable({columns:['Gate','Status','Evidence'],rows:r.gates.map(g=>[g.gate,g.status,g.evidence])})}</div>`:'';
+  const sources=Array.isArray(r.sources)?`<div class="rsection"><h4>Sources</h4><ul class="reportlist">${r.sources.map(s=>`<li>${esc(s)}</li>`).join('')}</ul></div>`:'';
+  return `<div class="fullreport">
+    <div class="reporthero">
+      <div class="reportmeta">${esc(r.generated||'Generated from current evidence snapshot')}</div>
+      <div class="reportverdict">${esc(r.verdict||'Verdict not supplied')}</div>
+      ${r.scope?`<div class="reportscope">${esc(r.scope)}</div>`:''}
+    </div>
+    ${stats}
+    ${house}
+    ${sections}
+    ${gates}
+    ${sources}
   </div>`;
 }
 function toggleEv(btn,key){
@@ -1582,7 +1650,7 @@ function ledgerRows(){
     add({type:'document',key:'document:'+i+':'+d.path,id:d.path,index:i,title:d.title||d.path,status:'Document',topic:d.path||'Project docs',desc:d.text||'',meta:[d.path,d.chunk!=null?'chunk '+d.chunk:null,d.priority!=null?'priority '+d.priority:null].filter(Boolean).join(' · '),raw:d});
   });
   (DATA.vocabulary||[]).forEach((c,i)=>{
-    add({type:'vocabulary',key:'vocabulary:'+c.key,id:c.key,index:i,title:c.label||c.key,status:'Vocabulary',topic:c.group||'Glossary',desc:c.what||'',meta:(c.examples||[]).slice(0,3).join(' · '),raw:c,source:{type:'vocab',key:c.key}});
+    add({type:'vocabulary',key:'vocabulary:'+c.key,id:c.key,index:i,title:c.label||c.key,status:'Vocabulary',topic:'Glossary',desc:c.what||'',meta:(c.examples||[]).slice(0,3).join(' · '),raw:c,source:{type:'vocab',key:c.key}});
   });
   (DATA.next_actions||[]).forEach((n,i)=>{
     add({type:'note',key:'note:next:'+i,id:'next_action_'+(i+1),index:i,title:'Build note '+(i+1),status:'Note',topic:'Build notes',desc:n,meta:'next_actions',raw:n});
@@ -1764,37 +1832,20 @@ let _vocabItems=[];
 // everything we have for a given concept, pulled from the real snapshot
 function vocabItems(key){
   const s=DATA||{};
-  if(['source_dataset','data_asset','production_lake'].includes(key)) return lakeAssets().map((a,i)=>({label:a.asset_id,sub:(a.rows!=null?fmt(a.rows)+' rows':mb(a.size_mb))+' · production lake',open:()=>{DETAIL={type:'dataset',store:'lake',idx:i};renderDrawer();}}))
+  if(key==='source_dataset') return lakeAssets().map((a,i)=>({label:a.asset_id,sub:(a.rows!=null?fmt(a.rows)+' rows':mb(a.size_mb))+' · production lake',open:()=>{DETAIL={type:'dataset',store:'lake',idx:i};renderDrawer();}}))
       .concat(shadowAssets().map((d,i)=>({label:d.name,sub:'shadow',open:()=>{DETAIL={type:'dataset',store:'shadow',idx:i};renderDrawer();}})));
-  if(key==='shadow_lake') return shadowAssets().map((d,i)=>({label:d.name,sub:[d.rows!=null?fmt(d.rows)+' rows':null,d.source||'shadow'].filter(Boolean).join(' · '),open:()=>{DETAIL={type:'dataset',store:'shadow',idx:i};renderDrawer();}}));
   if(key==='target') return (s.targets||[]).map((t,i)=>({label:t.label,chip:t.status,sub:t.question,open:()=>{DETAIL={type:'target',idx:i};renderDrawer();}}));
-  if(key==='hazard_lane') return (s.targets||[]).map((t,i)=>({label:t.label,chip:t.status,sub:t.plain||t.question,open:()=>{DETAIL={type:'target',idx:i};renderDrawer();}}));
-  if(['finding','claim_card'].includes(key)) return (s.findings||[]).map(f=>({label:f.title,chip:findingStatus(f.kind),sub:f.plain||f.headline||''}));
-  if(['trained_model','model_registry'].includes(key)) return (s.models||[]).map((m,i)=>({label:m.model_id,chip:modelStatus(m.status),sub:[m.family,m.task].filter(Boolean).join(' · '),open:()=>{DETAIL={type:'model',idx:i};renderDrawer();}}));
-  if(key==='champion_model') return (s.models||[]).map((m,i)=>({m,i})).filter(o=>/champion|production_candidate|catboost|hgbt|forecast_hgbt/i.test([o.m.status,o.m.model_id,o.m.notes,o.m.beats_baseline].join(' '))).map(o=>({label:o.m.model_id,chip:modelStatus(o.m.status),sub:o.m.beats_baseline||o.m.task||'',open:()=>{DETAIL={type:'model',idx:o.i};renderDrawer();}}));
+  if(key==='finding') return (s.findings||[]).map(f=>({label:f.title,chip:findingStatus(f.kind),sub:f.plain||f.headline||''}));
+  if(key==='trained_model') return (s.models||[]).map((m,i)=>({label:m.model_id,chip:modelStatus(m.status),sub:[m.family,m.task].filter(Boolean).join(' · '),open:()=>{DETAIL={type:'model',idx:i};renderDrawer();}}));
   if(key==='baseline') return (s.models||[]).map((m,i)=>({m,i})).filter(o=>modelStatus(o.m.status)==='Baseline'||o.m.family==='baseline').map(o=>({label:o.m.model_id,chip:'Baseline',sub:o.m.task||'',open:()=>{DETAIL={type:'model',idx:o.i};renderDrawer();}}));
   if(key==='learner'){const fam={};(s.models||[]).forEach(m=>{const f=m.family||'other';(fam[f]=fam[f]||[]).push(m.model_id);});return Object.entries(fam).map(([f,ms])=>({label:f+(f==='baseline'?' (comparators)':' learner'),sub:ms.length+' fitted: '+ms.join(', ')}));}
-  if(key==='model_family'){const fam={};(s.models||[]).forEach(m=>{const f=m.family||'other';(fam[f]=fam[f]||[]).push(m.model_id);});return Object.entries(fam).map(([f,ms])=>({label:f,sub:ms.length+' registry entries: '+ms.slice(0,6).join(', ')+(ms.length>6?'...':'')}));}
   if(key==='signal') return (s.signals||[]).map(g=>({label:g.name,sub:g.what,modality:g.modality,verdicts:g.verdicts}));
-  if(key==='modality'){const mods={};(s.signals||[]).forEach(g=>{const m=g.modality||'untyped';(mods[m]=mods[m]||[]).push(g.name);});return Object.entries(mods).map(([m,gs])=>({label:m,sub:gs.length+' signals: '+gs.slice(0,8).join(', ')+(gs.length>8?'...':'')}));}
-  if(key==='signal_verdict') return (s.signals||[]).flatMap(g=>(g.verdicts||[]).map(v=>({label:g.name,chip:v.status,sub:targetLabel(v.target),modality:g.modality})));
   if(key==='representation') return (s.signals||[]).filter(g=>g.modality==='derived').map(g=>({label:g.name,sub:g.what,verdicts:g.verdicts}));
-  if(key==='gate'||/gate$/.test(key)||['value_gate','critic_pass','promotion_gate','prospective_lockbox'].includes(key)) return (s.gates||[]).map(g=>({label:pretty(g.gate_id),chip:String(g.overall_status||'Gate').toUpperCase(),sub:gateExplain(g)}));
-  if(key==='evidence_artifact') return Object.entries(EVID||{}).map(([path,obj])=>({label:ledgerEvidenceTitle(path),sub:ledgerEvidenceSummary(obj)}));
-  if(key==='mission_control_snapshot') return [{label:'data.json',sub:`built ${s._built_pacific||'unknown'}`},{label:'index.html',sub:'static Mission Control app'},{label:'downloads.json',sub:'published downloadable artifacts'}];
-  if(key==='complete_ledger') return ledgerRows().slice(0,80).map(r=>({label:r.title,chip:r.status,sub:[r.typeLabel,r.topic].filter(Boolean).join(' · ')}));
   const c=(s.vocabulary||[]).find(v=>v.key===key);return ((c&&c.examples)||[]).map(e=>({label:e}));
 }
 function renderVocabulary(){
   const v=DATA.vocabulary||[];
-  const groups=[];
-  v.forEach(c=>{
-    const g=c.group||'Core concepts';
-    let row=groups.find(x=>x.group===g);
-    if(!row){row={group:g,items:[]};groups.push(row);}
-    row.items.push(c);
-  });
-  const card=c=>{
+  $('#vocabgrid').innerHTML=v.map(c=>{
     const n=vocabItems(c.key).length;
     return `<div class="vcard clickable" data-k="${esc(c.key)}">
     <div class="vk">${esc(c.key||'').replace(/_/g,' ')}${helpQ('This is the internal vocabulary key for this concept.')}</div>
@@ -1802,11 +1853,7 @@ function renderVocabulary(){
     <p class="vwhat">${esc(c.what)}${helpQ('This is the plain-English definition for the term.')}</p>
     <div class="vex">${(c.examples||[]).slice(0,4).map(e=>`<span>${esc(e)}${helpQ('This is a real example of the vocabulary term in this project.')}</span>`).join('')}</div>
     <div class="vcardfoot">See all ${n} ${esc(c.key.replace(/_/g,' '))}${n===1?'':'s'} →${helpQ('Open the drawer to see every item in this snapshot that matches this vocabulary concept.')}</div>
-  </div>`;};
-  $('#vocabgrid').innerHTML=groups.map(g=>`<section class="vocabsection">
-    <div class="vh"><h2>${esc(g.group)}</h2><span>${g.items.length} terms</span></div>
-    <div class="vocabgrid">${g.items.map(card).join('')}</div>
-  </section>`).join('') || '<div class="lhempty">No vocabulary in this snapshot.</div>';
+  </div>`;}).join('') || '<div class="lhempty">No vocabulary in this snapshot.</div>';
   document.querySelectorAll('#vocabgrid .vcard').forEach(card=>card.onclick=e=>{if(e.target.closest('.helpq'))return;DETAIL={type:'vocab',key:card.dataset.k};renderDrawer();});
 }
 function vocabDrawer(key){
@@ -1818,7 +1865,7 @@ function vocabDrawer(key){
     </div>`).join('');
   return `<div>
     <div class="dhead">
-      <div><div class="eb">Vocabulary · ${esc(c.group||'everything we have')}${helpQ('This drawer lists all snapshot items connected to the selected word.')}</div><div class="ti">${esc(c.label)}${helpQ(vocabHelp(c))}</div><div class="nt">${_vocabItems.length} item${_vocabItems.length===1?'':'s'}${helpQ('This count is how many matching items the snapshot currently has.')}</div></div>
+      <div><div class="eb">Vocabulary · everything we have${helpQ('This drawer lists all snapshot items connected to the selected word.')}</div><div class="ti">${esc(c.label)}${helpQ(vocabHelp(c))}</div><div class="nt">${_vocabItems.length} item${_vocabItems.length===1?'':'s'}${helpQ('This count is how many matching items the snapshot currently has.')}</div></div>
       <button class="dclose" onclick="closeDrawer()">×</button>
     </div>
     <div class="dbody">
