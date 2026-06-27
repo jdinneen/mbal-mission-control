@@ -605,24 +605,25 @@
   <!-- ===== START HERE ===== -->
   <section class="view" id="overview">
     <div class="hero">
-      <div class="eyebrow">Monterey Bay AI Lab · Mission Control</div>
-      <h1 class="page">A statewide beach-safety forecast — <span class="hl">AUC 0.868</span>, deployable in <span class="hl">8 of 9</span> California counties.</h1>
-      <p class="lede">That's the lab's strongest result, and the lab culture takes 18–24 hours — this scores the risk same-day. The rest of this site is the honest scorecard behind it: we test whether ML models — fed weather, river, and ocean data — actually beat the simplest guess, <i>"today will look a lot like yesterday."</i> Usually they don't, so the dead ends stay on the record beside the wins. <b>Ask the lab a question below</b> — if we've answered it, you get the audited result; if not, hand us the datasets and we'll run it.</p>
+      <div class="eyebrow">Monterey Bay AI Lab</div>
+      <h1 class="page">Audited coastal AI: public data, hard baselines, source-backed findings.</h1>
+      <p class="lede">Mission Control is the public evidence ledger for the lab. We take messy coastal, ocean, lake, and watershed data; put it through a governed pipeline; train forecasting and transfer models; then keep only the claims that survive held-out tests, honest baselines, null checks, and adversarial review.</p>
     </div>
 
-    <!-- ask the lab: curated instant answers + grounded assistant + research request -->
-    <section class="asklab" id="asklab">
-      <div class="askhead">
-        <h2>Ask the lab</h2>
-        <p>Real questions, honest answers. We match your question to our audited findings instantly. Open-ended questions go to a search assistant grounded only in the published data — and anything we haven't run yet, you can hand us as a research request.</p>
+    <div class="bigrow" aria-label="Project overview">
+      <div class="card bigcard">
+        <div class="tag">What we are doing</div>
+        <h2>Turning public environmental records into falsifiable forecasting claims.</h2>
+        <p>Each card on this site starts as a concrete question: can a model rank tomorrow's beach-bacteria risk, toxic HAB onset, cyanotoxin risk, hypoxia stress, or cross-region transfer better than a simple baseline? If the answer is yes, the evidence is shown. If the answer is no, the null stays on the record.</p>
       </div>
-      <div class="askrow">
-        <input id="askq" type="text" placeholder="e.g. Does rainfall predict beach bacteria?" autocomplete="off" onkeydown="if(event.key==='Enter')askLab()" />
-        <button id="askbtn" onclick="askLab()">Ask</button>
+      <div class="card bigcard">
+        <div class="tag">Biggest findings</div>
+        <h2>Beach-bacteria ranking, clean-to-dirty onset, HAB/toxin forecasting, and physics transfer are the current supported wins.</h2>
+        <p>The headline evidence is now the featured report set: statewide bacteria nowcast and onset, domoic-acid and HAB exceedance forecasts, mcyE genotype-to-toxin replication, and label-free physics interlingua transfer. Click any featured finding for the full source-backed report and the caveats that keep it honest.</p>
       </div>
-      <div class="askchips" id="askchips"></div>
-      <div class="askout" id="askout"></div>
-    </section>
+    </div>
+
+    <div class="secband"><h2>The pipeline</h2><p>Raw records land in the lakehouse, transforms make them comparable, model engines compete against baseline rules, and evidence gates decide what can be shown as a claim.</p></div>
 
     <section class="featurevideo" aria-label="Featured lakehouse explainer video">
       <div class="featurecopy">
@@ -1381,7 +1382,7 @@ function renderOverview(){
     <p>${latestWins.map(f=>esc(f.title+': '+(f.headline||''))).join('<br>')}</p>
     <div class="go" style="margin-top:13px;font-size:13px;font-weight:600;color:var(--acc)">Open the evidence →</div></div>`:(bac?`<div class="card bigcard" style="cursor:pointer" onclick="openTarget('bacteria_exceedance')">
     <div class="tag" style="color:#0f7a74"><i style="background:#0f8a84"></i>What works</div>
-    <h3>A statewide beach-safety forecast that beats the status quo.</h3>
+    <h3>Statewide beach-bacteria ranking beats station memory.</h3>
     <p>${esc((bac.plain||'').slice(0,230))}${(bac.plain||'').length>230?'…':''}</p>
     <div class="go" style="margin-top:13px;font-size:13px;font-weight:600;color:var(--acc)">Open the question →</div></div>`:'');
   $('#bigrow').innerHTML=lawCard+winCard;
