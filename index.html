@@ -134,8 +134,8 @@
   .fpill{appearance:none;cursor:pointer;display:flex;align-items:center;gap:7px;background:var(--surface);border:1px solid var(--border);color:var(--ink3);border-radius:999px;padding:7px 14px;font-family:var(--sans);font-size:13px;font-weight:600;transition:all .14s}
   .fpill .c{font-family:var(--mono);font-size:11px;opacity:.7}
   .fpill.active{background:var(--acc);border-color:var(--acc);color:#fff}
-  .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  .fcard{background:var(--surface);border:1px solid var(--border);border-radius:15px;box-shadow:var(--card-sh);padding:20px 21px;cursor:pointer;transition:box-shadow .18s,border-color .18s,transform .18s}
+  .fgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .fcard{background:var(--surface);border:1px solid var(--border);border-radius:15px;box-shadow:var(--card-sh);padding:20px 21px;cursor:pointer;transition:box-shadow .18s,border-color .18s,transform .18s;min-width:0}
   .fcard:hover{box-shadow:var(--card-sh-hover);transform:translateY(-2px)}
   .fcard.open{border-color:#bfe0dc}
   .fcard .toprow{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:11px}
@@ -145,8 +145,12 @@
   .featurechip i{width:6px;height:6px;border-radius:50%;background:#0f766e}
   .badge{flex:none;display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;border-radius:7px;padding:4px 9px}
   .badge i{width:6px;height:6px;border-radius:50%}
-  .fcard h3{margin:0 0 8px;font-size:17px;font-weight:600;line-height:1.25}
-  .fcard .plain{margin:0 0 16px;font-size:14px;line-height:1.55;color:var(--ink3);text-wrap:pretty}
+  .fcard h3{margin:0 0 8px;font-size:17px;font-weight:600;line-height:1.25;overflow-wrap:anywhere}
+  .fcard .plain{margin:0 0 16px;font-size:14px;line-height:1.55;color:var(--ink3);text-wrap:pretty;overflow-wrap:anywhere}
+  .quickread{display:grid;gap:8px;margin:0 0 16px}
+  .quickrow{display:grid;grid-template-columns:92px minmax(0,1fr);gap:9px;align-items:start;border:1px solid var(--faint);background:var(--subtle);border-radius:9px;padding:8px 10px}
+  .quickrow b{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink5);line-height:1.35}
+  .quickrow span{font-size:13px;line-height:1.42;color:var(--ink2)}
   .fbottom{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
   .minilbl{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink5);margin-bottom:5px}
   .segs{display:flex;gap:4px;align-items:center}
@@ -493,7 +497,7 @@
     .metrics,.ledgerstats{grid-template-columns:1fr 1fr}
     .metric:nth-child(odd){border-right:1px solid var(--faint)}
     .metric:nth-child(1),.metric:nth-child(2){border-bottom:1px solid var(--faint)}
-    .grid2,.fgrid,.lhlists{grid-template-columns:1fr}
+    .grid2,.fgrid,.lhlists{grid-template-columns:minmax(0,1fr)}
     .m-grid,.d-grid{grid-template-columns:1.6fr 1fr 22px}
     .l-grid{grid-template-columns:minmax(0,1fr) 92px 24px}
     .m-grid .hide-sm,.d-grid .hide-sm,.l-grid .hide-sm{display:none}
@@ -509,6 +513,15 @@
     .fieldgrid{grid-template-columns:1fr}
     .storyscore{grid-template-columns:1fr 1fr}
     .storyimage{height:260px}
+    .fcard{padding:18px 14px}
+    .fcard .toprow{align-items:flex-start;flex-wrap:wrap}
+    .statuschips{justify-content:flex-start}
+    .quickrow{grid-template-columns:1fr;gap:4px}
+    .quickrow span{overflow-wrap:anywhere}
+    .fbottom{align-items:flex-start;flex-direction:column}
+    .metricbox{text-align:left;width:100%}
+    .metricbox .mv{white-space:normal;overflow-wrap:anywhere;font-size:18px;line-height:1.15}
+    .ffoot{align-items:flex-start;flex-direction:column}
     .videolinkcard{grid-template-columns:150px minmax(0,1fr);align-items:start}
     .videolinkgo{grid-column:2}
   }
@@ -658,9 +671,9 @@
           <img src="videos/clean_to_dirty_tensor_8th_grade_poster.jpg" alt="">
         </span>
         <span class="videolinkcopy">
-          <span class="tag">New finding explainer · 1:54 · captions</span>
-          <h3>Why physics-pi plus tensor context improves surprise bacteria spike warning.</h3>
-          <p>AP rises from 0.2992 to 0.3418 by combining local spike physics with a broader coastal-state readout.</p>
+          <span class="tag">Critic update · 1:54 · captions</span>
+          <h3>Clean-to-dirty update: physics-pi survives; tensor is demoted.</h3>
+          <p>AP rises from 0.2992 to 0.3348 from physics-pi; the hardened n=200 critic does not promote the tensor increment.</p>
         </span>
         <span class="videolinkgo">Share page</span>
       </a>
@@ -1400,6 +1413,64 @@ function findingsSorted(){
   return (DATA.findings||[]).map((f,i)=>({f,i,st:findingStatus(f.kind)}))
     .sort((a,b)=>(Number(!!b.f.featured)-Number(!!a.f.featured))||(order[a.st]-order[b.st])|| (a.i-b.i));
 }
+const QUICK_LABELS={means:'What it means',matters:'Why it matters',careful:'Careful'};
+const FEATURED_QUICK_READS={
+  claim_bacteria_station_memory_supported:{
+    means:'The beach-bacteria model ranks risky beach-days better than old station history and rain rules.',
+    matters:'It can help a county choose which beach-days to inspect first.',
+    careful:'This is a retrospective test, not a live swim advisory; San Diego is excluded.'
+  },
+  claim_clean_to_dirty_onset:{
+    means:'The hard case is a beach that looked clean, then suddenly turns dirty. The model catches those surprise flips about twice as well as station memory.',
+    matters:'That is the warning people cannot get just by asking what happened yesterday.',
+    careful:'Physics-pi is the surviving booster; the tensor add-on is not promoted, and a prospective lockbox still needs scoring.'
+  },
+  claim_pi_zero_shot_ranking_screen:{
+    means:'Physics-only coordinates can sort risk in places with no local labels yet.',
+    matters:'It is a cold-start screen for new regions before a local model exists.',
+    careful:'It ranks cases; it is not a calibrated local advisory probability.'
+  },
+  claim_da_toxic_onset_ci_separated:{
+    means:'The DA model helps spot the next toxic sample after a clean one.',
+    matters:'That is closer to an early shellfish-safety warning than a generic bloom score.',
+    careful:'It is scoped to prior-clean toxic onset and is not a 10x C-HARM claim.'
+  },
+  claim_mcye_alberta_definitive_replication:{
+    means:'A toxin gene strongly matches microcystin toxin in Alberta lake samples.',
+    matters:'It supports the biology behind cyanobacteria toxin risk.',
+    careful:'This is an association in samples, not a forward bloom forecast by itself.'
+  },
+  claim_mcye_national_replication:{
+    means:'The same toxin-gene signal appears in a broader national dataset, but smaller.',
+    matters:'It shows the Alberta biology is not a one-place accident.',
+    careful:'The national test has less power and is still data-limited.'
+  },
+  claim_hab_exceed_strict_critic:{
+    means:'A guarded HAB model beats simple persistence for pDA exceedance on a time holdout.',
+    matters:'It gives one more checked path toward harmful-algal-bloom triage.',
+    careful:'The next proof is prospective replay plus station/region stress testing.'
+  },
+  claim_unified_zero_shot_interlingua_pi:{
+    means:'The same physics-pi idea ranks bacteria risk across 12 held-out domains without local labels.',
+    matters:'It is evidence that some transfer signal exists across regions.',
+    careful:'It is a ranking screen, not a deployed advisory or calibrated probability.'
+  }
+};
+function firstSentence(s){
+  s=String(s||'').replace(/\s+/g,' ').trim();
+  if(!s)return '';
+  const m=s.match(/^(.{40,180}?[.!?])\s/);
+  return m?m[1]:s.slice(0,180);
+}
+function findingQuickRead(f,st){
+  const r=(f&&f.card_read)||FEATURED_QUICK_READS[(f&&f.id)||'']||{};
+  const note=firstSentence(f&&f.note);
+  return {
+    means:r.means||firstSentence((f&&f.plain)||(f&&f.headline)||'This is a tested result.'),
+    matters:r.matters||(st==='Null'?'It tells the lab what to stop investing in.':'It shows where the model may help real triage.'),
+    careful:r.careful||note||'Open details for the limits, baseline, and evidence.'
+  };
+}
 function renderFindings(){
   const all=findingsSorted();
   const cnt=st=>all.filter(x=>x.st===st).length;
@@ -1420,6 +1491,8 @@ function renderFindings(){
     const segs=[0,1,2].map(n=>`<i style="background:${n<strength?seg:'var(--border)'}"></i>`).join('');
     const met=pickMetric(f); const open=OPENF===i;
     const topic=findingFamily(f.id).family;
+    const quick=findingQuickRead(f,st);
+    const quickRows=['means','matters','careful'].map(k=>`<div class="quickrow"><b>${QUICK_LABELS[k]}</b><span>${esc(quick[k])}</span></div>`).join('');
     return `<div class="fcard${f.featured?' featured':''}${open?' open':''}" data-i="${i}">
       <div class="toprow">
         <span class="topic">${esc(topic)}${helpQ(topicExplain(topic))}</span>
@@ -1427,6 +1500,7 @@ function renderFindings(){
       </div>
       <h3>${esc(f.title)}${helpQ('This is the tested claim or result name. Click the card to see how it was checked.')}</h3>
       <p class="plain">${esc(f.plain||f.headline||'')}${helpQ(statementHelp(f.plain||f.headline||''))}</p>
+      <div class="quickread">${quickRows}</div>
       <div class="fbottom">
         <div><div class="minilbl">Evidence strength${helpQ(evidenceStrengthExplain(st))}</div><div class="segs">${segs}<em style="color:${b.text}">${STRENGTH_LABEL[strength]}${helpQ(evidenceStrengthExplain(st))}</em></div></div>
         <div class="metricbox"><div class="minilbl">${esc(met.label)}${helpQ(metricExplain(met.label,met.value))}</div><div class="mv">${esc(met.value)}${helpQ(metricExplain(met.label,met.value))}</div></div>

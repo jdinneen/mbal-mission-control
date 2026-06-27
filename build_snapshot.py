@@ -196,7 +196,7 @@ def _short_feature(name):
     return str(name).split("::")[-1] if name is not None else None
 
 
-def _finding(fid, title, kind, headline, plain, how, evidence, metrics=None, note=None):
+def _finding(fid, title, kind, headline, plain, how, evidence, metrics=None, note=None, card_read=None):
     return {
         "id": fid,
         "title": title,
@@ -207,6 +207,7 @@ def _finding(fid, title, kind, headline, plain, how, evidence, metrics=None, not
         "evidence": evidence,
         "metrics": metrics or {},
         "note": note,
+        **({"card_read": card_read} if card_read else {}),
     }
 
 
@@ -360,10 +361,10 @@ def _science_breakthrough_findings():
         m = onset.get("surprise_slice", {})
         out.append(_finding(
             "claim_clean_to_dirty_onset",
-            "Clean-to-dirty beach surprise reframe passes retrospective gate",
+            "Clean-to-dirty beach warning catches surprise flips",
             "claim",
-            f"AP {_r(m.get('model_ap'))} vs station-memory {_r(m.get('station_memory_ap'))}",
-            "Among currently-clean beach-days, the frozen statewide model predicts clean-to-dirty exceedance surprises far better than station memory.",
+            f"{_r(onset.get('onset_ratio_vs_station_memory'))}x station-memory on prior-clean beach-days",
+            "The hard case is a beach that looked clean, then suddenly turns dirty. On that slice, the model ranks risky flips about twice as well as station memory.",
             "Same frozen bacteria model, EXCLUDE_SAN_DIEGO, reveal-lag discipline, evaluated on the onset slice instead of the already-dirty persistence slice.",
             "reports/science_breakthrough/science_claim_cards.json",
             {
@@ -375,7 +376,12 @@ def _science_breakthrough_findings():
                 "delta_ap": _r(m.get("model_minus_station_memory")),
                 "ratio_vs_station_memory": _r(onset.get("onset_ratio_vs_station_memory")),
             },
-            "Final breakthrough claim remains blocked until the post-2026-06-18 prospective lockbox has rows and is scored.",
+            "This is a retrospective target-reframe claim. The separate physics-pi/tensor explainer is corrected: physics-pi survives, tensor is not promoted, and the post-2026-06-18 prospective lockbox still needs scoring.",
+            {
+                "means": "The hard case is a beach that looked clean, then suddenly turns dirty. The model catches those surprise flips about twice as well as station memory.",
+                "matters": "That is the warning people cannot get just by asking what happened yesterday.",
+                "careful": "Physics-pi is the surviving booster; the tensor add-on is not promoted, and a prospective lockbox still needs scoring.",
+            },
         ))
     sampling = cards.get("sampling_pilot") or {}
     if sampling:

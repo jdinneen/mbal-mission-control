@@ -12,8 +12,8 @@
           "who": "Lab (seed)",
           "title": "Which clean beaches will suddenly spike?",
           "what": "Instead of 'is the water dirty now,' ask 'which currently-clean beaches are about to surprise us.'",
-          "approach": "Reframe the target to clean-to-dirty onset, pool stations into one model, add physics-π + a causal tensor.",
-          "result": "Beats station-memory 16/16 forward-in-time; AP 0.2992 → 0.3418.",
+          "approach": "Reframe the target to clean-to-dirty onset, pool stations into one model, then use physics-pi as the surviving booster.",
+          "result": "Clean-to-dirty onset beats station memory; physics-pi raises AP 0.2992 to 0.3348, while tensor is not promoted.",
           "action": "view:questions"
         }
       ]
