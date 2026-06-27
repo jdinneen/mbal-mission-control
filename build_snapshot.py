@@ -2201,7 +2201,7 @@ def _build_vocabulary():
 
         {"key": "target", "label": "Target / label", "group": "Science targets",
          "what": "The thing being explained or predicted — it defines the scientific question.",
-         "examples": ["bacteria exceedance (AB411 > 104 MPN/100 mL)", "domoic-acid pier exceedance", "hypoxia lead (DO ≤ 2 mg/L, 7–14 d)", "renewal onset", "cyano bloom onset"]},
+         "examples": ["bacteria exceedance (AB411 > 104 MPN/100 mL)", "domoic-acid pier exceedance", "hypoxia lead (DO <= 2 mg/L, 7-14 d)", "freshwater cyano toxin exceedance", "coral disease / mortality"]},
         {"key": "hazard_lane", "label": "Hazard lane", "group": "Science targets",
          "what": "A family of science questions that share a target domain, data spine, and evidence standard.",
          "examples": ["beach bacteria", "HAB / domoic acid", "hypoxia", "lake cyano", "whale mortality", "compound flood"]},
@@ -2364,7 +2364,7 @@ def _build_vocabulary():
          "examples": ["docs/REPORTING_HOUSE_STYLE.md", "one number per claim", "null-verdict guard", "SO WHAT"]},
     ]
     easy = {
-        "target": "Target = what you are predicting: the label/outcome and the decision question. Examples here include bacteria_exceedance, domoic_acid, hypoxia_lead, and renewal_onset.",
+        "target": "Target = what you are predicting: the label/outcome and the decision question. This card now includes worked targets plus ranked lakehouse candidate targets that need value-gate and critic checks before becoming claims.",
         "signal": "Signal = what you predict with: a candidate predictor or engineered input fed to the model. Examples here include station lab history, rainfall, river discharge, tide range, HAB state, and surf/wave features.",
         "source": "Source = where a record came from and how we know it: agency, file/feed, adapter, license, and retrieval provenance.",
         "time_coordinate": "Time = when the evidence is valid or available. It can mean sample time, event time, forecast valid time, issue time, or available-at time.",
@@ -2399,6 +2399,71 @@ def _build_vocabulary():
     for term in terms:
         term["easy"] = easy.get(term["key"], f"{term['label']} = {term['what']}")
     return terms
+
+
+def _build_candidate_targets():
+    """Ranked lakehouse target backlog for the Glossary target card.
+
+    These are inventory candidates, not promoted research claims. They make the
+    broader lakehouse search space visible without promoting them into the
+    worked-on Questions tab until they pass the value gate and critic checks.
+    """
+    rows = [
+        ("freshwater_cyano_bloom_onset", "Freshwater cyano bloom onset", "High", "cyan_cyanohab_full; solid_ca_fhabs_*; wqp_microcystin_panel", "When a lake bloom starts."),
+        ("microcystin_toxin_exceedance", "Microcystin / toxin exceedance", "High", "wqp_microcystin_panel; solid_ca_fhabs_results", "When a bloom becomes poisonous."),
+        ("lake_erie_hab_severity", "Lake Erie HAB severity", "High", "glerl_lake_erie_hab_wq; heidelberg_htlp", "Whether river nutrients predict Lake Erie bloom trouble."),
+        ("gulf_karenia_red_tide", "Gulf Karenia red tide", "High", "habsos_karenia", "When Florida or Gulf red tide cells spike."),
+        ("shellfish_biotoxin_closure", "Shellfish biotoxin closures", "High", "Ireland; Canada CSSP; Oregon; Washington; New Zealand and UK biotoxin tables", "When shellfish harvest areas close."),
+        ("domoic_acid_toxic_onset", "Domoic-acid toxic onset", "High", "habmap_cdph; c_harm; noaa_pmn_erddap; obis_hab", "When Pseudo-nitzschia becomes domoic-acid risk."),
+        ("hypoxia_low_oxygen", "Hypoxia / low oxygen", "High", "onc_saanich_inlet; onc_strait_georgia_central; gulf_hypoxia_watch; wqp_dissolved_oxygen; hk_epd_marine_wq", "When water loses oxygen."),
+        ("oxygen_recovery_renewal", "Oxygen recovery / renewal", "High", "ONC Saanich Inlet; ONC Strait of Georgia", "When bad deep water gets flushed clean."),
+        ("ocean_acidification_extremes", "Ocean acidification extremes", "High", "cencoos_ocean_acidification; CRCP carbonate chemistry; OOI", "When pH or aragonite gets stressful."),
+        ("open_ocean_bloom_events", "Open-ocean bloom events", "High", "argo_gdac_float_profiles; mbari_float_cycles; OOI; MODIS/PACE/VIIRS", "When offshore chlorophyll blooms appear."),
+        ("coral_mortality_disease", "Coral mortality / disease", "High", "CRCP coral demographic surveys", "Which reefs show recent dead coral or disease."),
+        ("coral_to_algae_phase_shift", "Coral-to-algae phase shift", "High", "CRCP benthic cover", "When reefs shift from coral-dominated to algae or rubble."),
+        ("reef_fish_biomass_drop", "Reef fish biomass / community drop", "High", "CRCP reef fish surveys", "When reef fish communities crash or change."),
+        ("reef_heat_stress_response", "Reef heat-stress response", "High", "CRCP subsurface temperature; coral, fish, and benthic tables", "Whether heat predicts reef damage."),
+        ("sea_star_kelp_collapse", "Sea-star / kelp ecosystem collapse", "Medium", "marine_sswd; kelp and urchin tables", "When sudden ecosystem state changes happen."),
+        ("marine_mammal_mortality", "Marine mammal mortality", "Medium", "global_cetacean_mortality; inat_mammal_mortality; noaa_stranding_examples; pmmc_sealion_da", "When strandings or deaths rise."),
+        ("domoic_acid_sealion_syndrome", "Domoic-acid sea-lion syndrome", "Medium", "pmmc_sealion_da plus DA/HAB sources", "Whether domoic acid predicts sick sea lions."),
+        ("pinniped_count_anomalies", "Pinniped count anomalies", "Medium", "nps_sfan_pinniped", "When seal or sea-lion counts are unusually low or high."),
+        ("whale_sighting_shifts", "Whale / cetacean sighting shifts", "Medium", "OCIMS; ALA cetacean records; OBIS marine mammals", "When animals show up in unusual places or seasons."),
+        ("fisheries_catch_drops", "Fisheries catch drops", "Medium", "cdfw_mfde_landings; ccamlr_statistical_bulletin; afsc_bering_trawl", "When catch or prey availability drops."),
+        ("zooplankton_forage_changes", "Zooplankton / forage changes", "Medium", "calcofi_zoop; AFSC trawl; CDFW landings", "Whether food-web base changes are predictable."),
+        ("phytoplankton_community_shift", "Phytoplankton community shifts", "Medium", "noaa_pmn_erddap; auscpr_phyto; monterey_edna_obis", "Which plankton species take over."),
+        ("edna_biodiversity_shift", "eDNA biodiversity shifts", "Medium", "monterey_edna_obis", "Which organisms appear or disappear in DNA samples."),
+        ("deep_sea_animal_occurrence", "Deep-sea animal occurrence", "Medium", "monterey_fathomnet_annotations", "Which animals appear in camera images."),
+        ("soundscape_noise_events", "Soundscape / noise events", "Medium", "sanctsound_monterey_products; passive acoustic inventory", "When the ocean gets noisier or acoustically different."),
+        ("toxicity_bioassay_failures", "Toxicity bioassay failures", "Medium", "ceden_toxicity; ceden_water_chem; dpr_pur", "When water samples harm test organisms."),
+        ("contaminant_spikes", "Contaminant spikes", "Medium", "mussel_watch; ceden_tissue; ceden_sediment", "When metals or chemicals spike in tissue or sediment."),
+        ("pesticide_runoff_pulses", "Pesticide runoff pulses", "Medium", "dpr_pur; CEDEN; USGS; rainfall", "Whether pesticide applications plus rain predict water toxicity."),
+        ("turbidity_sediment_pulses", "Turbidity / sediment pulses", "Medium", "usgs_iv_turbidity; ceden_water_chem; heidelberg_htlp", "When rivers turn muddy or carry sediment."),
+        ("nutrient_loading_pulses", "Nutrient loading pulses", "Medium", "Heidelberg; WQP nutrients; DWR lab; CEDEN", "When nitrogen or phosphorus spikes."),
+        ("groundwater_level_anomalies", "Groundwater level anomalies", "Medium", "dwr_groundwater; dwr_gw_continuous", "When groundwater gets unusually high or low."),
+        ("new_region_beach_bacteria", "Beach bacteria in new regions", "Medium", "WQP FL/TX/HI/NC/NJ/WA/OR/PR/AL; NSW; HK; Victoria; Ireland; Surfrider", "The same bacteria problem in many more places."),
+        ("molecular_culture_mismatch", "Molecular-vs-culture mismatch", "Medium", "Great Lakes ddPCR; Chicago DNA/culture", "When DNA says risky but old culture does not."),
+        ("beach_advisories_closures", "Beach advisories / closures", "Medium", "BEACON; Beach Report Card; Canada, New Zealand, and Singapore alert tables", "Predict official do-not-swim decisions."),
+        ("waterborne_outbreak_risk", "Waterborne outbreak risk", "Medium", "cdc_nors", "Which state and month have higher outbreak risk."),
+        ("wastewater_pathogen_spikes", "Wastewater pathogen spikes", "Medium", "cdc_nwss_wastewater", "When pathogen levels rise in sewage."),
+        ("snowpack_runoff_drought", "Snowpack / runoff drought", "Lower", "ca_snow_swc; CDEC; USGS", "When water supply or runoff will be low or high."),
+        ("sea_ice_anomaly", "Sea-ice anomaly", "Lower", "nsidc_seaice; nsidc_seaice_regional", "When polar sea ice is unusually low."),
+        ("penguin_colony_decline", "Penguin colony decline", "Lower", "mapppd_penguin", "Which colonies crash next season."),
+        ("tsunami_generation_runup", "Tsunami generation / runup", "Lower", "gcmt_focal; usgs_comcat; noaa_tsunami_db", "Which earthquakes make tsunamis."),
+        ("dark_vessel_activity", "Dark-vessel / fishing activity", "Lower", "AIS; Sentinel-1 catalog; xView3 labels", "Find suspicious vessels; the clean modeling table is not ready yet."),
+    ]
+    out = []
+    for rank, (target_id, label, priority, sources, plain) in enumerate(rows, 1):
+        out.append({
+            "id": target_id,
+            "rank": rank,
+            "label": label,
+            "status": "Candidate",
+            "priority": priority,
+            "question": "Can MBAL find predictive signals for " + label.lower() + "?",
+            "plain": plain,
+            "source_examples": sources,
+        })
+    return out
 
 
 def _build_targets():
@@ -2512,10 +2577,12 @@ def main():
     state["lab_memory"] = _build_lab_memory()
     state["vocabulary"] = _build_vocabulary()
     state["targets"] = _build_targets()
+    state["candidate_targets"] = _build_candidate_targets()
     state["signals"] = _build_signals()
     project_docs = _build_project_docs()
     counts = dict(state.get("counts") or {})
     counts["targets"] = len(state["targets"])
+    counts["candidate_targets"] = len(state["candidate_targets"])
     counts["signals"] = len(state["signals"])
     counts["project_docs"] = len(project_docs)
     state["counts"] = counts

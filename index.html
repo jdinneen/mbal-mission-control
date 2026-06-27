@@ -907,7 +907,7 @@ const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov',
 /* ---------- status / value mapping (data-bound, no fabrication) ---------- */
 const FINDING_STATUS={claim:'Supported',positive:'Supported',replication:'Supported',operational:'Supported',caveat:'Caveated',status:'Caveated',null:'Null',negative_result:'Null',negative:'Null',refutation:'Null',ablation:'Caveated'};
 function findingStatus(k){return FINDING_STATUS[k]||'Caveated';}
-const STATUS_BADGE={Supported:{bg:'#e3f3ef',text:'#1a7a4f'},Caveated:{bg:'#fdf3e0',text:'#9a6a07'},Null:{bg:'#eef0f2',text:'#586069'},Audited:{bg:'#e3f3ef',text:'#1a7a4f'},Baseline:{bg:'#eef0f2',text:'#586069'},Production:{bg:'#eef4f3',text:'#0f7a74'},Shadow:{bg:'#f1f1f3',text:'#7c828a'},PASS:{bg:'#e3f3ef',text:'#1a7a4f'},WARN:{bg:'#fdf3e0',text:'#9a6a07'},FAIL:{bg:'#fbeceb',text:'#b4453c'},Evidence:{bg:'#eef4f3',text:'#0f7a74'},Document:{bg:'#eaf1fb',text:'#3a6ea5'},Vocabulary:{bg:'#f1f1f3',text:'#586069'},Signal:{bg:'#eef4f3',text:'#0f7a74'},Note:{bg:'#f1f1f3',text:'#7c828a'},Question:{bg:'#eaf1fb',text:'#3a6ea5'}};
+const STATUS_BADGE={Supported:{bg:'#e3f3ef',text:'#1a7a4f'},Caveated:{bg:'#fdf3e0',text:'#9a6a07'},Null:{bg:'#eef0f2',text:'#586069'},Audited:{bg:'#e3f3ef',text:'#1a7a4f'},Baseline:{bg:'#eef0f2',text:'#586069'},Production:{bg:'#eef4f3',text:'#0f7a74'},Shadow:{bg:'#f1f1f3',text:'#7c828a'},PASS:{bg:'#e3f3ef',text:'#1a7a4f'},WARN:{bg:'#fdf3e0',text:'#9a6a07'},FAIL:{bg:'#fbeceb',text:'#b4453c'},Evidence:{bg:'#eef4f3',text:'#0f7a74'},Document:{bg:'#eaf1fb',text:'#3a6ea5'},Vocabulary:{bg:'#f1f1f3',text:'#586069'},Signal:{bg:'#eef4f3',text:'#0f7a74'},Note:{bg:'#f1f1f3',text:'#7c828a'},Question:{bg:'#eaf1fb',text:'#3a6ea5'},Candidate:{bg:'#eaf1fb',text:'#3a6ea5'}};
 const STATUS_SEG={Supported:'#0f8a84',Caveated:'#c9a23a',Null:'#b8bdc3',Audited:'#0f8a84',Baseline:'#b8bdc3'};
 const STATUS_STRENGTH={Supported:3,Caveated:2,Null:1};
 const STRENGTH_LABEL={3:'Strong',2:'Moderate',1:'Weak'};
@@ -1894,7 +1894,19 @@ function vocabItems(key){
   const s=DATA||{};
   if(key==='source_dataset') return lakeAssets().map((a,i)=>({label:a.asset_id,sub:(a.rows!=null?fmt(a.rows)+' rows':mb(a.size_mb))+' · production lake',open:()=>{DETAIL={type:'dataset',store:'lake',idx:i};renderDrawer();}}))
       .concat(shadowAssets().map((d,i)=>({label:d.name,sub:'shadow',open:()=>{DETAIL={type:'dataset',store:'shadow',idx:i};renderDrawer();}})));
-  if(key==='target') return (s.targets||[]).map((t,i)=>({label:t.label,chip:t.status,sub:t.question,open:()=>{DETAIL={type:'target',idx:i};renderDrawer();}}));
+  if(key==='target'){
+    const active=(s.targets||[]).map((t,i)=>({label:t.label,chip:t.status,sub:t.question,open:()=>{DETAIL={type:'target',idx:i};renderDrawer();}}));
+    const candidates=(s.candidate_targets||[]).map(t=>({
+      label:t.label,
+      chip:t.status||'Candidate',
+      sub:[
+        t.rank?('#'+t.rank+' '+(t.priority||'')+' likelihood'):null,
+        t.plain,
+        t.source_examples?('Data: '+t.source_examples):null
+      ].filter(Boolean).join(' | ')
+    }));
+    return active.concat(candidates);
+  }
   if(key==='finding') return (s.findings||[]).map(f=>({label:f.title,chip:findingStatus(f.kind),sub:f.plain||f.headline||''}));
   if(key==='trained_model') return (s.models||[]).map((m,i)=>({label:m.model_id,chip:modelStatus(m.status),sub:[m.family,m.task].filter(Boolean).join(' · '),open:()=>{DETAIL={type:'model',idx:i};renderDrawer();}}));
   if(key==='baseline') return (s.models||[]).map((m,i)=>({m,i})).filter(o=>modelStatus(o.m.status)==='Baseline'||o.m.family==='baseline').map(o=>({label:o.m.model_id,chip:'Baseline',sub:o.m.task||'',open:()=>{DETAIL={type:'model',idx:o.i};renderDrawer();}}));
