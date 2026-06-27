@@ -13,8 +13,8 @@
    "path": "downloads/findings.csv",
    "type": "text/csv",
    "license": "Apache-2.0",
-   "bytes": 10924,
-   "sha256": "7d7996bc349dff3a12ffa001d911a3c90e807e7e592150e709c9e0da72c5e3d7"
+   "bytes": 10884,
+   "sha256": "09e9029278a86eb28466e29a24efd249f2e1d53bb472539232ce174eb3525524"
   },
   {
    "title": "Models registry (CSV)",
@@ -61,8 +61,8 @@
    "path": "downloads/PROGRAM_RESULTS.md",
    "type": "text/markdown",
    "license": "Apache-2.0",
-   "bytes": 13958,
-   "sha256": "1b261ce930d32f1e0023f9f218998639c66cd8e84c748c642e484a08aa91f97e"
+   "bytes": 13823,
+   "sha256": "773cd59c8e5d1d6f8969359dae4586b7d7dcf4852dd51114aa7e28318c4de2b7"
   }
  ]
 }
