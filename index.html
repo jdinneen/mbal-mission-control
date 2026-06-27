@@ -595,7 +595,6 @@
     <button data-v="ledger">Ledger</button>
     <button data-v="data">Data &amp; reproduce</button>
     <button data-v="glossary">Glossary</button>
-    <a href="https://jdinneen.github.io/monterey-bay-today/" target="_blank">Monterey Bay Today ↗</a>
   </nav>
 </header>
 
@@ -690,19 +689,6 @@
     <!-- the escapes -->
     <div class="secband"><h2>Where the models actually win</h2><p>The exceptions — places a model genuinely beats that simple "like yesterday" forecast.</p></div>
     <div class="minigrid" id="escapelist"></div>
-
-    <!-- honest nulls -->
-    <div class="secband"><h2>Kept on the record</h2><p>Tested fairly, didn't hold. Knowing this saves the next experiment.</p></div>
-    <div class="minigrid" id="nulllist"></div>
-
-    <!-- open frontiers: the invitation -->
-    <div class="secband"><h2>Open frontiers — help us crack these</h2><p>The levers we think are still live. If you have data, an idea, or an approach for one of these, that's exactly what the lab wants.</p></div>
-    <div class="minigrid" id="frontierlist"></div>
-
-    <!-- leaderboard: curated hall-of-fame, three contribution lanes -->
-    <div class="secband"><h2>Leaderboard</h2><p>Editor's picks. Three ways to contribute — the best ones get published with the approach that actually worked.</p></div>
-    <div class="lanes" id="leaderboard"></div>
-    <div class="contribute" id="contribute"></div>
 
     <!-- how to read primer -->
     <details class="primer">
@@ -1390,8 +1376,7 @@ function renderOverview(){
 
   // escapes (drivers genuinely beat the baseline) + honest nulls
   $('#escapelist').innerHTML=['hypoxia_lead','renewal_onset','cross_country_transfer','cyano_onset'].map(targetMini).join('');
-  $('#nulllist').innerHTML=['whale_mortality','sfbay_compound_flood','ddpcr_culture_safe'].map(targetMini).join('');
-  renderAsk(); renderFrontiers(); renderLeaderboard();
+  renderAsk();
 
   // demoted snapshot/build status strip (gates live here now, not the headline)
   const ov=(s.overall_status||'UNKNOWN');

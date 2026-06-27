@@ -17,23 +17,19 @@ const required = [
   "The pipeline",
   "Featured explainer",
   "function renderFullReport",
-  "function renderLeaderboard",
-  "function renderFrontiers",
 ];
 for (const needle of required) {
   assert(html.includes(needle), `homepage wiring missing: ${needle}`);
 }
 assert(!html.includes('id="asklab"'), "homepage should not include the Ask-the-lab form");
 assert(!html.includes('id="askq"'), "homepage should not include the Ask input");
-
-// curated leaderboard: must be seeded so it is never empty on launch
-const lb = JSON.parse(fs.readFileSync("leaderboard.json", "utf8"));
-assert(Array.isArray(lb.lanes) && lb.lanes.length === 3,
-  "leaderboard.json should have exactly 3 contribution lanes");
-for (const lane of lb.lanes) {
-  assert(Array.isArray(lane.entries) && lane.entries.length >= 1,
-    `leaderboard lane '${lane.id}' must be seeded with >=1 entry`);
-}
+assert(!html.includes("Open frontiers — help us crack these"), "homepage should not include Open frontiers");
+assert(!html.includes("<h2>Kept on the record</h2>"), "homepage should not include Kept on the record");
+assert(!html.includes("<h2>Leaderboard</h2>"), "homepage should not include Leaderboard");
+assert(!html.includes("id=\"frontierlist\""), "homepage should not include frontier grid");
+assert(!html.includes("id=\"nulllist\""), "homepage should not include null grid");
+assert(!html.includes("id=\"leaderboard\""), "homepage should not include leaderboard grid");
+assert(!html.includes("Monterey Bay Today"), "nav should not include Monterey Bay Today");
 
 const scripts = [...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
 assert(scripts.length > 0, "index.html should include an app script");
