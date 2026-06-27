@@ -5,16 +5,16 @@
    "path": "data.json",
    "type": "application/json",
    "license": "Apache-2.0",
-   "bytes": 1045502,
-   "sha256": "307a908f9fb3db14f14b31a0ee01ca16c5f3e1adaf041ec9fcaaa6a1b2383c22"
+   "bytes": 1725356,
+   "sha256": "e953708fc8b8cc3a56b6c2dda853359ee131f8ead0274f7bd65f57592d3f617b"
   },
   {
    "title": "Findings table (CSV)",
    "path": "downloads/findings.csv",
    "type": "text/csv",
    "license": "Apache-2.0",
-   "bytes": 10978,
-   "sha256": "b02dd47cc570b9e92d45dc51f4ea972087f8674b9120357cf54d460414b922a5"
+   "bytes": 10924,
+   "sha256": "7d7996bc349dff3a12ffa001d911a3c90e807e7e592150e709c9e0da72c5e3d7"
   },
   {
    "title": "Models registry (CSV)",
