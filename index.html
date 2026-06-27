@@ -968,6 +968,7 @@ function statusExplain(st){
   if(st==='Supported')return `Supported means the result held up under the snapshot's checks. It is evidence-backed, not just an idea.`;
   if(st==='Caveated')return `Caveated means there is a real signal, but it has limits you should read before trusting it too much.`;
   if(st==='Null')return `Null means this was tested and did not clear the bar. It is useful because it prevents pretending a weak idea worked.`;
+  if(st==='Candidate')return `Candidate means this is a ranked lakehouse lead, not a promoted finding. It still needs a value gate, fair baseline, holdout, and critic pass.`;
   if(st==='Audited')return `Audited means this model or result has been checked against saved evidence. It may still be a candidate, not a deployed system.`;
   if(st==='Baseline')return `Baseline means comparator. It is the simple or status-quo method that a new model must beat.`;
   if(st==='Production')return `Production means this data asset is in the governed public ledger for this snapshot.`;
@@ -1889,21 +1890,28 @@ function statusChip(st){const b=anyBadge(st);return `<span class="vchip" style="
 const shortTarget=t=>({bacteria_exceedance:'bacteria',domoic_acid:'domoic',whale_mortality:'whale',hypoxia_lead:'hypoxia',hypoxia_onset:'hypoxia-onset',cyano_onset:'cyano',cyano_onset_timing_anom:'cyano-anom',renewal_onset:'renewal',sfbay_compound_flood:'flood',sea_star_kelp_ecosystem:'sea-star',cross_country_transfer:'transfer'}[t]||String(t||'').split('_')[0]);
 function verdictChips(vs){return (vs||[]).map(v=>{const b=anyBadge(v.status);return `<span class="vchip" style="background:${b.bg};color:${b.text}" title="${esc(v.target)}">${esc(shortTarget(v.target))} · ${esc(v.status)}</span>`;}).join('');}
 let _vocabItems=[];
+let VTARGET_TYPE='all', VTARGET_PRIORITY='all';
 // everything we have for a given concept, pulled from the real snapshot
 function vocabItems(key){
   const s=DATA||{};
   if(key==='source_dataset') return lakeAssets().map((a,i)=>({label:a.asset_id,sub:(a.rows!=null?fmt(a.rows)+' rows':mb(a.size_mb))+' · production lake',open:()=>{DETAIL={type:'dataset',store:'lake',idx:i};renderDrawer();}}))
       .concat(shadowAssets().map((d,i)=>({label:d.name,sub:'shadow',open:()=>{DETAIL={type:'dataset',store:'shadow',idx:i};renderDrawer();}})));
   if(key==='target'){
-    const active=(s.targets||[]).map((t,i)=>({label:t.label,chip:t.status,sub:t.question,open:()=>{DETAIL={type:'target',idx:i};renderDrawer();}}));
+    const active=(s.targets||[]).map((t,i)=>({label:t.label,chip:t.status,type:'worked',priority:'Worked',sub:t.question,open:()=>{DETAIL={type:'target',idx:i};renderDrawer();}}));
     const candidates=(s.candidate_targets||[]).map(t=>({
       label:t.label,
       chip:t.status||'Candidate',
+      type:'candidate',
+      priority:t.priority||'Candidate',
+      rank:t.rank,
+      target:t,
       sub:[
         t.rank?('#'+t.rank+' '+(t.priority||'')+' likelihood'):null,
+        'Not a claim yet',
         t.plain,
         t.source_examples?('Data: '+t.source_examples):null
-      ].filter(Boolean).join(' | ')
+      ].filter(Boolean).join(' | '),
+      open:()=>{DETAIL={type:'target_candidate',id:t.id};renderDrawer();}
     }));
     return active.concat(candidates);
   }
@@ -1914,6 +1922,33 @@ function vocabItems(key){
   if(key==='signal') return (s.signals||[]).map(g=>({label:g.name,sub:g.what,modality:g.modality,verdicts:g.verdicts}));
   if(key==='representation') return (s.signals||[]).filter(g=>g.modality==='derived').map(g=>({label:g.name,sub:g.what,verdicts:g.verdicts}));
   const c=(s.vocabulary||[]).find(v=>v.key===key);return ((c&&c.examples)||[]).map(e=>({label:e}));
+}
+function targetVocabFilteredItems(items){
+  return items.filter(it=>
+    (VTARGET_TYPE==='all'||it.type===VTARGET_TYPE)&&
+    (VTARGET_PRIORITY==='all'||it.priority===VTARGET_PRIORITY)
+  );
+}
+function targetVocabControls(items,shown){
+  const count=fn=>items.filter(fn).length;
+  const typeDefs=[
+    ['all','All',items.length],
+    ['worked','Worked',count(it=>it.type==='worked')],
+    ['candidate','Candidates',count(it=>it.type==='candidate')]
+  ];
+  const prDefs=[
+    ['all','All likelihoods',items.length],
+    ['High','High',count(it=>it.priority==='High')],
+    ['Medium','Medium',count(it=>it.priority==='Medium')],
+    ['Lower','Lower',count(it=>it.priority==='Lower')]
+  ].filter(x=>x[2]||x[0]==='all');
+  const btn=(kind,row,on)=>`<button class="fpill${on?' active':''}" onclick="${kind}='${esc(row[0])}';renderDrawer()">${esc(row[1])}<span class="c">${row[2]}</span></button>`;
+  return `<div class="hubsec" style="margin-top:0">
+    <div class="hl">Target filters${helpQ('These filters separate worked targets from unpromoted lakehouse candidates and narrow candidates by likelihood tier.')}</div>
+    <div class="filterrow">${typeDefs.map(r=>btn('VTARGET_TYPE',r,VTARGET_TYPE===r[0])).join('')}</div>
+    <div class="filterrow" style="margin-top:8px">${prDefs.map(r=>btn('VTARGET_PRIORITY',r,VTARGET_PRIORITY===r[0])).join('')}</div>
+    <p class="plain" style="font-size:13.5px;margin:12px 0 0;color:var(--ink4)">Showing ${shown} of ${items.length}. Candidate rows are discovery leads only; they still need target definition, fair baseline, held-out validation, null controls, and critic review before any claim wording.${helpQ('This prevents the backlog from being mistaken for evidence-backed findings.')}</p>
+  </div>`;
 }
 function renderVocabulary(){
   const v=DATA.vocabulary||[];
@@ -1930,7 +1965,9 @@ function renderVocabulary(){
 }
 function vocabDrawer(key){
   const c=(DATA.vocabulary||[]).find(v=>v.key===key); if(!c)return '';
-  _vocabItems=vocabItems(key);
+  const allItems=vocabItems(key);
+  _vocabItems=key==='target'?targetVocabFilteredItems(allItems):allItems;
+  const controls=key==='target'?targetVocabControls(allItems,_vocabItems.length):'';
   const rows=_vocabItems.map((it,i)=>`<div class="vrow${it.open?' clickable':''}" data-i="${i}">
       <div class="vmain"><span class="vname">${esc(it.label)}${helpQ('This is one real item that matches the selected vocabulary term.')}</span>${it.modality?` <span class="vmod">${esc(it.modality)}${helpQ('Modality is the kind of signal or representation this item belongs to.')}</span>`:''}${it.sub?`<span class="vsub">${esc(it.sub)}${helpQ(statementHelp(it.sub))}</span>`:''}</div>
       <span class="vmeta">${it.chip?statusChip(it.chip)+helpQ(statusExplain(it.chip)):''}${it.verdicts?`<span class="vlist">${verdictChips(it.verdicts)}${helpQ('These chips show how this signal performed for different targets: KEEP means useful, WASH means no lift, REJECT means it hurt, UNTESTED means not checked yet.')}</span>`:''}${it.open?'<span class="chev">→'+helpQ('Open the source card for this item.')+'</span>':''}</span>
@@ -1942,7 +1979,31 @@ function vocabDrawer(key){
     </div>
     <div class="dbody">
       <p class="plain" style="margin-bottom:18px">${esc(c.what)}${helpQ('This is the definition used by the lab on this site.')}</p>
+      ${controls}
       ${rows||'<div class="lhempty">Nothing recorded for this concept yet.</div>'}
+    </div>
+  </div>`;
+}
+function candidateTargetDrawer(t){
+  if(!t)return '';
+  return `<div>
+    <div class="dhead">
+      <div><div class="eb">Target candidate · not a claim${helpQ('Candidate targets are ranked leads from the lakehouse. They are not promoted findings until they pass the evidence gates.')}</div><div class="ti">${esc(t.label)}${helpQ(t.plain||'Candidate target')}</div><div class="nt">#${esc(t.rank)} · ${esc(t.priority||'Candidate')} likelihood${helpQ('Likelihood is a triage rank for where to look first, not a model result.')}</div></div>
+      <button class="dclose" onclick="closeDrawer()">×</button>
+    </div>
+    <div class="dbody">
+      <span class="badge" style="background:${STATUS_BADGE.Candidate.bg};color:${STATUS_BADGE.Candidate.text};margin-bottom:16px"><i style="background:${STATUS_BADGE.Candidate.text}"></i>Candidate${helpQ(statusExplain('Candidate'))}</span>
+      <p class="plain">${esc(t.plain||'Candidate target from the lakehouse backlog.')}${helpQ('This is the simple meaning of the candidate target.')}</p>
+      <div class="fieldgrid">
+        <div class="fieldcard"><div class="fk">Rank</div><div class="fv">#${esc(t.rank)}</div></div>
+        <div class="fieldcard"><div class="fk">Likelihood tier</div><div class="fv">${esc(t.priority||'Candidate')}</div></div>
+        <div class="fieldcard"><div class="fk">Status</div><div class="fv">Backlog candidate, not a finding</div></div>
+        <div class="fieldcard"><div class="fk">Question</div><div class="fv">${esc(t.question||'Can MBAL find predictive signals for this target?')}</div></div>
+      </div>
+      <div class="hubsec"><div class="hl">Lakehouse source examples${helpQ('These are source examples to inspect. They are not proof that the target is predictable.')}</div><p class="plain" style="font-size:14px;color:var(--ink3)">${esc(t.source_examples||'No source examples recorded.')}</p></div>
+      <div class="hubsec"><div class="hl">Next validation step${helpQ('This is the minimum path before this candidate can become a claim.')}</div><p class="plain" style="font-size:14px;color:var(--ink3)">Define the exact target label, choose a fair forecast-realistic baseline, run a held-out test with leakage checks and null controls, then promote only if the critic pass survives.</p></div>
+      <div class="hubsec"><div class="hl">Boundary</div><p class="plain" style="font-size:14px;color:var(--ink3)">This row is useful for deciding what to test next. It should not be read as evidence that the signal exists yet.</p></div>
+      <button class="lnk" onclick="DETAIL={type:'vocab',key:'target'};renderDrawer()">Back to target list →</button>
     </div>
   </div>`;
 }
@@ -2181,6 +2242,7 @@ function renderDrawer(){
   if(DETAIL.type==='model') inner=modelDrawer(DATA.models[DETAIL.idx]);
   else if(DETAIL.type==='dataset') inner=datasetDrawer();
   else if(DETAIL.type==='target') inner=targetDrawer();
+  else if(DETAIL.type==='target_candidate') inner=candidateTargetDrawer((DATA.candidate_targets||[]).find(t=>t.id===DETAIL.id));
   else if(DETAIL.type==='vocab') inner=vocabDrawer(DETAIL.key);
   else if(DETAIL.type==='ledger') inner=ledgerDrawer(DETAIL.key);
   host.innerHTML=`<div class="backdrop" id="backdrop"><div class="drawer" id="drawer">${inner}</div></div>`;

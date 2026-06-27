@@ -8,6 +8,8 @@ const snap = JSON.parse(fs.readFileSync("data.json", "utf8"));
 assert(snap.state, "data.json should expose the published snapshot state");
 assert(Array.isArray(snap.state.findings), "snapshot should include findings");
 assert(Array.isArray(snap.state.models), "snapshot should include models");
+assert(Array.isArray(snap.state.candidate_targets) && snap.state.candidate_targets.length === 41,
+  "snapshot should include the 41 ranked target candidates");
 
 /* ---- Start page: overview first, no question form on the homepage ---- */
 const required = [
@@ -17,6 +19,8 @@ const required = [
   "The pipeline",
   "Featured explainer",
   "function renderFullReport",
+  "function targetVocabControls",
+  "function candidateTargetDrawer",
 ];
 for (const needle of required) {
   assert(html.includes(needle), `homepage wiring missing: ${needle}`);
