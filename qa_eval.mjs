@@ -11,6 +11,14 @@ assert(Array.isArray(snap.state.models), "snapshot should include models");
 assert(Array.isArray(snap.state.candidate_targets) && snap.state.candidate_targets.length === 41,
   "snapshot should include the 41 ranked target candidates");
 
+const featuredBlock = html.match(/const FEATURED_QUICK_READS=\{([\s\S]*?)\n\};/);
+assert(featuredBlock, "homepage should define the featured finding fallback set");
+const featuredIds = [...featuredBlock[1].matchAll(/\n\s+([A-Za-z0-9_]+):\{/g)].map((m) => m[1]);
+const findingIds = new Set(snap.state.findings.map((f) => f.id));
+const resolvedFeatured = snap.state.findings.filter((f) => f.featured || featuredIds.includes(f.id));
+assert(html.includes("function isFeaturedFinding"), "Findings view should derive featured status safely");
+assert(resolvedFeatured.length > 0, "Featured findings filter should resolve at least one current finding");
+
 /* ---- Start page: overview first, no question form on the homepage ---- */
 const required = [
   "Audited coastal AI: public data, hard baselines, source-backed findings.",
