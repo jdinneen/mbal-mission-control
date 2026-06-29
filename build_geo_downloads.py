@@ -1,39 +1,25 @@
 #!/usr/bin/env python3
-"""Generate the static map + downloads artifacts for Mission Control.
+"""Generate the static map artifacts for Mission Control.
 
 HONESTY SCOPE (critic-gated):
   * stations.geojson = WHERE THE OBSERVATIONS ARE (monitoring coverage), NOT a model
     prediction surface. The deployed bacteria model is a per-station tabular nowcast;
     the lab's own `bacteria_hgbt_spatial` is a registered WASH, so there is NO honest
     continuous confidence grid. We show coverage + observed exceedance rate + support.
-  * downloads.json is built from an EXPLICIT ALLOWLIST. The snapshot build reads the
-    working tree, so git-ignore is NOT a safety boundary — only files on the allowlist
-    are ever published (no data/ raw parquets, no research-only / licensed datasets).
+  * Raw public data downloads are intentionally disabled. The static site can still
+    render governed summaries and map coverage, but rebuilds must not recreate CSV,
+    Markdown, or full-snapshot download bundles.
 
 Run from mbal-mission-control/ with the monorepo as the parent. Requires duckdb.
 Re-run when the station geo or master observations change. Front-end reads the
-emitted manifests; it never hard-codes links.
+emitted map layers; it never hard-codes raw data download links.
 """
-import json, hashlib, re, csv, io, os
+import json
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parent
 EXCEED_MPN = 104  # AB411 single-sample enterococcus standard
-
-def redact(text):
-    text = re.sub(r"C:[\\/]+Users[\\/]+[^\\/\"]+[\\/]+", "", text)
-    text = re.sub(r"/Users/[^/\\\"]+/", "/[redacted]/", text)
-    text = re.sub(r"\b(?:sk|ghp|github_pat|glpat|xox[baprs])[-_][-A-Za-z0-9_]{16,}\b", "[token-redacted]", text)
-    text = re.sub(r"\bAIza[0-9A-Za-z_-]{20,}\b", "[api-key-redacted]", text)
-    return text
-
-def sha256(p):
-    h = hashlib.sha256()
-    with open(p, "rb") as f:
-        for chunk in iter(lambda: f.read(1 << 16), b""):
-            h.update(chunk)
-    return h.hexdigest()
 
 def _auc(labels, scores):
     """Rank-based AUC (Mann-Whitney), tie-aware. None if a class is absent."""
@@ -244,60 +230,20 @@ def build_ireland():
     print(f"ireland_beaches.geojson: {len(feats)} beaches")
 
 
-# ---------- 2. CSV exports from data.json (can't drift) ----------
-def _csv(rows, cols):
-    buf = io.StringIO()
-    w = csv.DictWriter(buf, fieldnames=cols, extrasaction="ignore")
-    w.writeheader()
-    for r in rows:
-        w.writerow({c: r.get(c, "") for c in cols})
-    return buf.getvalue()
-
-def build_csvs(state):
-    (HERE / "downloads").mkdir(exist_ok=True)
-    fcols = ["id", "title", "kind", "headline", "plain"]
-    findings = [{**f, "plain": (f.get("plain") or "").replace("\n", " ")} for f in state.get("findings", [])]
-    (HERE / "downloads" / "findings.csv").write_text(_csv(findings, fcols), encoding="utf-8")
-    mcols = ["model_id", "family", "task", "status", "claimable", "beats_baseline"]
-    (HERE / "downloads" / "models.csv").write_text(_csv(state.get("models", []), mcols), encoding="utf-8")
-    print(f"findings.csv ({len(findings)}), models.csv ({len(state.get('models', []))})")
-
-# ---------- 3. PROGRAM_RESULTS.md (redacted copy) ----------
-def build_program_results():
-    src = ROOT / "mbal_program" / "reports" / "PROGRAM_RESULTS.md"
-    if src.exists():
-        (HERE / "downloads").mkdir(exist_ok=True)
-        (HERE / "downloads" / "PROGRAM_RESULTS.md").write_text(redact(src.read_text(encoding="utf-8")), encoding="utf-8")
-        print("PROGRAM_RESULTS.md copied (redacted)")
-        return True
-    print("PROGRAM_RESULTS.md not found — skipping")
-    return False
-
-# ---------- 4. downloads.json — EXPLICIT ALLOWLIST only ----------
-def build_manifest(have_program):
-    APACHE = "Apache-2.0"
-    allow = [
-        {"title": "Full snapshot (all findings, models, datasets, signals)", "path": "data.json", "type": "application/json", "license": APACHE},
-        {"title": "Findings table (CSV)", "path": "downloads/findings.csv", "type": "text/csv", "license": APACHE},
-        {"title": "Models registry (CSV)", "path": "downloads/models.csv", "type": "text/csv", "license": APACHE},
-        {"title": "Beach-station coverage + model skill (GeoJSON)", "path": "stations.geojson", "type": "application/geo+json", "license": APACHE},
-    ]
-    if (HERE / "lakes_cyano.geojson").exists():
-        allow.append({"title": "US lake cyano coverage (GeoJSON)", "path": "lakes_cyano.geojson", "type": "application/geo+json", "license": "Public domain (EPA CyAN)"})
-    if (HERE / "piers_domoic.geojson").exists():
-        allow.append({"title": "Domoic-acid pier coverage (GeoJSON)", "path": "piers_domoic.geojson", "type": "application/geo+json", "license": "Public (CalHABMAP/SCCOOS)"})
-    if (HERE / "ireland_beaches.geojson").exists():
-        allow.append({"title": "Ireland bathing-water coverage (GeoJSON)", "path": "ireland_beaches.geojson", "type": "application/geo+json", "license": "Public (EPA Ireland / EU open data)"})
-    if have_program:
-        allow.append({"title": "Program results summary", "path": "downloads/PROGRAM_RESULTS.md", "type": "text/markdown", "license": APACHE})
-    items = []
-    for a in allow:
-        p = HERE / a["path"]
-        assert p.exists(), f"allowlisted file missing: {a['path']}"  # no dead links
-        assert not a["path"].startswith(("data/", "../")), f"refused unsafe path: {a['path']}"
-        items.append({**a, "bytes": p.stat().st_size, "sha256": sha256(p)})
-    (HERE / "downloads.json").write_text(json.dumps({"items": items}, indent=1), encoding="utf-8")
-    print(f"downloads.json: {len(items)} allowlisted artifacts")
+# ---------- 2. downloads.json — intentionally empty ----------
+def build_manifest():
+    (HERE / "downloads.json").write_text(
+        json.dumps(
+            {
+                "items": [],
+                "downloads_enabled": False,
+                "note": "Raw public downloads are disabled. Use the site UI for governed summaries and request controlled raw artifacts through the lab.",
+            },
+            indent=1,
+        ),
+        encoding="utf-8",
+    )
+    print("downloads.json: raw public downloads disabled")
 
 def build_license():
     src = ROOT / "LICENSE"
@@ -306,15 +252,12 @@ def build_license():
         print("LICENSE copied from monorepo (Apache-2.0)")
 
 def main():
-    state = json.load(open(HERE / "data.json", encoding="utf-8"))["state"]
     build_stations()
     build_cyano_lakes()
     build_da_piers()
     build_ireland()
-    build_csvs(state)
-    have = build_program_results()
     build_license()
-    build_manifest(have)
+    build_manifest()
 
 if __name__ == "__main__":
     main()

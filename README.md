@@ -17,7 +17,7 @@ Files:
 python -m http.server 8000      # in this folder
 # open http://127.0.0.1:8000
 ```
-Findings/models/lakehouse render from `data.json`. Search will say "not wired yet" until step 3.
+Findings/models/lakehouse render from `data.json`. Raw export downloads are intentionally not published from the site. Search will say "not wired yet" until step 3.
 
 ## 2. Publish the site on GitHub Pages
 You run these (they use *your* GitHub login — I never touch your credentials):
@@ -63,8 +63,10 @@ python build_snapshot.py        # rewrites data.json from live state
 git add data.json && git commit -m "refresh snapshot" && git push
 ```
 
+`build_geo_downloads.py` may refresh map layers, but it must keep `downloads.json` empty and must not recreate raw CSV, Markdown, or full-snapshot download bundles.
+
 ---
 
 **Privacy note:** `build_snapshot.py` strips local file paths, usernames, GPU/process/agent details —
-the published `data.json` contains only the science (findings, models, gates, dataset inventory).
+the published `data.json` contains only the science summaries needed to render the site.
 **Never** commit `.env`, `.dev.vars`, or your API key (the `.gitignore` already blocks them).

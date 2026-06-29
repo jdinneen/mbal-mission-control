@@ -347,7 +347,7 @@
   .mapnote{margin:12px 2px 0;font-size:12.5px;color:var(--ink4);line-height:1.5}
   .mapfail{padding:60px 24px;text-align:center;color:var(--ink4);font-size:14px}
 
-  /* ---- footer / downloads ---- */
+  /* ---- footer / access ---- */
   .sitefoot{border-top:1px solid var(--border);background:var(--surface);margin-top:20px}
   .footwrap{max-width:1120px;margin:0 auto;padding:34px 28px 48px;display:grid;grid-template-columns:1.3fr 1fr;gap:36px}
   .footcol .footnote{font-size:13px;line-height:1.6;color:var(--ink3);margin:0 0 14px;max-width:520px}
@@ -770,18 +770,18 @@
   <section class="view" id="data">
     <div style="margin-bottom:22px;max-width:800px">
       <h1 class="sec">Data &amp; reproduce</h1>
-      <p class="subhead">Everything here is open and exported from one frozen snapshot, so the findings, models, and map can't drift apart. Download any file, check its fingerprint, and trace a claim back to its evidence.</p>
+      <p class="subhead">Everything shown here is rendered from one governed snapshot, so the findings, models, and map can't drift apart. Raw export downloads are no longer published from this site.</p>
     </div>
     <div class="card reprocard">
-      <h3>Get the data</h3>
+      <h3>Data access</h3>
       <div id="downloads" class="downloads"></div>
     </div>
     <div class="card reprocard">
       <h3>Verify &amp; reproduce</h3>
       <ol>
-        <li>Every download carries a <code>sha256</code> fingerprint. Recompute it (<code>shasum -a 256 &lt;file&gt;</code>) and confirm it matches the value shown — that proves the file is exactly the published snapshot, unchanged.</li>
-        <li>Findings, models, and map layers are all exported from the same <code>data.json</code>, so any claim on this site traces back to the evidence behind it rather than a hand-written summary.</li>
-        <li>Findings, models, and map layers are all exported from the same <code>data.json</code> snapshot, so every claim on this site traces back to its evidence.</li>
+        <li>The public site keeps the audited findings, models, map coverage, and ledger visible without serving raw export bundles.</li>
+        <li>Every claim still traces to an evidence path or report ID so collaborators can request the exact governed artifact through the lab.</li>
+        <li>Published summaries should be treated as decision support, not a replacement for controlled data access or source-system records.</li>
       </ol>
     </div>
     <div class="secband"><h2>Datasets behind this snapshot</h2><p>Production (governed) vs experimental (shadow). Click any row for size, source, and recency.</p></div>
@@ -871,7 +871,7 @@
   <div class="footwrap">
     <div class="footcol">
       <div class="eyebrow" style="margin-bottom:8px">About this snapshot</div>
-      <p class="footnote">A public science snapshot from the Monterey Bay AI Lab. Every result is graded honestly — <b>Supported</b> held up under audit, <b>Caveated</b> is real but limited, <b>Null</b> was tested and didn't hold — and nulls stay on the record beside the wins. The map shows observation coverage, never an extrapolated prediction surface. Downloads and reproduction live under <a href="#data">Data &amp; reproduce</a>.</p>
+      <p class="footnote">A public science snapshot from the Monterey Bay AI Lab. Every result is graded honestly — <b>Supported</b> held up under audit, <b>Caveated</b> is real but limited, <b>Null</b> was tested and didn't hold — and nulls stay on the record beside the wins. The map shows observation coverage, never an extrapolated prediction surface. Evidence and access notes live under <a href="#data">Data &amp; reproduce</a>.</p>
     </div>
     <div class="footcol">
       <div class="eyebrow" style="margin-bottom:8px">About the data</div>
@@ -1027,7 +1027,7 @@ function appendHelpAll(selector,helps){
 function applyStaticHelp(){
   appendHelp('#snaplabel','Published snapshot means a frozen public copy of the current evidence, not a live private workspace.');
   appendHelp('#snapwhen','This is the month and year when the public snapshot was built.');
-  appendHelpAll('nav.tabs button',['Overview is the summary page.','Questions are research areas and hazards the lab has worked on.','Findings are tested science results.','Models are fitted systems and baselines in the registry.','Map shows data and model evidence by place.','Ledger is the full searchable audit trail.','Data and reproduce is the organized data inventory and downloads.','Glossary explains the lab words.']);
+  appendHelpAll('nav.tabs button',['Overview is the summary page.','Questions are research areas and hazards the lab has worked on.','Findings are tested science results.','Models are fitted systems and baselines in the registry.','Map shows data and model evidence by place.','Ledger is the full searchable audit trail.','Data and reproduce is the organized evidence inventory and access note.','Glossary explains the lab words.']);
   appendHelp('#overview .eyebrow','This page starts with the big picture before showing the evidence cards and datasets.');
   appendHelp('#overview .page','A unified model means one project trying to connect many coastal signals: water, weather, runoff, tides, waves, biology, and observations.');
   appendHelp('#overview .lede','This paragraph is the plain-language mission: show wins, limits, and failures with evidence attached.');
@@ -1052,8 +1052,8 @@ function applyStaticHelp(){
   appendHelpAll('#maptoggle button',['Coverage means where observations exist and how often the measured condition appears.','Model skill means how well the model ranked held-out events at each site, when enough events exist.','Evidence grid groups nearby sites into map cells so you can see observation support and model confidence together without pretending we have ocean-wide pixels.']);
   appendHelp('#vocabulary .sec','This section explains the lab words so non-experts can read the site without guessing.');
   appendHelp('#vocabulary .subhead','The vocabulary prevents common confusion, like treating an unfitted learner as a trained model.');
-  appendHelp('.sitefoot .footcol:nth-child(1) .eyebrow','Downloads let someone inspect or reproduce the public evidence outside the web page.');
-  appendHelp('.sitefoot .footcol:nth-child(1) .footnote','SHA-256 is a fingerprint for a file. If the fingerprint matches, the file did not silently change.');
+  appendHelp('.sitefoot .footcol:nth-child(1) .eyebrow','This section explains what the public snapshot is and how to read it.');
+  appendHelp('.sitefoot .footcol:nth-child(1) .footnote','Raw export bundles are not published from this site. The public page keeps evidence summaries and access notes visible.');
   appendHelp('.sitefoot .footcol:nth-child(2) .eyebrow','This is the legend for interpreting the site honestly.');
   appendHelp('.sitefoot .footcol:nth-child(2) .footnote','This explains the grading words used across the site: supported, caveated, null, keep, wash, reject, and untested.');
   appendHelpAll('#models .thead span',['Model ID: the registry name for the fitted model or baseline.','Family: the algorithm or comparator type.','Task: what the model tries to predict or rank.','Status: the evidence state in the registry.',null]);
@@ -2141,7 +2141,7 @@ function selectDomain(key){
 }
 function renderMap(){
   const host=$('#leafmap'); if(!host)return;
-  if(!window.L){host.innerHTML='<div class="mapfail">The map library didn’t load (offline?). The station data is still downloadable in the footer below.</div>';return;}
+  if(!window.L){host.innerHTML='<div class="mapfail">The map library did not load. The rest of the public evidence snapshot can still be read.</div>';return;}
   if(_map){setTimeout(()=>_map.invalidateSize(),60);if(_pendingDomain||_pendingMode){selectDomain(_pendingDomain||_domain.key);_pendingDomain=null;_pendingMode=null;}return;}
   _map=L.map('leafmap',{scrollWheelZoom:false}).setView([37,-110],4);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO',subdomains:'abcd',maxZoom:19}).addTo(_map);
@@ -2149,15 +2149,10 @@ function renderMap(){
   document.querySelectorAll('#mapdomain button').forEach(b=>b.onclick=()=>selectDomain(b.dataset.d));
   selectDomain(_pendingDomain||'bacteria'); _pendingDomain=null; _pendingMode=null;
 }
-/* ---------- downloads footer (manifest-driven, allowlisted) ---------- */
+/* ---------- public data-access notice ---------- */
 function renderDownloads(){
   const box=$('#downloads'); if(!box)return;
-  const sz=b=>b>=1048576?(b/1048576).toFixed(1)+' MB':b>=1024?(b/1024).toFixed(0)+' KB':b+' B';
-  const typ=t=>({'application/json':'JSON','text/csv':'CSV','application/geo+json':'GeoJSON','text/markdown':'Markdown'}[t]||t);
-  fetch('downloads.json',{cache:'no-cache'}).then(r=>r.json()).then(d=>{
-    box.innerHTML=(d.items||[]).map(it=>`<div class="dl"><div class="di"><div class="dt">${esc(it.title)}${helpQ('This is a downloadable evidence file from the published snapshot.')}</div><div class="dm">${typ(it.type)}${helpQ('This is the file format. JSON is structured data, CSV is a spreadsheet-like table, GeoJSON is map data, and Markdown is readable text.')} · ${sz(it.bytes)}${helpQ('This is the file size.')} · sha256 ${esc(String(it.sha256).slice(0,16))}…${helpQ('SHA-256 is a file fingerprint. It helps prove the downloaded file matches the published snapshot.')}</div></div><a class="dbtn" href="${esc(it.path)}" download>Download</a></div>`).join('')
-      ||'<div class="footnote">No downloads in this snapshot.</div>';
-  }).catch(()=>{box.innerHTML='<div class="footnote">Downloads manifest unavailable on this host.</div>';});
+  box.innerHTML='<div class="dl"><div class="di"><div class="dt">Raw public downloads are disabled'+helpQ('The site no longer publishes direct raw data export links or a downloadable manifest.')+'</div><div class="dm">Governed summaries remain visible here. Request raw artifacts through the lab when there is a controlled-access need.</div></div></div>';
 }
 
 /* ---------- questions (research-question spine, grouped by family) ---------- */

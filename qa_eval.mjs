@@ -42,6 +42,8 @@ assert(!html.includes("id=\"frontierlist\""), "homepage should not include front
 assert(!html.includes("id=\"nulllist\""), "homepage should not include null grid");
 assert(!html.includes("id=\"leaderboard\""), "homepage should not include leaderboard grid");
 assert(!html.includes("Monterey Bay Today"), "nav should not include Monterey Bay Today");
+assert(!html.includes("fetch('downloads.json'"), "site should not fetch the raw-download manifest");
+assert(!html.includes(' download>Download'), "site should not render raw download buttons");
 
 const scripts = [...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
 assert(scripts.length > 0, "index.html should include an app script");
