@@ -652,6 +652,41 @@
   .contribute div h3{margin:0 0 4px;font-size:16px;color:var(--ink)}
   .contribute div p{margin:0;font-size:13.5px;color:var(--ink3);max-width:560px}
   .contribute a{padding:12px 22px;border-radius:11px;background:var(--acc);color:#fff;text-decoration:none;font-weight:600;font-size:14.5px;white-space:nowrap}
+  /* innovation tab */
+  .ihero{max-width:880px;margin-bottom:20px}
+  .ithrough{background:linear-gradient(135deg,#fff 0%,#fff 55%,var(--acc-tint2) 100%);border:1px solid #d8e7e5;border-left:4px solid var(--acc);border-radius:14px;padding:18px 22px;margin-bottom:24px;box-shadow:var(--card-sh)}
+  .ithrough p{margin:0;font-size:15px;line-height:1.6;color:var(--ink2);text-wrap:pretty}
+  .iscore{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:8px}
+  .imetric{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--acc);border-radius:13px;padding:15px 16px;box-shadow:var(--card-sh)}
+  .imetric .v{font-size:30px;font-weight:600;letter-spacing:-.02em;line-height:1}
+  .imetric .k{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink4);margin-top:9px;font-weight:600}
+  .imetric .s{font-size:12px;color:var(--ink4);margin-top:5px;line-height:1.4}
+  .igroup{display:flex;align-items:baseline;gap:12px;margin:30px 0 14px;flex-wrap:wrap;border-bottom:1px solid var(--faint);padding-bottom:10px}
+  .igroup h2{margin:0;font-size:20px;font-weight:600;letter-spacing:-.01em}
+  .igroup span{font-size:13px;color:var(--ink4)}
+  .icard{background:var(--surface);border:1px solid var(--border);border-left:5px solid var(--acc);border-radius:14px;box-shadow:var(--card-sh);padding:20px 22px;margin-bottom:14px;transition:box-shadow .16s,transform .16s,border-color .16s}
+  .icard:hover{box-shadow:var(--card-sh-hover);transform:translateY(-1px)}
+  .icard.win{border-left-color:#0f8a84}.icard.partial{border-left-color:#c98a10}
+  .icard.caution{border-left-color:#c0563e}.icard.dead{border-left-color:#9aa0a7}.icard.method{border-left-color:#3b5bdb}
+  .ichead{display:flex;align-items:center;gap:11px;margin-bottom:11px}
+  .icnum{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--ink4);background:var(--faint2);border-radius:7px;padding:4px 8px}
+  .ictitle{font-size:17.5px;font-weight:600;line-height:1.22;flex:1;letter-spacing:-.012em;min-width:0}
+  .icverdict{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;white-space:nowrap}
+  .iclead{font-size:15px;line-height:1.56;color:var(--ink);margin:0 0 14px;text-wrap:pretty}
+  .icgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+  .iblock{background:var(--subtle);border:1px solid var(--faint);border-radius:11px;padding:12px 14px;min-width:0}
+  .iblock .lbl{font-family:var(--mono);font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:6px}
+  .iblock .lbl i{width:6px;height:6px;border-radius:50%}
+  .iblock p{margin:0;font-size:13px;line-height:1.52;color:var(--ink2);text-wrap:pretty;overflow-wrap:anywhere}
+  .ibet .lbl{color:var(--ink4)}.ibet .lbl i{background:var(--ink5)}
+  .ifound.win .lbl{color:#0f7a74}.ifound.win .lbl i{background:#0f7a74}
+  .ifound.partial .lbl{color:#9a6a07}.ifound.partial .lbl i{background:#c98a10}
+  .ifound.caution .lbl{color:#b4453c}.ifound.caution .lbl i{background:#c0563e}
+  .ifound.dead .lbl{color:#7c828a}.ifound.dead .lbl i{background:#9aa0a7}
+  .ifound.method .lbl{color:#3b5bdb}.ifound.method .lbl i{background:#3b5bdb}
+  .icds{font-family:var(--mono);font-size:11.5px;line-height:1.62;background:#0e1621;color:#c3ccd8;border-radius:11px;padding:13px 15px;overflow-wrap:anywhere}
+  .icds .dlbl{display:block;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#5fd0c6;margin-bottom:6px}
+  @media(max-width:720px){.iscore{grid-template-columns:1fr 1fr}.icgrid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -674,7 +709,7 @@
     <button data-v="overview" class="active">Overview</button>
     <button data-v="data">Data &amp; reproduce</button>
     <button data-v="models">Discovery Engines</button>
-    <button data-v="innovations">What we tried</button>
+    <button data-v="innovations">Innovation</button>
     <button data-v="map">Map</button>
     <button data-v="ledger">Ledger</button>
     <button data-v="glossary">Glossary</button>
@@ -1043,13 +1078,12 @@
 
   <!-- ===== GLOSSARY ===== -->
   <section class="view" id="innovations">
-    <div style="margin-bottom:22px;max-width:820px">
-      <h1 class="sec">What we tried &mdash; and what we learned</h1>
-      <p class="subhead">The modern machine-learning and physics toolkit, applied honestly to ocean-hazard forecasting. Each idea below has the plain version, the bet behind it, and what actually happened &mdash; wins and dead-ends alike, because knowing which is which is the real product.</p>
+    <div class="ihero">
+      <h1 class="sec">Innovation</h1>
+      <p class="subhead">The modern machine-learning and physics toolkit, applied honestly to ocean-hazard forecasting. Ten ideas we tried &mdash; each with the plain-English version, the bet behind it, what we found, and the technical detail. Wins and dead-ends alike, because knowing which is which is the whole point.</p>
     </div>
-    <div class="card" style="margin-bottom:20px;border-left:3px solid var(--acc)">
-      <p style="margin:0;font-size:14px;line-height:1.6"><b>The through-line.</b> Ocean data is dominated by &ldquo;tomorrow looks like today.&rdquo; Almost every clever driver or fancy model just re-learns that. The two things that truly worked were changing the <b>question</b> (predict the onset, not the level) and changing the <b>place</b> (transfer a model to a coast it has never seen). Everything else we tried honestly &mdash; and most of it washed, which is exactly what the evidence gate is for.</p>
-    </div>
+    <div class="ithrough"><p><b>The through-line.</b> Ocean data is dominated by &ldquo;tomorrow looks like today.&rdquo; Almost every clever driver or fancy model just re-learns that. The two things that truly worked were changing the <b>question</b> (predict the onset, not the level) and changing the <b>place</b> (move a model to a coast it has never seen). Everything else we tried honestly &mdash; and most of it washed, which is exactly what the evidence gate is for.</p></div>
+    <div class="iscore" id="innovscore"></div>
     <div id="innovlist"></div>
   </section>
   <section class="view" id="glossary">
@@ -2082,17 +2116,28 @@ const INNOVATIONS=[
  ds:'Claim-card gate = strongest single fair baseline (rolling site-recurrence, never persistence/climatology/union), forward-blocked CV, station-clustered bootstrap CI, permutation and key-shuffle nulls, a default-refuted adversarial verifier, and audit-the-auditor recursion. This is why the verdict chips elsewhere on this site can be trusted.'}
 ];
 function renderInnovations(){
-  const el=document.getElementById('innovlist'); if(!el)return;
-  el.innerHTML=INNOVATIONS.map(x=>{const b=INNOV_BADGE[x.verdict]||INNOV_BADGE['DEAD END'];
-    return '<div class="card" style="margin-bottom:14px">'
-      +'<div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px">'
-      +'<span style="font:600 12px/1 var(--mono,monospace);color:#b8bdc3">'+x.n+'</span>'
-      +'<h3 style="margin:0;font-size:16px">'+x.title+'</h3>'
-      +'<span class="sbadge" style="background:'+b.bg+';color:'+b.text+'">'+x.verdict+'</span></div>'
-      +'<p style="margin:6px 0;font-size:14px;line-height:1.55"><b>In plain words.</b> '+x.plain+'</p>'
-      +'<p style="margin:6px 0;font-size:14px;line-height:1.55"><b>The bet.</b> '+x.bet+'</p>'
-      +'<p style="margin:6px 0;font-size:14px;line-height:1.55"><b>What we found.</b> '+x.found+'</p>'
-      +'<p style="margin:8px 0 0;font-size:12.5px;line-height:1.55;color:var(--muted,#586069);border-top:1px solid var(--hair,#eef0f2);padding-top:8px"><b>For the data scientist.</b> '+x.ds+'</p>'
+  const list=document.getElementById('innovlist'); if(!list)return;
+  const CLS={WIN:'win',PARTIAL:'partial','DEAD END':'dead',CAUTION:'caution',METHOD:'method'};
+  const c=v=>INNOVATIONS.filter(x=>x.verdict===v).length;
+  const sc=document.getElementById('innovscore');
+  if(sc)sc.innerHTML=[
+    ['#0f8a84',c('WIN'),'Real wins','onset + zero-shot transfer'],
+    ['#c98a10',c('PARTIAL'),'Partial','worked in the right slot'],
+    ['#9aa0a7',c('DEAD END')+c('CAUTION'),'Washed out','clever, but no real edge'],
+    ['#3b5bdb',c('METHOD'),'Method','the referee that makes it real']
+  ].map(m=>'<div class="imetric" style="border-top-color:'+m[0]+'"><div class="v" style="color:'+m[0]+'">'+m[1]+'</div><div class="k">'+m[2]+'</div><div class="s">'+m[3]+'</div></div>').join('');
+  const GROUPS={'01':['What actually worked','the two real escapes'],'03':['The physics-transfer bets','real, but only in the right slot'],'07':['Honest dead-ends','model cleverness was not the lever'],'10':['The method','the referee that makes the rest trustworthy']};
+  list.innerHTML=INNOVATIONS.map(x=>{const cl=CLS[x.verdict]||'dead', b=INNOV_BADGE[x.verdict]||INNOV_BADGE['DEAD END'];
+    const g=GROUPS[x.n]?('<div class="igroup"><h2>'+GROUPS[x.n][0]+'</h2><span>'+GROUPS[x.n][1]+'</span></div>'):'';
+    return g+'<div class="icard '+cl+'">'
+      +'<div class="ichead"><span class="icnum">'+x.n+'</span><span class="ictitle">'+x.title+'</span>'
+      +'<span class="icverdict" style="background:'+b.bg+';color:'+b.text+'">'+x.verdict+'</span></div>'
+      +'<p class="iclead">'+x.plain+'</p>'
+      +'<div class="icgrid">'
+      +'<div class="iblock ibet"><div class="lbl"><i></i>The bet</div><p>'+x.bet+'</p></div>'
+      +'<div class="iblock ifound '+cl+'"><div class="lbl"><i></i>What we found</div><p>'+x.found+'</p></div>'
+      +'</div>'
+      +'<div class="icds"><span class="dlbl">For the data scientist</span>'+x.ds+'</div>'
       +'</div>';}).join('');
 }
 
