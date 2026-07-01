@@ -12,15 +12,15 @@
 </script>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <title>Monterey Bay AI Lab — Mission Control</title>
-<meta name="description" content="A public science snapshot from the Monterey Bay AI Lab: what we've tested to forecast rare coastal water-quality events, what held up under audit, and what didn't — every claim tied to real evidence, with the failures kept on the record."/>
+<meta name="description" content="What Monterey Bay AI Lab is building now: water and environmental evidence engines, the data pipeline behind them, and the findings that have actually held up against baselines."/>
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f8a84'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E"/>
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="Monterey Bay AI Lab — Mission Control"/>
-<meta property="og:description" content="A public science snapshot: what we've tested to forecast rare coastal water-quality events, what held up under audit, and what didn't — evidence first, failures on the record."/>
+<meta property="og:description" content="Whole-project evidence work in public: discovery engines, checked findings, plain baselines, and null results kept on the record."/>
 <meta property="og:url" content="https://jdinneen.github.io/mbal-mission-control/"/>
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Monterey Bay AI Lab — Mission Control"/>
-<meta name="twitter:description" content="A public science snapshot: what held up under audit, what didn't, every claim tied to real evidence."/>
+<meta name="twitter:description" content="Discovery engines, checked findings, plain baselines, and null results from Monterey Bay AI Lab."/>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -215,6 +215,28 @@
   .trow .cellmono{font-family:var(--mono);font-size:13px;color:var(--ink3)}
   .trow .chev{justify-self:end;color:#c2c7cc;font-size:16px}
   .sbadge{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;border-radius:7px;padding:4px 10px;justify-self:start}
+
+  /* ---- discovery engines ---- */
+  .engineflow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:0 0 24px}
+  .engineflow .step{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--card-sh);padding:18px 18px;min-width:0}
+  .engineflow .step .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--acc);font-weight:600;margin-bottom:8px}
+  .engineflow .step h3{margin:0 0 7px;font-size:16px;line-height:1.25;font-weight:650;color:var(--ink)}
+  .engineflow .step p{margin:0;font-size:13.5px;line-height:1.52;color:var(--ink3);text-wrap:pretty}
+  .enginebrief{padding:20px 22px;margin:0 0 24px;border-left:4px solid var(--acc)}
+  .enginebrief h3{margin:0 0 7px;font-size:17px}
+  .enginebrief p{margin:0;font-size:14.5px;line-height:1.58;color:var(--ink2);text-wrap:pretty}
+  .engineportfolio{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:0 0 24px}
+  .enginecard{padding:18px 20px;min-width:0}
+  .enginecard .eh{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px}
+  .enginecard h3{margin:0;font-size:16px;line-height:1.25;font-weight:650;overflow-wrap:anywhere}
+  .enginechips{display:flex;flex-wrap:wrap;gap:7px;margin:0 0 13px}
+  .enginechips span{font-family:var(--mono);font-size:11px;color:var(--ink3);background:var(--faint3);border:1px solid var(--border);border-radius:7px;padding:4px 8px}
+  .enginefact{display:grid;gap:4px;border-top:1px solid var(--faint2);padding-top:11px;margin-top:10px}
+  .enginefact b{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink5)}
+  .enginefact span{font-size:13.5px;line-height:1.48;color:var(--ink3)}
+  .registryhead{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin:8px 0 13px;flex-wrap:wrap}
+  .registryhead h2{margin:0 0 4px;font-size:19px;font-weight:650}
+  .registryhead p{margin:0;font-size:14px;line-height:1.5;color:var(--ink3);max-width:760px}
 
   /* ---- complete ledger ---- */
   .ledgerstats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 18px}
@@ -488,7 +510,7 @@
   .reprocard li{font-size:14px;line-height:1.6;color:var(--ink2);margin-bottom:7px}
   .reprocard code{font-family:var(--mono);font-size:12.5px;background:var(--faint3);border:1px solid var(--border);border-radius:5px;padding:1px 6px}
   @media (max-width:860px){
-    .featurevideo,.bigrow,.minigrid,.paths,.qcardgrid,.storyintro,.storyflow,.storycompare{grid-template-columns:1fr}
+    .featurevideo,.bigrow,.minigrid,.paths,.qcardgrid,.storyintro,.storyflow,.storycompare,.engineflow,.engineportfolio{grid-template-columns:1fr}
     .hwrap{padding:12px 16px}
     nav.tabs{padding:0 16px}
     main{padding:24px 16px 64px}
@@ -603,7 +625,7 @@
     <button data-v="overview" class="active">Start here</button>
     <button data-v="questions">Questions</button>
     <button data-v="findings">Findings</button>
-    <button data-v="models">Models</button>
+    <button data-v="models">Discovery Engines</button>
     <button data-v="map">Map</button>
     <button data-v="ledger">Ledger</button>
     <button data-v="data">Data &amp; reproduce</button>
@@ -618,35 +640,35 @@
   <section class="view" id="overview">
     <div class="hero">
       <div class="eyebrow">Monterey Bay AI Lab</div>
-      <h1 class="page">Audited coastal AI: public data, hard baselines, source-backed findings.</h1>
-      <p class="lede">Mission Control is the public evidence ledger for the lab. We take messy coastal, ocean, lake, and watershed data; put it through a governed pipeline; train forecasting and transfer models; then keep only the claims that survive held-out tests, honest baselines, null checks, and adversarial review.</p>
+      <h1 class="page">We train evidence engines across water, biology, and field-risk questions, then show the scorecard.</h1>
+      <p class="lede">Mission Control is the public notebook for the whole project: pulling water, weather, ocean, watershed, biology, toxin, fisheries, and sensor records into one lakehouse; using frontier models to scout new engines and failure checks; running the real jobs on local GPU compute; then publishing what beat a fair baseline, what only partly worked, and what failed.</p>
     </div>
 
     <div class="bigrow" aria-label="Project overview">
       <div class="card bigcard">
         <div class="tag">What we are doing</div>
-        <h2>Turning public environmental records into falsifiable forecasting claims.</h2>
-        <p>Each card on this site starts as a concrete question: can a model rank tomorrow's beach-bacteria risk, toxic HAB onset, cyanotoxin risk, hypoxia stress, or cross-region transfer better than a simple baseline? If the answer is yes, the evidence is shown. If the answer is no, the null stays on the record.</p>
+        <h2>Building a repeatable test bench for multi-hazard science and operations.</h2>
+        <p>Each run starts with a concrete question: can we rank bacteria risk, toxic HAB onset, cyanotoxin risk, hypoxia, storm response, fisheries effort, wildlife risk, or cross-region transfer better than recent same-place history, persistence, or seasonality? The point is not to make every model look good. The point is to find the few places where extra modeling is worth it.</p>
       </div>
       <div class="card bigcard">
-        <div class="tag">Biggest findings</div>
-        <h2>Beach-bacteria ranking, clean-to-dirty onset, HAB/toxin forecasting, and physics transfer are the current supported wins.</h2>
-        <p>The headline evidence is now the featured report set: statewide bacteria nowcast and onset, domoic-acid and HAB exceedance forecasts, mcyE genotype-to-toxin replication, and label-free physics interlingua transfer. Click any featured finding for the full source-backed report and the caveats that keep it honest.</p>
+        <div class="tag">How we work</div>
+        <h2>Train a lot, promote little, keep the misses visible.</h2>
+        <p>The engines compete against boring but strong baselines first. A result does not become a claim until it has a held-out read, a baseline comparison, and a failure mode written down. That is why the site shows wins, caveats, and nulls side by side instead of only the best-looking chart.</p>
       </div>
     </div>
 
-    <div class="secband"><h2>The pipeline</h2><p>Raw records land in the lakehouse, transforms make them comparable, model engines compete against baseline rules, and evidence gates decide what can be shown as a claim.</p></div>
+    <div class="secband"><h2>The pipeline</h2><p>Raw records land in the lakehouse, transforms make them comparable, training engines compete against baseline rules, and evidence gates decide what can be shown as a finding.</p></div>
 
     <section class="featurevideo" aria-label="Featured lakehouse explainer video">
       <div class="featurecopy">
         <div class="tag">Featured explainer · narrated · closed captions</div>
-        <h2>How the data machine turns messy public data into checked evidence.</h2>
-        <p>Start here for the plain-English walkthrough: where data lands in the lakehouse, how transforms clean it, where the tables and outputs live, which model engines run, and how results become claim cards.</p>
+        <h2>How messy public data becomes a checked result.</h2>
+        <p>Start here for the plain-English walkthrough: where data lands in the lakehouse, how transforms clean it, which training engines run, and how a model output becomes a claim card or a recorded miss.</p>
         <div class="featurepoints" aria-label="Lakehouse explainer topics">
           <div class="featurepoint"><b>Lakehouse</b><span>Bronze, Silver, and Gold tables keep raw data, clean features, and results separate.</span></div>
           <div class="featurepoint"><b>Transforms</b><span>Units, joins, dates, features, and leakage checks make the data trustworthy.</span></div>
-          <div class="featurepoint"><b>Model engines</b><span>Rankers, boosters, neural nets, tensor factors, and zero-shot readouts get graded.</span></div>
-          <div class="featurepoint"><b>Evidence gates</b><span>Holdouts, baselines, null checks, and critics decide which claims survive.</span></div>
+          <div class="featurepoint"><b>Training engines</b><span>Recent-history baselines, boosters, neural nets, symbolic screens, tensor tests, and physics-pi readouts get graded.</span></div>
+          <div class="featurepoint"><b>Evidence gates</b><span>Holdouts, baselines, null checks, and critic passes decide which claims survive.</span></div>
         </div>
       </div>
       <div class="featuremedia">
@@ -672,7 +694,7 @@
         </span>
         <span class="videolinkcopy">
           <span class="tag">Critic update · 1:54 · captions</span>
-          <h3>Clean-to-dirty update: physics-pi survives; tensor is demoted.</h3>
+          <h3>Clean-to-dirty update: physics-pi helps; tensor did not clear the harder test.</h3>
           <p>AP rises from 0.2992 to 0.3348 from physics-pi; the hardened n=200 critic does not promote the tensor increment.</p>
         </span>
         <span class="videolinkgo">Share page</span>
@@ -694,13 +716,13 @@
       </button>
       <button class="pathcard" onclick="go('questions')">
         <div class="pe">For ML / forecasting researchers</div>
-        <h3>The methods story →</h3>
-        <p>The driver-null law, the escapes that beat it (slow-driver lead, first-flush onset, spring-neap tide), and label-free cross-region transfer via a physics "interlingua" — with baselines and CV schemes.</p>
+        <h3>The training story →</h3>
+        <p>See which engines were tried, where persistence and seasonality still win, and where added structure helped: clean-to-dirty onset, slow environmental lead, upstream signals, hypoxia sequence models, and scoped HAB/toxin forecasts.</p>
       </button>
     </div>
 
     <!-- the escapes -->
-    <div class="secband"><h2>Where the models actually win</h2><p>The exceptions — places a model genuinely beats that simple "like yesterday" forecast.</p></div>
+    <div class="secband"><h2>Where extra modeling earns its keep</h2><p>The exceptions: places a model beats a simple "like yesterday" or seasonal forecast on a checked read.</p></div>
     <div class="minigrid" id="escapelist"></div>
 
     <!-- how to read primer -->
@@ -754,11 +776,46 @@
     <div id="questionsgroups"></div>
   </section>
 
-  <!-- ===== MODELS ===== -->
+  <!-- ===== DISCOVERY ENGINES ===== -->
   <section class="view" id="models">
-    <div style="margin-bottom:22px">
-      <h1 class="sec">Models</h1>
-      <p class="subhead">Registry catalog. Click any model to open its card — what it does, how it's claimed, and the raw evidence.</p>
+    <div style="margin-bottom:22px;max-width:840px">
+      <h1 class="sec">Discovery Engines</h1>
+      <p class="subhead">This is the search machinery behind the results. We use frontier models to find candidate engines, translate them into runnable jobs, execute the real experiments on the RTX 5090 workstation, and only promote outputs that beat a fair baseline on held-out data.</p>
+    </div>
+    <div class="engineflow" aria-label="Discovery engine workflow">
+      <article class="step">
+        <div class="k">01 Scout</div>
+        <h3>Use frontier models to widen the search.</h3>
+        <p>Frontier AI helps review papers, propose model families, spot missing controls, and draft job specs. It is a scout, not the judge.</p>
+      </article>
+      <article class="step">
+        <div class="k">02 Build</div>
+        <h3>Turn ideas into reproducible jobs.</h3>
+        <p>Each candidate becomes a script with a target, split, baseline, metric, artifact path, and confusion-matrix status when labels allow it.</p>
+      </article>
+      <article class="step">
+        <div class="k">03 Run</div>
+        <h3>Execute on local compute.</h3>
+        <p>GPU-heavy jobs run on the RTX 5090 box; CPU screens run as cheaper sweeps first. The output is saved before anyone writes a claim.</p>
+      </article>
+      <article class="step">
+        <div class="k">04 Gate</div>
+        <h3>Promote, scope, or kill.</h3>
+        <p>A result has to beat the right plain baseline, survive leakage checks, and pass critic review. Otherwise it stays a null or a data ask.</p>
+      </article>
+    </div>
+    <article class="card enginebrief">
+      <h3>Better page organization</h3>
+      <p>Use this tab in three passes during the meeting: first the operating loop above, then the engine-family cards below, then the raw registry table only when someone wants the technical model record. That keeps the story accessible while preserving enough detail for data scientists.</p>
+    </article>
+    <div class="secband"><h2>Engine portfolio</h2><p>The families we actually use: baselines, tree models, rankers, foundation-model channels, zero-shot transfer, physics-pi screens, sequence models, event studies, and auditors.</p></div>
+    <div class="engineportfolio" id="enginefamilyrows"></div>
+    <div class="registryhead">
+      <div>
+        <h2>Fitted model registry</h2>
+        <p>Click any model to open the exact card: task, family, evidence status, and raw snapshot fields. This is the audit layer after the plain-English engine map.</p>
+      </div>
+      <span class="sbadge" id="modelcountpill" style="background:#eef4f3;color:#0f7a74"></span>
     </div>
     <div class="card tbl">
       <div class="trow thead m-grid"><span>Model</span><span class="hide-sm">Family</span><span>Task</span><span class="hide-sm">Status</span><span></span></div>
@@ -1029,8 +1086,8 @@ function applyStaticHelp(){
   appendHelp('#snapwhen','This is the month and year when the public snapshot was built.');
   appendHelpAll('nav.tabs button',['Overview is the summary page.','Questions are research areas and hazards the lab has worked on.','Findings are tested science results.','Models are fitted systems and baselines in the registry.','Map shows data and model evidence by place.','Ledger is the full searchable audit trail.','Data and reproduce is the organized evidence inventory and access note.','Glossary explains the lab words.']);
   appendHelp('#overview .eyebrow','This page starts with the big picture before showing the evidence cards and datasets.');
-  appendHelp('#overview .page','A unified model means one project trying to connect many coastal signals: water, weather, runoff, tides, waves, biology, and observations.');
-  appendHelp('#overview .lede','This paragraph is the plain-language mission: show wins, limits, and failures with evidence attached.');
+  appendHelp('#overview .page','The homepage starts with the work itself: train forecasting engines, compare them to plain baselines, and publish the result.');
+  appendHelp('#overview .lede','This paragraph names the current pipeline: lakehouse data, training engines, checked wins, caveats, and failures.');
   appendHelp('.statpanel .head .l .t','The overall evidence gate summarizes whether the snapshot is publishable, blocked, or waiting on prospective checks.');
   appendHelp('#gatepill','This is the overall status of the snapshot. PASS means okay to publish; PROSPECTIVE means future rows still need scoring; BLOCKED means do not rely on it yet.');
   appendHelp('.statpanel .head .cap','Retrospective means looking backward at frozen data. Prospective means testing future rows after the freeze.');
@@ -1040,8 +1097,8 @@ function applyStaticHelp(){
   appendHelp('#findings .subhead','This explains how to read finding cards: plain claim first, technical details on click.');
   appendHelp('#frontiers .sec','Frontiers are research areas the lab has tried, even if they are not finished wins.');
   appendHelp('#frontiers .subhead','This section shows the full breadth: wins, caveats, and honest nulls across topics.');
-  appendHelp('#models .sec','Models are fitted systems or baselines in the registry, not just algorithm names.');
-  appendHelp('#models .subhead','The model registry shows what each model does and what evidence backs it.');
+  appendHelp('#models .sec','Discovery engines are the ways the lab searches for usable signal, before anything becomes a result claim.');
+  appendHelp('#models .subhead','Frontier models help scout and specify jobs, but the claim gate is still held-out evidence against a fair baseline.');
   appendHelp('#lakehouse .sec','Lakehouse means the organized data inventory behind the snapshot.');
   appendHelp('#lakehouse .subhead','Production data is governed; shadow data is experimental or still being validated.');
   appendHelp('#map .sec','The map shows evidence by place. It does not invent values between stations.');
@@ -1125,7 +1182,7 @@ function findingFamily(fid){return _findingFamily[fid]||{family:'Cross-cutting &
 /* ---------- routing ---------- */
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.v));
 function go(v){if(location.hash.slice(1)!==v)location.hash=v;else showView(v);}
-const VIEW_ALIAS={frontiers:'questions',lakehouse:'data',vocabulary:'glossary'};
+const VIEW_ALIAS={frontiers:'questions',lakehouse:'data',vocabulary:'glossary',engines:'models',discovery:'models'};
 if('scrollRestoration' in history)history.scrollRestoration='manual';
 function resetRouteScroll(){window.scrollTo(0,0);setTimeout(()=>window.scrollTo(0,0),80);setTimeout(()=>window.scrollTo(0,0),220);}
 function showView(v){
@@ -1201,11 +1258,11 @@ function renderBacteriaStory(){
     <p style="margin:9px 0 0;font-size:12.8px;line-height:1.45;color:var(--ink4)">${esc(sub)}</p>
   </div>`;
   host.innerHTML=`<section class="storypanel">
-    <div class="secband"><h2>Beach bacteria, from sample to warning</h2><p>Watch the classroom version, then read the audited numbers underneath.</p></div>
+    <div class="secband"><h2>Beach bacteria: one concrete win</h2><p>Watch the classroom version, then read the checked numbers underneath.</p></div>
     <div class="storyintro">
       <div class="card storycopy">
         <div class="tag">Beach warning explainer</div>
-        <h2>The danger is invisible, and the lab result arrives late.</h2>
+        <h2>The sample is useful, but it arrives after the decision.</h2>
         <p>Beach bacteria can come from runoff, animal waste, aging infrastructure, and local conditions. A swimmer cannot see it. The usual lab culture takes about <b>18-24 hours</b>, so a same-day warning has to use information available before the sample result is known.</p>
       </div>
       <div class="storymedia">
@@ -1223,8 +1280,8 @@ function renderBacteriaStory(){
       </div>
     </div>
     <div class="storyflow">
-      <div class="storystep"><div class="num">1 · old rule</div><h3>Station-memory is the status quo.</h3><p>It asks whether this site was dirty recently. The model beats it on the deployable 2022+ holdout: AP ${modelAp} versus station-memory AP ${memAp}.</p></div>
-      <div class="storystep"><div class="num">2 · features</div><h3>The model reads clues, not labels.</h3><p>It uses causal, available-at-decision features such as recent lab history, rain, season, location, waves, and other vetted signals. Signals that wash out stay in the ledger.</p></div>
+      <div class="storystep"><div class="num">1 · baseline</div><h3>Station-memory is the first thing to beat.</h3><p>It asks whether this site was dirty recently. The model beats it on the deployable 2022+ holdout: AP ${modelAp} versus station-memory AP ${memAp}.</p></div>
+      <div class="storystep"><div class="num">2 · training</div><h3>The engine uses clues available at decision time.</h3><p>It uses recent lab history, rain, season, location, waves, and other vetted signals. Signals that wash out stay in the ledger.</p></div>
       <div class="storystep"><div class="num">3 · probability</div><h3>The output is a risk score.</h3><p>The decision rule turns calibrated probability into action: warn when P(exceedance) is at least ${tau}. The chosen threshold flags ${flag} of beach-days.</p></div>
     </div>
     <div class="storyscore">
@@ -1245,7 +1302,7 @@ function askAction(a){
   if(!a)return; const i=a.indexOf(':'); if(i<0){go(a);return;}
   const k=a.slice(0,i), v=a.slice(i+1);
   if(k==='target'&&typeof openTarget==='function')openTarget(v);
-  else if(k==='finding'&&typeof openFinding==='function')openFinding(v);
+  else if(k==='finding'&&typeof openFindingById==='function')openFindingById(v);
   else if(k==='view')go(v);
   else if(k==='url')window.open(v,'_blank','noopener');
 }
@@ -1360,32 +1417,27 @@ function renderOverview(){
   const assets=s.data_assets||[];
   const totRows=assets.reduce((a,x)=>a+(x.rows||0),0);
   const ts=s.targets||[];
-  const tSup=ts.filter(t=>t.status==='Supported').length, tNull=ts.filter(t=>t.status==='Null').length;
   const bp=s._built_pacific||''; const mm=/^(\d{4})-(\d{2})/.exec(bp);
 
-  // two big cards: the law + the latest scoped wins when present.
-  const bac=targetById('bacteria_exceedance');
+  // two big cards: what has actually run + the strongest current wins.
   const byId={}; fs.forEach(f=>byId[f.id]=f);
-  const latestWins=['claim_hab_exceed_strict_critic','status_tide_range_data_gap','claim_wqp_oxygen_stress_screening'].map(id=>byId[id]).filter(Boolean).filter(f=>findingStatus(f.kind)==='Supported');
-  const lawCard=`<div class="card bigcard">
-    <div class="tag" style="color:var(--ink3)"><i style="background:#b8bdc3"></i>The honest result</div>
-    <h3>Most of the time: no.</h3>
-    <p>Across every hazard we've tried, piling on more data — weather, river flow, satellites — or a bigger model usually does <b>not</b> beat the simple forecast of "what's happening now, plus the time of year." We treat that as the default and make a model earn its keep before we believe it. Knowing what <i>doesn't</i> work is most of the science here.</p>
+  const homeWins=['claim_bacteria_station_memory_supported','claim_clean_to_dirty_onset','claim_forward_2026_holdout_pass','claim_hab_exceed_strict_critic','claim_da_toxic_onset_ci_separated','claim_hypoxia_onset_forecast','claim_mcye_alberta_definitive_replication']
+    .map(id=>byId[id]).filter(Boolean).filter(f=>findingStatus(f.kind)==='Supported');
+  const runCard=`<div class="card bigcard">
+    <div class="tag" style="color:var(--ink3)"><i style="background:#b8bdc3"></i>What we have actually run</div>
+    <h3>A lot of training, a lot of misses, a few useful wins.</h3>
+    <p>The current snapshot tracks ${fs.length} findings, ${(s.models||[]).length} model records, ${(s.signals||[]).length} signal verdicts, and ${assets.length} data assets. The engines include station-memory baselines, HGBT/CatBoost/LightGBM boosters, neural sequence models, symbolic searches, tensor tests, and physics-pi screens.</p>
     <div class="num">
-      <div><b>${ts.length}</b><span>questions tested</span></div>
-      <div><b>${tSup}</b><span>where a model wins</span></div>
-      <div><b>${tNull+nul}</b><span>dead ends kept on record</span></div>
+      <div><b>${ts.length}</b><span>research questions</span></div>
+      <div><b>${sup}</b><span>supported findings</span></div>
+      <div><b>${nul}</b><span>null findings kept</span></div>
     </div></div>`;
-  const winCard=latestWins.length?`<div class="card bigcard" style="cursor:pointer" onclick="openFinding('${esc(latestWins[0].id)}')">
-    <div class="tag" style="color:#0f7a74"><i style="background:#0f8a84"></i>Latest scoped wins</div>
-    <h3>Current wins are useful, narrow, and baseline-checked.</h3>
-    <p>${latestWins.map(f=>esc(f.title+': '+(f.headline||''))).join('<br>')}</p>
-    <div class="go" style="margin-top:13px;font-size:13px;font-weight:600;color:var(--acc)">Open the evidence →</div></div>`:(bac?`<div class="card bigcard" style="cursor:pointer" onclick="openTarget('bacteria_exceedance')">
-    <div class="tag" style="color:#0f7a74"><i style="background:#0f8a84"></i>What works</div>
-    <h3>Statewide beach-bacteria ranking beats station memory.</h3>
-    <p>${esc((bac.plain||'').slice(0,230))}${(bac.plain||'').length>230?'…':''}</p>
-    <div class="go" style="margin-top:13px;font-size:13px;font-weight:600;color:var(--acc)">Open the question →</div></div>`:'');
-  $('#bigrow').innerHTML=lawCard+winCard;
+  const winCard=homeWins.length?`<div class="card bigcard" style="cursor:pointer" onclick="openFindingById('${esc(homeWins[0].id)}')">
+    <div class="tag" style="color:#0f7a74"><i style="background:#0f8a84"></i>What has held up</div>
+    <h3>The strongest wins are practical and scoped.</h3>
+    <p>${homeWins.slice(0,6).map(f=>esc(f.title)).join('<br>')}</p>
+    <div class="go" style="margin-top:13px;font-size:13px;font-weight:600;color:var(--acc)">Open the evidence -></div></div>`:'';
+  $('#bigrow').innerHTML=runCard+winCard;
   renderBacteriaStory();
 
   // escapes (drivers genuinely beat the baseline) + honest nulls
@@ -1419,7 +1471,7 @@ const FEATURED_QUICK_READS={
   claim_bacteria_station_memory_supported:{
     means:'The beach-bacteria model ranks risky beach-days better than old station history and rain rules.',
     matters:'It can help a county choose which beach-days to inspect first.',
-    careful:'This is a retrospective test, not a live swim advisory; San Diego is excluded.'
+    careful:'This is a retrospective test, not a live swim advisory; source-gated strata are excluded when they are not comparable.'
   },
   claim_clean_to_dirty_onset:{
     means:'The hard case is a beach that looked clean, then suddenly turns dirty. The model catches those surprise flips about twice as well as station memory.',
@@ -1598,7 +1650,33 @@ function toggleEv(btn,key){
 }
 
 /* ---------- models ---------- */
+const ENGINE_FAMILIES=[
+  {family:'Baselines and simple rules',status:'Required',tone:'Supported',engines:['recent same-place history','seasonal floor','persistence','rolling value','calendar','uniform budget'],usedFor:'Every promoted claim has to beat the relevant simple opponent.',lesson:'These rules decide whether a model learned something useful. Several old claims shrank or died once the fair rolling baseline was added.'},
+  {family:'Leak-safe tabular champions',status:'Used',tone:'Audited',engines:['logistic regression','HGBT','CatBoost','LightGBM','calibrated stacks'],usedFor:'Bacteria classification, DA and Karenia rankers, and first-pass operational screens.',lesson:'Still the workhorse: fast, inspectable, and strong when the panel and split are honest.'},
+  {family:'Capture-at-budget rankers',status:'Used',tone:'Audited',engines:['top-K watchlists','sample-now queues','safe-defer lists','season-ahead routing'],usedFor:'Field decisions where crews can check only part of a coast, lake list, or monitoring grid.',lesson:'The cleanest product form is often a ranked list because agencies already operate under budget constraints.'},
+  {family:'Foundation models as channels',status:'Scoped',tone:'Caveated',engines:['Chronos-T5','Chronos-Bolt','TimesFM','TTM','TabPFN','TabICL'],usedFor:'Strictly-prior time-series shape embeddings and foundation-model floor tests.',lesson:'Chronos helps when it becomes an extra feature channel. Standalone or bigger models do not automatically win.'},
+  {family:'Zero-shot and cold-start transfer',status:'Scoped',tone:'Caveated',engines:['CA-to-Ireland transfer','universal recurrence ranker','leave-one-basin-out gates'],usedFor:'New or data-poor places where local labels are not yet enough.',lesson:'Useful as a starting ranker. It can beat calendar floors in scoped lanes, then hand off when local history becomes stronger.'},
+  {family:'Physics-pi and interlingua screens',status:'Mixed',tone:'Caveated',engines:['dimensionless groups','pi logistic rankers','shared physical coordinates','tensor screens'],usedFor:'Testing whether unit-free physical ratios transfer across basins and hazards.',lesson:'Keep pi here: a bounded cold-start screen in some contexts, not a universal language and not a replacement for local evidence.'},
+  {family:'Sequence and deep-state benchmarks',status:'Candidate',tone:'Candidate',engines:['GRU','PatchTST','NHITS','TFT','NBEATSx','neural ODE','FNO'],usedFor:'Dynamic-state benchmarks and time-series forecasting cells.',lesson:'Useful for benchmark pressure, but not claimable unless they beat the best naive and tabular baselines on the same split.'},
+  {family:'Event-study, trend, and regression',status:'Used',tone:'Audited',engines:['dose-response regression','lagged regression','long-term trend analysis','block bootstrap'],usedFor:'Storm-to-effort, hypoxia, and deoxygenation indicator work.',lesson:'For continuous or trend questions, effect size, uncertainty, and mechanism checks matter more than a confusion matrix.'},
+  {family:'Source and evidence auditors',status:'Required',tone:'Supported',engines:['alias audit','date-semantics audit','permutation nulls','leakage critics','negative controls'],usedFor:'Blocking bad targets, checking held-out units, and tightening claims before a meeting.',lesson:'This is the quality gate. It turns a tempting story into a scoped result, a data ask, or a stopped claim.'},
+  {family:'Null and kill ledger',status:'Required',tone:'Null',engines:['baseline audit','effort placebo','seed hardening','power check','source gate'],usedFor:'Cyano allocator, CPUE, whale MoE, post-fire WQ, and weak pi claims.',lesson:'A disciplined no is useful. It tells the team what not to sell and what evidence would be needed to reopen the question.'}
+];
 function renderModels(){
+  const familyRows=$('#enginefamilyrows');
+  if(familyRows){
+    familyRows.innerHTML=ENGINE_FAMILIES.map(e=>{
+      const b=STATUS_BADGE[e.tone]||STATUS_BADGE.Caveated;
+      return `<article class="card enginecard">
+        <div class="eh"><h3>${esc(e.family)}</h3><span class="sbadge" style="background:${b.bg};color:${b.text}">${esc(e.status)}</span></div>
+        <div class="enginechips">${e.engines.map(x=>`<span>${esc(x)}</span>`).join('')}</div>
+        <div class="enginefact"><b>How we used it</b><span>${esc(e.usedFor)}</span></div>
+        <div class="enginefact"><b>What we learned</b><span>${esc(e.lesson)}</span></div>
+      </article>`;
+    }).join('');
+  }
+  const modelCount=$('#modelcountpill');
+  if(modelCount)modelCount.textContent=`${fmt((DATA.models||[]).length)} registry records`;
   const rows=(DATA.models||[]).map((m,i)=>{
     const st=modelStatus(m.status); const b=STATUS_BADGE[st];
     return `<div class="trow click m-grid" data-i="${i}">

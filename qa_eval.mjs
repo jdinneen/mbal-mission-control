@@ -21,9 +21,11 @@ assert(resolvedFeatured.length > 0, "Featured findings filter should resolve at 
 
 /* ---- Start page: overview first, no question form on the homepage ---- */
 const required = [
-  "Audited coastal AI: public data, hard baselines, source-backed findings.",
+  "We train evidence engines across water, biology, and field-risk questions, then show the scorecard.",
   "What we are doing",
-  "Biggest findings",
+  "How we work",
+  "What we have actually run",
+  "What has held up",
   "The pipeline",
   "Featured explainer",
   "function renderFullReport",
