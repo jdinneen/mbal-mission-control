@@ -2582,6 +2582,11 @@ def main():
     state["targets"] = _build_targets()
     state["candidate_targets"] = _build_candidate_targets()
     state["signals"] = _build_signals()
+    try:
+        from enrich_dataset_signals import enrich as _enrich_dataset_signals
+        _enrich_dataset_signals(state)
+    except Exception:
+        pass
     project_docs = _build_project_docs()
     counts = dict(state.get("counts") or {})
     counts["targets"] = len(state["targets"])

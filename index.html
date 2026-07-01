@@ -833,9 +833,27 @@
       <h1 class="sec">Data &amp; reproduce</h1>
       <p class="subhead">Everything shown here is rendered from one governed snapshot, so the findings, models, and map can't drift apart. Raw export downloads are no longer published from this site.</p>
     </div>
-    <div class="card reprocard">
-      <h3>Data access</h3>
-      <div id="downloads" class="downloads"></div>
+    <div class="card" style="margin-bottom:22px">
+      <h3>How the AI builds this lakehouse</h3>
+      <p class="subhead" style="margin:2px 0 16px">Autonomous agents run the whole pipeline end to end &mdash; pulling raw data from public sources, cleaning it into leak-free model features, and promoting only what survives a hard evidence gate. Nothing reaches "governed" without beating an honest baseline.</p>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px">
+        <div style="border:1px solid var(--hair,#e6e8eb);border-radius:12px;padding:15px 17px;border-top:3px solid #b9791a">
+          <div style="font:600 11px/1 'IBM Plex Mono',monospace;color:#9a6a07;letter-spacing:.06em">STEP 1 &middot; FETCH &rarr; BRONZE</div>
+          <h4 style="margin:9px 0 5px">Agents pull the raw data</h4>
+          <p style="margin:0;font-size:13.5px;line-height:1.5;color:var(--muted,#586069)">Data-adapter scripts call public APIs, ERDDAP/OPeNDAP servers, satellite archives and agency portals &mdash; NOAA, USGS, Copernicus, CalHABMAP, state water boards, MBARI &mdash; and land the records as raw <b>bronze</b> parquet: unchanged, fingerprinted, timestamped.</p>
+        </div>
+        <div style="border:1px solid var(--hair,#e6e8eb);border-radius:12px;padding:15px 17px;border-top:3px solid #6b7280">
+          <div style="font:600 11px/1 'IBM Plex Mono',monospace;color:#4b5563;letter-spacing:.06em">STEP 2 &middot; CLEAN &rarr; SILVER</div>
+          <h4 style="margin:9px 0 5px">Transforms make it model-ready</h4>
+          <p style="margin:0;font-size:13.5px;line-height:1.5;color:var(--muted,#586069)">Silver transforms normalize schemas, harmonize units and regulatory thresholds, de-duplicate, quality-check, and build <b>strictly backward-looking (leak-free)</b> lags and rolling features &mdash; the clean tables the models actually train on.</p>
+        </div>
+        <div style="border:1px solid var(--hair,#e6e8eb);border-radius:12px;padding:15px 17px;border-top:3px solid #0f8a84">
+          <div style="font:600 11px/1 'IBM Plex Mono',monospace;color:#0f7a74;letter-spacing:.06em">STEP 3 &middot; PROMOTE &rarr; GOLD</div>
+          <h4 style="margin:9px 0 5px">A gate decides what's real</h4>
+          <p style="margin:0;font-size:13.5px;line-height:1.5;color:var(--muted,#586069)">Each result is scored against the <b>strongest fair baseline</b> (rolling site-memory), forward-in-time, with permutation nulls and an adversarial red-team. Only results that genuinely beat the baseline are promoted to <b>gold / governed</b>; everything else stays experimental.</p>
+        </div>
+      </div>
+      <p style="margin:15px 0 0;font-size:12.5px;line-height:1.6;color:var(--muted,#586069);border-top:1px solid var(--hair,#eef0f2);padding-top:12px"><b>What the layers mean</b> (the standard lakehouse "medallion" tiers): <b style="color:#9a6a07">Bronze</b> = raw data exactly as it was fetched, nothing changed. <b style="color:#4b5563">Silver</b> = cleaned, unit-harmonized, de-duplicated, leak-free features. <b style="color:#0f7a74">Gold</b> = results that passed the evidence gate and were promoted to governed. The <b>Layer</b> badge on each dataset below tells you which tier it lives in.</p>
     </div>
     <div class="card reprocard">
       <h3>Verify &amp; reproduce</h3>
@@ -845,23 +863,8 @@
         <li>Published summaries should be treated as decision support, not a replacement for controlled data access or source-system records.</li>
       </ol>
     </div>
-    <div class="secband"><h2>Datasets behind this snapshot</h2><p>Production (governed) vs experimental (shadow). Click any row for size, source, and recency.</p></div>
-    <div class="lhlists">
-      <div class="card lhcard">
-        <div class="h"><i style="background:var(--acc)"></i><h3>Production lake</h3></div>
-        <p class="sub" id="lakesub">— datasets · governed</p>
-        <div id="lakelist"></div>
-      </div>
-      <div class="card lhcard">
-        <div class="h"><i style="background:#b8bdc3"></i><h3>Shadow</h3></div>
-        <p class="sub" id="shadowsub">— datasets · experimental</p>
-        <div id="shadowlist"></div>
-      </div>
-    </div>
-    <div class="card tbl">
-      <div class="trow thead d-grid"><span>Dataset</span><span>Rows</span><span class="hide-sm">Source</span><span class="hide-sm">Tier</span><span></span></div>
-      <div id="datasetrows"></div>
-    </div>
+    <div class="secband"><h2>All lakehouse data &mdash; largest source first</h2><p id="lakesub">Every dataset behind the snapshot, ranked by size, with its source, layer, and all of its signals shown inline. Everything here is also searchable in the <a href="#ledger" onclick="go('ledger')" style="color:var(--acc)">Ledger</a>.</p></div>
+    <div id="datasetrows"></div>
   </section>
 
   <!-- ===== MAP ===== -->
@@ -1779,7 +1782,7 @@ function ledgerRows(){
   });
   (DATA.data_assets||[]).forEach((a,i)=>{
     const range=a.date_min?`${String(a.date_min).slice(0,10)} to ${String(a.date_max||'').slice(0,10)}`:'no date range';
-    add({type:'dataset',key:'dataset:lake:'+a.asset_id,id:a.asset_id,index:i,store:'lake',title:a.asset_id,status:'Production',topic:a.source?pretty(a.source):pretty(a.kind||'dataset'),desc:`Governed public data asset with ${a.rows!=null?fmt(a.rows)+' rows':'unknown row count'} and ${range}.`,meta:[a.kind,a.status,a.path].filter(Boolean).join(' · '),raw:a,source:{type:'dataset',store:'lake',idx:i}});
+    add({type:'dataset',key:'dataset:lake:'+a.asset_id,id:a.asset_id,index:i,store:'lake',title:a.asset_id,status:'Production',topic:a.source?pretty(a.source):pretty(a.kind||'dataset'),desc:`Governed public data asset with ${a.rows!=null?fmt(a.rows)+' rows':'unknown row count'} and ${range}.${a.signals&&a.signals.length?' Signals: '+a.signals.join(', ')+'.':''}`,meta:[a.kind,a.status,a.path].filter(Boolean).join(' · '),raw:a,source:{type:'dataset',store:'lake',idx:i}});
   });
   shadowAssets().forEach((d,i)=>{
     add({type:'dataset',key:'dataset:shadow:'+d.name,id:d.name,index:i,store:'shadow',title:d.name,status:'Shadow',topic:pretty(d.source||'shadow'),desc:'Experimental or under-validation dataset tracked before production promotion.',meta:[d.rows!=null?fmt(d.rows)+' rows':null,d.source].filter(Boolean).join(' · '),raw:d,source:{type:'dataset',store:'shadow',idx:i}});
@@ -1945,27 +1948,50 @@ function shadowAssets(){return (((DATA.inventory||{}).shadow||{}).datasets)||[];
 function renderData(){renderLake();}
 function renderLake(){
   const lake=lakeAssets(), shadow=shadowAssets();
-  $('#lakesub').innerHTML=lake.length+' datasets · governed'+helpQ('Governed datasets are the production assets in the public snapshot ledger.');
-  $('#shadowsub').innerHTML=shadow.length+' datasets · experimental'+helpQ('Shadow datasets are tracked experiments or work-in-progress assets that are not promoted to production yet.');
-  $('#lakelist').innerHTML=lake.map((a,i)=>`<div class="lhrow" data-t="lake" data-i="${i}"><span class="nm">${esc(a.asset_id)}${helpQ(datasetFieldHelp('name',a,'Production'))}</span><span class="r"><span class="rows">${a.rows!=null?fmt(a.rows):mb(a.size_mb)}${helpQ(a.rows!=null?datasetFieldHelp('rows',a,'Production'):datasetFieldHelp('size',a,'Production'))}</span><span class="chev">→${helpQ('Click to see source, size, row count, and date range.')}</span></span></div>`).join('')
-    || '<div class="lhempty">No row-counted assets in this snapshot.</div>';
-  $('#shadowlist').innerHTML=shadow.map((d,i)=>`<div class="lhrow" data-t="shadow" data-i="${i}"><span class="nm">${esc(d.name)}${helpQ(datasetFieldHelp('name',d,'Shadow'))}</span><span class="r"><span class="rows">${d.rows!=null?fmt(d.rows):mb(d.size_mb)}${helpQ(d.rows!=null?datasetFieldHelp('rows',d,'Shadow'):datasetFieldHelp('size',d,'Shadow'))}</span><span class="chev">→${helpQ('Click to see the shadow dataset details.')}</span></span></div>`).join('')
-    || '<div class="lhempty">No shadow datasets in this snapshot.</div>';
-
-  const tbl=lake.map((a,i)=>({t:'lake',i,name:a.asset_id,rows:a.rows,src:a.kind||'parquet',tier:'Production'}))
-    .concat(shadow.map((d,i)=>({t:'shadow',i,name:d.name,rows:d.rows,src:d.source||'—',tier:'Shadow'})));
-  $('#datasetrows').innerHTML=tbl.map(r=>{const b=STATUS_BADGE[r.tier];
-    return `<div class="trow click d-grid" data-t="${r.t}" data-i="${r.i}">
-      <span class="cellmono" style="font-weight:500;color:var(--ink)">${esc(r.name)}${helpQ(datasetFieldHelp('name',r,r.tier))}</span>
-      <span class="cellmono">${r.rows!=null?fmt(r.rows):'—'}${helpQ(datasetFieldHelp('rows',r,r.tier))}</span>
-      <span class="cellmuted hide-sm">${esc(r.src)}${helpQ(datasetFieldHelp('source',r,r.tier))}</span>
-      <span class="sbadge hide-sm" style="background:${b.bg};color:${b.text}">${r.tier}${helpQ(datasetFieldHelp('tier',r,r.tier))}</span>
-      <span class="chev">→${helpQ('Click the row to open the dataset card.')}</span></div>`;}).join('')
+  const rows=lake.map((a,i)=>({t:'lake',i,name:a.asset_id,rows:a.rows,size:a.size_mb||0,signals:(a.signals||[]),
+        src:lakeSource(a.path||a.asset_id),layer:lakeLayer(a.path||'')}))
+    .concat(shadow.map((d,i)=>({t:'shadow',i,name:d.name,rows:d.rows,size:d.size_mb||0,signals:(d.signals||[]),
+        src:d.source||lakeSource(d.name),layer:'Shadow'})))
+    .sort((x,y)=>(y.size||0)-(x.size||0));
+  const totRows=lake.reduce((a,x)=>a+(x.rows||0),0), totMb=lake.reduce((a,x)=>a+(x.size_mb||0),0);
+  if($('#lakesub'))$('#lakesub').innerHTML=`${rows.length} datasets · ${fmt(totRows)} rows · ${mb(totMb)} total, ranked by size — with source, layer, and all signals shown inline. Also searchable in the <a href="#ledger" onclick="go('ledger')" style="color:var(--acc)">Ledger</a>.`;
+  $('#datasetrows').innerHTML=rows.map(r=>{const b=LAYER_BADGE[r.layer]||{bg:'#eef0f2',text:'#586069'};const sg=r.signals||[];
+    return `<div class="card dscard click" data-t="${r.t}" data-i="${r.i}" style="margin-bottom:11px;cursor:pointer">
+      <div style="display:flex;align-items:baseline;gap:9px;flex-wrap:wrap">
+        <span class="cellmono" style="font-weight:600;color:var(--ink);font-size:14.5px">${esc(r.name)}</span>
+        <span class="sbadge" style="background:${b.bg};color:${b.text}">${r.layer}</span>
+        <span class="cellmuted" style="font-size:12.5px">${r.rows!=null?fmt(r.rows)+' rows':(r.size?mb(r.size):'')} · ${esc(r.src)} · ${sg.length} signals</span>
+      </div>
+      ${sg.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:9px">${sg.map(c=>`<span class="vchip" style="background:var(--faint3,#f1f3f5);color:var(--ink2,#3a4046);font-size:11px">${esc(c)}</span>`).join('')}</div>`:''}
+    </div>`;}).join('')
     || '<div class="lhempty" style="padding:18px 22px">No datasets in this snapshot.</div>';
-
-  document.querySelectorAll('#lakelist .lhrow, #shadowlist .lhrow, #datasetrows .trow').forEach(r=>
+  document.querySelectorAll('#datasetrows .dscard').forEach(r=>
     r.onclick=e=>{if(e.target.closest('.helpq'))return;DETAIL={type:'dataset',store:r.dataset.t,idx:+r.dataset.i};renderDrawer();});
 }
+function lakeSource(p){p=String(p||'');const M=[
+  [/sentinel3_olci/i,'Sentinel-3 OLCI · Copernicus (satellite chlorophyll)'],
+  [/merra2|prithvi/i,'NASA MERRA-2 / Prithvi (reanalysis)'],
+  [/m1_history/i,'MBARI M1 mooring · OPeNDAP'],[/m2_history/i,'MBARI M2 mooring · OPeNDAP'],
+  [/ndbc/i,'NOAA NDBC met/wave buoy'],[/coops/i,'NOAA CO-OPS tide gauges'],
+  [/upwelling/i,'NOAA / CDFW upwelling index'],[/noaa_drivers/i,'NOAA daily ocean drivers'],
+  [/cdip_waves/i,'CDIP wave buoys · Scripps'],[/rainfall/i,'Gridded rainfall · Open-Meteo / ERA5'],
+  [/discharge/i,'USGS stream discharge'],[/tide_stages/i,'NOAA tidal harmonics'],
+  [/statewide_advisor/i,'CA State Water Board · beach advisories'],
+  [/statewide/i,'CA State Water Board / BeachWatch · FIB'],
+  [/hk_epd/i,'Hong Kong EPD · marine water quality'],
+  [/gulf_hypoxia/i,'NOAA · Gulf of Mexico hypoxia survey'],
+  [/ireland|_mi_|biotoxin/i,'Marine Institute Ireland · shellfish biotoxin'],
+  [/habsos|karenia/i,'NOAA HABSOS · Gulf red tide'],
+  [/cyan_|cyano/i,'NASA/EPA CyAN · satellite cyanobacteria'],
+  [/hab_sota|habmap/i,'CalHABMAP · HAB / domoic-acid panel'],
+  [/semantic_shadow/i,'Lab semantic-shadow discovery (computed)'],
+  [/lakehouse\/gold/i,'Lab lakehouse · gold (computed results)'],
+  [/curated_history/i,'MBAL curated history']];
+  for(const[re,l]of M){if(re.test(p))return l;}
+  const m=p.match(/external_curated\/([^\/]+)/);if(m)return m[1].replace(/_/g,' ');
+  const s2=p.split('/').filter(Boolean);return s2.slice(0,2).join(' / ')||'lab source';}
+function lakeLayer(p){p=String(p||'');return /\/gold\//.test(p)?'Gold':/\/silver\//.test(p)?'Silver':'Bronze';}
+const LAYER_BADGE={Bronze:{bg:'#f6ede0',text:'#9a6a07'},Silver:{bg:'#eef0f2',text:'#4b5563'},Gold:{bg:'#e3f3ef',text:'#0f7a74'},Shadow:{bg:'#f1f1f3',text:'#7c828a'}};
 
 /* ---------- vocabulary ---------- */
 const VERDICT_BADGE={PRIMARY:{bg:'#e3f3ef',text:'#0f7a74'},KEEP:{bg:'#e3f3ef',text:'#1a7a4f'},'KEEP-research':{bg:'#fdf3e0',text:'#9a6a07'},UNTESTED:{bg:'#eef0f2',text:'#586069'},WASH:{bg:'#f1f1f3',text:'#7c828a'},REJECT:{bg:'#fbeceb',text:'#b4453c'}};
@@ -2373,7 +2399,7 @@ function datasetDrawer(){
   const tier=isLake?'Production':'Shadow'; const b=STATUS_BADGE[tier];
   const range=a.date_min?`${String(a.date_min).slice(0,10)} → ${String(a.date_max).slice(0,10)}`:'—';
   const updated=a.modified_utc?ago(a.modified_utc):(a.age_days!=null?a.age_days+'d ago':'—');
-  const src=isLake?(a.kind||'parquet'):(a.source||'—');
+  const src=isLake?lakeSource(a.path||a.asset_id):(a.source||'—');
   const plain=isLake
     ? `Governed production asset stored as ${esc(a.kind||'parquet')}${a.path?' at <span class="mono">'+esc(a.path)+'</span>':''}. ${a.rows!=null?'Holds '+fmt(a.rows)+' rows':''}${a.date_min?', spanning '+range:''}.`
     : `Experimental shadow dataset under validation before promotion to the governed lake.`;
@@ -2392,6 +2418,7 @@ function datasetDrawer(){
         <div class="inset"><div class="k">${isLake?'Size':'Files'}${helpQ(isLake?datasetFieldHelp('size',a,tier):'Files is the number of files grouped into this shadow dataset.')}</div><div class="sm">${isLake?mb(a.size_mb):fmt(a.files)}${helpQ(isLake?datasetFieldHelp('size',a,tier):'Files is the number of files grouped into this shadow dataset.')}</div></div>
       </div>
       ${isLake&&a.date_min?`<div class="dlabel">Time range${helpQ(datasetFieldHelp('range',a,tier))}</div><div class="drow" style="border-top:none;padding-top:0"><span class="a">${a.time_column||'time'}${helpQ('This is the column used as the time or date field.')}</span><span class="b mono" style="font-size:12.5px">${esc(range)}${helpQ(datasetFieldHelp('range',a,tier))}</span></div><div class="drow"><span class="a">Status${helpQ('Dataset status tells whether the asset is current and accepted in the snapshot.')}</span><span class="b">${esc(a.status||'—')}${helpQ('Dataset status tells whether the asset is current and accepted in the snapshot.')}</span></div>`:''}
+      ${a.signals&&a.signals.length?`<div class="dlabel" style="margin-top:16px">Signals in this dataset — ${a.signals.length} fields${helpQ('Every column / measurement this dataset contains.')}</div><div style="display:flex;flex-wrap:wrap;gap:5px;margin-top:8px">${a.signals.map(c=>`<span class="vchip" style="background:var(--faint3,#f1f3f5);color:var(--ink2,#3a4046)">${esc(c)}</span>`).join('')}</div>`:''}
     </div>
   </div>`;
 }
