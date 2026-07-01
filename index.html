@@ -674,6 +674,7 @@
     <button data-v="overview" class="active">Overview</button>
     <button data-v="data">Data &amp; reproduce</button>
     <button data-v="models">Discovery Engines</button>
+    <button data-v="innovations">What we tried</button>
     <button data-v="map">Map</button>
     <button data-v="ledger">Ledger</button>
     <button data-v="glossary">Glossary</button>
@@ -1041,6 +1042,16 @@
   </section>
 
   <!-- ===== GLOSSARY ===== -->
+  <section class="view" id="innovations">
+    <div style="margin-bottom:22px;max-width:820px">
+      <h1 class="sec">What we tried &mdash; and what we learned</h1>
+      <p class="subhead">The modern machine-learning and physics toolkit, applied honestly to ocean-hazard forecasting. Each idea below has the plain version, the bet behind it, and what actually happened &mdash; wins and dead-ends alike, because knowing which is which is the real product.</p>
+    </div>
+    <div class="card" style="margin-bottom:20px;border-left:3px solid var(--acc)">
+      <p style="margin:0;font-size:14px;line-height:1.6"><b>The through-line.</b> Ocean data is dominated by &ldquo;tomorrow looks like today.&rdquo; Almost every clever driver or fancy model just re-learns that. The two things that truly worked were changing the <b>question</b> (predict the onset, not the level) and changing the <b>place</b> (transfer a model to a coast it has never seen). Everything else we tried honestly &mdash; and most of it washed, which is exactly what the evidence gate is for.</p>
+    </div>
+    <div id="innovlist"></div>
+  </section>
   <section class="view" id="glossary">
     <div style="margin-bottom:18px;max-width:780px">
       <h1 class="sec">Glossary</h1>
@@ -1313,11 +1324,11 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';
 function resetRouteScroll(){window.scrollTo(0,0);setTimeout(()=>window.scrollTo(0,0),80);setTimeout(()=>window.scrollTo(0,0),220);}
 function showView(v){
   v=VIEW_ALIAS[v]||v;
-  if(!['overview','questions','findings','models','map','ledger','data','glossary'].includes(v))v='overview';
+  if(!['overview','questions','findings','models','map','ledger','data','glossary','innovations'].includes(v))v='overview';
   TAB=v; if(DETAIL){DETAIL=null;renderDrawer();}
   document.querySelectorAll('nav.tabs button').forEach(b=>{const on=b.dataset.v===v;b.classList.toggle('active',on);if(on&&b.scrollIntoView)try{b.scrollIntoView({inline:'center',block:'nearest'});}catch(e){}});
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id===v));
-  if(DATA){if(v==='questions')renderQuestions();if(v==='findings')renderFindings();if(v==='models')renderModels();if(v==='ledger')renderLedger();if(v==='data')renderData();if(v==='glossary')renderVocabulary();}
+  if(DATA){if(v==='questions')renderQuestions();if(v==='findings')renderFindings();if(v==='models')renderModels();if(v==='ledger')renderLedger();if(v==='data')renderData();if(v==='glossary')renderVocabulary();if(v==='innovations')renderInnovations();}
   if(v==='map')renderMap();
   resetRouteScroll();
   pv('/'+v,v);
@@ -2017,6 +2028,74 @@ function ledgerDrawer(key){
 /* ---------- lakehouse ---------- */
 function lakeAssets(){return (DATA.data_assets||[]).filter(a=>a.exists!==false);}
 function shadowAssets(){return (((DATA.inventory||{}).shadow||{}).datasets)||[];}
+const INNOV_BADGE={WIN:{bg:'#e3f3ef',text:'#0f7a74'},PARTIAL:{bg:'#fdf3e0',text:'#9a6a07'},'DEAD END':{bg:'#f1f1f3',text:'#7c828a'},METHOD:{bg:'#e8eefc',text:'#3b5bdb'},CAUTION:{bg:'#fbeceb',text:'#b4453c'}};
+const INNOVATIONS=[
+{n:'01',title:'Onset reframe — predict the flip, not the level',verdict:'WIN',
+ plain:'Instead of guessing how dirty the water is (which barely changes from one day to the next), we guess the moment it flips from safe to dangerous. That flip is exactly what a lifeguard or a health officer needs to know.',
+ bet:'The day-to-day level is almost all memory — today looks like yesterday — so no model can beat simply assuming no change. But the transition from clean to dirty is a real event with its own trigger (a first rain flushing bacteria into the surf), and an event can be forecast.',
+ found:'The lab&rsquo;s single biggest real result. First-flush beach-bacteria onset is genuinely predictable (+0.22 in our ranking score over a fair baseline), and the same pattern repeats across different coasts and hazards. Dry-weather onset is still an open problem.',
+ ds:'Retarget from level/exceedance-nowcast to the clean&rarr;exceedance transition on the prior-clean slice (prev_exceed==0), scored as onset average-precision over a strong site-memory+season baseline, forward-blocked CV, permutation-null clean. It deliberately decouples the label from the target&rsquo;s own autocorrelation — which is where all the persistence skill otherwise hides.'},
+{n:'02',title:'Zero-shot transfer — train in California, predict Ireland with no Irish data',verdict:'WIN',
+ plain:'Train a model only on California, then run it on the coast of Ireland — a place it has never seen a single measurement from — and it still ranks which sites are about to turn toxic.',
+ bet:'The rhythm of how blooms keep coming back to the same spots, and their seasonal timing, is a shared physical pattern. If the model learns only that recurrence &ldquo;shape&rdquo; (and nothing location-specific), it should port to any similar coast.',
+ found:'Real and genuinely new. A California-trained ranker recovers about 60% of a locally-trained model&rsquo;s skill on the Irish coast — 19 degrees of latitude away, different species, different units, zero Irish training data. No published method does this for toxic-bloom onset.',
+ ds:'Scale-free recurrence + seasonal features only (latitude/longitude and absolute magnitude dropped — they cannot cross 34N&rarr;53N or &micro;g/L&rarr;&micro;g/g). Zero-shot AP recovers 0.60&ndash;0.70 of the local oracle above the calendar floor, shuffle-p 0.005, holds in both powered Irish basins. It ties or loses to local memory where history exists — a tool for unmonitored coasts, not a replacement.'},
+{n:'03',title:'Buckingham-&pi; — turn raw physics into unit-free numbers',verdict:'PARTIAL',
+ plain:'Take raw physics — rain, heat, sunlight, wind, how fast the water flushes — and boil it down to a handful of unit-free numbers, the way engineers use the Reynolds number to compare a toy airplane to a real one.',
+ bet:'Dimensional analysis is the classic trick that lets physics transfer across scales and places. Unit-free &ldquo;&pi;-numbers&rdquo; should be a portable physics fingerprint a model can reuse anywhere.',
+ found:'Real, but only in the right slot. &pi; added to what a site already knows from its own past gave a solid lift in Australia (+0.10), and &pi; on its own beats a bare calendar at beaches with no history at all. But where a site has its own history, &pi; adds nothing on top of it &mdash; and the version built from free weather data alone turns out to be just rainfall in disguise.',
+ ds:'Five non-dimensional Buckingham-&pi; coordinates (Damk&ouml;hler, UV-dose, loading, P&eacute;clet, flushing) from exogenous NASA-POWER physics. Augmentation +0.10 AP (LOSO 5/5, perm 0.031) in AU; as a standalone driver over site-memory it is a wash. Beware the AP/base-rate ratio inflating the apparent effect.'},
+{n:'04',title:'&pi;-tensor — stack the physics into a cube and factorize it',verdict:'CAUTION',
+ plain:'Stack all those physics numbers into a big 3-D cube (physics &times; data-source &times; time) and let a math technique automatically pull out hidden patterns.',
+ bet:'Tensor factorization finds cross-domain structure a person would never spot by hand.',
+ found:'A textbook trap. The tensor looked like it predicted lots of things — but it was mostly predicting variables that were its own ingredients (a subtle self-reconstruction leak). Tested against a truly outside target, it carried no signal at all.',
+ ds:'CP-factorized tensor over &pi; &times; sources &times; time. Apparent wins (+0.077 AP) were on estate variables that are the tensor&rsquo;s own inputs = input-reconstruction leakage, which a date-shuffle null does NOT catch. On the one exogenous target (fishing effort, not a tensor input) it was null (+0.011, p=0.45). Lesson: test learned representations only against truly held-out, non-input targets.'},
+{n:'05',title:'Interlingua — a shared physics &ldquo;language&rdquo; so models speak across systems',verdict:'PARTIAL',
+ plain:'Give every hazard and every coast the same physics vocabulary, so a model trained on one system can translate what it knows to another.',
+ bet:'A shared representation is what makes transfer possible in the first place — a common language between places.',
+ found:'Real but bounded. For a beach that has never been monitored, it genuinely ranks which sites are about to turn bad &mdash; beating the only thing you can compare against there, the time of year alone. But where a beach has its own history, that history still wins. The eye-popping &ldquo;2&times; better&rdquo; headline came from dividing by a tiny number, not from real extra skill; the honest lift is modest.',
+ ds:'Dimensionless-physics transfer. Zero-shot &pi; at an unmonitored site beats the calendar floor (perm p=0.002) in 7/10 clean basins, recovering ~57% median of local-oracle skill. The &ldquo;2.09&times;&rdquo; was an AP/base-rate ratio artifact; &pi; loses to local memory (0.124 vs 0.516). Report magnitudes as absolute-AP-vs-calendar, not ratios.'},
+{n:'06',title:'Chronos — use a giant pretrained AI as a feature, not the whole model',verdict:'PARTIAL',
+ plain:'Take a giant pretrained AI (trained on millions of time series) and use it not as the forecaster, but as a describer: let it summarize the shape of a site&rsquo;s recent history, and feed that summary into our simple model.',
+ bet:'A foundation model has seen so many time series that its internal shape-summary should add a few points of signal for free.',
+ found:'Real but narrow. As an ingredient it adds a small lift over our best model on some time windows; but on its own it loses to a plain tree, and on the San Diego data this week it did not beat a one-line rolling average once we used a fair baseline.',
+ ds:'Chronos-T5 causal embedding as a strictly-prior channel into a gradient-boosted tree: +0.012&ndash;0.015 AP over the MEM+&pi; stack, 3/3 forward cutoffs (p&asymp;0.03), key-shuffle-null clean; a separate cross-region transfer use gives ~+0.025 AP median. But per-target it is fragile &mdash; on South-San-Diego dry-onset it is beaten by a rolling prior-value baseline, and bigger Chronos-2 is only 2/3, so scale is not the lever; the general claim needs re-checking against single (not union) rolling baselines.'},
+{n:'07',title:'The engine swarm — throw every modern architecture at it',verdict:'DEAD END',
+ plain:'Maybe simple models are just the wrong tool. So we threw the whole modern zoo at the problem — graph neural nets, transformers, diffusion models, neural differential equations — about two dozen architectures.',
+ bet:'A more powerful, or more physically-appropriate, model captures dynamics that simple trees miss.',
+ found:'A clean, complete strike-out. We re-trained all ~26 on the GPU this week; against honest baselines every single one ties or loses to a plain rolling-memory tree. The apparent wins were all artifacts of a too-easy baseline.',
+ ds:'TSFM / Mamba / GNN / Neural-ODE-FNO / diffusion / geo-FM / NNGP / DANN / quantile. On forward-blocked onset slices vs the strongest single rolling baseline, all refuted; the lone survivor (a GNN) was re-skinned neighbour-memory that a plain tree on the same lags beat by +0.18 AP and that collapsed forward-in-time.'},
+{n:'08',title:'Self-supervised features — let a neural net invent its own inputs',verdict:'DEAD END',
+ plain:'Instead of hand-picking which measurements matter, let a neural network invent its own features straight from the raw data.',
+ bet:'Learned representations beat features a human engineers by hand.',
+ found:'Nothing, on every hazard. The features the neural net invented for itself did no better than plain, simple methods. The lesson: we are limited by how much signal is actually in the data, not by how clever the model is &mdash; a fancier brain cannot pull out information that was never there.',
+ ds:'Denoising autoencoders + semi-supervised representations over the lakehouse; NULL vs linear PCA / HGBT on every target. Reinforces the persistence-ceiling law and argues against spending on model scale.'},
+{n:'09',title:'Auto-discovery — let the AI search all 350+ datasets for hidden couplings',verdict:'DEAD END',
+ plain:'Point the AI at every dataset and let it search exhaustively — millions of candidate formulas, automatic feature-selection — for any hidden connection a human would miss.',
+ bet:'With enough compute and search, serendipity finds a lever nobody thought to look for.',
+ found:'Mostly false leads. The automatic formula-hunt, the feature-picking search, and the hunt for hidden pairings all came up empty; the few connections that looked promising fell apart the moment we tried to reproduce them properly.',
+ ds:'Symbolic regression (~3M expression trees), DeepLINK/knockoff FDR-controlled selection, exhaustive 2-way interaction screens over the pooled estate — all below the promotion gate vs deployable incumbents. Breadth of search is not a finding without a pre-registered reproduction.'},
+{n:'10',title:'Adversarial red-team gating — the referee that makes the rest trustworthy',verdict:'METHOD',
+ plain:'The most important thing we built is not a model — it is the referee. Nothing counts as real until it beats the toughest fair comparison, holds up predicting the future (not just the past), survives a randomness check, and passes a skeptic whose only job is to prove it wrong.',
+ bet:'Most machine-learning wins in this field are illusions caused by an easy baseline. So rigor — not cleverness — is the actual product.',
+ found:'The highest-value tool we have. Just this week it caught four promotable-looking results that were mirages: a domoic-acid model that lost to &ldquo;rank by recent toxin,&rdquo; a cyano tool beaten by a one-line rule, a graph net that was disguised memory, and a foundation-model win that only beat a weak baseline.',
+ ds:'Claim-card gate = strongest single fair baseline (rolling site-recurrence, never persistence/climatology/union), forward-blocked CV, station-clustered bootstrap CI, permutation and key-shuffle nulls, a default-refuted adversarial verifier, and audit-the-auditor recursion. This is why the verdict chips elsewhere on this site can be trusted.'}
+];
+function renderInnovations(){
+  const el=document.getElementById('innovlist'); if(!el)return;
+  el.innerHTML=INNOVATIONS.map(x=>{const b=INNOV_BADGE[x.verdict]||INNOV_BADGE['DEAD END'];
+    return '<div class="card" style="margin-bottom:14px">'
+      +'<div style="display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:6px">'
+      +'<span style="font:600 12px/1 var(--mono,monospace);color:#b8bdc3">'+x.n+'</span>'
+      +'<h3 style="margin:0;font-size:16px">'+x.title+'</h3>'
+      +'<span class="sbadge" style="background:'+b.bg+';color:'+b.text+'">'+x.verdict+'</span></div>'
+      +'<p style="margin:6px 0;font-size:14px;line-height:1.55"><b>In plain words.</b> '+x.plain+'</p>'
+      +'<p style="margin:6px 0;font-size:14px;line-height:1.55"><b>The bet.</b> '+x.bet+'</p>'
+      +'<p style="margin:6px 0;font-size:14px;line-height:1.55"><b>What we found.</b> '+x.found+'</p>'
+      +'<p style="margin:8px 0 0;font-size:12.5px;line-height:1.55;color:var(--muted,#586069);border-top:1px solid var(--hair,#eef0f2);padding-top:8px"><b>For the data scientist.</b> '+x.ds+'</p>'
+      +'</div>';}).join('');
+}
+
 function renderData(){renderLake();}
 function renderLake(){
   const lake=lakeAssets(), shadow=shadowAssets();
