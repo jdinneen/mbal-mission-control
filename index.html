@@ -701,6 +701,46 @@
   .lhmore{margin-top:12px;padding:9px 16px;border:1px solid var(--hair,#e6e8eb);border-radius:9px;background:#fff;color:var(--acc,#0f8a84);font-weight:600;font-size:12.5px;cursor:pointer;font-family:var(--mono,monospace)}
   .lhmore:hover{background:var(--acc-tint2,#f2f9f8)}
   @media(max-width:640px){.lhrow{grid-template-columns:24px 1fr 62px;gap:8px}.lhtags,.lhmeta{display:none}}
+  /* lakehouse data finder */
+  .datametrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 14px}
+  .datametric{background:var(--surface);border:1px solid var(--border);border-radius:13px;box-shadow:var(--card-sh);padding:15px 16px;min-width:0}
+  .datametric .k{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink5);margin-bottom:7px}
+  .datametric .v{font-size:25px;font-weight:650;letter-spacing:-.02em;line-height:1;color:var(--ink);white-space:nowrap}
+  .datametric .s{font-size:12.5px;color:var(--ink4);margin-top:7px;line-height:1.38}
+  .datacats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:0 0 16px}
+  .datacat{appearance:none;text-align:left;background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--acc);border-radius:13px;box-shadow:var(--card-sh);padding:14px 15px;cursor:pointer;transition:box-shadow .16s,transform .16s,border-color .16s;min-width:0}
+  .datacat:hover,.datacat.active{box-shadow:var(--card-sh-hover);transform:translateY(-1px);border-color:#bfe0dc}
+  .datacat b{display:block;font-size:14px;line-height:1.25;color:var(--ink);margin-bottom:6px;overflow-wrap:anywhere}
+  .datacat span{display:block;font-family:var(--mono);font-size:11.5px;color:var(--ink4);line-height:1.45}
+  .datatools{display:grid;grid-template-columns:minmax(240px,1fr) 210px 210px auto;gap:10px;align-items:center;padding:14px;margin:0 0 18px}
+  .datatools input,.datatools select{min-width:0;appearance:none;border:1px solid var(--border);background:var(--surface);border-radius:10px;padding:10px 12px;font-family:var(--sans);font-size:13.5px;color:var(--ink);outline:none}
+  .datatools input:focus,.datatools select:focus{border-color:#bfe0dc;box-shadow:0 0 0 3px rgba(15,138,132,.11)}
+  .datatools select{font-weight:600;color:var(--ink3);background-image:linear-gradient(45deg,transparent 50%,var(--ink4) 50%),linear-gradient(135deg,var(--ink4) 50%,transparent 50%);background-position:calc(100% - 15px) 16px,calc(100% - 10px) 16px;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:32px}
+  .datareset{appearance:none;border:1px solid var(--border);background:var(--surface);border-radius:10px;padding:10px 12px;font-family:var(--mono);font-size:12px;font-weight:650;color:var(--acc);cursor:pointer}
+  .datareset:hover{background:var(--acc-tint2)}
+  .datafound{font-family:var(--mono);font-size:12px;color:var(--ink5);margin:0 0 9px}
+  .lakeinventory{display:grid;gap:9px}
+  .lakeitem{background:var(--surface);border:1px solid var(--border);border-radius:13px;box-shadow:var(--card-sh);overflow:hidden}
+  .lakeitem[open]{border-color:#bfe0dc}
+  .lakesummary{list-style:none;cursor:pointer;display:grid;grid-template-columns:42px minmax(0,1fr) minmax(120px,.34fr) minmax(130px,.38fr);gap:13px;align-items:center;padding:13px 15px}
+  .lakesummary::-webkit-details-marker{display:none}
+  .lakerank{font-family:var(--mono);font-size:11px;color:var(--ink5);text-align:right}
+  .lakename{display:block;font-size:14.5px;font-weight:650;line-height:1.25;color:var(--ink);overflow-wrap:anywhere}
+  .lakehint{display:block;font-size:12.5px;line-height:1.42;color:var(--ink4);margin-top:4px}
+  .lakecount{text-align:right;font-family:var(--mono);white-space:nowrap}
+  .lakecount b{display:block;font-size:13.5px;color:var(--ink);font-weight:650}
+  .lakecount span{display:block;font-size:10.5px;color:var(--ink5);letter-spacing:.04em;text-transform:uppercase;margin-top:2px}
+  .lakebadges{display:flex;gap:6px;align-items:center;justify-content:flex-end;flex-wrap:wrap}
+  .lakebody{border-top:1px solid var(--faint2);background:#fbfcfc;padding:13px 16px 15px;margin-left:55px}
+  .lakebodygrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:12px}
+  .lakefact{border:1px solid var(--faint);border-radius:9px;background:#fff;padding:10px 11px;min-width:0}
+  .lakefact b{display:block;font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink5);margin-bottom:4px}
+  .lakefact span{display:block;font-size:13px;color:var(--ink2);line-height:1.35;overflow-wrap:anywhere}
+  .signalchips{display:flex;flex-wrap:wrap;gap:5px}
+  .signalchips .empty{font-size:13px;color:var(--ink4)}
+  .signalmore{font-family:var(--mono);font-size:10.5px;color:var(--ink4);background:var(--faint2);border-radius:7px;padding:3px 7px}
+  @media(max-width:900px){.datametrics,.datacats{grid-template-columns:1fr 1fr}.datatools{grid-template-columns:1fr 1fr}.lakesummary{grid-template-columns:34px minmax(0,1fr);align-items:start}.lakecount,.lakebadges{grid-column:2;text-align:left;justify-content:flex-start}.lakebody{margin-left:0}.lakebodygrid{grid-template-columns:1fr}}
+  @media(max-width:640px){.datametrics,.datacats,.datatools{grid-template-columns:1fr}.lakesummary{padding:12px}.lakerank{text-align:left}.lakebody{padding:12px}}
 </style>
 </head>
 <body>
@@ -1008,6 +1048,16 @@
       <h1 class="sec">Lakehouse</h1>
       <p class="subhead">Everything shown here is rendered from one governed snapshot, so the findings, models, and map can't drift apart. Raw export downloads are no longer published from this site.</p>
     </div>
+    <div id="dataoverview" class="datametrics"></div>
+    <div id="datacats" class="datacats"></div>
+    <div class="card datatools" aria-label="Lakehouse data filters">
+      <input id="datasearch" type="search" placeholder="Search sources or signals">
+      <select id="datadomain" aria-label="Filter by data family"></select>
+      <select id="datastatus" aria-label="Filter by readiness"></select>
+      <button class="datareset" id="datareset" type="button">Reset</button>
+    </div>
+    <div class="secband"><h2>Source inventory</h2><p id="lakesub">Every source behind the snapshot, ranked by size, with readiness, date coverage, and representative signals. Everything here is also searchable in the <a href="#ledger" onclick="go('ledger')" style="color:var(--acc)">Ledger</a>.</p></div>
+    <div id="datasetrows"></div>
     <div class="card" style="margin-bottom:22px">
       <h3>How the AI builds this lakehouse</h3>
       <p class="subhead" style="margin:2px 0 16px">Autonomous agents run the whole pipeline end to end &mdash; pulling raw data from public sources, cleaning it into leak-free model features, and promoting only what survives a hard evidence gate. Nothing reaches "governed" without beating an honest baseline.</p>
@@ -1038,8 +1088,6 @@
         <li>Published summaries should be treated as decision support, not a replacement for controlled data access or source-system records.</li>
       </ol>
     </div>
-    <div class="secband"><h2>All lakehouse data &mdash; largest source first</h2><p id="lakesub">Every dataset behind the snapshot, ranked by size, with its source, layer, and all of its signals shown inline. Everything here is also searchable in the <a href="#ledger" onclick="go('ledger')" style="color:var(--acc)">Ledger</a>.</p></div>
-    <div id="datasetrows"></div>
   </section>
 
   <!-- ===== MAP ===== -->
@@ -1143,6 +1191,7 @@ const PROXY_URL = "https://mbal-search-957730565502.us-central1.run.app";
 const FORM_URL = "";
 const CONTACT_EMAIL = "jon.dinneen@gmail.com";
 let LEDGER_TYPE='all', LEDGER_STATUS='all', LEDGER_TOPIC='all', LEDGER_SORT='signal', LEDGER_QUERY='', LEDGER_ROWS=null;
+let LAKE_QUERY='', LAKE_STATUS='all', LAKE_DOMAIN='all', LAKE_SHOW_ALL=false;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"'`]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[c]));
 const fmt=n=>n==null?'—':Number(n).toLocaleString();
@@ -2165,18 +2214,92 @@ function renderData(){renderLake();}
 function renderLake(){
   const inv=(DATA.lakehouse_sources||[]);
   if(inv.length){
-    const SB={READY_FOR_MODELING:{bg:'#e9f5f1',text:'#0f7a74',lbl:'Ready'},FETCHED_NEEDS_REVIEW:{bg:'#f6f0e4',text:'#9a6a07',lbl:'Fetched'},IMPLEMENTED_NOT_FETCHED:{bg:'#eef0f2',text:'#6b7280',lbl:'Planned'},NOT_STARTED:{bg:'#eef0f2',text:'#6b7280',lbl:'Planned'}};
-    const STOP=new Set(['wmo','dac','cycle','source_kind','source_key','source_id','dataset_id','title_array','grid_lat','grid_lon','entity_id','node_code','site_code','profile_index','level_index','parameter','instrument_class','geometry','provider','flag','qc','location_code','n_obs']);
-    const pretty=t=>String(t).replace(/_/g,' ').replace(/\b([a-z])/g,(m,c)=>c.toUpperCase());
-    const cleanName=n=>{n=String(n||'').replace(/\s+(source|records?|observations?|tables?|data|profiles?)\s+for\s+.*/i,'').trim();return n.length>60?n.slice(0,58)+'…':n;};
-    const tagsOf=s=>(s||[]).filter(x=>!STOP.has(String(x).toLowerCase())&&String(x).length<26).slice(0,4).map(pretty);
-    const tot=inv.reduce((a,x)=>a+(x.rows||0),0), ready=inv.filter(x=>x.status==='READY_FOR_MODELING').length;
-    if($('#lakesub'))$('#lakesub').innerHTML=`${fmt(inv.length)} sources &middot; ${fmt(tot)} rows &middot; ${fmt(ready)} ready for modeling. Largest first &mdash; searchable in the <a href="#ledger" onclick="go('ledger')" style="color:var(--acc)">Ledger</a>.`;
-    const LIM=window.__lakeAll?inv.length:28;
-    const row=(r,i)=>{const b=SB[r.status]||{bg:'#eef0f2',text:'#6b7280',lbl:'—'};const tg=tagsOf(r.signals);const yr=(r.date_min&&r.date_max)?`${String(r.date_min).slice(0,4)}–${String(r.date_max).slice(0,4)}`:'';
-      return `<div class="lhrow"><span class="lhnum">${i+1}</span><span class="lhname" title="${esc(r.name)}">${esc(cleanName(r.name))}</span><span class="lhtags">${tg.map(c=>`<span class="lhchip">${esc(c)}</span>`).join('')}</span><span class="lhmeta">${r.rows!=null?fmt(r.rows):''}${yr?'&nbsp;&middot;&nbsp;'+yr:''}</span><span class="lhstat" style="background:${b.bg};color:${b.text}">${b.lbl}</span></div>`;};
-    $('#datasetrows').innerHTML=`<div class="lhlist">${inv.slice(0,LIM).map(row).join('')}</div>`+
-      (inv.length>28?`<button class="lhmore" onclick="window.__lakeAll=!window.__lakeAll;renderLake()">${window.__lakeAll?'Show top 28 &uarr;':'Show all '+fmt(inv.length)+' sources &darr;'}</button>`:'');
+    const SB={
+      READY_FOR_MODELING:{bg:'#e3f3ef',text:'#0f7a74',lbl:'Ready'},
+      FETCHED_NEEDS_REVIEW:{bg:'#fdf3e0',text:'#9a6a07',lbl:'Needs review'},
+      IMPLEMENTED_NOT_FETCHED:{bg:'#eef0f2',text:'#586069',lbl:'Fetcher built'},
+      NOT_STARTED:{bg:'#f1f1f3',text:'#7c828a',lbl:'Planned'}
+    };
+    const DOMAINS={
+      ocean:{label:'Ocean observing',hint:'Argo, OOI, buoys, observatories, fixed platforms',color:'#0f8a84'},
+      water:{label:'Water quality',hint:'Beaches, bacteria, advisories, chemistry, WQX',color:'#3a6ea5'},
+      biology:{label:'HABs, toxins & biology',hint:'HABs, domoic acid, cyano, chlorophyll, organisms',color:'#4f9b6e'},
+      land:{label:'Rivers, land & weather',hint:'USGS, discharge, rain, pesticides, fire, watershed',color:'#9a6a07'},
+      remote:{label:'Remote sensing & models',hint:'Satellites, reanalysis, gridded forecasts, HYCOM',color:'#5f7fb0'},
+      wildlife:{label:'Fisheries & wildlife',hint:'Fishing effort, whales, sharks, ecology records',color:'#7c6fb0'},
+      other:{label:'Other / methods',hint:'Computed panels, audits, metadata, uncategorized sources',color:'#7c828a'}
+    };
+    const STOP=new Set(['_id','id','wmo','dac','cycle','source_kind','source_key','source_id','dataset_id','title_array','grid_lat','grid_lon','entity_id','node_code','site_code','profile_index','level_index','parameter','instrument_class','geometry','provider','flag','qc','location_code','n_obs','objectid','record_id','year','month','day']);
+    const pretty=t=>String(t||'').replace(/_/g,' ').replace(/\b([a-z])/g,(m,c)=>c.toUpperCase());
+    const prettySignal=t=>pretty(t);
+    const cleanName=n=>String(n||'').replace(/\s+(source|records?|observations?|tables?|data|profiles?)\s+for\s+.*/i,'').trim();
+    const domainKey=r=>{const t=((r.name||'')+' '+(r.id||'')+' '+(r.signals||[]).join(' ')).toLowerCase();
+      if(/fish|fishing|whale|shark|cpue|vessel|gfw|sea star|kelp/.test(t))return 'wildlife';
+      if(/sentinel|landsat|modis|viirs|hycom|merra|era5|reanalysis|satellite|remote|model grid|forecast system|copernicus/.test(t))return 'remote';
+      if(/hab|domoic|karenia|cyano|cyanobacter|chlorophyll|phytoplankton|biotoxin|microcystin|biology|species|organism/.test(t))return 'biology';
+      if(/beach|bacteria|fib|enterococcus|coliform|advis|wqx|water quality|chemistry|drinking|wastewater|safe-to-swim/.test(t))return 'water';
+      if(/usgs|nwis|river|stream|discharge|rain|precip|weather|meteo|fire|pesticide|watershed|soil|turbidity|gage|gauge/.test(t))return 'land';
+      if(/argo|ooi|onc|venus|erddap|buoy|mooring|co-ops|coops|ndbc|cdip|cen?coos|sccoos|mbari|glider|observatory|platform|float|profile|ocean/.test(t))return 'ocean';
+      return 'other';};
+    const signalList=s=>(s||[]).filter(x=>{const v=String(x||'').trim();return v&&v.length<40&&!STOP.has(v.toLowerCase());}).map(prettySignal);
+    const dateRange=r=>(r.date_min&&r.date_max)?`${String(r.date_min).slice(0,10)} to ${String(r.date_max).slice(0,10)}`:'not dated in snapshot';
+    const yearRange=r=>(r.date_min&&r.date_max)?`${String(r.date_min).slice(0,4)}-${String(r.date_max).slice(0,4)}`:'no date range';
+    const rows=inv.map((r,i)=>{const d=domainKey(r), sig=signalList(r.signals);
+      return {...r,idx:i,domain:d,domainLabel:DOMAINS[d].label,clean:cleanName(r.name),cleanSignals:sig,search:[r.name,r.id,r.status,DOMAINS[d].label,(r.signals||[]).join(' ')].join(' ').toLowerCase()};})
+      .sort((a,b)=>(b.rows||0)-(a.rows||0));
+    const totalRows=rows.reduce((a,x)=>a+(x.rows||0),0);
+    const ready=rows.filter(x=>x.status==='READY_FOR_MODELING').length;
+    const uniqueSignals=new Set(rows.flatMap(x=>x.cleanSignals.map(s=>s.toLowerCase())));
+    const dated=rows.filter(x=>x.date_min&&x.date_max).length;
+    $('#dataoverview').innerHTML=[
+      ['Sources',fmt(rows.length),'public, computed, and planned inputs'],
+      ['Rows',fmt(totalRows),'known rows across source inventory'],
+      ['Ready',fmt(ready),`${Math.round(ready/rows.length*100)}% ready for modeling`],
+      ['Signals',fmt(uniqueSignals.size),`${fmt(dated)} sources have date coverage`]
+    ].map(([k,v,s])=>`<div class="datametric"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div><div class="s">${esc(s)}</div></div>`).join('');
+
+    const domainCounts=Object.keys(DOMAINS).map(k=>({key:k,...DOMAINS[k],n:rows.filter(r=>r.domain===k).length,rowSum:rows.filter(r=>r.domain===k).reduce((a,x)=>a+(x.rows||0),0)})).filter(x=>x.n).sort((a,b)=>b.rowSum-a.rowSum);
+    $('#datacats').innerHTML=domainCounts.map(d=>`<button class="datacat${LAKE_DOMAIN===d.key?' active':''}" data-domain="${esc(d.key)}" style="border-left-color:${d.color}">
+      <b>${esc(d.label)}</b><span>${fmt(d.n)} sources · ${fmt(d.rowSum)} rows</span><span>${esc(d.hint)}</span>
+    </button>`).join('');
+    document.querySelectorAll('#datacats .datacat').forEach(b=>b.onclick=()=>{LAKE_DOMAIN=b.dataset.domain;LAKE_SHOW_ALL=false;renderLake();});
+
+    const statuses=[...new Set(rows.map(r=>r.status))].sort();
+    if(LAKE_STATUS!=='all'&&!statuses.includes(LAKE_STATUS))LAKE_STATUS='all';
+    if(LAKE_DOMAIN!=='all'&&!domainCounts.some(d=>d.key===LAKE_DOMAIN))LAKE_DOMAIN='all';
+    const ds=$('#datastatus'), dd=$('#datadomain'), dq=$('#datasearch'), dr=$('#datareset');
+    if(ds){ds.innerHTML='<option value="all">All readiness</option>'+statuses.map(s=>`<option value="${esc(s)}">${esc((SB[s]&&SB[s].lbl)||pretty(s))}</option>`).join('');ds.value=LAKE_STATUS;ds.onchange=()=>{LAKE_STATUS=ds.value;LAKE_SHOW_ALL=false;renderLake();};}
+    if(dd){dd.innerHTML='<option value="all">All data families</option>'+domainCounts.map(d=>`<option value="${esc(d.key)}">${esc(d.label)}</option>`).join('');dd.value=LAKE_DOMAIN;dd.onchange=()=>{LAKE_DOMAIN=dd.value;LAKE_SHOW_ALL=false;renderLake();};}
+    if(dq){if(document.activeElement!==dq&&dq.value!==LAKE_QUERY)dq.value=LAKE_QUERY;dq.oninput=()=>{LAKE_QUERY=dq.value;LAKE_SHOW_ALL=false;renderLake();};}
+    if(dr)dr.onclick=()=>{LAKE_QUERY='';LAKE_STATUS='all';LAKE_DOMAIN='all';LAKE_SHOW_ALL=false;renderLake();};
+
+    const terms=LAKE_QUERY.trim().toLowerCase().split(/\s+/).filter(Boolean);
+    const filtered=rows.filter(r=>(LAKE_STATUS==='all'||r.status===LAKE_STATUS)&&(LAKE_DOMAIN==='all'||r.domain===LAKE_DOMAIN)&&(!terms.length||terms.every(t=>r.search.includes(t))));
+    const LIM=LAKE_SHOW_ALL?filtered.length:50;
+    const shown=filtered.slice(0,LIM);
+    const domainLabel=LAKE_DOMAIN==='all'?'all families':DOMAINS[LAKE_DOMAIN].label;
+    if($('#lakesub'))$('#lakesub').innerHTML=`Showing ${fmt(filtered.length)} of ${fmt(rows.length)} sources across ${esc(domainLabel)}. Rows are largest first; open any source to see date coverage, readiness, and signal fields.`;
+    const row=(r,i)=>{const b=SB[r.status]||{bg:'#eef0f2',text:'#586069',lbl:pretty(r.status)};const d=DOMAINS[r.domain];const sigs=r.cleanSignals.slice(0,28);
+      return `<details class="lakeitem">
+        <summary class="lakesummary">
+          <span class="lakerank">${String(i+1).padStart(2,'0')}</span>
+          <span class="lakemain"><span class="lakename">${esc(r.clean||r.name)}</span><span class="lakehint">${esc(d.label)} · ${esc(yearRange(r))} · ${fmt((r.signals||[]).length)} raw fields</span></span>
+          <span class="lakecount"><b>${r.rows!=null?fmt(r.rows):'—'}</b><span>rows</span></span>
+          <span class="lakebadges"><span class="sbadge" style="background:${b.bg};color:${b.text}">${esc(b.lbl)}</span><span class="sbadge" style="background:#f3f5f5;color:${d.color}">${esc(d.label)}</span></span>
+        </summary>
+        <div class="lakebody">
+          <div class="lakebodygrid">
+            <div class="lakefact"><b>Full source name</b><span>${esc(r.name)}</span></div>
+            <div class="lakefact"><b>Date coverage</b><span>${esc(dateRange(r))}</span></div>
+            <div class="lakefact"><b>Readiness</b><span>${esc((SB[r.status]&&SB[r.status].lbl)||pretty(r.status))}${r.serving_allowed===false?' · serving blocked':''}</span></div>
+          </div>
+          <div class="signalchips">${sigs.length?sigs.map(s=>`<span class="lhchip">${esc(s)}</span>`).join(''):'<span class="empty">No column-level signal list is published for this source yet.</span>'}${r.cleanSignals.length>sigs.length?`<span class="signalmore">+${r.cleanSignals.length-sigs.length} more</span>`:''}</div>
+        </div>
+      </details>`;};
+    $('#datasetrows').innerHTML=`<div class="datafound">Showing ${fmt(shown.length)} ${shown.length===1?'source':'sources'}${filtered.length>shown.length?' of '+fmt(filtered.length):''}. Search covers source names and signal fields.</div><div class="lakeinventory">${shown.map(row).join('')}</div>`+
+      (filtered.length>50?`<button class="lhmore" id="lakemore" type="button">${LAKE_SHOW_ALL?'Show top 50 &uarr;':'Show all '+fmt(filtered.length)+' matching sources &darr;'}</button>`:'')+
+      (!filtered.length?'<div class="lhempty" style="padding:18px 22px">No lakehouse sources match the current filters.</div>':'');
+    const more=$('#lakemore'); if(more)more.onclick=()=>{LAKE_SHOW_ALL=!LAKE_SHOW_ALL;renderLake();};
     return;
   }
   const lake=lakeAssets(), shadow=shadowAssets();

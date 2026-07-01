@@ -21,12 +21,9 @@ assert(resolvedFeatured.length > 0, "Featured findings filter should resolve at 
 
 /* ---- Start page: overview first, no question form on the homepage ---- */
 const required = [
-  "We train evidence engines across water, biology, and field-risk questions, then show the scorecard.",
-  "What we are doing",
+  "people, data, AI, and compute",
   "How we work",
-  "What we have actually run",
-  "What has held up",
-  "The pipeline",
+  "Top wins",
   "Featured explainer",
   "function renderFullReport",
   "function targetVocabControls",
@@ -46,6 +43,11 @@ assert(!html.includes("id=\"leaderboard\""), "homepage should not include leader
 assert(!html.includes("Monterey Bay Today"), "nav should not include Monterey Bay Today");
 assert(!html.includes("fetch('downloads.json'"), "site should not fetch the raw-download manifest");
 assert(!html.includes(' download>Download'), "site should not render raw download buttons");
+assert(html.includes('id="dataoverview"'), "Lakehouse page should expose summary metrics");
+assert(html.includes('id="datacats"'), "Lakehouse page should expose data-family cards");
+assert(html.includes('id="datasearch"'), "Lakehouse page should expose source/signal search");
+assert(html.includes('class="lakeinventory"'), "Lakehouse page should render the compact inventory");
+assert(html.includes("LAKE_QUERY"), "Lakehouse inventory should keep filter state");
 
 const scripts = [...html.matchAll(/<script[^>]*>([\s\S]*?)<\/script>/g)].map((m) => m[1]);
 assert(scripts.length > 0, "index.html should include an app script");
