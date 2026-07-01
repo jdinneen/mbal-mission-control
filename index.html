@@ -687,6 +687,20 @@
   .icds{font-family:var(--mono);font-size:11.5px;line-height:1.62;background:#0e1621;color:#c3ccd8;border-radius:11px;padding:13px 15px;overflow-wrap:anywhere}
   .icds .dlbl{display:block;font-size:9.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#5fd0c6;margin-bottom:6px}
   @media(max-width:720px){.iscore{grid-template-columns:1fr 1fr}.icgrid{grid-template-columns:1fr}}
+  /* lakehouse inventory — compact scannable rows */
+  .lhlist{border:1px solid var(--hair,#e6e8eb);border-radius:12px;overflow:hidden;background:#fff}
+  .lhrow{display:grid;grid-template-columns:30px minmax(150px,1.5fr) minmax(0,1.5fr) auto 74px;align-items:center;gap:12px;padding:8px 14px;border-bottom:1px solid var(--faint3,#f0f2f4);font-size:13px}
+  .lhrow:last-child{border-bottom:0}
+  .lhrow:hover{background:var(--acc-tint2,#f2f9f8)}
+  .lhnum{font-family:var(--mono,monospace);font-size:11px;color:var(--ink5,#9aa0a7);text-align:right}
+  .lhname{font-weight:600;color:var(--ink,#1a1f24);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lhtags{display:flex;gap:4px;flex-wrap:nowrap;overflow:hidden}
+  .lhchip{background:var(--faint3,#f1f3f5);color:var(--ink3,#586069);font-size:10.5px;padding:2px 7px;border-radius:5px;white-space:nowrap}
+  .lhmeta{font-family:var(--mono,monospace);font-size:11.5px;color:var(--ink4,#6b7280);text-align:right;white-space:nowrap}
+  .lhstat{font-size:10.5px;font-weight:600;padding:3px 9px;border-radius:999px;text-align:center;white-space:nowrap}
+  .lhmore{margin-top:12px;padding:9px 16px;border:1px solid var(--hair,#e6e8eb);border-radius:9px;background:#fff;color:var(--acc,#0f8a84);font-weight:600;font-size:12.5px;cursor:pointer;font-family:var(--mono,monospace)}
+  .lhmore:hover{background:var(--acc-tint2,#f2f9f8)}
+  @media(max-width:640px){.lhrow{grid-template-columns:24px 1fr 62px;gap:8px}.lhtags,.lhmeta{display:none}}
 </style>
 </head>
 <body>
@@ -2151,19 +2165,18 @@ function renderData(){renderLake();}
 function renderLake(){
   const inv=(DATA.lakehouse_sources||[]);
   if(inv.length){
-    const SB={READY_FOR_MODELING:{bg:'#e4f3ef',text:'#0f7a74'},FETCHED_NEEDS_REVIEW:{bg:'#fdf0dc',text:'#9a6a07'},IMPLEMENTED_NOT_FETCHED:{bg:'#eef0f2',text:'#586069'},NOT_STARTED:{bg:'#eef0f2',text:'#586069'}};
+    const SB={READY_FOR_MODELING:{bg:'#e9f5f1',text:'#0f7a74',lbl:'Ready'},FETCHED_NEEDS_REVIEW:{bg:'#f6f0e4',text:'#9a6a07',lbl:'Fetched'},IMPLEMENTED_NOT_FETCHED:{bg:'#eef0f2',text:'#6b7280',lbl:'Planned'},NOT_STARTED:{bg:'#eef0f2',text:'#6b7280',lbl:'Planned'}};
+    const STOP=new Set(['wmo','dac','cycle','source_kind','source_key','source_id','dataset_id','title_array','grid_lat','grid_lon','entity_id','node_code','site_code','profile_index','level_index','parameter','instrument_class','geometry','provider','flag','qc','location_code','n_obs']);
+    const pretty=t=>String(t).replace(/_/g,' ').replace(/\b([a-z])/g,(m,c)=>c.toUpperCase());
+    const cleanName=n=>{n=String(n||'').replace(/\s+(source|records?|observations?|tables?|data|profiles?)\s+for\s+.*/i,'').trim();return n.length>60?n.slice(0,58)+'…':n;};
+    const tagsOf=s=>(s||[]).filter(x=>!STOP.has(String(x).toLowerCase())&&String(x).length<26).slice(0,4).map(pretty);
     const tot=inv.reduce((a,x)=>a+(x.rows||0),0), ready=inv.filter(x=>x.status==='READY_FOR_MODELING').length;
-    if($('#lakesub'))$('#lakesub').innerHTML=`${fmt(inv.length)} sources in the lakehouse inventory &middot; ${fmt(tot)} total rows &middot; ${fmt(ready)} ready for modeling &mdash; every fetched source, largest first, with its promotion status and signals. Also searchable in the <a href="#ledger" onclick="go('ledger')" style="color:var(--acc)">Ledger</a>.`;
-    $('#datasetrows').innerHTML=inv.map((r,i)=>{const b=SB[r.status]||{bg:'#eef0f2',text:'#586069'};const sg=r.signals||[];const yr=(r.date_min&&r.date_max)?`${String(r.date_min).slice(0,4)}–${String(r.date_max).slice(0,4)}`:'';
-      return `<div class="card dscard" style="margin-bottom:11px">
-        <div style="display:flex;align-items:baseline;gap:9px;flex-wrap:wrap">
-          <span class="cellmuted" style="font-family:var(--mono);font-size:11.5px;min-width:34px">${i+1}</span>
-          <span class="cellmono" style="font-weight:600;color:var(--ink);font-size:14.5px">${esc(r.name)}</span>
-          <span class="sbadge" style="background:${b.bg};color:${b.text}">${esc(r.status)}</span>
-          <span class="cellmuted" style="font-size:12.5px">${r.rows!=null?fmt(r.rows)+' rows':''}${yr?' &middot; '+yr:''}${sg.length?' &middot; '+sg.length+' signals':''}</span>
-        </div>
-        ${sg.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:9px">${sg.map(c=>`<span class="vchip" style="background:var(--faint3,#f1f3f5);color:var(--ink2,#3a4046);font-size:11px">${esc(c)}</span>`).join('')}</div>`:''}
-      </div>`;}).join('');
+    if($('#lakesub'))$('#lakesub').innerHTML=`${fmt(inv.length)} sources &middot; ${fmt(tot)} rows &middot; ${fmt(ready)} ready for modeling. Largest first &mdash; searchable in the <a href="#ledger" onclick="go('ledger')" style="color:var(--acc)">Ledger</a>.`;
+    const LIM=window.__lakeAll?inv.length:28;
+    const row=(r,i)=>{const b=SB[r.status]||{bg:'#eef0f2',text:'#6b7280',lbl:'—'};const tg=tagsOf(r.signals);const yr=(r.date_min&&r.date_max)?`${String(r.date_min).slice(0,4)}–${String(r.date_max).slice(0,4)}`:'';
+      return `<div class="lhrow"><span class="lhnum">${i+1}</span><span class="lhname" title="${esc(r.name)}">${esc(cleanName(r.name))}</span><span class="lhtags">${tg.map(c=>`<span class="lhchip">${esc(c)}</span>`).join('')}</span><span class="lhmeta">${r.rows!=null?fmt(r.rows):''}${yr?'&nbsp;&middot;&nbsp;'+yr:''}</span><span class="lhstat" style="background:${b.bg};color:${b.text}">${b.lbl}</span></div>`;};
+    $('#datasetrows').innerHTML=`<div class="lhlist">${inv.slice(0,LIM).map(row).join('')}</div>`+
+      (inv.length>28?`<button class="lhmore" onclick="window.__lakeAll=!window.__lakeAll;renderLake()">${window.__lakeAll?'Show top 28 &uarr;':'Show all '+fmt(inv.length)+' sources &darr;'}</button>`:'');
     return;
   }
   const lake=lakeAssets(), shadow=shadowAssets();
