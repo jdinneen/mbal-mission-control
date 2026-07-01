@@ -622,11 +622,11 @@
     </div>
   </div>
   <nav class="tabs">
-    <button data-v="overview" class="active">Start here</button>
+    <button data-v="overview" class="active">Overview</button>
+    <button data-v="data">Data &amp; reproduce</button>
     <button data-v="models">Discovery Engines</button>
     <button data-v="map">Map</button>
     <button data-v="ledger">Ledger</button>
-    <button data-v="data">Data &amp; reproduce</button>
     <button data-v="glossary">Glossary</button>
   </nav>
 </header>
@@ -634,7 +634,7 @@
 <main>
   <div id="loading" class="loadwrap">loading published snapshot…</div>
 
-  <!-- ===== START HERE ===== -->
+  <!-- ===== OVERVIEW ===== -->
   <section class="view" id="overview">
     <div class="hero">
       <div class="eyebrow">Monterey Bay AI Lab</div>
@@ -1089,7 +1089,7 @@ function appendHelpAll(selector,helps){
 function applyStaticHelp(){
   appendHelp('#snaplabel','Published snapshot means a frozen public copy of the current evidence, not a live private workspace.');
   appendHelp('#snapwhen','This is the month and year when the public snapshot was built.');
-  appendHelpAll('nav.tabs button',['Overview is the summary page.','Questions are research areas and hazards the lab has worked on.','Findings are tested science results.','Models are fitted systems and baselines in the registry.','Map shows data and model evidence by place.','Ledger is the full searchable audit trail.','Data and reproduce is the organized evidence inventory and access note.','Glossary explains the lab words.']);
+  appendHelpAll('nav.tabs button',['Overview is the summary page.','Data and reproduce is the organized evidence inventory and access note.','Discovery Engines explains how the lab searches for signal and gates claims.','Map shows data and model evidence by place.','Ledger is the full searchable audit trail.','Glossary explains the lab words.']);
   appendHelp('#overview .eyebrow','This page starts with the big picture before showing the evidence cards and datasets.');
   appendHelp('#overview .page','The homepage starts with the work itself: train forecasting engines, compare them to plain baselines, and publish the result.');
   appendHelp('#overview .lede','This paragraph names the current pipeline: lakehouse data, training engines, checked wins, caveats, and failures.');
