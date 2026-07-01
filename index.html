@@ -2143,6 +2143,23 @@ function renderInnovations(){
 
 function renderData(){renderLake();}
 function renderLake(){
+  const inv=(DATA.lakehouse_sources||[]);
+  if(inv.length){
+    const SB={READY_FOR_MODELING:{bg:'#e4f3ef',text:'#0f7a74'},FETCHED_NEEDS_REVIEW:{bg:'#fdf0dc',text:'#9a6a07'},IMPLEMENTED_NOT_FETCHED:{bg:'#eef0f2',text:'#586069'},NOT_STARTED:{bg:'#eef0f2',text:'#586069'}};
+    const tot=inv.reduce((a,x)=>a+(x.rows||0),0), ready=inv.filter(x=>x.status==='READY_FOR_MODELING').length;
+    if($('#lakesub'))$('#lakesub').innerHTML=`${fmt(inv.length)} sources in the lakehouse inventory &middot; ${fmt(tot)} total rows &middot; ${fmt(ready)} ready for modeling &mdash; every fetched source, largest first, with its promotion status and signals. Also searchable in the <a href="#ledger" onclick="go('ledger')" style="color:var(--acc)">Ledger</a>.`;
+    $('#datasetrows').innerHTML=inv.map((r,i)=>{const b=SB[r.status]||{bg:'#eef0f2',text:'#586069'};const sg=r.signals||[];const yr=(r.date_min&&r.date_max)?`${String(r.date_min).slice(0,4)}–${String(r.date_max).slice(0,4)}`:'';
+      return `<div class="card dscard" style="margin-bottom:11px">
+        <div style="display:flex;align-items:baseline;gap:9px;flex-wrap:wrap">
+          <span class="cellmuted" style="font-family:var(--mono);font-size:11.5px;min-width:34px">${i+1}</span>
+          <span class="cellmono" style="font-weight:600;color:var(--ink);font-size:14.5px">${esc(r.name)}</span>
+          <span class="sbadge" style="background:${b.bg};color:${b.text}">${esc(r.status)}</span>
+          <span class="cellmuted" style="font-size:12.5px">${r.rows!=null?fmt(r.rows)+' rows':''}${yr?' &middot; '+yr:''}${sg.length?' &middot; '+sg.length+' signals':''}</span>
+        </div>
+        ${sg.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:9px">${sg.map(c=>`<span class="vchip" style="background:var(--faint3,#f1f3f5);color:var(--ink2,#3a4046);font-size:11px">${esc(c)}</span>`).join('')}</div>`:''}
+      </div>`;}).join('');
+    return;
+  }
   const lake=lakeAssets(), shadow=shadowAssets();
   const rows=lake.map((a,i)=>({t:'lake',i,name:a.asset_id,rows:a.rows,size:a.size_mb||0,signals:(a.signals||[]),
         src:lakeSource(a.path||a.asset_id),layer:lakeLayer(a.path||'')}))
