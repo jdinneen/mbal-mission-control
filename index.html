@@ -469,6 +469,52 @@
   .pathcard .pe{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--acc);font-weight:600;margin-bottom:8px}
   .pathcard h3{margin:0 0 6px;font-size:17px;font-weight:600;color:var(--ink)}
   .pathcard p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink3)}
+
+  /* ---- hero graphic ---- */
+  .herowrap{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(280px,.88fr);gap:36px;align-items:center;margin-bottom:30px}
+  .herowrap .hero{max-width:none;margin-bottom:0}
+  .heroart{min-width:0}
+  .heroart svg{display:block;width:100%;height:auto;filter:drop-shadow(0 10px 26px rgba(16,24,40,.08))}
+
+  /* ---- why now: convergence card ---- */
+  .whynow{margin-top:4px}
+  .convergecard{background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:var(--card-sh);padding:22px 24px;margin-bottom:30px;overflow:hidden}
+  .convergecard svg{display:block;width:100%;height:auto;max-width:900px;margin:0 auto}
+
+  /* ---- how-we-work pillar flow ---- */
+  .pillars{margin:0 0 30px}
+  .pillarflow{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .pillar{position:relative;background:var(--surface);border:1px solid var(--border);border-radius:15px;box-shadow:var(--card-sh);padding:20px 18px}
+  .pillar::after{content:"→";position:absolute;right:-13px;top:50%;transform:translateY(-50%);font-family:var(--mono);font-size:15px;color:#c2c7cc;z-index:2}
+  .pillar:last-child::after{display:none}
+  .pillar .pnum{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--acc);letter-spacing:.08em}
+  .pillar .picon{width:38px;height:38px;border-radius:10px;background:var(--acc-tint);color:var(--acc);display:flex;align-items:center;justify-content:center;margin:11px 0 13px}
+  .pillar .picon svg{width:20px;height:20px}
+  .pillar h3{margin:0 0 6px;font-size:16px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+  .pillar p{margin:0;font-size:12.8px;line-height:1.5;color:var(--ink3);text-wrap:pretty}
+
+  /* ---- crew: agents + gpu + experts ---- */
+  .crew{margin:18px 0 30px;border-top:1px solid var(--faint);padding-top:20px}
+  .crewlead{font-size:14px;color:var(--ink3);margin-bottom:15px;font-weight:600}
+  .crewrow{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .crewitem{display:flex;gap:12px;align-items:flex-start}
+  .crewitem .ci{flex:none;width:34px;height:34px;border-radius:9px;background:var(--acc-tint);color:var(--acc);display:flex;align-items:center;justify-content:center}
+  .crewitem .ci svg{width:18px;height:18px}
+  .crewitem .tx b{display:block;font-size:14px;color:var(--ink);margin-bottom:3px}
+  .crewitem .tx span{display:block;font-size:12.5px;line-height:1.45;color:var(--ink3);text-wrap:pretty}
+
+  /* ---- top wins band ---- */
+  .topwins{margin:0 0 6px}
+  .winsgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .wincard{display:block;width:100%;text-align:left;appearance:none;font-family:var(--sans);background:var(--surface);border:1px solid var(--border);border-radius:15px;box-shadow:var(--card-sh);padding:18px 20px;cursor:pointer;transition:box-shadow .18s,transform .18s,border-color .18s}
+  .wincard:hover{box-shadow:var(--card-sh-hover);transform:translateY(-2px);border-color:#bfe0dc}
+  .wincard .wtop{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:9px}
+  .wincard .wtopic{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink5)}
+  .wincard .wmetric{font-family:var(--mono);font-size:13.5px;font-weight:600;color:var(--acc);white-space:nowrap}
+  .wincard h3{margin:0 0 6px;font-size:16.5px;font-weight:600;line-height:1.28;color:var(--ink);letter-spacing:-.01em}
+  .wincard p{margin:0;font-size:13px;line-height:1.52;color:var(--ink3);text-wrap:pretty}
+  .winsmore{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-size:13.5px;font-weight:600;color:var(--acc);background:none;border:none;cursor:pointer;font-family:inherit;padding:0}
+  .winsmore:hover{text-decoration:underline}
   details.primer{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--card-sh);margin:26px 0;overflow:hidden}
   details.primer>summary{list-style:none;cursor:pointer;padding:16px 22px;font-size:15px;font-weight:600;display:flex;align-items:center;gap:10px}
   details.primer>summary::-webkit-details-marker{display:none}
@@ -510,7 +556,10 @@
   .reprocard li{font-size:14px;line-height:1.6;color:var(--ink2);margin-bottom:7px}
   .reprocard code{font-family:var(--mono);font-size:12.5px;background:var(--faint3);border:1px solid var(--border);border-radius:5px;padding:1px 6px}
   @media (max-width:860px){
-    .featurevideo,.bigrow,.minigrid,.paths,.qcardgrid,.storyintro,.storyflow,.storycompare,.engineflow,.engineportfolio{grid-template-columns:1fr}
+    .featurevideo,.bigrow,.minigrid,.paths,.qcardgrid,.storyintro,.storyflow,.storycompare,.engineflow,.engineportfolio,.winsgrid,.herowrap,.crewrow{grid-template-columns:1fr}
+    .pillarflow{grid-template-columns:1fr 1fr}
+    .pillar::after{display:none}
+    .heroart{max-width:440px}
     .hwrap{padding:12px 16px}
     nav.tabs{padding:0 16px}
     main{padding:24px 16px 64px}
@@ -636,37 +685,177 @@
 
   <!-- ===== OVERVIEW ===== -->
   <section class="view" id="overview">
-    <div class="hero">
-      <div class="eyebrow">Monterey Bay AI Lab</div>
-      <h1 class="page">We train evidence engines across water, biology, and field-risk questions, then show the scorecard.</h1>
-      <p class="lede">Mission Control is the public notebook for the whole project: pulling water, weather, ocean, watershed, biology, toxin, fisheries, and sensor records into one lakehouse; using frontier models to scout new engines and failure checks; running the real jobs on local GPU compute; then publishing what beat a fair baseline, what only partly worked, and what failed.</p>
+    <div class="herowrap">
+      <div class="hero">
+        <div class="eyebrow">Monterey Bay AI Lab · Mission Control</div>
+        <h1 class="page">Bringing together <span class="hl" style="white-space:normal">people, data, AI, and compute</span> to find the hidden signals that make a real difference in people's lives.</h1>
+        <p class="lede">We gather scattered public data about the coast — weather, rivers, satellites, ocean sensors, lab tests — into one checked place, run many learning engines against it, and hunt for the rare signal that genuinely beats <i>"tomorrow will look like today."</i> Every claim has to survive a fair baseline, held-out data, and an adversarial critic — so the wins are real, and the dead ends stay on the record.</p>
+      </div>
+      <div class="heroart">
+        <svg viewBox="0 0 440 340" role="img" aria-label="A hidden signal rising out of noisy coastal data">
+          <defs>
+            <linearGradient id="hbg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eef7f5"/></linearGradient>
+            <linearGradient id="hsig" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0f8a84"/><stop offset="1" stop-color="#28c4ba"/></linearGradient>
+            <filter id="hglow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="4"/></filter>
+          </defs>
+          <rect x="1" y="1" width="438" height="338" rx="18" fill="url(#hbg)" stroke="#dcebe8"/>
+          <g stroke="#e4efec" stroke-width="1">
+            <line x1="0" y1="70" x2="440" y2="70"/><line x1="0" y1="130" x2="440" y2="130"/><line x1="0" y1="190" x2="440" y2="190"/><line x1="0" y1="250" x2="440" y2="250"/>
+            <line x1="88" y1="0" x2="88" y2="340"/><line x1="176" y1="0" x2="176" y2="340"/><line x1="264" y1="0" x2="264" y2="340"/><line x1="352" y1="0" x2="352" y2="340"/>
+          </g>
+          <g fill="#c4d2cf" opacity=".7">
+            <circle cx="48" cy="292" r="3"/><circle cx="118" cy="278" r="2.4"/><circle cx="70" cy="206" r="2"/><circle cx="150" cy="296" r="3"/><circle cx="206" cy="268" r="2.4"/><circle cx="96" cy="150" r="2"/><circle cx="250" cy="288" r="3"/><circle cx="300" cy="256" r="2.4"/><circle cx="182" cy="180" r="2"/><circle cx="332" cy="230" r="2.8"/><circle cx="278" cy="212" r="2"/><circle cx="398" cy="286" r="3"/><circle cx="372" cy="196" r="2.4"/><circle cx="232" cy="150" r="2"/><circle cx="140" cy="120" r="2"/><circle cx="60" cy="120" r="2"/>
+          </g>
+          <path d="M0 306 q60 -20 120 0 t120 0 t120 0 t120 0 V340 H0 Z" fill="#e3f2ef"/>
+          <path d="M20 250 L60 244 L92 256 L120 230 L150 240 L184 208 L214 218 L248 184 L280 176 L312 138 L340 118 L362 96" fill="none" stroke="#28c4ba" stroke-width="8" opacity=".22" filter="url(#hglow)"/>
+          <path d="M20 250 L60 244 L92 256 L120 230 L150 240 L184 208 L214 218 L248 184 L280 176 L312 138 L340 118 L362 96" fill="none" stroke="url(#hsig)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="362" cy="96" r="17" fill="none" stroke="#28c4ba" stroke-width="2" opacity=".45"/>
+          <circle cx="362" cy="96" r="7.5" fill="#0f8a84"/>
+          <text x="362" y="60" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-size="12" letter-spacing=".05em" fill="#0f8a84">SIGNAL</text>
+        </svg>
+      </div>
     </div>
 
-    <div class="bigrow" aria-label="Project overview">
-      <div class="card bigcard">
-        <div class="tag">What we are doing</div>
-        <h2>Building a repeatable test bench for multi-hazard science and operations.</h2>
-        <p>Each run starts with a concrete question: can we rank bacteria risk, toxic HAB onset, cyanotoxin risk, hypoxia, storm response, fisheries effort, wildlife risk, or cross-region transfer better than recent same-place history, persistence, or seasonality? The point is not to make every model look good. The point is to find the few places where extra modeling is worth it.</p>
-      </div>
-      <div class="card bigcard">
-        <div class="tag">How we work</div>
-        <h2>Train a lot, promote little, keep the misses visible.</h2>
-        <p>The engines compete against boring but strong baselines first. A result does not become a claim until it has a held-out read, a baseline comparison, and a failure mode written down. That is why the site shows wins, caveats, and nulls side by side instead of only the best-looking chart.</p>
+    <!-- why now: the convergence -->
+    <div class="whynow">
+      <div class="secband"><h2>Why now</h2><p>Three forces are converging at once — and together they put discovery that used to need a whole institute within reach of a small team.</p></div>
+      <div class="convergecard">
+        <svg viewBox="0 0 900 250" role="img" aria-label="Agentic AI, extensive data, and cheap compute converging into new discovery power">
+          <defs>
+            <linearGradient id="cf" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#28c4ba" stop-opacity=".12"/><stop offset="1" stop-color="#0f8a84" stop-opacity=".5"/></linearGradient>
+            <radialGradient id="cb"><stop offset="0" stop-color="#3ad0c6"/><stop offset="1" stop-color="#0f8a84"/></radialGradient>
+            <filter id="cg" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="7"/></filter>
+          </defs>
+          <path d="M226 46 C 380 46 400 125 556 125" fill="none" stroke="url(#cf)" stroke-width="11" stroke-linecap="round"/>
+          <path d="M226 125 L 556 125" fill="none" stroke="url(#cf)" stroke-width="11" stroke-linecap="round"/>
+          <path d="M226 204 C 380 204 400 125 556 125" fill="none" stroke="url(#cf)" stroke-width="11" stroke-linecap="round"/>
+          <g font-family="Instrument Sans, system-ui, sans-serif">
+            <rect x="16" y="18" width="210" height="56" rx="13" fill="#f2f9f8" stroke="#cde6e3"/>
+            <rect x="16" y="18" width="5" height="56" rx="2.5" fill="#0f8a84"/>
+            <text x="40" y="43" font-size="16" font-weight="600" fill="#16181d">Agentic AI</text>
+            <text x="40" y="62" font-size="12.5" fill="#5b6168">runs the experiments</text>
+            <rect x="16" y="97" width="210" height="56" rx="13" fill="#f2f9f8" stroke="#cde6e3"/>
+            <rect x="16" y="97" width="5" height="56" rx="2.5" fill="#0f8a84"/>
+            <text x="40" y="122" font-size="16" font-weight="600" fill="#16181d">Extensive data</text>
+            <text x="40" y="141" font-size="12.5" fill="#5b6168">decades, worldwide, open</text>
+            <rect x="16" y="176" width="210" height="56" rx="13" fill="#f2f9f8" stroke="#cde6e3"/>
+            <rect x="16" y="176" width="5" height="56" rx="2.5" fill="#0f8a84"/>
+            <text x="40" y="201" font-size="16" font-weight="600" fill="#16181d">Cheap compute</text>
+            <text x="40" y="220" font-size="12.5" fill="#5b6168">test every idea fast</text>
+          </g>
+          <circle cx="556" cy="125" r="40" fill="url(#cb)" opacity=".22" filter="url(#cg)"/>
+          <circle cx="556" cy="125" r="19" fill="url(#cb)"/>
+          <g stroke="#28c4ba" stroke-width="2.4" stroke-linecap="round">
+            <line x1="556" y1="74" x2="556" y2="90"/><line x1="556" y1="160" x2="556" y2="176"/>
+            <line x1="601" y1="90" x2="613" y2="78"/><line x1="601" y1="160" x2="613" y2="172"/>
+          </g>
+          <path d="M583 125 H 628" fill="none" stroke="#0f8a84" stroke-width="2.6"/>
+          <path d="M622 119 L 634 125 L 622 131 Z" fill="#0f8a84"/>
+          <g font-family="Instrument Sans, system-ui, sans-serif">
+            <rect x="642" y="89" width="246" height="72" rx="15" fill="#eef7f5" stroke="#a9d9d3"/>
+            <text x="666" y="122" font-size="17" font-weight="700" fill="#0f7a74">Discovery within reach</text>
+            <text x="666" y="143" font-size="12.5" fill="#3f454c">for a small, focused team</text>
+          </g>
+        </svg>
       </div>
     </div>
 
-    <div class="secband"><h2>The pipeline</h2><p>Raw records land in the lakehouse, transforms make them comparable, training engines compete against baseline rules, and evidence gates decide what can be shown as a finding.</p></div>
+    <!-- how we work: the four moves, repeated on every question -->
+    <div class="secband"><h2>How we work</h2><p>Four moves, repeated on every question — with the truth checked at each step.</p></div>
+    <div class="pillars">
+      <div class="pillarflow">
+        <div class="pillar">
+          <div class="pnum">01</div>
+          <div class="picon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg></div>
+          <h3>Build the lakehouse</h3>
+          <p>Pull scattered public data into one clean, checked store — bronze, silver, and gold tables with units reconciled, joins verified, and leakage guarded.</p>
+        </div>
+        <div class="pillar">
+          <div class="pnum">02</div>
+          <div class="picon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2.2" fill="var(--surface)"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="15" cy="12" r="2.2" fill="var(--surface)"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="8" cy="18" r="2.2" fill="var(--surface)"/></svg></div>
+          <h3>Tune the learning engines</h3>
+          <p>Run many model families — rankers, boosters, neural nets, tensor factorizations, zero-shot foundation models — and make each one earn its keep.</p>
+        </div>
+        <div class="pillar">
+          <div class="pnum">03</div>
+          <div class="picon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2.5-7 5 14L17 12h4"/></svg></div>
+          <h3>Find the hidden signals</h3>
+          <p>Hunt for the exogenous signal that beats "tomorrow looks like today" — the escape that turns raw data into a forecast people can act on.</p>
+        </div>
+        <div class="pillar">
+          <div class="pnum">04</div>
+          <div class="picon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <h3>Keep the truth the whole way</h3>
+          <p>Every claim faces a fair baseline, held-out data, a permutation null, and an adversarial critic. Dead ends stay on the record.</p>
+        </div>
+      </div>
+      <div class="crew">
+        <div class="crewlead">Every move is run by a small crew working together:</div>
+        <div class="crewrow">
+          <div class="crewitem">
+            <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M12 8V4"/><circle cx="12" cy="3" r="1.4"/><circle cx="9" cy="13.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="13.5" r="1.2" fill="currentColor" stroke="none"/></svg></div>
+            <div class="tx"><b>Frontier-model agents</b><span>Fleets of AI agents read the data, run the experiments, and adversarially red-team each other's claims.</span></div>
+          </div>
+          <div class="crewitem">
+            <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M10 7V4M14 7V4M10 20v-3M14 20v-3M7 10H4M7 14H4M20 10h-3M20 14h-3"/></svg></div>
+            <div class="tx"><b>On-prem GPU</b><span>An in-house GPU trains the models and runs every gate locally — the compute stays under our roof.</span></div>
+          </div>
+          <div class="crewitem">
+            <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg></div>
+            <div class="tx"><b>Domain experts</b><span>Oceanographers and public-health advisors steer the questions and sanity-check every result.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- top wins: curated, real, baseline-checked -->
+    <div class="secband"><h2>Top wins</h2><p>The real, baseline-checked results — the ones that survived the whole process.</p></div>
+    <div class="topwins">
+      <div class="winsgrid">
+        <button class="wincard" onclick="go('questions')">
+          <div class="wtop"><span class="wtopic">Beach bacteria · California</span><span class="wmetric">AUC 0.868</span></div>
+          <h3>Statewide beach-safety forecast</h3>
+          <p>Scores beach-bacteria risk same-day across 8 of 9 California counties — the lab culture it replaces takes 18–24 hours. Beats the "like yesterday" baseline on held-out seasons.</p>
+        </button>
+        <button class="wincard" onclick="go('findings')">
+          <div class="wtop"><span class="wtopic">Shellfish toxin · Ireland</span><span class="wmetric">+0.28 AP</span></div>
+          <h3>Irish domoic-acid onset watchlist</h3>
+          <p>Flags the onset of domoic-acid (ASP) events over a fair season-and-location baseline; red-team survived — and a California-trained model transfers to Ireland zero-shot, recovering ~60% of local skill.</p>
+        </button>
+        <button class="wincard" onclick="go('findings')">
+          <div class="wtop"><span class="wtopic">Karenia red tide · FL / Gulf</span><span class="wmetric">+0.12 AP</span></div>
+          <h3>Gulf red-tide onset triage</h3>
+          <p>Ranks which Florida and Gulf sites are about to see a Karenia bloom, beating both persistence and a fair rolling-recurrence baseline — robust across a 6-of-6 grid.</p>
+        </button>
+        <button class="wincard" onclick="go('findings')">
+          <div class="wtop"><span class="wtopic">Lake cyano · Sentinel-2</span><span class="wmetric">AUC 0.80</span></div>
+          <h3>Satellite cyano-bloom detector</h3>
+          <p>Sentinel-2 imagery spots severe cyanobacteria blooms, validated against lab microcystin on 26 of 30 same-lake pairs — no in-water sensor required.</p>
+        </button>
+        <button class="wincard" onclick="go('questions')">
+          <div class="wtop"><span class="wtopic">Low-oxygen water · Gulf</span><span class="wmetric">+0.12 AP</span></div>
+          <h3>Coastal hypoxia onset flag</h3>
+          <p>Flags when Gulf bottom water is about to go hypoxic — AP 0.270 versus a persistence baseline of 0.145 on a strict chronological holdout.</p>
+        </button>
+        <button class="wincard" onclick="go('questions')">
+          <div class="wtop"><span class="wtopic">Fjord oxygen · slow-driver</span><span class="wmetric">+0.08 AP</span></div>
+          <h3>Fjord oxygen-renewal lead</h3>
+          <p>Deep-water density gives ~21 days of lead on when an anoxic fjord will re-oxygenate — the slow-driver principle transferring to a second basin.</p>
+        </button>
+      </div>
+      <button class="winsmore" onclick="go('findings')">See all supported findings — and the dead ends we kept →</button>
+    </div>
 
     <section class="featurevideo" aria-label="Featured lakehouse explainer video">
       <div class="featurecopy">
         <div class="tag">Featured explainer · narrated · closed captions</div>
-        <h2>How messy public data becomes a checked result.</h2>
-        <p>Start here for the plain-English walkthrough: where data lands in the lakehouse, how transforms clean it, which training engines run, and how a model output becomes a claim card or a recorded miss.</p>
+        <h2>How the data machine turns messy public data into checked evidence.</h2>
+        <p>Start here for the plain-English walkthrough: where data lands in the lakehouse, how transforms clean it, where the tables and outputs live, which model engines run, and how results become claim cards.</p>
         <div class="featurepoints" aria-label="Lakehouse explainer topics">
           <div class="featurepoint"><b>Lakehouse</b><span>Bronze, Silver, and Gold tables keep raw data, clean features, and results separate.</span></div>
           <div class="featurepoint"><b>Transforms</b><span>Units, joins, dates, features, and leakage checks make the data trustworthy.</span></div>
-          <div class="featurepoint"><b>Training engines</b><span>Recent-history baselines, boosters, neural nets, symbolic screens, tensor tests, and physics-pi readouts get graded.</span></div>
-          <div class="featurepoint"><b>Evidence gates</b><span>Holdouts, baselines, null checks, and critic passes decide which claims survive.</span></div>
+          <div class="featurepoint"><b>Model engines</b><span>Rankers, boosters, neural nets, tensor factors, and zero-shot readouts get graded.</span></div>
+          <div class="featurepoint"><b>Evidence gates</b><span>Holdouts, baselines, null checks, and critics decide which claims survive.</span></div>
         </div>
       </div>
       <div class="featuremedia">
@@ -685,74 +874,6 @@
       </div>
     </section>
 
-    <section class="videoqueue" aria-label="More shareable explainer videos">
-      <a class="videolinkcard" href="clean-to-dirty-tensor-video.html">
-        <span class="videolinkthumb" aria-hidden="true">
-          <img src="videos/clean_to_dirty_tensor_8th_grade_poster.jpg" alt="">
-        </span>
-        <span class="videolinkcopy">
-          <span class="tag">Critic update · 1:54 · captions</span>
-          <h3>Clean-to-dirty update: physics-pi helps; tensor did not clear the harder test.</h3>
-          <p>AP rises from 0.2992 to 0.3348 from physics-pi; the hardened n=200 critic does not promote the tensor increment.</p>
-        </span>
-        <span class="videolinkgo">Share page</span>
-      </a>
-    </section>
-
-    <!-- the two big things: the law + the shipped win (data-bound) -->
-    <div class="bigrow" id="bigrow"></div>
-
-    <!-- beach bacteria narrative, folded in from the standalone explainer -->
-    <div id="bacteriastory"></div>
-
-    <!-- two entry paths -->
-    <div class="paths">
-      <button class="pathcard" onclick="go('questions')">
-        <div class="pe">For domain scientists</div>
-        <h3>Browse by hazard →</h3>
-        <p>14 research questions — beach bacteria, HAB toxins, hypoxia, lake cyano, whales, floods — each with its status, evidence, models, signals, and map in one place.</p>
-      </button>
-      <button class="pathcard" onclick="go('questions')">
-        <div class="pe">For ML / forecasting researchers</div>
-        <h3>The training story →</h3>
-        <p>See which engines were tried, where persistence and seasonality still win, and where added structure helped: clean-to-dirty onset, slow environmental lead, upstream signals, hypoxia sequence models, and scoped HAB/toxin forecasts.</p>
-      </button>
-    </div>
-
-    <!-- the escapes -->
-    <div class="secband"><h2>Where extra modeling earns its keep</h2><p>The exceptions: places a model beats a simple "like yesterday" or seasonal forecast on a checked read.</p></div>
-    <div class="minigrid" id="escapelist"></div>
-
-    <!-- how to read primer -->
-    <details class="primer">
-      <summary>How to read this site</summary>
-      <div class="pbody">
-        <h4>Result grades</h4>
-        <dl>
-          <dt>Supported</dt><dd>Held up under audit — beat a real baseline on held-out data, with confidence intervals.</dd>
-          <dt>Caveated</dt><dd>A real signal, but with limits you should read (narrow slice, soft generalization, screening-only).</dd>
-          <dt>Null</dt><dd>Tested and did not clear the bar. Not hidden — kept visible so it isn't re-tried blindly.</dd>
-          <dt>Exploratory</dt><dd>An open lane; correlations exist but haven't survived strict cross-validation yet.</dd>
-        </dl>
-        <h4>Signal verdicts (what a feature did for a target)</h4>
-        <dl>
-          <dt>PRIMARY / KEEP</dt><dd>Added real, audited skill over the baseline.</dd>
-          <dt>WASH</dt><dd>No lift once the baseline was fair.</dd>
-          <dt>REJECT</dt><dd>Hurt the model.</dd>
-          <dt>UNTESTED</dt><dd>Not yet gated.</dd>
-        </dl>
-        <h4>The numbers</h4>
-        <dl>
-          <dt>AUC</dt><dd>Ranking skill: 0.5 ≈ random, 1.0 = perfect ordering of event vs non-event days.</dd>
-          <dt>AP</dt><dd>Average precision — for rare events, how high real events rank. ΔAP is the gain over a baseline.</dd>
-          <dt>Baseline</dt><dd>The honest comparator a model must beat — usually persistence (yesterday) or seasonal climatology, not a strawman.</dd>
-          <dt>Held-out / perm-null</dt><dd>Test rows kept out of fitting; a permutation null checks the lift isn't luck.</dd>
-        </dl>
-      </div>
-    </details>
-
-    <!-- demoted snapshot/build status -->
-    <div class="statstrip" id="statstrip"></div>
   </section>
 
   <!-- ===== FINDINGS ===== -->
@@ -1415,54 +1536,7 @@ function renderLeaderboard(){
     `<a href="${requestRunHref('')}">Contribute →</a>`;
 }
 function renderOverview(){
-  const s=DATA, c=s.counts||{};
-  const fs=s.findings||[];
-  const sup=fs.filter(f=>findingStatus(f.kind)==='Supported').length;
-  const nul=fs.filter(f=>findingStatus(f.kind)==='Null').length;
-  const assets=s.data_assets||[];
-  const totRows=assets.reduce((a,x)=>a+(x.rows||0),0);
-  const ts=s.targets||[];
-  const bp=s._built_pacific||''; const mm=/^(\d{4})-(\d{2})/.exec(bp);
-
-  // two big cards: what has actually run + the strongest current wins.
-  const byId={}; fs.forEach(f=>byId[f.id]=f);
-  const homeWins=['claim_bacteria_station_memory_supported','claim_clean_to_dirty_onset','claim_forward_2026_holdout_pass','claim_hab_exceed_strict_critic','claim_da_toxic_onset_ci_separated','claim_hypoxia_onset_forecast','claim_mcye_alberta_definitive_replication']
-    .map(id=>byId[id]).filter(Boolean).filter(f=>findingStatus(f.kind)==='Supported');
-  const runCard=`<div class="card bigcard">
-    <div class="tag" style="color:var(--ink3)"><i style="background:#b8bdc3"></i>What we have actually run</div>
-    <h3>A lot of training, a lot of misses, a few useful wins.</h3>
-    <p>The current snapshot tracks ${fs.length} findings, ${(s.models||[]).length} model records, ${(s.signals||[]).length} signal verdicts, and ${assets.length} data assets. The engines include station-memory baselines, HGBT/CatBoost/LightGBM boosters, neural sequence models, symbolic searches, tensor tests, and physics-pi screens.</p>
-    <div class="num">
-      <div><b>${ts.length}</b><span>research questions</span></div>
-      <div><b>${sup}</b><span>supported findings</span></div>
-      <div><b>${nul}</b><span>null findings kept</span></div>
-    </div></div>`;
-  const winCard=homeWins.length?`<div class="card bigcard" style="cursor:pointer" onclick="openFindingById('${esc(homeWins[0].id)}')">
-    <div class="tag" style="color:#0f7a74"><i style="background:#0f8a84"></i>What has held up</div>
-    <h3>The strongest wins are practical and scoped.</h3>
-    <p>${homeWins.slice(0,6).map(f=>esc(f.title)).join('<br>')}</p>
-    <div class="go" style="margin-top:13px;font-size:13px;font-weight:600;color:var(--acc)">Open the evidence -></div></div>`:'';
-  $('#bigrow').innerHTML=runCard+winCard;
-  renderBacteriaStory();
-
-  // escapes (drivers genuinely beat the baseline) + honest nulls
-  $('#escapelist').innerHTML=['hypoxia_lead','renewal_onset','cross_country_transfer','cyano_onset'].map(targetMini).join('');
-  renderAsk();
-
-  // demoted snapshot/build status strip (gates live here now, not the headline)
-  const ov=(s.overall_status||'UNKNOWN');
-  const ovTxt = ov==='GREEN'?'publishable':ov==='YELLOW'?'prospective scoring open':ov==='RED'?'blocked':ov;
-  const gv={PASS:{dot:'#0f8a84',tone:'#0f7a74',bg:'#eef4f3'},WARN:{dot:'#c9a23a',tone:'#9a6a07',bg:'#fdfaf2'},FAIL:{dot:'#b4453c',tone:'#b4453c',bg:'#fbeceb'}};
-  const pretty=id=>String(id||'').replace(/_/g,' ').replace(/\b\w/g,ch=>ch.toUpperCase());
-  const gateChips=(s.gates||[]).map(g=>{const st=(g.overall_status||'').toUpperCase();const v=gv[st]||{dot:'#9aa0a7',tone:'#5b6168',bg:'#f1f1f3'};
-    return `<span class="gchip" style="background:${v.bg};color:${v.tone}" title="${esc(pretty(g.gate_id))}: ${esc(st)}"><i style="background:${v.dot}"></i>${esc(pretty(g.gate_id))}</span>`;}).join('');
-  $('#statstrip').innerHTML=
-    `<div class="si"><b>${fs.length}</b><span>findings · ${sup} supported · ${nul} null</span></div>
-     <div class="si"><b>${(s.models||[]).length}</b><span>models · ${c.claimable||0} claimable</span></div>
-     <div class="si"><b>${assets.length}</b><span>data assets · ${fmt(totRows)} rows</span></div>
-     <div class="sep"></div>
-     <div class="si"><span>${mm?MONTHS[+mm[2]-1]+" '"+mm[1].slice(2):''} snapshot · status: <b style="font-weight:600">${esc(ovTxt)}</b></span></div>
-     ${gateChips}`;
+  // Home page is fully static HTML: mission → why now → how we work → top wins.
 }
 
 /* ---------- findings ---------- */
