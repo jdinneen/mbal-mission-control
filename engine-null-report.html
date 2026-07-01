@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The engine-swarm null — Monterey Bay AI Lab</title>
+<style>
+  :root{--bg:#f5f6f6;--surface:#fff;--ink:#16181d;--ink2:#3f454c;--ink3:#5b6168;--ink4:#878d94;--ink5:#9aa0a7;
+        --border:#e7e9e9;--faint:#eef0f0;--faint2:#f1f3f3;--acc:#0f8a84;--acc-tint:#eef4f3;
+        --mono:'IBM Plex Mono',ui-monospace,monospace;--sans:'Instrument Sans',system-ui,Segoe UI,sans-serif;}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:920px;margin:0 auto;padding:38px 22px 80px}
+  a{color:var(--acc);text-decoration:none}a:hover{text-decoration:underline}
+  .back{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--acc);display:inline-block;margin-bottom:22px}
+  .tag{font-family:var(--mono);font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--acc);font-weight:600}
+  h1{font-size:30px;letter-spacing:-.02em;margin:8px 0 12px;line-height:1.15}
+  .lede{font-size:16px;color:var(--ink2);max-width:760px;margin:0 0 8px}
+  .claim{background:linear-gradient(135deg,#fff 0%,#fff 55%,var(--acc-tint) 100%);border:1px solid #d8e7e5;border-left:4px solid var(--acc);border-radius:14px;padding:18px 22px;margin:22px 0 30px;font-size:15.5px;color:var(--ink)}
+  h2{font-size:21px;letter-spacing:-.01em;margin:34px 0 6px;padding-bottom:9px;border-bottom:1px solid var(--faint)}
+  h2 .n{font-family:var(--mono);font-size:12px;color:var(--ink5);margin-right:8px}
+  p{margin:12px 0;color:var(--ink2)}
+  .score{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:18px 0}
+  .metric{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--acc);border-radius:12px;padding:14px 16px}
+  .metric .v{font-size:26px;font-weight:600;letter-spacing:-.02em}
+  .metric .k{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink4);margin-top:7px;font-weight:600}
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13px;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+  th,td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--faint)}
+  th{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink4);background:var(--faint2);font-weight:600}
+  td.mono{font-family:var(--mono);font-size:12px}
+  tr:last-child td{border-bottom:none}
+  .b{font-family:var(--mono);font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:999px;white-space:nowrap}
+  .refuted{background:#fbeceb;color:#b4453c}.tie{background:#eef0f2;color:#586069}.weak{background:#fdf3e0;color:#9a6a07}
+  .untested{background:#f1f1f3;color:#7c828a}.incomplete{background:#f1f1f3;color:#9aa0a7}.win{background:#e3f3ef;color:#0f7a74}
+  .note{background:var(--faint2);border:1px solid var(--faint);border-radius:11px;padding:14px 16px;font-size:13.5px;color:var(--ink3);margin:16px 0}
+  code{font-family:var(--mono);font-size:12px;background:var(--faint2);border:1px solid var(--border);border-radius:5px;padding:1px 5px}
+  .caveat{border-left:3px solid #c98a10}
+  footer{margin-top:44px;padding-top:18px;border-top:1px solid var(--faint);font-size:12.5px;color:var(--ink4)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <a class="back" href="index.html#innovations">&larr; Back to the Innovation tab</a>
+  <div class="tag">Method report &middot; engine swarm</div>
+  <h1>Model scale is not the lever</h1>
+  <p class="lede">We re-trained the modern machine-learning toolkit against the hardest fair baseline &mdash; a site&rsquo;s own strictly-backward rolling history &mdash; in California, then re-pointed the same engines at foreign coasts. This is the full, honest scoreboard: every gated engine ties or loses.</p>
+
+  <div class="claim"><b>The verified claim.</b> Across a 26-engine re-training in California and re-pointing the same engines at three fully-tested foreign systems &mdash; Irish shellfish toxin, and Irish and Hong&nbsp;Kong beach bacteria &mdash; <b>no modern ML architecture</b> (GNN, Mamba, DANN, neural-ODE/FNO, diffusion, NNGP, time-series foundation models) beat a simple strictly-backward rolling-memory baseline on the fair onset / forward slice.</div>
+
+  <h2><span class="n">1</span>California &mdash; 26 engines, complete null</h2>
+  <p>Each engine self-reported against a weak comparison (persistence, seasonal average, or a base-rate stand-in). Re-scored against a <b>richer rolling-memory tree</b> on the fair onset / forward-in-time slice, the &ldquo;wins&rdquo; disappear. Five engines that looked SUPPORTED were weak-baseline artifacts; the one that looked strongest (a graph neural net) was demolished by a hard three-attack check.</p>
+  <div class="score">
+    <div class="metric"><div class="v">26</div><div class="k">engines re-trained</div></div>
+    <div class="metric"><div class="v">0</div><div class="k">beat rolling memory</div></div>
+    <div class="metric"><div class="v">5</div><div class="k">weak-baseline &ldquo;wins&rdquo;</div></div>
+  </div>
+  <table>
+    <tr><th>Engine</th><th>Self-reported</th><th>Fair-slice result vs rolling memory</th><th>Verdict</th></tr>
+    <tr><td class="mono">GNN (spatiotemporal)</td><td>+0.086 vs persistence</td><td class="mono">&minus;0.18 all / &minus;0.084 onset vs a richer memory tree; collapses forward</td><td><span class="b refuted">Refuted</span></td></tr>
+    <tr><td class="mono">Mamba (state-space)</td><td>+0.207 vs persistence</td><td class="mono">decision-curve adds nothing on the lead-time slice</td><td><span class="b weak">Weak baseline</span></td></tr>
+    <tr><td class="mono">DANN (domain-adversarial)</td><td>+0.273 vs persistence</td><td class="mono">only +0.008 over the &pi;-champion</td><td><span class="b weak">Weak baseline</span></td></tr>
+    <tr><td class="mono">NNGP (deep GP)</td><td>SUPPORTED vs seasonal</td><td class="mono">refuted vs the &pi; baseline; broken calibration</td><td><span class="b weak">Weak baseline</span></td></tr>
+    <tr><td class="mono">TSFM (Chronos / TTM)</td><td>+0.161</td><td class="mono">that was a tree vs seasonal; zero-shot foundation models &minus;0.18 / &minus;0.13</td><td><span class="b weak">Weak baseline</span></td></tr>
+    <tr><td class="mono">Neural-ODE / FNO (physics)</td><td>+0.28 full-slice</td><td class="mono">neural-ODE &minus;0.24; the FNO number is full-slice, ungated</td><td><span class="b refuted">Refuted / untested</span></td></tr>
+    <tr><td class="mono">Diffusion (CSDI)</td><td>&mdash;</td><td class="mono">never gated (missing null/holdout); CRPS NaN on the full run</td><td><span class="b untested">Did not gate</span></td></tr>
+    <tr><td class="mono">MoE routing</td><td>blend +0.037</td><td class="mono">a random gate does as well &mdash; routing adds nothing</td><td><span class="b tie">Tie</span></td></tr>
+    <tr><td class="mono">SSO / auto-discovery / SSL</td><td>&mdash;</td><td class="mono">refuted or below the promotion gate</td><td><span class="b refuted">Refuted</span></td></tr>
+  </table>
+  <div class="note"><b>The GNN hard-check</b> (the one that looked strongest). It beats a naive neighbour-memory baseline on the onset slice by +0.033 &mdash; but a plain gradient-boosted tree on the <i>same</i> neighbour lags beats the GNN by <b>&minus;0.18 AP</b> (CI excludes 0), and on a train-past / test-future split the GNN (0.325) loses to neighbour-memory (0.632), the richer tree (0.822), and even plain persistence (0.560). Its apparent edge was temporally leaky, re-skinned memory.</div>
+  <p>The one genuine California lift is a modest <b>combined-channel stack</b> (a tree/&pi; ensemble, <i>not</i> a neural architecture) on the onset slice. That is the exception that proves the rule: it is careful ensembling of simple channels, not model scale.</p>
+
+  <h2><span class="n">2</span>Off-shore &mdash; the same engines on foreign coasts</h2>
+  <p>We re-pointed the identical engines at new basins and scored each against the <b>strongest single backward rolling baseline</b> for that basin. Every fully-gated engine still ties or loses.</p>
+  <table>
+    <tr><th>Engine</th><th>Basin / target</th><th>Fair margin vs rolling memory</th><th>Verdict</th></tr>
+    <tr><td class="mono">TSFM</td><td>Ireland &mdash; domoic acid</td><td class="mono">&minus;0.230</td><td><span class="b refuted">Refuted</span></td></tr>
+    <tr><td class="mono">Diffusion</td><td>Ireland &mdash; domoic acid</td><td class="mono">&minus;0.070</td><td><span class="b refuted">Loses</span></td></tr>
+    <tr><td class="mono">EVT-Hawkes</td><td>Ireland &mdash; domoic acid</td><td class="mono">&minus;0.094</td><td><span class="b refuted">Loses</span></td></tr>
+    <tr><td class="mono">MoE combine</td><td>Ireland &mdash; domoic acid</td><td class="mono">no combination beats the single rolling baseline</td><td><span class="b refuted">Null</span></td></tr>
+    <tr><td class="mono">NNGP</td><td>Ireland &mdash; beach bacteria</td><td class="mono">&minus;0.049 (perm-p 1.0)</td><td><span class="b refuted">Refuted</span></td></tr>
+    <tr><td class="mono">Mamba</td><td>Ireland &mdash; beach bacteria</td><td class="mono">+0.0015 (estimator-contingent)</td><td><span class="b tie">Tie</span></td></tr>
+    <tr><td class="mono">DANN</td><td>Hong Kong &mdash; beach bacteria</td><td class="mono">&minus;0.007 (perm-p 1.0)</td><td><span class="b refuted">Loses</span></td></tr>
+    <tr><td class="mono">Combo-stack</td><td>Hong Kong &mdash; beach bacteria</td><td class="mono">&minus;0.028</td><td><span class="b refuted">Refuted</span></td></tr>
+    <tr><td class="mono">Booster</td><td>Hong Kong &mdash; beach bacteria</td><td class="mono">&minus;0.028</td><td><span class="b refuted">Refuted</span></td></tr>
+    <tr><td class="mono">Neural-ODE / FNO</td><td>US lakes &mdash; cyano</td><td class="mono">ran but ungated (no null / holdout)</td><td><span class="b untested">Untested</span></td></tr>
+    <tr><td class="mono">GNN</td><td>Gulf &mdash; Karenia red tide</td><td class="mono">run hit its time limit &mdash; no gated result</td><td><span class="b incomplete">Incomplete</span></td></tr>
+  </table>
+  <div class="note caveat"><b>Honest scope.</b> Three foreign hazard-systems are fully gated and confirmed: <b>Irish shellfish toxin, Irish beach bacteria, and Hong Kong beach bacteria</b> (across two foreign coasts). The <b>US-lake cyano</b> run completed but was not gated on this pass (its raw numbers are full-slice, not a fair result) &mdash; it is a null only via the separate California cyano run, so treat it as a caveat. The <b>Gulf Karenia</b> engine timed out and produced no gated result &mdash; we do not count it. We do not claim &ldquo;four coasts.&rdquo;</div>
+
+  <h2><span class="n">3</span>How this was checked</h2>
+  <p>Every engine was scored on the decision-relevant slice (toxic / bacterial onset, or a strictly forward-in-time split), against the <b>strongest single</b> backward rolling baseline &mdash; the best of a seasonal climatology, a rolling exceedance-rate, and a rolling prior-value ranker &mdash; never against persistence alone, a seasonal average, or a self-flattering &ldquo;union&rdquo; baseline. Margins were checked with station-clustered bootstrap confidence intervals and permutation / key-shuffle nulls; a default-refuted adversarial reviewer re-derived the headline results from the raw ledgers, and a separate fact-check went through every number before this page was published. Ranking metrics were scored on the <b>raw</b> model, because per-fold calibration on tiny folds silently sinks a real ranker.</p>
+  <p><b>What this rules out.</b> It is not that we picked the wrong California data. Model cleverness loses to a site&rsquo;s own recent history everywhere we have looked &mdash; so the lever is not a bigger or fancier model. The escapes that <i>did</i> work were a smarter question (predict the onset, not the level) and a new place (zero-shot transfer to an unmonitored coast).</p>
+
+  <footer>
+    Monterey Bay AI Lab &middot; generated from <code>reports/engine_retrain/ledger.json</code> and <code>reports/engine_retrain/newbasin_ledger.json</code>, fact-checked against the per-engine claim cards. Numbers are the fair-slice margins; full-slice figures are excluded by design.
+    <br><a href="index.html#innovations">&larr; Back to the Innovation tab</a>
+  </footer>
+</div>
+</body>
+</html>

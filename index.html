@@ -2166,7 +2166,7 @@ const INNOVATIONS=[
 {n:'07',title:'The engine swarm — throw every modern architecture at it',verdict:'DEAD END',
  plain:'Maybe simple models are just the wrong tool. So we threw the whole modern zoo at the problem — graph neural nets, transformers, diffusion models, neural differential equations — about two dozen architectures.',
  bet:'A more powerful, or more physically-appropriate, model captures dynamics that simple trees miss.',
- found:'A clean, complete strike-out. We re-trained all ~26 on the GPU this week; against honest baselines every single one ties or loses to a plain rolling-memory tree. The apparent wins were all artifacts of a too-easy baseline.',
+ found:'A clean, complete strike-out. We re-trained all ~26 on the GPU; against honest baselines every single one ties or loses to a plain rolling-memory tree, and the apparent wins were all artifacts of a too-easy baseline. And it holds off-shore &mdash; re-pointed at three foreign systems (Irish shellfish toxin, and Irish and Hong Kong beach bacteria), the same engines still lose to rolling memory. <a href="engine-null-report.html" style="color:var(--acc);font-weight:600">See the full report &rarr;</a>',
  ds:'TSFM / Mamba / GNN / Neural-ODE-FNO / diffusion / geo-FM / NNGP / DANN / quantile. On forward-blocked onset slices vs the strongest single rolling baseline, all refuted; the lone survivor (a GNN) was re-skinned neighbour-memory that a plain tree on the same lags beat by +0.18 AP and that collapsed forward-in-time.'},
 {n:'08',title:'Self-supervised features — let a neural net invent its own inputs',verdict:'DEAD END',
  plain:'Instead of hand-picking which measurements matter, let a neural network invent its own features straight from the raw data.',
