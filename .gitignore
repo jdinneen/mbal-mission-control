@@ -7,3 +7,4 @@ __pycache__/
 *.pyc
 
 shot_*.png
+gpu_fold_run/out/

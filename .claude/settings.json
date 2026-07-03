@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(node qa_eval.mjs)",
+      "Bash(node scripts/agent-context.mjs)",
+      "Bash(node scripts/check.mjs)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./.dev.vars)",
+      "Read(./.wrangler/**)",
+      "Read(./.ssh/**)",
+      "Read(./secrets/**)",
+      "Read(./config/credentials.json)",
+      "Read(./**/*credential*)",
+      "Read(./**/*.pem)",
+      "Read(./**/*.key)",
+      "Read(./**/id_rsa)",
+      "Read(./**/id_ed25519)",
+      "Read(./**/*token*)",
+      "Read(./**/*secret*)"
+    ]
+  }
+}
