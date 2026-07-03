@@ -887,8 +887,8 @@
 let DATA=null, EVID={}, PROJECT_DOCS=[], TAB='overview', FFILTER='featured', FFAM='all', OPENF=null, DETAIL=null;
 let ANSWERED=null, LEADERBOARD=null;
 /* ---- Ask the lab config ----
-   PROXY_URL: paste your deployed Cloudflare Worker URL to turn on the grounded search assistant
-              for open-ended questions (see README — `wrangler deploy`). Empty = curated answers only.
+   PROXY_URL: current live grounded-search proxy. This repo also contains Cloudflare Worker
+              files as an alternate path; keep docs/checks in sync if this URL changes.
    FORM_URL : paste your Google Form's pre-filled-link base to route research requests / suggestions /
               contributions there. Empty = falls back to a pre-composed email to CONTACT_EMAIL. */
 const PROXY_URL = "https://mbal-search-957730565502.us-central1.run.app";
