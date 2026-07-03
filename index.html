@@ -1576,6 +1576,12 @@ window.addEventListener('hashchange',()=>showView(location.hash.slice(1)||'overv
 
 /* ---------- load ---------- */
 async function load(){
+  // Reveal the static home page IMMEDIATELY — the overview (mission, why-now, top wins,
+  // Deep dives) is fully static and needs no data. Only the data-driven views (findings,
+  // models, ledger, map) wait on data.json, so a slow/failed 2MB fetch can no longer
+  // leave the page stuck on "loading" or blank the home page.
+  $('#loading').style.display='none';
+  showView('overview');
   try{
     const r=await fetch('data.json',{cache:'no-cache'}); const snap=await r.json();
     DATA=snap.state; EVID=snap.evidence||{}; PROJECT_DOCS=snap.project_docs||[];
@@ -1586,11 +1592,10 @@ async function load(){
       fetch('leaderboard.json',{cache:'no-cache'}).then(r=>r.json()).catch(()=>null)]);
       ANSWERED=aj; LEADERBOARD=lj;}catch(e){}
     buildFindingFamily();
-    $('#loading').style.display='none';
     renderHeader(); renderOverview(); renderDownloads();
     const fs=$('#footstamp'); if(fs)fs.textContent='Snapshot built '+(DATA._built_pacific||'')+'';
     showView(location.hash.slice(1)||'overview');
-  }catch(e){ $('#loading').textContent='⚠ failed to load data.json — '+e; }
+  }catch(e){ const fs=$('#footstamp'); if(fs)fs.textContent='(live data unavailable — overview shown)'; console.error('data load failed',e); }
 }
 
 function renderHeader(){
