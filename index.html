@@ -970,6 +970,140 @@
       </div>
     </section>
 
+    <!-- ===== DEEP DIVES: merged standalone write-ups ===== -->
+    <style>
+    .deepdive{margin-top:30px}
+    .deepdive .ddbadges{display:flex;flex-wrap:wrap;gap:7px;margin:2px 0 14px}
+    .deepdive .ddbadges span{font-family:var(--mono);font-size:11.5px;color:var(--ink2);background:var(--faint3);border:1px solid var(--border);border-radius:7px;padding:4px 9px}
+    .deepdive .ddstats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
+    .deepdive .ddstat{background:var(--subtle);border:1px solid var(--faint);border-radius:10px;padding:14px 15px}
+    .deepdive .ddstat b{display:block;font-size:23px;font-weight:700;color:var(--acc);line-height:1.1}
+    .deepdive .ddstat span{display:block;font-size:12.5px;color:var(--ink4);margin-top:4px;line-height:1.4}
+    .deepdive .ddbar{margin:9px 0}
+    .deepdive .ddbar .l{display:flex;justify-content:space-between;gap:12px;font-size:13px;font-weight:600;margin-bottom:5px;color:var(--ink2)}
+    .deepdive .ddtrack{height:19px;background:var(--faint3);border:1px solid var(--border);border-radius:999px;overflow:hidden}
+    .deepdive .ddtrack i{display:block;height:100%;background:var(--acc)}
+    .deepdive .ddtrack i.alt{background:#c08a3e}
+    .deepdive table.ddtable{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px}
+    .deepdive table.ddtable th,.deepdive table.ddtable td{border:1px solid var(--faint);padding:8px 10px;text-align:left;vertical-align:top}
+    .deepdive table.ddtable th{background:var(--subtle);font-weight:600;color:var(--ink)}
+    .deepdive .ddnote{border-left:3px solid var(--acc);background:var(--acc-tint2);padding:11px 14px;border-radius:8px;margin:13px 0;font-size:13.5px;line-height:1.55;color:var(--ink2)}
+    .deepdive .ddnote.warn{border-left-color:#c08a3e;background:#fbf4e9}
+    .deepdive .pbody h4{margin:20px 0 8px;font-size:12px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink5)}
+    .deepdive .pbody>p{font-size:14px;line-height:1.6;color:var(--ink2);margin:8px 0}
+    .deepdive .ddfull{display:inline-flex;align-items:center;gap:6px;margin:14px 0 2px;font-size:13.5px;font-weight:600;color:var(--acc);text-decoration:none}
+    .deepdive .ddfull:hover{text-decoration:underline}
+    @media(max-width:860px){.deepdive .ddstats{grid-template-columns:1fr}}
+    </style>
+
+    <div class="secband" id="deepdives"><h2>Deep dives</h2><p>The longer write-ups behind three of the wins, brought into one place — a data-scientist video briefing on the zero-shot ranker, and two plain-English papers you can open inline.</p></div>
+
+    <!-- zero-shot data-scientist briefing: featured, open video -->
+    <section class="featurevideo" id="dd-zeroshot" aria-label="Zero-shot ranker data-scientist briefing video">
+      <div class="featurecopy">
+        <div class="tag">Data-scientist briefing · narrated · closed captions</div>
+        <h2>The zero-shot coastal-bacteria ranker, in one technical pass.</h2>
+        <p>How a simple physical-intuition plus logistic ranker cleared a hardened zero-shot screen: the label-free panel contract, the physics feature layer, leave-one-basin-out validation, permutation nulls and bootstrap gates, the washouts, and the one narrow claim that survived.</p>
+        <div class="featurepoints" aria-label="Zero-shot briefing headline numbers">
+          <div class="featurepoint"><b>12 domains</b><span>Held-out coastal basins, each hidden in turn and scored with no target-domain labels.</span></div>
+          <div class="featurepoint"><b>708,337 rows</b><span>Scored held-out station-days spanning 57,628 daily exceedance events.</span></div>
+          <div class="featurepoint"><b>1.75× AP lift</b><span>Mean average precision 0.1511 over a 0.0909 base rate; all 12 domains beat their own base rate.</span></div>
+          <div class="featurepoint"><b>Narrow claim</b><span>A retrospective ranking screen for early sampling attention — not a calibrated advisory probability.</span></div>
+        </div>
+      </div>
+      <div class="featuremedia">
+        <video controls preload="metadata" playsinline poster="videos/zero_shot_data_scientist_briefing_poster.jpg" aria-label="Data-scientist briefing video on the zero-shot coastal bacteria ranker">
+          <source src="videos/zero_shot_data_scientist_briefing.mp4" type="video/mp4">
+          <track src="videos/zero_shot_data_scientist_briefing.vtt" kind="captions" srclang="en" label="English captions" default>
+          <a href="videos/zero_shot_data_scientist_briefing.mp4">Open the zero-shot data-scientist briefing video.</a>
+        </video>
+        <div class="featurebar">
+          <span>5:22 data-scientist briefing</span>
+          <div class="featurelinks">
+            <a href="https://jdinneen.github.io/zero-shot-data-scientist-briefing/" target="_blank" rel="noopener">Briefing page</a>
+            <a href="videos/zero_shot_data_scientist_briefing.mp4">MP4</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- two plain-English papers: expandable -->
+    <div class="deepdive">
+
+      <details class="primer" id="dd-bacteria">
+        <summary>California beach-bacteria shadow triage — plain-English write-up</summary>
+        <div class="pbody">
+          <div class="ddbadges"><span>Topic: beach safety</span><span>Target: enterococcus</span><span>Place: California</span><span>Use: shadow triage</span></div>
+          <p>A frozen model ranks which California marine beach station-days are most likely to exceed the enterococcus safety threshold before the newest lab culture comes back — hours before results that normally lag the same-day decision. It is promoted as a <strong>shadow triage helper</strong>, not an official beach advisory.</p>
+          <div class="ddstats">
+            <div class="ddstat"><b>0.868</b><span>ROC-AUC on 2022+ holdout</span></div>
+            <div class="ddstat"><b>0.510</b><span>Average precision (base rate ≈ 10.1%)</span></div>
+            <div class="ddstat"><b>0.009</b><span>Expected calibration error</span></div>
+          </div>
+          <h4>Ranking skill vs. real baselines (AP)</h4>
+          <div class="ddbar"><div class="l"><span>Calibrated beach-bacteria model</span><span>0.510</span></div><div class="ddtrack"><i style="width:100%"></i></div></div>
+          <div class="ddbar"><div class="l"><span>Virtual-Beach-class regression</span><span>0.375</span></div><div class="ddtrack"><i class="alt" style="width:73.5%"></i></div></div>
+          <div class="ddbar"><div class="l"><span>Station memory</span><span>0.278</span></div><div class="ddtrack"><i class="alt" style="width:54.5%"></i></div></div>
+          <div class="ddbar"><div class="l"><span>AB411 rain rule</span><span>0.178</span></div><div class="ddtrack"><i class="alt" style="width:34.9%"></i></div></div>
+          <h4>The warning test (score ≥ 0.0635)</h4>
+          <table class="ddtable">
+            <thead><tr><th>What happened?</th><th>Model said high risk</th><th>Model said low risk</th></tr></thead>
+            <tbody>
+              <tr><td>Enterococcus exceedance happened</td><td>7,780</td><td>1,219</td></tr>
+              <tr><td>No exceedance happened</td><td>26,026</td><td>54,296</td></tr>
+            </tbody>
+          </table>
+          <p>The warning line caught <strong>86.5%</strong> of future exceedances on the 2022+ test — with many false flags, which is why the right use is triage and review, not automatic closure.</p>
+          <h4>Harder audits</h4>
+          <div class="ddstats">
+            <div class="ddstat"><b>9/9</b><span>Counties where it beat the AB411 rain rule</span></div>
+            <div class="ddstat"><b>9/9</b><span>Counties where it beat station memory</span></div>
+            <div class="ddstat"><b>8/9</b><span>Counties passing deploy-ready calibration</span></div>
+          </div>
+          <p>A first prospective lockbox (frozen June 18, 2026; scored HOLDS June 27) held the claim on 198 rows / 8 events — still small, but forward evidence.</p>
+          <div class="ddnote warn"><strong>Important limit:</strong> this should not decide by itself whether a beach is open or closed. Official sampling, lab testing, public-health judgment, and legal advisory rules still control those decisions. The frozen headline uses a two-day reveal-lag proxy; the conservative available-at AP is ≈ 0.490, about 0.020 lower.</div>
+          <a class="ddfull" href="https://jdinneen.github.io/california-beach-bacteria-shadow-triage/" target="_blank" rel="noopener">Read the full write-up →</a>
+        </div>
+      </details>
+
+      <details class="primer" id="dd-ireland">
+        <summary>Ireland domoic-acid monitoring helper — plain-English write-up</summary>
+        <div class="pbody">
+          <div class="ddbadges"><span>Topic: ocean science</span><span>Target: domoic acid (ASP)</span><span>Place: Ireland</span><span>Use: monitoring triage</span></div>
+          <p>A calibrated model learns from past Ireland shellfish-toxin records to rank which sites and weeks most deserve monitoring attention for amnesic shellfish poisoning (the illness linked to domoic acid). It beat a fair seasonal baseline on a future holdout and is promoted as a <strong>monitoring triage helper</strong> — not a replacement for lab tests or safety rules.</p>
+          <div class="ddstats">
+            <div class="ddstat"><b>0.390</b><span>Model average precision (future test)</span></div>
+            <div class="ddstat"><b>0.143</b><span>Best seasonal baseline</span></div>
+            <div class="ddstat"><b>93/124</b><span>Future toxin events caught</span></div>
+          </div>
+          <h4>Ranking skill vs. baselines (AP)</h4>
+          <div class="ddbar"><div class="l"><span>Calibrated model</span><span>0.390</span></div><div class="ddtrack"><i style="width:100%"></i></div></div>
+          <div class="ddbar"><div class="l"><span>Site-month seasonal baseline</span><span>0.143</span></div><div class="ddtrack"><i class="alt" style="width:36.7%"></i></div></div>
+          <div class="ddbar"><div class="l"><span>Regional-memory baseline</span><span>0.031</span></div><div class="ddtrack"><i class="alt" style="width:7.9%"></i></div></div>
+          <h4>The warning test (threshold 0.0966)</h4>
+          <table class="ddtable">
+            <thead><tr><th>Metric</th><th>Model</th><th>Seasonal baseline</th></tr></thead>
+            <tbody>
+              <tr><td>True positives</td><td>93</td><td>107</td></tr>
+              <tr><td>False positives</td><td>216</td><td>951</td></tr>
+              <tr><td>False negatives</td><td>31</td><td>17</td></tr>
+              <tr><td>Precision</td><td>0.301</td><td>0.101</td></tr>
+              <tr><td>Recall</td><td>0.750</td><td>0.863</td></tr>
+            </tbody>
+          </table>
+          <p>The baseline caught a few more events but raised far more false alarms; the model is stricter and much more precise — useful when monitoring attention is limited. A shuffled-label red-team could not reproduce the result, so it is hard to dismiss as luck.</p>
+          <h4>Against the closest public system (bulletin region-weeks, AP)</h4>
+          <div class="ddbar"><div class="l"><span>Model (aggregated to region-weeks)</span><span>0.607</span></div><div class="ddtrack"><i style="width:100%"></i></div></div>
+          <div class="ddbar"><div class="l"><span>Strongest local region-week baseline</span><span>0.364</span></div><div class="ddtrack"><i class="alt" style="width:60%"></i></div></div>
+          <div class="ddbar"><div class="l"><span>Public Ireland HAB Bulletin ASP risk</span><span>0.078</span></div><div class="ddtrack"><i class="alt" style="width:12.9%"></i></div></div>
+          <p>Data: Ireland Marine Institute shellfish biotoxin monitoring (220,803 raw records → 35,042 usable ASP rows across 139 sites, Nov 2002 – Jun 2026), with a public comparison parsed from Ireland HAB Bulletin PDFs.</p>
+          <div class="ddnote warn"><strong>Important limit:</strong> because it still misses some events, it should help decide where to look first — not make harvesting open/close decisions alone. Lab testing and official safety rules remain in control.</div>
+          <a class="ddfull" href="https://jdinneen.github.io/ireland-da-sixth-grade-paper/" target="_blank" rel="noopener">Read the full write-up →</a>
+        </div>
+      </details>
+
+    </div>
+
   </section>
 
   <!-- ===== FINDINGS ===== -->

@@ -1,0 +1,273 @@
+WEBVTT
+
+1
+00:00:00.000 --> 00:00:05.422
+This is the data scientist version of the zero-shot coastal bacteria result.
+
+2
+00:00:05.422 --> 00:00:10.844
+Before the protocol and results, it grounds the key feature layer: PI
+
+3
+00:00:10.844 --> 00:00:12.200
+meaning physical-intuition features.
+
+4
+00:00:12.200 --> 00:00:15.925
+PI here does not mean the number pi.
+
+5
+00:00:15.925 --> 00:00:17.787
+It means physical-intuition features.
+
+6
+00:00:17.787 --> 00:00:23.374
+Rain, sunlight, tide and flow, wind, date, and location feed label-free formulas.
+
+7
+00:00:23.374 --> 00:00:28.961
+Those formulas become columns for loading, decay, UV dose, transport, and flushing.
+
+8
+00:00:28.961 --> 00:00:35.013
+Then the experiment switchboard either joins those PI columns to other allowed data
+
+9
+00:00:35.013 --> 00:00:40.600
+or deliberately turns PI off for baselines like calendar-only and raw-physics arms.
+
+10
+00:00:40.600 --> 00:00:50.394
+The research question was narrow: can a label-free model train on non-target basins and rank enterococcus exceedance in a completely held-out basin
+
+11
+00:00:50.394 --> 00:00:54.400
+with zero target-domain labels or lab-history features as inputs?
+
+12
+00:00:54.400 --> 00:01:03.455
+The final scored panel had twelve domains, 708,337 held-out rows, and 57,628 events.
+
+13
+00:01:03.455 --> 00:01:11.814
+Rows needed a date, site, basin, coordinates, a comparable daily bacteria label
+
+14
+00:01:11.814 --> 00:01:14.600
+and finite physical-intuition features.
+
+15
+00:01:14.600 --> 00:01:19.503
+Data quality was enforced by exclusion, not wishful imputation.
+
+16
+00:01:19.503 --> 00:01:24.407
+Empty Wales, annual-only EEA bathing class data, pre-2012 Montenegro
+
+17
+00:01:24.407 --> 00:01:30.400
+and Hong Kong without coordinates were excluded from daily physical-intuition transfer.
+
+18
+00:01:30.400 --> 00:01:35.740
+The anti-leak feature contract allowed weather, physical-intuition groups, calendar
+
+19
+00:01:35.740 --> 00:01:40.487
+optional geography, and optional strings for non-headline arms.
+
+20
+00:01:40.487 --> 00:01:46.420
+It blocked FIB concentration, hazard labels, exceedance labels, lab-history lags
+
+21
+00:01:46.420 --> 00:01:48.200
+and target-domain labels.
+
+22
+00:01:48.200 --> 00:01:53.908
+The headline feature set then used five PI groups: Damkohler-style decay, loading
+
+23
+00:01:53.908 --> 00:01:56.762
+UV dose, Peclet-style transport, and flushing.
+
+24
+00:01:56.762 --> 00:02:05.800
+The point is transfer: every basin is expressed in the same physical coordinate system before logistic regression ranks risk.
+
+25
+00:02:05.800 --> 00:02:13.376
+We also engineered compact label-free physics kernels from the same inputs: decay-adjusted load
+
+26
+00:02:13.376 --> 00:02:18.621
+solar survival load, runoff memory, first flush, flushing inverse
+
+27
+00:02:18.621 --> 00:02:22.700
+spring-neap exchange, transport retention, and wind resuspension.
+
+28
+00:02:22.700 --> 00:02:28.733
+The model zoo compared feature switch settings: calendar without PI, PI alone
+
+29
+00:02:28.733 --> 00:02:33.761
+PI plus calendar, raw physics without PI, physics plus geography
+
+30
+00:02:33.761 --> 00:02:36.778
+physics-kernel variants, and sampled CARTE strings.
+
+31
+00:02:36.778 --> 00:02:40.800
+The frozen public winner was PI plus logistic.
+
+32
+00:02:40.800 --> 00:02:43.041
+The validation split was leave-one-basin-out.
+
+33
+00:02:43.041 --> 00:02:48.869
+For each target, the model trained only on rows from the other basins
+
+34
+00:02:48.869 --> 00:02:51.110
+then scored the hidden basin.
+
+35
+00:02:51.110 --> 00:02:53.800
+This repeated across all twelve domains.
+
+36
+00:02:53.800 --> 00:02:56.181
+The primary metric was average precision
+
+37
+00:02:56.181 --> 00:02:59.752
+because the use case is ranking early sampling attention.
+
+38
+00:02:59.752 --> 00:03:06.100
+The base-rate baseline is the held-out event rate; lift is AP divided by that base rate.
+
+39
+00:03:06.100 --> 00:03:08.555
+The null check was source-stratum permutation.
+
+40
+00:03:08.555 --> 00:03:12.236
+Outcomes were shuffled within source buckets, preserving source mix
+
+41
+00:03:12.236 --> 00:03:17.145
+and the real AP had to beat the ninety-fifth percentile shuffled score.
+
+42
+00:03:17.145 --> 00:03:19.600
+It did on all twelve targets.
+
+43
+00:03:19.600 --> 00:03:23.322
+The freeze gate required every target above base rate
+
+44
+00:03:23.322 --> 00:03:26.630
+at least eighty percent above the permutation null
+
+45
+00:03:26.630 --> 00:03:29.938
+at least one hundred null draws per target
+
+46
+00:03:29.938 --> 00:03:34.900
+AP-minus-base bootstrap lower bound above zero, and mean-lift lower bound above one.
+
+47
+00:03:34.900 --> 00:03:45.844
+The headline PI plus logistic result was mean AP 0.1511 versus mean base rate 0.0909
+
+48
+00:03:45.844 --> 00:03:48.763
+for mean lift 1.752.
+
+49
+00:03:48.763 --> 00:03:54.600
+The domain-bootstrap AP-minus-base interval was 0.0365 to 0.086.
+
+50
+00:03:54.600 --> 00:03:58.003
+Per-target results were not one lucky basin.
+
+51
+00:03:58.003 --> 00:04:02.378
+All twelve held-out domains beat their own base rate.
+
+52
+00:04:02.378 --> 00:04:07.239
+The strongest lifts were Australia New South Wales, California, Ireland
+
+53
+00:04:07.239 --> 00:04:12.100
+and Texas; the weakest lift was North Carolina at 1.186.
+
+54
+00:04:12.100 --> 00:04:16.218
+The richer physics-kernel arms looked tempting on mean AP
+
+55
+00:04:16.218 --> 00:04:19.421
+but they washed under the promotion rule.
+
+56
+00:04:19.421 --> 00:04:22.624
+The best kernel added 0.0083 mean AP
+
+57
+00:04:22.624 --> 00:04:27.200
+but its paired-domain interval crossed zero and five targets regressed.
+
+58
+00:04:27.200 --> 00:04:30.207
+CARTE and entity-string variants were not frozen.
+
+59
+00:04:30.207 --> 00:04:34.933
+Prior same-sample fair-baseline checks failed, and full-panel CARTE was too slow
+
+60
+00:04:34.933 --> 00:04:38.800
+so strings did not become part of the claim.
+
+61
+00:04:38.800 --> 00:04:40.290
+The limitations matter.
+
+62
+00:04:40.290 --> 00:04:43.767
+This is a retrospective zero-shot ranking screen
+
+63
+00:04:43.767 --> 00:04:46.250
+not a calibrated advisory probability.
+
+64
+00:04:46.250 --> 00:04:53.700
+Persistence and seasonal-naive were not run because target-domain history is forbidden in the cold-start setting.
+
+65
+00:04:53.700 --> 00:04:57.978
+The reproducibility artifacts are the runner, markdown and JSON outputs
+
+66
+00:04:57.978 --> 00:05:00.117
+freeze manifest, and test file.
+
+67
+00:05:00.117 --> 00:05:09.100
+The caveat is that byte-reproduction from a clean clone is not yet proven because cached panels are not public frozen inputs.
+
+68
+00:05:09.100 --> 00:05:21.600
+The defensible data-science claim is narrow: a simple PI plus logistic ranker clears a hardened zero-shot screen for prioritizing early sampling in unseen coastal bacteria basins.
