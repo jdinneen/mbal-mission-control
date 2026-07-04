@@ -905,68 +905,6 @@
     </div>
 
     <!-- top wins: curated, real, baseline-checked -->
-    <div class="secband"><h2>Top wins</h2><p>The real, baseline-checked results — the ones that survived the whole process.</p></div>
-    <div class="topwins">
-      <div class="winsgrid">
-        <button class="wincard" onclick="go('questions')">
-          <div class="wtop"><span class="wtopic">Beach bacteria · California</span><span class="wmetric">AUC 0.868</span></div>
-          <h3>Statewide beach-safety forecast</h3>
-          <p>Scores beach-bacteria risk same-day across 8 of 9 California counties — the lab culture it replaces takes 18–24 hours. Beats the "like yesterday" baseline on held-out seasons.</p>
-        </button>
-        <button class="wincard" onclick="go('findings')">
-          <div class="wtop"><span class="wtopic">Shellfish toxin · Ireland</span><span class="wmetric">+0.28 AP</span></div>
-          <h3>Irish domoic-acid onset watchlist</h3>
-          <p>Flags the onset of domoic-acid (ASP) events over a fair season-and-location baseline; red-team survived — and a California-trained model transfers to Ireland zero-shot, recovering ~60% of local skill.</p>
-        </button>
-        <button class="wincard" onclick="go('findings')">
-          <div class="wtop"><span class="wtopic">Karenia red tide · FL / Gulf</span><span class="wmetric">+0.12 AP</span></div>
-          <h3>Gulf red-tide onset triage</h3>
-          <p>Ranks which Florida and Gulf sites are about to see a Karenia bloom, beating both persistence and a fair rolling-recurrence baseline — robust across a 6-of-6 grid.</p>
-        </button>
-        <button class="wincard" onclick="go('findings')">
-          <div class="wtop"><span class="wtopic">Lake cyano · Sentinel-2</span><span class="wmetric">AUC 0.80</span></div>
-          <h3>Satellite cyano-bloom detector</h3>
-          <p>Sentinel-2 imagery spots severe cyanobacteria blooms, validated against lab microcystin on 26 of 30 same-lake pairs — no in-water sensor required.</p>
-        </button>
-        <button class="wincard" onclick="go('questions')">
-          <div class="wtop"><span class="wtopic">Low-oxygen water · Gulf</span><span class="wmetric">+0.12 AP</span></div>
-          <h3>Coastal hypoxia onset flag</h3>
-          <p>Flags when Gulf bottom water is about to go hypoxic — AP 0.270 versus a persistence baseline of 0.145 on a strict chronological holdout.</p>
-        </button>
-        <button class="wincard" onclick="go('questions')">
-          <div class="wtop"><span class="wtopic">Fjord oxygen · slow-driver</span><span class="wmetric">+0.08 AP</span></div>
-          <h3>Fjord oxygen-renewal lead</h3>
-          <p>Deep-water density gives ~21 days of lead on when an anoxic fjord will re-oxygenate — the slow-driver principle transferring to a second basin.</p>
-        </button>
-      </div>
-      <button class="winsmore" onclick="go('findings')">See all supported findings — and the dead ends we kept →</button>
-    </div>
-
-    <!-- ===== DEEP DIVES: merged standalone write-ups ===== -->
-    <style>
-    .deepdive{margin-top:30px}
-    .deepdive .ddbadges{display:flex;flex-wrap:wrap;gap:7px;margin:2px 0 14px}
-    .deepdive .ddbadges span{font-family:var(--mono);font-size:11.5px;color:var(--ink2);background:var(--faint3);border:1px solid var(--border);border-radius:7px;padding:4px 9px}
-    .deepdive .ddstats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:14px 0}
-    .deepdive .ddstat{background:var(--subtle);border:1px solid var(--faint);border-radius:10px;padding:14px 15px}
-    .deepdive .ddstat b{display:block;font-size:23px;font-weight:700;color:var(--acc);line-height:1.1}
-    .deepdive .ddstat span{display:block;font-size:12.5px;color:var(--ink4);margin-top:4px;line-height:1.4}
-    .deepdive .ddbar{margin:9px 0}
-    .deepdive .ddbar .l{display:flex;justify-content:space-between;gap:12px;font-size:13px;font-weight:600;margin-bottom:5px;color:var(--ink2)}
-    .deepdive .ddtrack{height:19px;background:var(--faint3);border:1px solid var(--border);border-radius:999px;overflow:hidden}
-    .deepdive .ddtrack i{display:block;height:100%;background:var(--acc)}
-    .deepdive .ddtrack i.alt{background:#c08a3e}
-    .deepdive table.ddtable{width:100%;border-collapse:collapse;margin:14px 0;font-size:13px}
-    .deepdive table.ddtable th,.deepdive table.ddtable td{border:1px solid var(--faint);padding:8px 10px;text-align:left;vertical-align:top}
-    .deepdive table.ddtable th{background:var(--subtle);font-weight:600;color:var(--ink)}
-    .deepdive .ddnote{border-left:3px solid var(--acc);background:var(--acc-tint2);padding:11px 14px;border-radius:8px;margin:13px 0;font-size:13.5px;line-height:1.55;color:var(--ink2)}
-    .deepdive .ddnote.warn{border-left-color:#c08a3e;background:#fbf4e9}
-    .deepdive .pbody h4{margin:20px 0 8px;font-size:12px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink5)}
-    .deepdive .pbody>p{font-size:14px;line-height:1.6;color:var(--ink2);margin:8px 0}
-    .deepdive .ddfull{display:inline-flex;align-items:center;gap:6px;margin:14px 0 2px;font-size:13.5px;font-weight:600;color:var(--acc);text-decoration:none}
-    .deepdive .ddfull:hover{text-decoration:underline}
-    @media(max-width:860px){.deepdive .ddstats{grid-template-columns:1fr}}
-    </style>
 
     <div class="secband" id="deepdives"><h2>Deep dives</h2><p>The longer write-ups behind three of the wins, brought into one place — a data-scientist video briefing on the zero-shot ranker, and two plain-English papers you can open inline.</p></div>
 

@@ -80,3 +80,12 @@ git add data.json && git commit -m "refresh snapshot" && git push
 **Privacy note:** `build_snapshot.py` strips local file paths, usernames, GPU/process/agent details —
 the published `data.json` contains only the science summaries needed to render the site.
 **Never** commit `.env`, `.dev.vars`, or your API key (the `.gitignore` already blocks them).
+
+## Publishing (read this — do not push by hand)
+
+Deploy ONLY via `./publish.sh "message"`. GitHub Pages debounces rapid pushes and can silently
+**skip** deploying a commit, and its CDN caches per-edge — so pushing directly and eyeballing the
+page (or grepping the repo) can look done while the live site is stale. `publish.sh` stamps a unique
+id into `version.json`, pushes once, then polls the **live** `version.json` until that id appears
+(nudging Pages if it skipped the deploy). It only exits success when the live site verifiably serves
+your change. `version.json` is the source of truth for "what is actually live."
