@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260703T2359Z-init-785",
-  "built_utc": "2026-07-04T00:10:00Z",
-  "message": "Remove Top wins section; add publish.sh deploy-and-verify tooling"
+  "deploy_id": "20260704T002446Z-127075-27017",
+  "built_utc": "2026-07-04T00:24:47Z",
+  "message": "Fix slow video: faststart re-mux + preload=none on the zero-shot Deep dive"
 }
