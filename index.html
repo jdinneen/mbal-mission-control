@@ -806,6 +806,34 @@
       </div>
     </div>
 
+    <!-- MBAL start-to-finish: featured overview video -->
+    <section class="featurevideo" id="mbal-overview-video" aria-label="Monterey Bay AI Lab start-to-finish overview video">
+      <div class="featurecopy">
+        <div class="tag">Start to finish · narrated · closed captions</div>
+        <h2>The whole lab in five minutes.</h2>
+        <p>From hundreds of public ocean datasets to a handful of warnings worth trusting — the lakehouse, the discovery engines, the evidence gate that kills spurious signals, the wins that survived, and the newest result: a 2-day beach advisory that deploys cold-start across networks.</p>
+        <div class="featurepoints" aria-label="Overview headline points">
+          <div class="featurepoint"><b>Full arc</b><span>Sixteen scenes, narrated with closed captions.</span></div>
+          <div class="featurepoint"><b>426 sources</b><span>The governed lakehouse behind every finding.</span></div>
+          <div class="featurepoint"><b>Evidence-gated</b><span>Pre-registered kill-metrics, permutation nulls, adversarial red-teams.</span></div>
+          <div class="featurepoint"><b>Honest by design</b><span>The nulls and the walked-back overclaims are part of the story.</span></div>
+        </div>
+      </div>
+      <div class="featuremedia">
+        <video controls preload="none" playsinline poster="videos/mbal_start_to_finish_poster.jpg" aria-label="Monterey Bay AI Lab start-to-finish overview video">
+          <source src="videos/mbal_start_to_finish.mp4" type="video/mp4">
+          <track src="videos/mbal_start_to_finish.vtt" kind="captions" srclang="en" label="English captions" default>
+          <a href="videos/mbal_start_to_finish.mp4">Open the MBAL start-to-finish video.</a>
+        </video>
+        <div class="featurebar">
+          <span>Start-to-finish overview</span>
+          <div class="featurelinks">
+            <a href="videos/mbal_start_to_finish.mp4">MP4</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- why now: the convergence -->
     <div class="whynow">
       <div class="secband"><h2>Why now</h2><p>Four forces are converging at once — agentic AI, deep open data, cheap compute, and experts from many fields — putting discovery that used to need a whole institute within reach of a small team.</p></div>
@@ -906,38 +934,9 @@
 
     <!-- top wins: curated, real, baseline-checked -->
 
-    <div class="secband" id="deepdives"><h2>Deep dives</h2><p>The longer write-ups behind the wins, brought into one place — the newest 2-day forecast-lead advisory, a data-scientist video briefing on the zero-shot ranker, and two plain-English papers you can open inline.</p></div>
+    <div class="secband" id="deepdives"><h2>Deep dives</h2><p>The longer write-ups and briefings behind the wins, brought into one place — open any to read the checked numbers underneath.</p></div>
 
-    <!-- zero-shot data-scientist briefing: featured, open video -->
-    <section class="featurevideo" id="dd-zeroshot" aria-label="Zero-shot ranker data-scientist briefing video">
-      <div class="featurecopy">
-        <div class="tag">Data-scientist briefing · narrated · closed captions</div>
-        <h2>The zero-shot coastal-bacteria ranker, in one technical pass.</h2>
-        <p>How a simple physical-intuition plus logistic ranker cleared a hardened zero-shot screen: the label-free panel contract, the physics feature layer, leave-one-basin-out validation, permutation nulls and bootstrap gates, the washouts, and the one narrow claim that survived.</p>
-        <div class="featurepoints" aria-label="Zero-shot briefing headline numbers">
-          <div class="featurepoint"><b>12 domains</b><span>Held-out coastal basins, each hidden in turn and scored with no target-domain labels.</span></div>
-          <div class="featurepoint"><b>708,337 rows</b><span>Scored held-out station-days spanning 57,628 daily exceedance events.</span></div>
-          <div class="featurepoint"><b>1.75× AP lift</b><span>Mean average precision 0.1511 over a 0.0909 base rate; all 12 domains beat their own base rate.</span></div>
-          <div class="featurepoint"><b>Narrow claim</b><span>A retrospective ranking screen for early sampling attention — not a calibrated advisory probability.</span></div>
-        </div>
-      </div>
-      <div class="featuremedia">
-        <video controls preload="none" playsinline poster="videos/zero_shot_data_scientist_briefing_poster.jpg" aria-label="Data-scientist briefing video on the zero-shot coastal bacteria ranker">
-          <source src="videos/zero_shot_data_scientist_briefing.mp4" type="video/mp4">
-          <track src="videos/zero_shot_data_scientist_briefing.vtt" kind="captions" srclang="en" label="English captions" default>
-          <a href="videos/zero_shot_data_scientist_briefing.mp4">Open the zero-shot data-scientist briefing video.</a>
-        </video>
-        <div class="featurebar">
-          <span>5:22 data-scientist briefing</span>
-          <div class="featurelinks">
-            <a href="https://jdinneen.github.io/zero-shot-data-scientist-briefing/" target="_blank" rel="noopener">Briefing page</a>
-            <a href="videos/zero_shot_data_scientist_briefing.mp4">MP4</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- two plain-English papers: expandable -->
+    <!-- deep-dive write-ups + briefings: expandable -->
     <div class="deepdive">
 
       <details class="primer" id="dd-carrier" open>
@@ -954,6 +953,26 @@
           <p>A forecast buys lead-time only when <strong>all three</strong> hold: a <strong>fast carrier</strong> (observations go stale between samples), <strong>headroom</strong> of a carrier forecast over the antecedent-observed carrier, and <strong>sufficient regional NWP skill</strong>. Two of three ⇒ null. All three ⇒ a deployable advisory. A <strong>free pre-screen</strong> (observed-carrier oracle headroom, computed with no forecast fetch) tells you in advance where a feed will pay — it correctly rejected the slow-carrier and chronic cases before spending on any forecast data.</p>
           <div class="ddnote warn"><strong>Honest scope:</strong> the forecast-pays win is demonstrated for densely-sampled marine enterococcus beaches (CA + NJ) plus one freshwater case; it is a 2-day, not 3-day, product and not a beach-posting forecast. Effect sizes over recurrence are modest — the strength is discipline (pre-registered kill-metrics, phantom-guards, red-teams), generality, and cross-network portability, not a large accuracy jump. Slow-carrier and chronic cases are low-powered nulls, recorded honestly rather than dressed up.</div>
           <a class="ddfull" href="javascript:void(0)" onclick="openFindingById('claim_carrier_forecast_lead_advisory');return false;">See the finding card →</a>
+        </div>
+      </details>
+
+      <details class="primer" id="dd-zeroshot">
+        <summary>The zero-shot coastal-bacteria ranker — data-scientist video briefing</summary>
+        <div class="pbody">
+          <div class="ddbadges"><span>Topic: beach safety</span><span>Target: enterococcus</span><span>Method: zero-shot ranker</span><span>Format: narrated briefing</span></div>
+          <p>How a simple physical-intuition-plus-logistic ranker cleared a hardened zero-shot screen: the label-free panel contract, the physics feature layer, leave-one-basin-out validation, permutation nulls and bootstrap gates, the washouts, and the one narrow claim that survived.</p>
+          <div class="ddstats">
+            <div class="ddstat"><b>12 domains</b><span>Held-out coastal basins, each hidden in turn, scored with no target-domain labels</span></div>
+            <div class="ddstat"><b>708,337 rows</b><span>Held-out station-days spanning 57,628 daily exceedance events</span></div>
+            <div class="ddstat"><b>1.75× AP lift</b><span>Mean average precision 0.1511 over a 0.0909 base rate; all 12 domains beat their base rate</span></div>
+          </div>
+          <div class="ddnote warn"><strong>Narrow claim:</strong> a retrospective ranking screen for early sampling attention — not a calibrated advisory probability.</div>
+          <video controls preload="none" playsinline poster="videos/zero_shot_data_scientist_briefing_poster.jpg" aria-label="Data-scientist briefing video on the zero-shot coastal bacteria ranker" style="width:100%;border-radius:10px;margin-top:8px">
+            <source src="videos/zero_shot_data_scientist_briefing.mp4" type="video/mp4">
+            <track src="videos/zero_shot_data_scientist_briefing.vtt" kind="captions" srclang="en" label="English captions" default>
+            <a href="videos/zero_shot_data_scientist_briefing.mp4">Open the zero-shot data-scientist briefing video.</a>
+          </video>
+          <a class="ddfull" href="https://jdinneen.github.io/zero-shot-data-scientist-briefing/" target="_blank" rel="noopener">Open the full briefing page →</a>
         </div>
       </details>
 
@@ -1026,6 +1045,25 @@
           <p>Data: Ireland Marine Institute shellfish biotoxin monitoring (220,803 raw records → 35,042 usable ASP rows across 139 sites, Nov 2002 – Jun 2026), with a public comparison parsed from Ireland HAB Bulletin PDFs.</p>
           <div class="ddnote warn"><strong>Important limit:</strong> because it still misses some events, it should help decide where to look first — not make harvesting open/close decisions alone. Lab testing and official safety rules remain in control.</div>
           <a class="ddfull" href="https://jdinneen.github.io/ireland-da-sixth-grade-paper/" target="_blank" rel="noopener">Read the full write-up →</a>
+        </div>
+      </details>
+
+      <details class="primer" id="dd-hypoxia">
+        <summary>Gulf of Mexico hypoxia (dead-zone) flag forecast — plain-English write-up</summary>
+        <div class="pbody">
+          <div class="ddbadges"><span>Topic: ocean health</span><span>Target: hypoxia (low oxygen)</span><span>Place: Gulf of Mexico</span><span>Use: survey triage</span></div>
+          <p>Low-oxygen "dead zones" suffocate seafloor life and disrupt fisheries. A leakage-guarded model flags which Gulf survey casts are likely hypoxic from station geometry, cruise context, and season — beating the stronger of persistence and a seasonal baseline on a strict chronological holdout. It is promoted as a <strong>survey-triage helper</strong>, not a deployed forecast.</p>
+          <div class="ddstats">
+            <div class="ddstat"><b>0.270</b><span>Model average precision (base rate ≈ 7.6%)</span></div>
+            <div class="ddstat"><b>0.870</b><span>ROC-AUC on the chronological holdout</span></div>
+            <div class="ddstat"><b>+0.125</b><span>AP gain over best baseline; 95% CI [0.052, 0.206], excludes zero</span></div>
+          </div>
+          <h4>Ranking skill vs. real baselines (AP)</h4>
+          <div class="ddbar"><div class="l"><span>Leakage-guarded model</span><span>0.270</span></div><div class="ddtrack"><i style="width:100%"></i></div></div>
+          <div class="ddbar"><div class="l"><span>Persistence baseline</span><span>0.145</span></div><div class="ddtrack"><i class="alt" style="width:53.7%"></i></div></div>
+          <div class="ddbar"><div class="l"><span>Seasonal baseline</span><span>0.113</span></div><div class="ddtrack"><i class="alt" style="width:41.9%"></i></div></div>
+          <p>Tested on 1,277 held-out casts with 97 hypoxic events after a 2016 chronological cutoff; a 200-shuffle permutation null passes (p = 0.005). Bottom dissolved oxygen — which defines the hypoxia flag — is excluded from the features to prevent leakage.</p>
+          <div class="ddnote warn"><strong>Important limit:</strong> not deployment-ready. This is a retrospective holdout on a survey dataset, not an operational lead-time forecast; the next proofs are year/cruise-block validation and a target tied to real warning lead time. No transfer outside the Gulf survey is claimed.</div>
         </div>
       </details>
 
@@ -1752,6 +1790,11 @@ const FEATURED_QUICK_READS={
     means:'A guarded HAB model beats simple persistence for pDA exceedance on a time holdout.',
     matters:'It gives one more checked path toward harmful-algal-bloom triage.',
     careful:'The next proof is prospective replay plus station/region stress testing.'
+  },
+  claim_gulf_hypoxia_flag:{
+    means:'A guarded model flags which Gulf of Mexico survey casts are likely low-oxygen "dead-zone" water, beating persistence and season on a strict time holdout.',
+    matters:'Dead zones suffocate seafloor life and disrupt fisheries; better flagging helps target monitoring.',
+    careful:'Retrospective survey holdout, not a deployed lead-time forecast; no transfer outside the Gulf is claimed.'
   },
   claim_unified_zero_shot_interlingua_pi:{
     means:'The same physics-pi idea ranks bacteria risk across 12 held-out domains without local labels.',

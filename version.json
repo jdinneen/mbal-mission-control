@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260705T183655Z-9450-968",
-  "built_utc": "2026-07-05T18:36:55Z",
-  "message": "Revert GA measurement ID to G-FB36EGBD7B (the real MBAL stream id 15123301707; my prior change to ...DD7B was wrong and stopped collection)"
+  "deploy_id": "20260705T190329Z-1232-30003",
+  "built_utc": "2026-07-05T19:03:29Z",
+  "message": "Home: feature start-to-finish overview video (below hero, above Why-now); collapse zero-shot briefing into a deep-dive; add Gulf hypoxia deep-dive + featured finding"
 }

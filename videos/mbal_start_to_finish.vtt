@@ -93,182 +93,182 @@ Ranking correlations by metadata is not evidence.
 00:01:59.115 --> 00:02:00.800
 Only the filter is.
 
-00:02:00.800 --> 00:02:02.937
+00:02:00.800 --> 00:02:02.858
 The result is a funnel.
 
-00:02:02.937 --> 00:02:07.212
-Hundreds of tempting candidate links go in at the top.
+00:02:02.858 --> 00:02:07.797
+Take naive hazard-driver links ranked only by raw correlation: in one audit
 
-00:02:07.212 --> 00:02:10.204
-Most collapse: shared climate trends, sampling effort
+00:02:07.797 --> 00:02:12.736
+two hundred eighty-four of them went in and zero survived the gate
 
-00:02:10.204 --> 00:02:12.769
-or sensor smearing explain them away.
+00:02:12.736 --> 00:02:15.206
+because shared climate trends, sampling effort
 
-00:02:12.769 --> 00:02:17.471
-Out of one cross-run audit of two hundred eighty-four candidate links
+00:02:15.206 --> 00:02:18.087
+and sensor smearing explain spurious correlations away.
 
-00:02:17.471 --> 00:02:19.180
-zero survived as defensible.
+00:02:18.087 --> 00:02:20.968
+Ranking correlations by metadata is not evidence.
 
-00:02:19.180 --> 00:02:22.600
-The handful that do survive are worth trusting.
+00:02:20.968 --> 00:02:23.026
+The filter is the value
 
-00:02:22.600 --> 00:02:25.681
+00:02:23.026 --> 00:02:29.200
+and that same rigor is exactly why the findings that do survive it are trustworthy.
+
+00:02:29.200 --> 00:02:32.281
 The lab even walks back its own wins.
 
-00:02:25.681 --> 00:02:31.459
+00:02:32.281 --> 00:02:38.059
 An early headline claimed a HAB model beat the standard forecast by about ten times.
 
-00:02:31.459 --> 00:02:35.311
+00:02:38.059 --> 00:02:41.911
 On inspection, that was a broken-baseline mirage, not real skill
 
-00:02:35.311 --> 00:02:40.319
+00:02:41.911 --> 00:02:46.919
 so it was retracted and written into the record as a rejected claim.
 
-00:02:40.319 --> 00:02:43.400
+00:02:46.919 --> 00:02:50.000
 Overclaims do not survive contact with the gate.
 
-00:02:43.400 --> 00:02:45.996
+00:02:50.000 --> 00:02:52.596
 Here is what did survive.
 
-00:02:45.996 --> 00:02:48.072
+00:02:52.596 --> 00:02:54.672
 A zero-shot coastal-bacteria ranker.
 
-00:02:48.072 --> 00:02:51.706
+00:02:54.672 --> 00:02:58.306
 A clean-to-dirty warning that catches surprise flips.
 
-00:02:51.706 --> 00:02:54.821
+00:02:58.306 --> 00:03:01.421
 Domoic-acid onset forecasting for harmful blooms.
 
-00:02:54.821 --> 00:02:56.379
+00:03:01.421 --> 00:03:02.979
 Gulf hypoxia flagging.
 
-00:02:56.379 --> 00:03:01.051
+00:03:02.979 --> 00:03:07.651
 Microcystin genotype results that replicated nationally and in Alberta.
 
-00:03:01.051 --> 00:03:05.204
+00:03:07.651 --> 00:03:11.804
 And a tsunami screen that cuts false alarms.
 
-00:03:05.204 --> 00:03:07.800
+00:03:11.804 --> 00:03:14.400
 Each one cleared the gate.
 
-00:03:07.800 --> 00:03:11.400
+00:03:14.400 --> 00:03:18.000
 And then came the newest headline: the Carrier-Timescale Law.
 
-00:03:11.400 --> 00:03:13.400
+00:03:18.000 --> 00:03:20.000
 It answers a portfolio-level question.
 
-00:03:13.400 --> 00:03:18.600
+00:03:20.000 --> 00:03:25.200
 When does paying for a weather forecast feed actually buy you earlier warning
 
-00:03:18.600 --> 00:03:21.000
+00:03:25.200 --> 00:03:27.600
 and when is it wasted money?
 
-00:03:21.000 --> 00:03:26.465
+00:03:27.600 --> 00:03:33.065
 The law says a forecast only extends lead time when three conditions all hold.
 
-00:03:26.465 --> 00:03:31.929
+00:03:33.065 --> 00:03:38.529
 One: the driver is fast and flashy, like rain, so yesterday's reading goes stale.
 
-00:03:31.929 --> 00:03:35.832
+00:03:38.529 --> 00:03:42.432
 Two: there is real headroom over what you already observe.
 
-00:03:35.832 --> 00:03:40.126
+00:03:42.432 --> 00:03:46.726
 Three: the regional forecast is accurate enough to cash that headroom.
 
-00:03:40.126 --> 00:03:42.858
+00:03:46.726 --> 00:03:49.458
 Two out of three is a null.
 
-00:03:42.858 --> 00:03:45.200
+00:03:49.458 --> 00:03:51.800
 All three is a deployable advisory.
 
-00:03:45.200 --> 00:03:46.940
+00:03:51.800 --> 00:03:53.540
 That yields a real
 
-00:03:46.940 --> 00:03:54.337
+00:03:53.540 --> 00:04:00.937
 shippable product: a two-day-ahead beach bacteria exceedance advisory that runs on a free public NOAA forecast feed.
 
-00:03:54.337 --> 00:03:56.077
+00:04:00.937 --> 00:04:02.677
 It is deliberately scoped.
 
-00:03:56.077 --> 00:03:59.123
+00:04:02.677 --> 00:04:05.723
 It is a two-day advisory, not three.
 
-00:03:59.123 --> 00:04:02.604
+00:04:05.723 --> 00:04:09.204
 It is for densely sampled marine enterococcus beaches.
 
-00:04:02.604 --> 00:04:04.779
+00:04:09.204 --> 00:04:11.379
 The effect sizes are modest.
 
-00:04:04.779 --> 00:04:10.000
+00:04:11.379 --> 00:04:16.600
 The strength is discipline and portability, not a giant jump in accuracy.
 
-00:04:10.000 --> 00:04:12.048
+00:04:16.600 --> 00:04:18.648
 The portability is the surprise.
 
-00:04:12.048 --> 00:04:17.374
+00:04:18.648 --> 00:04:23.974
 The advisory was trained on California and New Jersey with zero local labels
 
-00:04:17.374 --> 00:04:23.929
+00:04:23.974 --> 00:04:30.529
 then it deployed cold-start onto brand-new networks it had never seen: New South Wales in Australia
 
-00:04:23.929 --> 00:04:25.977
+00:04:30.529 --> 00:04:32.577
 and the Texas Gulf coast.
 
-00:04:25.977 --> 00:04:26.797
+00:04:32.577 --> 00:04:33.397
 On both
 
-00:04:26.797 --> 00:04:31.713
+00:04:33.397 --> 00:04:38.313
 the free forecast feature was load-bearing and beat the local recurrence baseline.
 
-00:04:31.713 --> 00:04:35.400
+00:04:38.313 --> 00:04:42.000
 Two independent networks, so it is not a fluke.
 
-00:04:35.400 --> 00:04:37.177
+00:04:42.000 --> 00:04:43.777
 There is one more gift.
 
-00:04:37.177 --> 00:04:38.243
+00:04:43.777 --> 00:04:44.843
 A free pre-screen.
 
-00:04:38.243 --> 00:04:41.796
+00:04:44.843 --> 00:04:48.396
 Using only observed data and no forecast fetch at all
 
-00:04:41.796 --> 00:04:48.193
+00:04:48.396 --> 00:04:54.793
 the lab can tell you in advance whether a forecast feed will pay off at a given beach.
 
-00:04:48.193 --> 00:04:50.325
+00:04:54.793 --> 00:04:56.925
 The master gate is oracle headroom.
 
-00:04:50.325 --> 00:04:55.300
+00:04:56.925 --> 00:05:01.900
 It turns a one-off product into a portfolio tool for deciding where to invest.
 
-00:04:55.300 --> 00:04:59.300
+00:05:01.900 --> 00:05:05.227
 All of this lives on a public Mission Control site.
 
-00:04:59.300 --> 00:05:02.900
-It shows what data exists, which models were built
+00:05:05.227 --> 00:05:09.218
+In one place it shows what data exists, which models were built
 
-00:05:02.900 --> 00:05:08.100
-and what has actually been learned, including the nulls and the walked-back claims.
+00:05:09.218 --> 00:05:14.873
+and what has actually been learned - including the nulls and the claims that were walked back.
 
-00:05:08.100 --> 00:05:10.900
-Raw data downloads are deliberately turned off.
+00:05:14.873 --> 00:05:18.200
+It is a living, honest record of the whole lab.
 
-00:05:10.900 --> 00:05:14.500
-The site publishes the science, not the private inputs.
-
-00:05:14.500 --> 00:05:18.636
+00:05:18.200 --> 00:05:22.336
 That is the Monterey Bay AI Lab, start to finish.
 
-00:05:18.636 --> 00:05:21.532
+00:05:22.336 --> 00:05:25.232
 Hundreds of public datasets, many competing models
 
-00:05:21.532 --> 00:05:28.150
+00:05:25.232 --> 00:05:31.850
 and a relentless evidence gate that turns noise into a small number of warnings worth trusting.
 
-00:05:28.150 --> 00:05:30.632
+00:05:31.850 --> 00:05:34.332
 The honesty is not a footnote.
 
-00:05:30.632 --> 00:05:32.700
+00:05:34.332 --> 00:05:36.400
 It is the whole point.
