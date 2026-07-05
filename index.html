@@ -906,7 +906,7 @@
 
     <!-- top wins: curated, real, baseline-checked -->
 
-    <div class="secband" id="deepdives"><h2>Deep dives</h2><p>The longer write-ups behind three of the wins, brought into one place — a data-scientist video briefing on the zero-shot ranker, and two plain-English papers you can open inline.</p></div>
+    <div class="secband" id="deepdives"><h2>Deep dives</h2><p>The longer write-ups behind the wins, brought into one place — the newest 2-day forecast-lead advisory, a data-scientist video briefing on the zero-shot ranker, and two plain-English papers you can open inline.</p></div>
 
     <!-- zero-shot data-scientist briefing: featured, open video -->
     <section class="featurevideo" id="dd-zeroshot" aria-label="Zero-shot ranker data-scientist briefing video">
@@ -939,6 +939,23 @@
 
     <!-- two plain-English papers: expandable -->
     <div class="deepdive">
+
+      <details class="primer" id="dd-carrier" open>
+        <summary>2-day beach-bacteria advisory on free forecast data — the Carrier-Timescale Law (newest win)</summary>
+        <div class="pbody">
+          <div class="ddbadges"><span>Topic: beach safety</span><span>Target: enterococcus / E. coli exceedance</span><span>Data: free NOAA GFS forecast</span><span>Use: 2-day advisory</span></div>
+          <p>Where a beach's pollution is driven by rain (a fast carrier) and the beach is sampled densely, a <strong>free public NOAA GFS rain-forecast feed</strong> can flag an exceedance <strong>two days ahead</strong>. The lab proved when this works, mapped exactly when it does not, and then deployed it to brand-new beach networks with <strong>zero local training labels</strong>.</p>
+          <div class="ddstats">
+            <div class="ddstat"><b>0.730</b><span>California 2-day recall @ FPR ≤ 0.15 — beats persistence and a rain-model, CI excludes 0</span></div>
+            <div class="ddstat"><b>3 regions · 2 indicators</b><span>Confirmed CA + NJ (marine enterococcus) and Ohio Lake Erie (freshwater E. coli)</span></div>
+            <div class="ddstat"><b>2 networks cold-start</b><span>Zero local labels → NSW Australia (0.536 vs 0.491) and TX Gulf (0.580 vs 0.541, CI excl 0)</span></div>
+          </div>
+          <h4>The law: when a forecast feed actually pays</h4>
+          <p>A forecast buys lead-time only when <strong>all three</strong> hold: a <strong>fast carrier</strong> (observations go stale between samples), <strong>headroom</strong> of a carrier forecast over the antecedent-observed carrier, and <strong>sufficient regional NWP skill</strong>. Two of three ⇒ null. All three ⇒ a deployable advisory. A <strong>free pre-screen</strong> (observed-carrier oracle headroom, computed with no forecast fetch) tells you in advance where a feed will pay — it correctly rejected the slow-carrier and chronic cases before spending on any forecast data.</p>
+          <div class="ddnote warn"><strong>Honest scope:</strong> the forecast-pays win is demonstrated for densely-sampled marine enterococcus beaches (CA + NJ) plus one freshwater case; it is a 2-day, not 3-day, product and not a beach-posting forecast. Effect sizes over recurrence are modest — the strength is discipline (pre-registered kill-metrics, phantom-guards, red-teams), generality, and cross-network portability, not a large accuracy jump. Slow-carrier and chronic cases are low-powered nulls, recorded honestly rather than dressed up.</div>
+          <a class="ddfull" href="javascript:void(0)" onclick="openFindingById('claim_carrier_forecast_lead_advisory');return false;">See the finding card →</a>
+        </div>
+      </details>
 
       <details class="primer" id="dd-bacteria">
         <summary>California beach-bacteria shadow triage — plain-English write-up</summary>
@@ -1425,7 +1442,7 @@ const TARGET_FAMILIES=[
 ];
 // Curated, by-hand finding->question links (accurate is the point; a wrong link is worse than none).
 const TARGET_FINDINGS={
-  bacteria_exceedance:['claim_bacteria_station_memory_supported','claim_clean_to_dirty_onset','claim_bacteria_decision_rule','claim_forward_2026_holdout_pass','claim_bacteria_honest_forecast_horizon','claim_adaptive_sampling_pilot','claim_catboost_champion_record_dont_ship','claim_lightgbm_catboost_paired_boosts','claim_wet_tail_driver_skill','claim_russian_river_advection_escape','claim_cache_slough_upstream_escape','claim_soil_moisture_gate_positive','claim_carte_numeric_shared_plane_benchmark','claim_new_source_signal_gate_keeps','claim_findings_campaign_targeted_l2_keeps','status_tide_range_data_gap','status_bacteria_breakthrough_lockbox','claim_pi_zero_shot_ranking_screen','claim_pi_memory_hybrid_ranking_candidate','caveat_pi_calibration_deployment_gate_failed','null_findings_campaign_dry_onset_interaction','null_findings_campaign_dry_onset_symbolic','null_estate_gpu_signal_search'],
+  bacteria_exceedance:['claim_bacteria_station_memory_supported','claim_carrier_forecast_lead_advisory','claim_clean_to_dirty_onset','claim_bacteria_decision_rule','claim_forward_2026_holdout_pass','claim_bacteria_honest_forecast_horizon','claim_adaptive_sampling_pilot','claim_catboost_champion_record_dont_ship','claim_lightgbm_catboost_paired_boosts','claim_wet_tail_driver_skill','claim_russian_river_advection_escape','claim_cache_slough_upstream_escape','claim_soil_moisture_gate_positive','claim_carte_numeric_shared_plane_benchmark','claim_new_source_signal_gate_keeps','claim_findings_campaign_targeted_l2_keeps','status_tide_range_data_gap','status_bacteria_breakthrough_lockbox','claim_pi_zero_shot_ranking_screen','claim_pi_memory_hybrid_ranking_candidate','caveat_pi_calibration_deployment_gate_failed','null_findings_campaign_dry_onset_interaction','null_findings_campaign_dry_onset_symbolic','null_estate_gpu_signal_search'],
   ddpcr_culture_safe:['null_ddpcr_target_redefinition_artifact'],
   domoic_acid:['claim_hab_exceed_strict_critic','claim_da_toxic_onset_ci_separated','claim_hab_external_proxy_support','null_charm_10x_broken_baseline'],
   cyano_onset:['claim_cyano_onset_latitude_law_scoped','claim_mcye_alberta_definitive_replication','claim_mcye_national_replication','caveat_cyano_watchlist_lockbox_open','caveat_karenia_watchlist_lockbox_open','null_fresh_karenia_discovery_washed','null_national_microcystin_driver','null_erie_loading_driver_break'],
@@ -1705,6 +1722,11 @@ const FEATURED_QUICK_READS={
     means:'The hard case is a beach that looked clean, then suddenly turns dirty. The model catches those surprise flips about twice as well as station memory.',
     matters:'That is the warning people cannot get just by asking what happened yesterday.',
     careful:'Physics-pi is the surviving booster; the tensor add-on is not promoted, and a prospective lockbox still needs scoring.'
+  },
+  claim_carrier_forecast_lead_advisory:{
+    means:'A free public weather-forecast feed can flag a likely beach-bacteria exceedance two days ahead — where rain is the fast driver and the beach is sampled densely.',
+    matters:'It is a deployable early warning on free data, and it transferred to brand-new beach networks in Australia and Texas with zero local training labels.',
+    careful:'Proven for densely-sampled marine enterococcus beaches (CA + NJ) plus one freshwater E. coli case; it is a 2-day (not 3-day) product and effect sizes over recurrence are modest — the strength is discipline, generality, and cross-network portability.'
   },
   claim_pi_zero_shot_ranking_screen:{
     means:'Physics-only coordinates can sort risk in places with no local labels yet.',

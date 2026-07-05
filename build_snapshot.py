@@ -1507,6 +1507,25 @@ def _physics_and_tensor_findings():
     return out
 
 
+def _carrier_law_findings():
+    card = _local_json("reports/carrier_law_claim_card/claim_card.json") or {}
+    cid = card.get("id")
+    if not cid:
+        return []
+    kind = "claim" if card.get("verdict") == "SUPPORTED_CURRENT_EVIDENCE" else "caveat"
+    return [_finding(
+        f"claim_{cid}",
+        card.get("title") or cid.replace("_", " "),
+        kind,
+        card.get("headline") or card.get("claim") or "",
+        card.get("plain") or "",
+        card.get("how") or "",
+        "reports/carrier_law_claim_card/claim_card.json",
+        card.get("metrics") or {},
+        card.get("deployment_caveat"),
+    )]
+
+
 def _extra_findings():
     cards = []
     for maker in (
@@ -1527,6 +1546,7 @@ def _extra_findings():
         _data_ops_findings,
         _all_lakehouse_neural_findings,
         _physics_and_tensor_findings,
+        _carrier_law_findings,
     ):
         cards.extend(maker())
     seen = set()

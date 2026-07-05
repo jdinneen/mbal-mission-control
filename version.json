@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260705T182032Z-8362-20210",
-  "built_utc": "2026-07-05T18:20:32Z",
-  "message": "Fix GA4 measurement ID -> G-FB36EGDD7B (was a typo'd G-FB36EGBD7B; matches stream MBAL / property 542431430)"
+  "deploy_id": "20260705T183157Z-9168-16289",
+  "built_utc": "2026-07-05T18:31:57Z",
+  "message": "Add carrier-law forecast-lead advisory as a featured finding + home Deep-dive; refresh snapshot (findings 52->53, inventory 375->426)"
 }
