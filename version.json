@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260705T183157Z-9168-16289",
-  "built_utc": "2026-07-05T18:31:57Z",
-  "message": "Add carrier-law forecast-lead advisory as a featured finding + home Deep-dive; refresh snapshot (findings 52->53, inventory 375->426)"
+  "deploy_id": "20260705T183655Z-9450-968",
+  "built_utc": "2026-07-05T18:36:55Z",
+  "message": "Revert GA measurement ID to G-FB36EGBD7B (the real MBAL stream id 15123301707; my prior change to ...DD7B was wrong and stopped collection)"
 }

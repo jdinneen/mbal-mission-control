@@ -1,0 +1,274 @@
+WEBVTT
+
+00:00:00.000 --> 00:00:04.400
+This is the Monterey Bay AI Lab, from start to finish.
+
+00:00:04.400 --> 00:00:10.400
+It is an autonomous science lab that turns hundreds of public ocean datasets into earlier
+
+00:00:10.400 --> 00:00:12.400
+honest warnings for coastal hazards.
+
+00:00:12.400 --> 00:00:14.400
+Here is the whole journey.
+
+00:00:14.400 --> 00:00:16.142
+Start with the problem.
+
+00:00:16.142 --> 00:00:23.544
+Coastlines face hazards that hurt people and close beaches: bacteria that make the water unsafe to swim
+
+00:00:23.544 --> 00:00:28.333
+harmful algal blooms that put the toxin domoic acid into seafood
+
+00:00:28.333 --> 00:00:30.075
+and low-oxygen dead zones.
+
+00:00:30.075 --> 00:00:35.300
+Communities need warnings that arrive earlier, and that they can actually trust.
+
+00:00:35.300 --> 00:00:38.683
+So the lab built a data lakehouse.
+
+00:00:38.683 --> 00:00:44.000
+It fetches hundreds of raw public sources: Argo floats, ocean observatories
+
+00:00:44.000 --> 00:00:48.350
+satellite chlorophyll and sea-surface temperature, rainfall and weather forecasts
+
+00:00:48.350 --> 00:00:50.767
+river flow, and pollution feeds.
+
+00:00:50.767 --> 00:00:56.083
+Four hundred twenty-six sources and billions of rows are cleaned, named
+
+00:00:56.083 --> 00:01:01.400
+and governed into trustworthy silver tables before any model sees them.
+
+00:01:01.400 --> 00:01:06.088
+On top of the clean data run the discovery engines.
+
+00:01:06.088 --> 00:01:10.306
+Many model families compete: simple baselines, gradient-boosted trees, rankers
+
+00:01:10.306 --> 00:01:14.525
+neural sequence models, tensor factorizations, and zero-shot foundation models.
+
+00:01:14.525 --> 00:01:18.275
+No model is trusted because it is fancy.
+
+00:01:18.275 --> 00:01:23.900
+Each one has to earn its place against a fair, simpler comparison.
+
+00:01:23.900 --> 00:01:27.559
+This is the heart of the lab: the evidence gate.
+
+00:01:27.559 --> 00:01:31.949
+Before any experiment runs, the kill metrics are written down in advance.
+
+00:01:31.949 --> 00:01:36.339
+A candidate signal only survives if it clears every one of them.
+
+00:01:36.339 --> 00:01:38.900
+This is what keeps the lab honest.
+
+00:01:38.900 --> 00:01:40.585
+The gate is strict.
+
+00:01:40.585 --> 00:01:44.375
+A real signal has to beat its own baseline
+
+00:01:44.375 --> 00:01:48.165
+survive a permutation null where the answers are shuffled
+
+00:01:48.165 --> 00:01:51.956
+hold up under bootstrap confidence intervals that exclude zero
+
+00:01:51.956 --> 00:01:56.167
+and pass adversarial red-teams that actively try to break it.
+
+00:01:56.167 --> 00:01:59.115
+Ranking correlations by metadata is not evidence.
+
+00:01:59.115 --> 00:02:00.800
+Only the filter is.
+
+00:02:00.800 --> 00:02:02.937
+The result is a funnel.
+
+00:02:02.937 --> 00:02:07.212
+Hundreds of tempting candidate links go in at the top.
+
+00:02:07.212 --> 00:02:10.204
+Most collapse: shared climate trends, sampling effort
+
+00:02:10.204 --> 00:02:12.769
+or sensor smearing explain them away.
+
+00:02:12.769 --> 00:02:17.471
+Out of one cross-run audit of two hundred eighty-four candidate links
+
+00:02:17.471 --> 00:02:19.180
+zero survived as defensible.
+
+00:02:19.180 --> 00:02:22.600
+The handful that do survive are worth trusting.
+
+00:02:22.600 --> 00:02:25.681
+The lab even walks back its own wins.
+
+00:02:25.681 --> 00:02:31.459
+An early headline claimed a HAB model beat the standard forecast by about ten times.
+
+00:02:31.459 --> 00:02:35.311
+On inspection, that was a broken-baseline mirage, not real skill
+
+00:02:35.311 --> 00:02:40.319
+so it was retracted and written into the record as a rejected claim.
+
+00:02:40.319 --> 00:02:43.400
+Overclaims do not survive contact with the gate.
+
+00:02:43.400 --> 00:02:45.996
+Here is what did survive.
+
+00:02:45.996 --> 00:02:48.072
+A zero-shot coastal-bacteria ranker.
+
+00:02:48.072 --> 00:02:51.706
+A clean-to-dirty warning that catches surprise flips.
+
+00:02:51.706 --> 00:02:54.821
+Domoic-acid onset forecasting for harmful blooms.
+
+00:02:54.821 --> 00:02:56.379
+Gulf hypoxia flagging.
+
+00:02:56.379 --> 00:03:01.051
+Microcystin genotype results that replicated nationally and in Alberta.
+
+00:03:01.051 --> 00:03:05.204
+And a tsunami screen that cuts false alarms.
+
+00:03:05.204 --> 00:03:07.800
+Each one cleared the gate.
+
+00:03:07.800 --> 00:03:11.400
+And then came the newest headline: the Carrier-Timescale Law.
+
+00:03:11.400 --> 00:03:13.400
+It answers a portfolio-level question.
+
+00:03:13.400 --> 00:03:18.600
+When does paying for a weather forecast feed actually buy you earlier warning
+
+00:03:18.600 --> 00:03:21.000
+and when is it wasted money?
+
+00:03:21.000 --> 00:03:26.465
+The law says a forecast only extends lead time when three conditions all hold.
+
+00:03:26.465 --> 00:03:31.929
+One: the driver is fast and flashy, like rain, so yesterday's reading goes stale.
+
+00:03:31.929 --> 00:03:35.832
+Two: there is real headroom over what you already observe.
+
+00:03:35.832 --> 00:03:40.126
+Three: the regional forecast is accurate enough to cash that headroom.
+
+00:03:40.126 --> 00:03:42.858
+Two out of three is a null.
+
+00:03:42.858 --> 00:03:45.200
+All three is a deployable advisory.
+
+00:03:45.200 --> 00:03:46.940
+That yields a real
+
+00:03:46.940 --> 00:03:54.337
+shippable product: a two-day-ahead beach bacteria exceedance advisory that runs on a free public NOAA forecast feed.
+
+00:03:54.337 --> 00:03:56.077
+It is deliberately scoped.
+
+00:03:56.077 --> 00:03:59.123
+It is a two-day advisory, not three.
+
+00:03:59.123 --> 00:04:02.604
+It is for densely sampled marine enterococcus beaches.
+
+00:04:02.604 --> 00:04:04.779
+The effect sizes are modest.
+
+00:04:04.779 --> 00:04:10.000
+The strength is discipline and portability, not a giant jump in accuracy.
+
+00:04:10.000 --> 00:04:12.048
+The portability is the surprise.
+
+00:04:12.048 --> 00:04:17.374
+The advisory was trained on California and New Jersey with zero local labels
+
+00:04:17.374 --> 00:04:23.929
+then it deployed cold-start onto brand-new networks it had never seen: New South Wales in Australia
+
+00:04:23.929 --> 00:04:25.977
+and the Texas Gulf coast.
+
+00:04:25.977 --> 00:04:26.797
+On both
+
+00:04:26.797 --> 00:04:31.713
+the free forecast feature was load-bearing and beat the local recurrence baseline.
+
+00:04:31.713 --> 00:04:35.400
+Two independent networks, so it is not a fluke.
+
+00:04:35.400 --> 00:04:37.177
+There is one more gift.
+
+00:04:37.177 --> 00:04:38.243
+A free pre-screen.
+
+00:04:38.243 --> 00:04:41.796
+Using only observed data and no forecast fetch at all
+
+00:04:41.796 --> 00:04:48.193
+the lab can tell you in advance whether a forecast feed will pay off at a given beach.
+
+00:04:48.193 --> 00:04:50.325
+The master gate is oracle headroom.
+
+00:04:50.325 --> 00:04:55.300
+It turns a one-off product into a portfolio tool for deciding where to invest.
+
+00:04:55.300 --> 00:04:59.300
+All of this lives on a public Mission Control site.
+
+00:04:59.300 --> 00:05:02.900
+It shows what data exists, which models were built
+
+00:05:02.900 --> 00:05:08.100
+and what has actually been learned, including the nulls and the walked-back claims.
+
+00:05:08.100 --> 00:05:10.900
+Raw data downloads are deliberately turned off.
+
+00:05:10.900 --> 00:05:14.500
+The site publishes the science, not the private inputs.
+
+00:05:14.500 --> 00:05:18.636
+That is the Monterey Bay AI Lab, start to finish.
+
+00:05:18.636 --> 00:05:21.532
+Hundreds of public datasets, many competing models
+
+00:05:21.532 --> 00:05:28.150
+and a relentless evidence gate that turns noise into a small number of warnings worth trusting.
+
+00:05:28.150 --> 00:05:30.632
+The honesty is not a footnote.
+
+00:05:30.632 --> 00:05:32.700
+It is the whole point.
