@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260705T181317Z-8156-25168",
-  "built_utc": "2026-07-05T18:13:17Z",
-  "message": "Refresh snapshot: inventory 375->426 sources, models 19->21, signals 57->61 (no data downloads; inventory-only)"
+  "deploy_id": "20260705T182032Z-8362-20210",
+  "built_utc": "2026-07-05T18:20:32Z",
+  "message": "Fix GA4 measurement ID -> G-FB36EGDD7B (was a typo'd G-FB36EGBD7B; matches stream MBAL / property 542431430)"
 }
