@@ -2,6 +2,8 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
+<!-- Owner/internal opt-out: visit ?optout=1 once to stop GA on this browser (?optout=0 re-enables) -->
+<script>(function(){var q=new URLSearchParams(location.search).get('optout');if(q==='1')localStorage.mbal_optout=1;else if(q==='0')delete localStorage.mbal_optout;if(localStorage.mbal_optout)window['ga-disable-G-FB36EGBD7B']=1})();</script>
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-FB36EGBD7B"></script>
 <script>
@@ -525,6 +527,31 @@
   details.primer .pbody dt{font-weight:600;color:var(--ink)}
   details.primer .pbody dd{margin:0;color:var(--ink3)}
   details.primer .pbody h4{margin:18px 0 10px;font-size:12px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink5)}
+  details.primer .pbody>p{font-size:14px;line-height:1.6;color:var(--ink2);margin:10px 0}
+  /* ---- deep-dive charts, stat cards + callouts ---- */
+  .ddbadges{display:flex;flex-wrap:wrap;gap:7px;margin:2px 0 15px}
+  .ddbadges span{font-family:var(--mono);font-size:10.5px;letter-spacing:.03em;color:var(--ink4);background:var(--acc-tint2);border:1px solid var(--faint);border-radius:6px;padding:3px 9px}
+  .ddstats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0}
+  .ddstat{background:var(--subtle);border:1px solid var(--faint);border-radius:12px;padding:14px 16px}
+  .ddstat b{display:block;font-size:23px;font-weight:600;letter-spacing:-.02em;color:var(--acc);font-feature-settings:"tnum" 1}
+  .ddstat span{display:block;font-size:12px;color:var(--ink4);margin-top:6px;line-height:1.45}
+  .ddbar{margin:10px 0}
+  .ddbar .l{display:flex;justify-content:space-between;align-items:baseline;gap:14px;font-size:13px;margin-bottom:6px}
+  .ddbar .l span:first-child{color:var(--ink2)}
+  .ddbar .l span:last-child{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--ink3)}
+  .ddtrack{height:10px;background:var(--faint3);border-radius:6px;overflow:hidden}
+  .ddtrack i{display:block;height:100%;border-radius:6px;background:linear-gradient(90deg,var(--acc),var(--acc-bright));transition:width .6s cubic-bezier(.2,.7,.2,1)}
+  .ddtrack i.alt{background:var(--ink5);opacity:.5}
+  .ddnote{font-size:13px;line-height:1.55;color:var(--ink3);background:var(--acc-tint2);border:1px solid var(--faint);border-left:3px solid var(--acc);border-radius:9px;padding:11px 15px;margin:16px 0 4px}
+  .ddnote.warn{background:#fff8f0;border-left-color:#e0932f}
+  .ddnote strong{color:var(--ink)}
+  .ddtable{width:100%;border-collapse:collapse;margin:10px 0;font-size:13px}
+  .ddtable th,.ddtable td{text-align:left;padding:8px 11px;border-bottom:1px solid var(--faint2)}
+  .ddtable th{font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink5);font-weight:600}
+  .ddtable td{color:var(--ink2)}
+  .ddtable tr:last-child td{border-bottom:none}
+  .ddfull{display:inline-block;margin-top:16px;font-size:13.5px;font-weight:600;color:var(--acc);text-decoration:none}
+  .ddfull:hover{color:var(--acc-hover)}
   .statstrip{display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap;padding:14px 20px;background:var(--subtle);border:1px solid var(--faint);border-radius:13px;margin-top:26px}
   .statstrip .si{display:flex;align-items:baseline;gap:7px}
   .statstrip .si b{font-size:16px;font-weight:600}
@@ -933,7 +960,7 @@
     <!-- deep-dive write-ups + briefings: expandable -->
     <div class="deepdive">
 
-      <details class="primer" id="dd-carrier" open>
+      <details class="primer" id="dd-carrier">
         <summary>2-day beach-bacteria advisory on free forecast data — the Carrier-Timescale Law (newest win)</summary>
         <div class="pbody">
           <div class="ddbadges"><span>Topic: beach safety</span><span>Target: enterococcus / E. coli exceedance</span><span>Data: free NOAA GFS forecast</span><span>Use: 2-day advisory</span></div>
@@ -943,6 +970,13 @@
             <div class="ddstat"><b>3 regions · 2 indicators</b><span>Confirmed CA + NJ (marine enterococcus) and Ohio Lake Erie (freshwater E. coli)</span></div>
             <div class="ddstat"><b>2 networks cold-start</b><span>Zero local labels → NSW Australia (0.536 vs 0.491) and TX Gulf (0.580 vs 0.541, CI excl 0)</span></div>
           </div>
+          <h4>Advisory vs. local baseline — 2-day recall at matched false-alarm rate</h4>
+          <div class="ddbar"><div class="l"><span>Ohio Lake Erie — advisory</span><span>0.528</span></div><div class="ddtrack"><i style="width:91%"></i></div></div>
+          <div class="ddbar"><div class="l"><span>Ohio Lake Erie — persistence baseline</span><span>0.307</span></div><div class="ddtrack"><i class="alt" style="width:53%"></i></div></div>
+          <div class="ddbar"><div class="l"><span>NSW Australia — advisory <em style="color:var(--acc);font-style:normal">(zero local labels)</em></span><span>0.536</span></div><div class="ddtrack"><i style="width:92%"></i></div></div>
+          <div class="ddbar"><div class="l"><span>NSW Australia — recurrence baseline</span><span>0.491</span></div><div class="ddtrack"><i class="alt" style="width:85%"></i></div></div>
+          <div class="ddbar"><div class="l"><span>Texas Gulf — advisory <em style="color:var(--acc);font-style:normal">(zero local labels)</em></span><span>0.580</span></div><div class="ddtrack"><i style="width:100%"></i></div></div>
+          <div class="ddbar"><div class="l"><span>Texas Gulf — recurrence baseline</span><span>0.541</span></div><div class="ddtrack"><i class="alt" style="width:93%"></i></div></div>
           <h4>The law: when a forecast feed actually pays</h4>
           <p>A forecast buys lead-time only when <strong>all three</strong> hold: a <strong>fast carrier</strong> (observations go stale between samples), <strong>headroom</strong> of a carrier forecast over the antecedent-observed carrier, and <strong>sufficient regional NWP skill</strong>. Two of three ⇒ null. All three ⇒ a deployable advisory. A <strong>free pre-screen</strong> (observed-carrier oracle headroom, computed with no forecast fetch) tells you in advance where a feed will pay — it correctly rejected the slow-carrier and chronic cases before spending on any forecast data.</p>
           <div class="ddnote warn"><strong>Honest scope:</strong> the forecast-pays win is demonstrated for densely-sampled marine enterococcus beaches (CA + NJ) plus one freshwater case; it is a 2-day, not 3-day, product and not a beach-posting forecast. Effect sizes over recurrence are modest — the strength is discipline (pre-registered kill-metrics, phantom-guards, red-teams), generality, and cross-network portability, not a large accuracy jump. Slow-carrier and chronic cases are low-powered nulls, recorded honestly rather than dressed up.</div>
@@ -960,6 +994,9 @@
             <div class="ddstat"><b>708,337 rows</b><span>Held-out station-days spanning 57,628 daily exceedance events</span></div>
             <div class="ddstat"><b>1.75× AP lift</b><span>Mean average precision 0.1511 over a 0.0909 base rate; all 12 domains beat their base rate</span></div>
           </div>
+          <h4>Mean ranking skill vs. base rate (12 held-out basins)</h4>
+          <div class="ddbar"><div class="l"><span>Zero-shot ranker — mean average precision</span><span>0.1511</span></div><div class="ddtrack"><i style="width:100%"></i></div></div>
+          <div class="ddbar"><div class="l"><span>Base rate (chance)</span><span>0.0909</span></div><div class="ddtrack"><i class="alt" style="width:60.2%"></i></div></div>
           <div class="ddnote warn"><strong>Narrow claim:</strong> a retrospective ranking screen for early sampling attention — not a calibrated advisory probability.</div>
           <video controls preload="none" playsinline poster="videos/zero_shot_data_scientist_briefing_poster.jpg" aria-label="Data-scientist briefing video on the zero-shot coastal bacteria ranker" style="width:100%;border-radius:10px;margin-top:8px">
             <source src="videos/zero_shot_data_scientist_briefing.mp4" type="video/mp4">
@@ -2875,5 +2912,6 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&DETAIL)closeDrawer(
 
 load();
 </script>
+<script src="ga-events.js" defer></script>
 </body>
 </html>

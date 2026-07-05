@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260705T190723Z-856-4201",
-  "built_utc": "2026-07-05T19:07:24Z",
-  "message": "Home overview video: remove bullet points; faststart re-mux + eager preload so it plays instantly on click"
+  "deploy_id": "20260705T191822Z-507-3660",
+  "built_utc": "2026-07-05T19:18:22Z",
+  "message": "Analytics: owner opt-out on every page + native-video play events (video_start/progress/complete) + GA tag on 6 standalone content pages; shared ga-events.js (<1KB). Carries in-progress deep-dive CSS already in tree."
 }
