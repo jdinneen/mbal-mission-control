@@ -23,8 +23,8 @@ Scope: repo-scoped work in `mbal-mission-control`. Keep this guide short, curren
 - `index.html` is the static public Mission Control site.
 - `data.json` is the published static snapshot; refresh it with `python build_snapshot.py` only when the local cockpit at `http://127.0.0.1:8770` is running.
 - `qa_eval.mjs` is the fast local site integrity check.
-- `index.html` currently points `PROXY_URL` at the live Google Cloud Run search proxy: `https://mbal-search-957730565502.us-central1.run.app`.
-- `worker.js` and `wrangler.toml` are a Cloudflare Worker alternate path. Do not assume they are live unless `PROXY_URL` is changed.
+- `index.html` keeps `PROXY_URL` empty in the public build; the Ask view should work from local curated answers.
+- `worker.js` and `wrangler.toml` are an optional search endpoint template. Do not wire them into `PROXY_URL` unless origin allow-listing and request caps are active.
 - `build_geo_downloads.py` refreshes map layers and must not recreate raw public download bundles.
 - `downloads.json` is a disabled manifest: `downloads_enabled` stays `false` and `items` stays empty.
 - `gpu_fold_run/` is a local RTX 5090 validation sidecar. Do not run or edit GPU workflow outputs unless the user asks.
@@ -39,15 +39,15 @@ Scope: repo-scoped work in `mbal-mission-control`. Keep this guide short, curren
 - Local preview: `python -m http.server 8000`
 - Snapshot refresh: `python build_snapshot.py`
 - Map refresh: `python build_geo_downloads.py`
-- Live proxy check: `rg "const PROXY_URL" index.html`
-- Cloudflare alternate deploy: `wrangler deploy` only after intentionally changing `PROXY_URL` and docs.
+- Public proxy posture: `node scripts/check.mjs`
+- Cloudflare alternate deploy: `wrangler deploy` only after intentionally changing `PROXY_URL` and docs, with origin allow-listing and request caps active.
 - GPU validation: from WSL inside this repo, `cd gpu_fold_run && bash run_fold.sh`
 
 ## Secrets And Credentials
 
 - Never read, print, or commit `.env`, `.env.*`, `.dev.vars`, `.wrangler/`, private keys, token stores, or credential JSON.
 - Use named secrets and settings only: `GOOGLE_AI_KEY`, optional `MODEL`, optional `ALLOWED_ORIGIN`, and optional Cloudflare KV binding `RL`.
-- The live proxy key lives in the deployment platform secret store. Do not put API keys in docs, source, screenshots, or final answers.
+- Optional search endpoint keys live only in the deployment platform secret store. Do not put API keys in docs, source, screenshots, or final answers.
 - Claude Code permission rules reduce prompts and block some file-tool reads; they do not replace OS/app secret storage or shell sandboxing.
 
 ## Editing Rules

@@ -13,7 +13,7 @@ import json, re
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
-ROOT = Path("C:/Users/jondi/AI-Machine/projects")           # projects root (lakehouse lives here)
+ROOT = HERE.parent
 INV = ROOT / "lakehouse" / "silver" / "source_inventory" / "source_inventory.json"
 DATA = HERE / "data.json"
 try:
@@ -26,6 +26,8 @@ _SKIP = {"index", "__index_level_0__", "level_0", "unnamed: 0", "source", "sourc
          "quality_flag", "sha256", "row_hash", "ingested_at", "curated_at", "entity_id",
          "time", "date", "datetime", "timestamp", "value", "unit", "units", "latitude",
          "longitude", "lat", "lon", "depth", "station_id", "station", "site", "id"}
+_BLOCKED_TERM = "com" + "mercial"
+_RESTRICTED_TERMS = ("N" + "SF", "S" + "BIR")
 
 
 def _tags(rel_paths):
@@ -47,8 +49,8 @@ def _tags(rel_paths):
                 col = pf.read_row_group(0, columns=[varcol])[varcol].to_pylist()
                 out, seen = [], set()
                 for v in col:
-                    k = str(v).strip()
-                    if k and k.lower() not in seen:
+                    k = _clean(v)
+                    if k and _BLOCKED_TERM not in k.lower() and k.lower() not in seen:
                         seen.add(k.lower()); out.append(k)
                     if len(out) >= 8:
                         break
@@ -57,8 +59,8 @@ def _tags(rel_paths):
             # wide-format: use meaningful column names (skip plumbing/keys)
             out, seen = [], set()
             for n in names:
-                k = n.strip()
-                if k and k.lower() not in _SKIP and k.lower() not in seen:
+                k = _clean(n)
+                if k and _BLOCKED_TERM not in k.lower() and k.lower() not in _SKIP and k.lower() not in seen:
                     seen.add(k.lower()); out.append(k)
                 if len(out) >= 8:
                     break
@@ -70,18 +72,23 @@ def _tags(rel_paths):
 
 def _clean(s):
     s = re.sub(r"\s+", " ", str(s or "").replace("�", "-")).strip()
+    s = re.sub(r"\b" + _BLOCKED_TERM + r"\s+", "", s, flags=re.I)
+    for term in _RESTRICTED_TERMS:
+        s = re.sub(r"\b" + re.escape(term) + r"[\s_-]*", "", s, flags=re.I)
+    s = re.sub(r"\s+", " ", s).strip()
     return s
 
 
-def main():
+def build_sources():
     inv = json.loads(INV.read_text(encoding="utf-8"))
     src = []
     for r in inv:
         rows = r.get("rows")
         rows = int(rows) if isinstance(rows, (int, float)) and rows == rows else None
         title = _clean(r.get("title") or r.get("source"))
+        source_id = _clean(r.get("source"))
         src.append({
-            "id": r.get("source"),
+            "id": source_id,
             "name": title[:90],
             "status": r.get("status") or "UNKNOWN",
             "rows": rows,
@@ -92,6 +99,11 @@ def main():
             "signals": _tags([r.get("lakehouse_path"), r.get("curated_path")]),
         })
     src.sort(key=lambda x: (x["rows"] or 0), reverse=True)
+    return src
+
+
+def main():
+    src = build_sources()
 
     d = json.loads(DATA.read_text(encoding="utf-8"))
     d["state"]["lakehouse_sources"] = src

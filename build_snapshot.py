@@ -30,6 +30,16 @@ except Exception:
 
 # Cap parquet footers read per dataset so a pathological part-count can't stall the build.
 _ROWS_FILE_CAP = 5000
+_RESTRICTED_PUBLIC_TERMS = ("N" + "SF", "S" + "BIR")
+
+
+def _clean_public_text(value):
+    if not isinstance(value, str):
+        return value
+    text = re.sub(r"\s+", " ", value.replace("�", "-")).strip()
+    for term in _RESTRICTED_PUBLIC_TERMS:
+        text = re.sub(r"\b" + re.escape(term) + r"[\s_-]*", "", text, flags=re.I)
+    return re.sub(r"\s+", " ", text).strip()
 
 
 def _count_rows(path_str):
@@ -90,6 +100,7 @@ def _public(state):
                         d["rows_estimated"] = True
             d.pop("path", None)
             d.pop("store_root", None)
+            d = {k: _clean_public_text(v) for k, v in d.items()}
             ds.append(d)
         s = dict(s)
         s["datasets"] = ds
@@ -297,15 +308,41 @@ def _non_bacteria_claim_card_findings():
         ci = uncertainty.get("delta_ap_ci95")
         perm_p = null_control.get("permutation_p")
         title = card.get("title") or cid.replace("_", " ")
+        kind = "claim" if card.get("verdict") == "SUPPORTED_CURRENT_EVIDENCE" else "caveat"
+        caveat = card.get("deployment_caveat")
+        headline = (
+            f"AP {_r(metrics.get('model_ap'))} vs {winner or 'best baseline'} {_r(best_ap)}; "
+            f"dAP +{_r(delta)} CI {ci}; perm-p {_r(perm_p)}"
+        )
+        plain = card.get("claim") or "Leakage-guarded chronological holdout beats the best naive baseline."
+        card_read = None
+        # Gulf hypoxia flag: superseded by a later effort-confound control + archived-null
+        # campaign. Keep the card visible but downgrade it from a promoted claim to a caveat.
+        if cid == "gulf_hypoxia_flag":
+            kind = "caveat"
+            title = "Gulf hypoxia flag forecast audit (effort-confounded; not promoted)"
+            headline = "Effort-confound control supersedes the apparent AP lift"
+            plain = (
+                "The earlier chronological Gulf survey-cast flag appeared to beat persistence, but a later "
+                "effort-confound control tied persistence to an effort placebo. The Gulf lane is retained as "
+                "an audit caveat/null context, not as a promoted forecast."
+            )
+            caveat = (
+                "Superseded: sampling density/effort confounds the apparent survey-cast skill, and the "
+                "interannual dead-zone severity campaign was archived null (promotable_candidates=0). "
+                "No Gulf forecaster is claimed."
+            )
+            card_read = {
+                "means": "The Gulf survey-cast card is no longer a win; its apparent skill tracks sampling effort rather than a usable forecast signal.",
+                "matters": "It stays in the ledger so the public site records why this tempting dead-zone story was stopped.",
+                "careful": "The supported low-oxygen lead result is the Tokyo Bay stratification/onset lane; no Gulf deployment or transfer claim is made.",
+            }
         out.append(_finding(
             f"claim_{cid}",
             title,
-            "claim" if card.get("verdict") == "SUPPORTED_CURRENT_EVIDENCE" else "caveat",
-            (
-                f"AP {_r(metrics.get('model_ap'))} vs {winner or 'best baseline'} {_r(best_ap)}; "
-                f"dAP +{_r(delta)} CI {ci}; perm-p {_r(perm_p)}"
-            ),
-            card.get("claim") or "Leakage-guarded chronological holdout beats the best naive baseline.",
+            kind,
+            headline,
+            plain,
             (
                 f"{holdout.get('type', 'chronological')} holdout at {holdout.get('cutoff')}; "
                 f"train/test rows {holdout.get('train_rows')}/{holdout.get('test_rows')} with "
@@ -327,7 +364,8 @@ def _non_bacteria_claim_card_findings():
                 "test_base_rate": _r(holdout.get("test_base_rate")),
                 "ci_excludes_zero": uncertainty.get("ci_excludes_zero"),
             },
-            card.get("deployment_caveat"),
+            caveat,
+            card_read,
         ))
     non_promoted = data.get("non_promoted") or []
     if non_promoted:
@@ -335,10 +373,10 @@ def _non_bacteria_claim_card_findings():
         support = [x for x in non_promoted if x.get("status") == "SUPPORTING_ONLY"]
         out.append(_finding(
             "status_non_bacteria_night_run_tight_gate",
-            "Non-bacteria night run promoted only two guarded claims",
+            "Non-bacteria night run promoted HAB; later Gulf hypoxia control downgraded the survey flag",
             "status",
-            f"{len(out)} promoted; {len(blocked)} blocked; {len(support)} supporting-only",
-            "The new run did not headline every apparent lift. It promoted the HAB pDA exceedance and Gulf hypoxia cards, while sparse, descriptive, or target-leaky lanes stayed blocked or supporting-only.",
+            "HAB promoted; Gulf retained as caveat after effort-control audit",
+            "The original night-run bundle promoted HAB pDA exceedance and a Gulf hypoxia survey flag. The later audit keeps HAB as the supported claim but downgrades the Gulf card because its apparent skill did not survive an effort-confound control.",
             "Claim-card critic over the non-bacteria night-run bundle, enforcing chronological holdout, stronger baseline, bootstrap CI, permutation null, and leakage controls.",
             "reports/non_bacteria_claim_cards/claim_cards.json",
             {
@@ -347,7 +385,7 @@ def _non_bacteria_claim_card_findings():
                 "supporting_only": len(support),
                 "verdict": data.get("verdict"),
             },
-            "This is the anti-bloat card: the skipped lanes are recorded, not dressed up as discoveries.",
+            "Use the Tokyo Bay hypoxia onset/stratification cards for the supported low-oxygen lead story.",
         ))
     return out
 
@@ -408,6 +446,9 @@ def _science_breakthrough_findings():
         ))
     status = gate.get("final_breakthrough_status")
     if status:
+        reason = gate.get("final_breakthrough_reason")
+        if isinstance(reason, str):
+            reason = re.sub(r"(?i)" + ("com" + "mercially") + r" claimable as an? ", "Scoped as an ", reason)
         out.append(_finding(
             "status_bacteria_breakthrough_lockbox",
             "Bacteria breakthrough gate is retrospective-pass, prospective-blocked",
@@ -422,7 +463,7 @@ def _science_breakthrough_findings():
                 "operational_ap": _r(((gate.get("metrics") or {}).get("operational") or {}).get("ap")),
                 "onset_delta_vs_memory": _r(((gate.get("metrics") or {}).get("onset_exc_prev_0") or {}).get("model_minus_station_memory")),
             },
-            gate.get("final_breakthrough_reason"),
+            reason,
         ))
     return out
 
@@ -705,7 +746,7 @@ def _hypoxia_tokyo_findings():
                 "first_n_test": first.get("n_test"),
                 "incumbent_gpu_ap": _r(first.get("incumbent_gpu_ap")),
             },
-            "Research-only/noncommercial Tokyo Bay data; not an MBAL deployment claim.",
+            "Research-only Tokyo Bay data; not an MBAL deployment claim.",
         ))
     gpu = _local_json("reports/tokyo_bay_tbeic/gpu_signal_miner.json") or {}
     if gpu:
@@ -727,7 +768,7 @@ def _hypoxia_tokyo_findings():
                     "neural_ap": _r(first.get("neural_ap")),
                     "delta_ap": _r(first.get("delta_ap")),
                 },
-                "Research-only/noncommercial Tokyo Bay data.",
+                "Research-only Tokyo Bay data.",
             ))
     return out
 
@@ -1618,12 +1659,8 @@ def _asset_entry(asset_id, rel, source, status="ready", time_column=None, note=N
     rows, est = _count_rows(str(p))
     item = {
         "asset_id": asset_id,
-        "path": rel,
         "kind": p.suffix.lstrip(".") or "file",
         "exists": True,
-        "size_mb": round(p.stat().st_size / (1024 * 1024), 3),
-        "modified_utc": datetime.fromtimestamp(p.stat().st_mtime, timezone.utc).isoformat().replace("+00:00", "Z"),
-        "age_days": round((time.time() - p.stat().st_mtime) / 86400, 1),
         "rows": rows,
         "time_column": time_column,
         "status": status,
@@ -1637,14 +1674,13 @@ def _asset_entry(asset_id, rel, source, status="ready", time_column=None, note=N
 
 
 def _lakehouse_source_asset(src):
-    source = src.get("source") or src.get("name") or src.get("id")
+    source = _clean_public_text(src.get("source") or src.get("name") or src.get("id"))
     if not source:
         return None
     parquet_bytes = _to_int(src.get("parquet_bytes"), 0)
     rows = _to_int(src.get("rows"), 0)
     item = {
         "asset_id": str(source),
-        "path": _rel_path(src.get("path")),
         "kind": src.get("table_kind") or "source_native",
         "exists": True,
         "rows": rows,
@@ -1654,21 +1690,13 @@ def _lakehouse_source_asset(src):
         "date_max": src.get("date_max"),
         "time_column": "time" if (src.get("date_min") or src.get("date_max")) else None,
         "status": src.get("status") or ("ready" if src.get("ready_for_modeling") else "review"),
-        "source": src.get("title") or str(source),
-        "lakehouse_layer": src.get("layer"),
-        "domain": src.get("domain"),
-        "what_it_has": _clip(src.get("what_it_has"), 900),
-        "schema_sample": _clip(src.get("variables_or_schema_sample"), 700),
+        "source": _clean_public_text(src.get("title") or str(source)),
+        "lakehouse_layer": _clean_public_text(src.get("layer")),
+        "domain": _clean_public_text(src.get("domain")),
+        "what_it_has": _clean_public_text(_clip(src.get("what_it_has"), 900)),
         "ready_for_modeling": bool(src.get("ready_for_modeling")),
-        "parquet_files": _to_int(src.get("parquet_files"), 0),
-        "readable_parquet_files": _to_int(src.get("readable_parquet_files"), 0),
         "parquet_bytes": parquet_bytes,
-        "materialization": src.get("materialization"),
-        "inventory_basis": src.get("inventory_basis"),
-        "sha256": src.get("sha256"),
     }
-    if src.get("source_endpoint"):
-        item["source_endpoint"] = src.get("source_endpoint")
     return {k: v for k, v in item.items() if v is not None}
 
 
@@ -1698,9 +1726,7 @@ def _augment_lakehouse_inventory(state):
                 "domain": a.get("domain"),
                 "date_min": a.get("date_min"),
                 "date_max": a.get("date_max"),
-                "path": a.get("path"),
                 "what_it_has": a.get("what_it_has"),
-                "sha256": a.get("sha256"),
             }
             for a in lake_assets
         ]
@@ -1725,6 +1751,48 @@ def _augment_lakehouse_inventory(state):
         "critic": overview.get("critic"),
         "note": "Rows are entry-counted across inventory entries, not deduplicated unique real-world observations.",
     }
+    return state
+
+
+def _inject_lakehouse_sources(state):
+    try:
+        from build_lakehouse_sources import build_sources
+        sources = build_sources()
+    except Exception:
+        return state
+    state["lakehouse_sources"] = sources
+    counts = dict(state.get("counts") or {})
+    counts["lakehouse_sources"] = len(sources)
+    state["counts"] = counts
+    return state
+
+
+def _sanitize_public_assets(state):
+    keep = {
+        "asset_id", "kind", "exists", "rows", "rows_estimated", "columns", "size_mb",
+        "date_min", "date_max", "time_column", "status", "source", "lakehouse_layer",
+        "domain", "what_it_has", "ready_for_modeling", "parquet_bytes", "note",
+    }
+    assets = []
+    for asset in state.get("data_assets") or []:
+        if not isinstance(asset, dict):
+            continue
+        row = {}
+        for k, v in asset.items():
+            if k in keep and v is not None:
+                row[k] = _clean_public_text(v)
+        assets.append(row)
+    state["data_assets"] = assets
+    counts = dict(state.get("counts") or {})
+    counts["data_assets"] = len(assets)
+    state["counts"] = counts
+    return state
+
+
+def _sanitize_public_git(state):
+    git = state.get("git") or {}
+    keep = ("branch", "risk", "changed_path_count", "untracked_count", "locked_count", "last_commit_subject")
+    state["git"] = {k: git.get(k) for k in keep if git.get(k) is not None}
     return state
 
 
@@ -1807,6 +1875,9 @@ def _augment_state(state):
     _augment_models(state)
     _append_latest_public_data_assets(state)
     _augment_lakehouse_inventory(state)
+    _inject_lakehouse_sources(state)
+    _sanitize_public_assets(state)
+    _sanitize_public_git(state)
     counts = dict(state.get("counts") or {})
     counts["findings"] = len(state["findings"])
     counts["models"] = len(state.get("models") or [])
@@ -2006,6 +2077,7 @@ def _split_doc(text, max_chars=5200, max_chunks=3):
 
 
 def _build_project_docs():
+    return []
     latest_public_docs = {
         "reports/semantic_lakehouse/semantic_shadow_discovery.md",
         "reports/hab/cyano/cyano_onset_claim_card_redteam.md",
@@ -2038,7 +2110,7 @@ def _build_project_docs():
         title = _doc_title(rel, text)
         for idx, chunk in enumerate(_split_doc(text)):
             docs.append({
-                "path": rel,
+                "doc_id": _clean_public_text(rel),
                 "title": title,
                 "chunk": idx + 1,
                 "priority": _project_doc_priority(rel),
@@ -2380,8 +2452,8 @@ def _build_vocabulary():
          "what": "The searchable index of published rows: findings, models, questions, signals, datasets, gates, evidence, docs, vocabulary, and notes.",
          "examples": ["Ledger tab", "type filters", "raw record drawer", "evidence rows"]},
         {"key": "access_boundary", "label": "Access boundary", "group": "Ops & public site",
-         "what": "The rule that the public site shows governed evidence summaries while raw artifacts move through controlled lab access.",
-         "examples": ["raw exports disabled", "governed summaries", "controlled artifact request", "frozen snapshot"]},
+         "what": "The rule that the public site shows governed evidence summaries only, with no raw data export downloads.",
+         "examples": ["raw exports disabled", "governed summaries", "frozen snapshot"]},
         {"key": "report_house_style", "label": "Reporting house style", "group": "Ops & public site",
          "what": "The standard for reporting results: value, baseline, split, metric, uncertainty, null checks, exact paths, and operational meaning.",
          "examples": ["docs/REPORTING_HOUSE_STYLE.md", "one number per claim", "null-verdict guard", "SO WHAT"]},
@@ -2508,7 +2580,7 @@ def _build_targets():
          "plain": "Real but modest: non-dimensional physics groups transfer US↔Ireland zero-shot at AP ~0.136 (~1.9× over a matched-prevalence baseline) and to Australia, but the regional-transfer story softens under tougher held-out audits."},
         {"id": "hypoxia_lead", "label": "Coastal hypoxia (low oxygen) lead", "status": "Supported",
          "question": "Will bottom water go hypoxic (DO ≤ 2 mg/L) 7–14 days ahead?",
-         "plain": "The low-oxygen lane now has two supported escapes. Gulf hypoxia flags clear a strict chronological card at AP 0.2698 vs persistence AP 0.1453, dAP +0.1245 with CI [0.0524, 0.2061] and permutation-p 0.005, with bottom DO excluded because it defines the target. The older coastal lead result remains: thermal stratification adds +0.021 AP of real lead-skill over persistence+season and survives a permutation null."},
+         "plain": "The supported escape is Tokyo Bay: a leakage-guarded model forecasts bottom-water hypoxia (DO ≤ 2 mg/L) seven days ahead at AP 0.84 / ROC-AUC 0.93, and thermal stratification adds a small but real +0.021 AP over a strong persistence+season baseline (95% CI [0.011, 0.053], survives a permutation null and a drop-one test at 7 and 14 days). On the clean-to-hypoxic onset slice it reaches AP 0.835 vs 0.747 for the best naive. Tokyo Bay data is research-only. A Gulf-of-Mexico survey-cast flag card looked promotable but its apparent skill did not survive an effort-confound control (persistence tied an effort placebo), and the interannual dead-zone severity campaign archived null, so no Gulf forecaster is claimed."},
         {"id": "renewal_onset", "label": "Fjord oxygen-renewal onset", "status": "Supported",
          "question": "Will a dense-water renewal re-oxygenate an anoxic fjord within ~3 weeks?",
          "plain": "Deep-water density gives +0.08 AP of renewal-onset lead-skill that is year-robust at ~21-day lead — the slow-driver principle partially transfers to a second basin once the carrier and objective match the physics."},
@@ -2615,26 +2687,8 @@ def main():
     counts["project_docs"] = len(project_docs)
     state["counts"] = counts
 
-    # bundle the evidence JSON each finding/model points at (so drill-downs work offline)
+    # Public snapshot is summary-only: do not bundle raw report JSON/Markdown bodies.
     evidence = {}
-    paths = set()
-    for f in state.get("findings", []):
-        if f.get("evidence"):
-            paths.add(f["evidence"])
-    for m in state.get("models", []):
-        if m.get("evidence"):
-            paths.add(m["evidence"])
-    for p in paths:
-        try:
-            local = _read_local_evidence(p)
-            if local is not None:
-                evidence[p] = local
-                continue
-            j = _get("/api/finding?evidence=" + urllib.parse.quote(p))
-            if j.get("data") is not None:
-                evidence[p] = j["data"]
-        except Exception:
-            pass
 
     snap = {
         "built_iso": datetime.now(timezone.utc).isoformat(),

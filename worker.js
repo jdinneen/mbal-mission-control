@@ -1,17 +1,18 @@
 /**
- * MBAL search proxy — Cloudflare Worker (Google Gemini via AI Studio key).
+ * MBAL search proxy - Cloudflare Worker (Google Gemini via AI Studio key).
  *
- * Holds your Google AI Studio key as a SECRET (never shipped to the browser) and answers
- * science questions from the published data, grounded and capped for a public site.
+ * Optional endpoint template. The published site keeps PROXY_URL empty unless this
+ * endpoint is deployed with an exact origin allow-list and request caps.
  *
- * Guardrails:
- *   - model = Gemini Flash
+ * Required guardrails:
+ *   - ALLOWED_ORIGIN must match the published site origin
+ *   - KV namespace RL must be bound for per-IP and global request caps
+ *   - model = Gemini Flash by default
  *   - max output tokens capped (MAX_OUTPUT)
  *   - input context truncated (MAX_CONTEXT chars) + question length cap
- *   - optional per-IP + global daily rate limit if you bind a KV namespace "RL"
  *
  * Deploy (see README.md):
- *   wrangler secret put GOOGLE_AI_KEY      # paste your AI Studio key — stays secret on Cloudflare
+ *   wrangler secret put GOOGLE_AI_KEY
  *   wrangler deploy
  */
 
@@ -23,9 +24,8 @@ const PER_IP_PER_DAY = 40;     // used only if a KV namespace "RL" is bound
 const GLOBAL_PER_DAY = 1500;   // used only if a KV namespace "RL" is bound
 
 function cors(origin, allowed) {
-  const o = (allowed && allowed !== "*") ? allowed : (origin || "*");
   return {
-    "Access-Control-Allow-Origin": o,
+    "Access-Control-Allow-Origin": allowed || "null",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     "Vary": "Origin",
@@ -33,7 +33,7 @@ function cors(origin, allowed) {
 }
 
 async function rateLimited(env, ip) {
-  if (!env.RL) return false; // KV optional — skip if not bound
+  if (!env.RL) return true;
   const day = new Date().toISOString().slice(0, 10);
   const ipKey = `ip:${day}:${ip}`;
   const gKey = `g:${day}`;
@@ -48,10 +48,16 @@ async function rateLimited(env, ip) {
 export default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin") || "";
-    const allowed = env.ALLOWED_ORIGIN || "*";
+    const allowed = env.ALLOWED_ORIGIN || "";
     const headers = { ...cors(origin, allowed), "Content-Type": "application/json" };
 
     if (request.method === "OPTIONS") return new Response(null, { headers });
+    if (!allowed)
+      return new Response(JSON.stringify({ error: "server not configured (no ALLOWED_ORIGIN)" }), { status: 503, headers });
+    if (origin !== allowed)
+      return new Response(JSON.stringify({ error: "origin not allowed" }), { status: 403, headers });
+    if (!env.RL)
+      return new Response(JSON.stringify({ error: "server not configured (no RL rate-limit namespace)" }), { status: 503, headers });
     if (request.method !== "POST")
       return new Response(JSON.stringify({ error: "POST only" }), { status: 405, headers });
     if (!env.GOOGLE_AI_KEY)

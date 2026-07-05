@@ -12,8 +12,7 @@ body:
         the same evidence gates as internal hypotheses.
 
         **Scope:** suggestions must be about the *coastal-water science* — observations, signals, targets,
-        models, baselines, or evidence. Questions about funding, money, business, commercialization, or
-        partnerships are out of scope and will be closed.
+        models, baselines, or evidence. Non-science/process requests are out of scope and will be closed.
   - type: textarea
     id: question
     attributes:

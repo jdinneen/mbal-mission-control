@@ -237,7 +237,7 @@ def build_manifest():
             {
                 "items": [],
                 "downloads_enabled": False,
-                "note": "Raw public downloads are disabled. Use the site UI for governed summaries and request controlled raw artifacts through the lab.",
+                "note": "Raw public downloads are disabled. The site publishes governed summaries only.",
             },
             indent=1,
         ),

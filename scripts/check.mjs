@@ -45,19 +45,18 @@ if (/Anthropic key/.test(readme)) fail("README.md still refers to an Anthropic k
 if (!/GOOGLE_AI_KEY/.test(readme)) fail("README.md should document GOOGLE_AI_KEY.");
 console.log("README credential wording: PASS");
 
-console.log("checking live proxy documentation...");
+console.log("checking public proxy posture...");
 const indexHtml = read("index.html");
 const proxyMatch = indexHtml.match(/const\s+PROXY_URL\s*=\s*"([^"]*)"/);
 if (!proxyMatch) fail("index.html should define const PROXY_URL.");
 const proxyUrl = proxyMatch[1];
-if (!/^https:\/\/mbal-search-\d+\.us-central1\.run\.app$/.test(proxyUrl)) {
-  fail("PROXY_URL is no longer the documented Cloud Run endpoint. Update README.md and agent guides intentionally.");
-}
-for (const doc of [readme, agents]) {
-  if (!doc.includes(proxyUrl)) fail(`README.md and AGENTS.md must mention the current PROXY_URL: ${proxyUrl}`);
+if (proxyUrl !== "") fail("Public PROXY_URL must stay empty unless the proxy posture is reviewed intentionally.");
+const liveProxyPattern = /https:\/\/mbal-search-\d+\.us-central1\.run\.app/;
+for (const [name, doc] of [["README.md", readme], ["AGENTS.md", agents], ["index.html", indexHtml]]) {
+  if (liveProxyPattern.test(doc)) fail(`${name} still references the retired live Cloud Run proxy.`);
 }
 if (/tokens \(512\)/.test(readme)) fail("README.md still documents the stale 512 output-token cap.");
-console.log("live proxy docs: PASS");
+console.log("public proxy posture: PASS");
 
 console.log("checking raw-download policy...");
 const downloads = JSON.parse(read("downloads.json"));

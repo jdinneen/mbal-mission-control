@@ -118,8 +118,8 @@
       "alt": ["tokyo bay", "hypoxia", "low oxygen", "japan", "cross basin"],
       "tags": ["hypoxia", "transfer"],
       "grade": "Supported",
-      "a": "Yes. Onset-beats-memory replicates cross-basin and cross-hazard in Tokyo Bay hypoxia (+0.17 AP, ~3-day lead, permutation-null clean), and low-dissolved-oxygen stress can be screened from other water-quality clues. The pattern is not California-specific.",
-      "evidence": "Gulf / hypoxia finding",
+      "a": "Yes, but scoped to Tokyo Bay. The supported low-oxygen story is a leakage-guarded Tokyo Bay onset/stratification result: the 7-day onset model reaches AP 0.835 versus 0.747 for the better naive, while the older Gulf survey-cast flag is retained only as an effort-confounded caveat.",
+      "evidence": "Tokyo Bay hypoxia finding",
       "action": "target:hypoxia_lead"
     },
     {

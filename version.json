@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260705T191822Z-507-3660",
-  "built_utc": "2026-07-05T19:18:22Z",
-  "message": "Analytics: owner opt-out on every page + native-video play events (video_start/progress/complete) + GA tag on 6 standalone content pages; shared ga-events.js (<1KB). Carries in-progress deep-dive CSS already in tree."
+  "deploy_id": "20260705T210109Z-2501-30369",
+  "built_utc": "2026-07-05T21:01:09Z",
+  "message": "Harden public mission control tabs"
 }

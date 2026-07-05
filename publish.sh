@@ -18,7 +18,11 @@
 set -euo pipefail
 
 MSG="${1:-Publish site}"
-URL_BASE="https://jdinneen.github.io/mbal-mission-control"
+URL_BASE="${URL_BASE:-${PAGES_URL:-}}"
+if [ -z "$URL_BASE" ]; then
+  echo "[publish] Set URL_BASE or PAGES_URL to the deployed site root before publishing." >&2
+  exit 2
+fi
 DEPLOY_ID="$(date -u +%Y%m%dT%H%M%SZ)-$$-${RANDOM}"
 
 printf '{\n  "deploy_id": "%s",\n  "built_utc": "%s",\n  "message": %s\n}\n' \
@@ -46,5 +50,5 @@ for i in $(seq 1 40); do
   fi
   sleep 12
 done
-echo "[publish] NOT confirmed live after timeout. Check https://github.com/jdinneen/mbal-mission-control/deployments"
+echo "[publish] NOT confirmed live after timeout. Check the repository deployments page."
 exit 1

@@ -2,12 +2,12 @@ name = "mbal-search"
 main = "worker.js"
 compatibility_date = "2025-01-01"
 
-# Restrict who can call the proxy to your published site's origin (recommended).
-# Uncomment and set after you know your GitHub Pages URL:
+# Required before wiring this worker into index.html.
+# Set this to the exact published site origin:
 # [vars]
 # ALLOWED_ORIGIN = "https://YOURNAME.github.io"
 
-# OPTIONAL rate limiting (per-IP + global daily caps). Create a KV namespace
+# Required before wiring this worker into index.html. Create a KV namespace
 #   wrangler kv namespace create RL
 # then paste its id here and uncomment:
 # [[kv_namespaces]]

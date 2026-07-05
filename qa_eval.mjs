@@ -23,8 +23,8 @@ assert(resolvedFeatured.length > 0, "Featured findings filter should resolve at 
 const required = [
   "people, data, AI, and compute",
   "How we work",
-  "Top wins",
-  "Featured explainer",
+  "Deep dives",
+  "Beach warning explainer",
   "function renderFullReport",
   "function targetVocabControls",
   "function candidateTargetDrawer",
@@ -43,6 +43,15 @@ assert(!html.includes("id=\"leaderboard\""), "homepage should not include leader
 assert(!html.includes("Monterey Bay Today"), "nav should not include Monterey Bay Today");
 assert(!html.includes("fetch('downloads.json'"), "site should not fetch the raw-download manifest");
 assert(!html.includes(' download>Download'), "site should not render raw download buttons");
+const marketTerm = "com" + "mercial";
+const ownerTerms = ["jdin", "neen"].join("") + "|jon" + "di|jon" + "athan|C:[\\\\/]+Users";
+assert(!html.includes("Request raw " + "artifacts"), "site should not solicit raw artifact access");
+assert(!(new RegExp(marketTerm, "i")).test(html), "site should not include market-positioning language");
+assert(!(new RegExp("\\b(" + ["NS", "F"].join("") + "|S" + "BIR)\\b", "i")).test(html), "site should not include restricted funding/program language");
+assert(!(new RegExp(ownerTerms, "i")).test(html), "site should not expose personal identifiers or local paths");
+assert(!(new RegExp(ownerTerms, "i")).test(JSON.stringify(snap)), "snapshot should not expose personal identifiers or local paths");
+assert(Array.isArray(snap.state.lakehouse_sources) && snap.state.lakehouse_sources.length > 0,
+  "snapshot should include the source-native lakehouse inventory");
 assert(html.includes('id="dataoverview"'), "Lakehouse page should expose summary metrics");
 assert(html.includes('id="datacats"'), "Lakehouse page should expose data-family cards");
 assert(html.includes('id="datasearch"'), "Lakehouse page should expose source/signal search");

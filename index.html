@@ -19,7 +19,7 @@
 <meta property="og:type" content="website"/>
 <meta property="og:title" content="Monterey Bay AI Lab — Mission Control"/>
 <meta property="og:description" content="Whole-project evidence work in public: discovery engines, checked findings, plain baselines, and null results kept on the record."/>
-<meta property="og:url" content="https://jdinneen.github.io/mbal-mission-control/"/>
+<meta property="og:url" content="/mbal-mission-control/"/>
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Monterey Bay AI Lab — Mission Control"/>
 <meta name="twitter:description" content="Discovery engines, checked findings, plain baselines, and null results from Monterey Bay AI Lab."/>
@@ -637,9 +637,13 @@
     .featurecopy h2{font-size:21px}
     .videolinkcard{grid-template-columns:1fr}
     .videolinkgo{grid-column:auto;justify-self:start}
+    .herowrap{gap:22px}
+    .heroart{width:100%;max-width:100%}
+    h1.page{font-size:26px;line-height:1.16;overflow-wrap:anywhere}
+    .hero .page .hl{white-space:normal}
   }
   /* ---- engagement: hero highlight, ask the lab, frontiers, leaderboard ---- */
-  .hero .page .hl{color:var(--acc);white-space:nowrap}
+  .hero .page .hl{color:var(--acc);white-space:normal}
   .asklab{margin:22px 0 8px;padding:22px;border:1px solid var(--acc);border-radius:16px;background:linear-gradient(180deg,var(--acc-tint2),var(--surface))}
   .asklab .askhead h2{margin:0 0 4px;font-size:21px;color:var(--ink)}
   .asklab .askhead p{margin:0 0 14px;color:var(--ink3);font-size:14px;max-width:760px}
@@ -1003,7 +1007,7 @@
             <track src="videos/zero_shot_data_scientist_briefing.vtt" kind="captions" srclang="en" label="English captions" default>
             <a href="videos/zero_shot_data_scientist_briefing.mp4">Open the zero-shot data-scientist briefing video.</a>
           </video>
-          <a class="ddfull" href="https://jdinneen.github.io/zero-shot-data-scientist-briefing/" target="_blank" rel="noopener">Open the full briefing page →</a>
+          <a class="ddfull" href="#findings" onclick="go('findings');return false;">Open related findings →</a>
         </div>
       </details>
 
@@ -1039,7 +1043,7 @@
           </div>
           <p>A first prospective lockbox (frozen June 18, 2026; scored HOLDS June 27) held the claim on 198 rows / 8 events — still small, but forward evidence.</p>
           <div class="ddnote warn"><strong>Important limit:</strong> this should not decide by itself whether a beach is open or closed. Official sampling, lab testing, public-health judgment, and legal advisory rules still control those decisions. The frozen headline uses a two-day reveal-lag proxy; the conservative available-at AP is ≈ 0.490, about 0.020 lower.</div>
-          <a class="ddfull" href="https://jdinneen.github.io/california-beach-bacteria-shadow-triage/" target="_blank" rel="noopener">Read the full write-up →</a>
+          <a class="ddfull" href="#findings" onclick="go('findings');return false;">Open related findings →</a>
         </div>
       </details>
 
@@ -1075,26 +1079,26 @@
           <div class="ddbar"><div class="l"><span>Public Ireland HAB Bulletin ASP risk</span><span>0.078</span></div><div class="ddtrack"><i class="alt" style="width:12.9%"></i></div></div>
           <p>Data: Ireland Marine Institute shellfish biotoxin monitoring (220,803 raw records → 35,042 usable ASP rows across 139 sites, Nov 2002 – Jun 2026), with a public comparison parsed from Ireland HAB Bulletin PDFs.</p>
           <div class="ddnote warn"><strong>Important limit:</strong> because it still misses some events, it should help decide where to look first — not make harvesting open/close decisions alone. Lab testing and official safety rules remain in control.</div>
-          <a class="ddfull" href="https://jdinneen.github.io/ireland-da-sixth-grade-paper/" target="_blank" rel="noopener">Read the full write-up →</a>
+          <a class="ddfull" href="#findings" onclick="go('findings');return false;">Open related findings →</a>
         </div>
       </details>
 
       <details class="primer" id="dd-hypoxia">
-        <summary>Gulf of Mexico hypoxia (dead-zone) flag forecast — plain-English write-up</summary>
+        <summary>Tokyo Bay hypoxia (dead-zone) 7-day lead forecast — plain-English write-up</summary>
         <div class="pbody">
-          <div class="ddbadges"><span>Topic: ocean health</span><span>Target: hypoxia (low oxygen)</span><span>Place: Gulf of Mexico</span><span>Use: survey triage</span></div>
-          <p>Low-oxygen "dead zones" suffocate seafloor life and disrupt fisheries. A leakage-guarded model flags which Gulf survey casts are likely hypoxic from station geometry, cruise context, and season — beating the stronger of persistence and a seasonal baseline on a strict chronological holdout. It is promoted as a <strong>survey-triage helper</strong>, not a deployed forecast.</p>
+          <div class="ddbadges"><span>Topic: ocean health</span><span>Target: hypoxia (low oxygen)</span><span>Place: Tokyo Bay</span><span>Use: early warning</span></div>
+          <p>Low-oxygen "dead zones" suffocate seafloor life and disrupt fisheries. On Tokyo Bay's 7-station, 16-year monitoring record, a leakage-guarded model forecasts whether bottom water will go hypoxic (dissolved oxygen ≤ 2 mg/L) <strong>seven days ahead</strong> — and the physics of thermal stratification adds a small but real, statistically clean edge over an already-strong persistence-plus-season baseline.</p>
           <div class="ddstats">
-            <div class="ddstat"><b>0.270</b><span>Model average precision (base rate ≈ 7.6%)</span></div>
-            <div class="ddstat"><b>0.870</b><span>ROC-AUC on the chronological holdout</span></div>
-            <div class="ddstat"><b>+0.125</b><span>AP gain over best baseline; 95% CI [0.052, 0.206], excludes zero</span></div>
+            <div class="ddstat"><b>0.84</b><span>7-day forecast average precision (ROC-AUC 0.93; base rate ≈ 30%)</span></div>
+            <div class="ddstat"><b>+0.021</b><span>AP added by stratification physics over persistence+season; 95% CI [0.011, 0.053], excludes zero</span></div>
+            <div class="ddstat"><b>7 days</b><span>Lead time; the lift survives a permutation null and drop-one test at 7 and 14 days</span></div>
           </div>
-          <h4>Ranking skill vs. real baselines (AP)</h4>
-          <div class="ddbar"><div class="l"><span>Leakage-guarded model</span><span>0.270</span></div><div class="ddtrack"><i style="width:100%"></i></div></div>
-          <div class="ddbar"><div class="l"><span>Persistence baseline</span><span>0.145</span></div><div class="ddtrack"><i class="alt" style="width:53.7%"></i></div></div>
-          <div class="ddbar"><div class="l"><span>Seasonal baseline</span><span>0.113</span></div><div class="ddtrack"><i class="alt" style="width:41.9%"></i></div></div>
-          <p>Tested on 1,277 held-out casts with 97 hypoxic events after a 2016 chronological cutoff; a 200-shuffle permutation null passes (p = 0.005). Bottom dissolved oxygen — which defines the hypoxia flag — is excluded from the features to prevent leakage.</p>
-          <div class="ddnote warn"><strong>Important limit:</strong> not deployment-ready. This is a retrospective holdout on a survey dataset, not an operational lead-time forecast; the next proofs are year/cruise-block validation and a target tied to real warning lead time. No transfer outside the Gulf survey is claimed.</div>
+          <h4>Flagging hypoxia before it starts — onset skill (AP)</h4>
+          <div class="ddbar"><div class="l"><span>Stratification model</span><span>0.835</span></div><div class="ddtrack"><i style="width:92.8%"></i></div></div>
+          <div class="ddbar"><div class="l"><span>Best seasonal / oxygen-proximity naive</span><span>0.747</span></div><div class="ddtrack"><i class="alt" style="width:83.0%"></i></div></div>
+          <div class="ddbar"><div class="l"><span>Base rate (event frequency)</span><span>0.214</span></div><div class="ddtrack"><i class="alt" style="width:23.8%"></i></div></div>
+          <p>Among currently-oxygenated origins — the useful "clean-to-hypoxic" onset question — the model reaches AP 0.835 versus 0.747 for the best seasonal/oxygen-proximity naive at 7 days (4,356 held-out origins, 934 onset events). Checked by training on years ≤ 2021 and testing on later years, with station-block bootstrap confidence intervals and a permutation null; bottom oxygen, which defines the target, is excluded from the features.</p>
+          <div class="ddnote warn"><strong>Honest limits:</strong> the raw next-week forecast (0.837 vs 0.816) beats its seasonal baseline only narrowly, because Tokyo Bay hypoxia is strongly seasonal — the real, CI-clean win is the stratification-physics increment and the onset reframe. This is a validated research result, not an MBAL deployment. It replaces an earlier Gulf-of-Mexico dead-zone card whose apparent skill did not survive an effort-confound control (that lane is a documented null).</div>
         </div>
       </details>
 
@@ -1299,17 +1303,17 @@
 let DATA=null, EVID={}, PROJECT_DOCS=[], TAB='overview', FFILTER='featured', FFAM='all', OPENF=null, DETAIL=null;
 let ANSWERED=null, LEADERBOARD=null;
 /* ---- Ask the lab config ----
-   PROXY_URL: current live grounded-search proxy. This repo also contains Cloudflare Worker
-              files as an alternate path; keep docs/checks in sync if this URL changes.
-   FORM_URL : paste your Google Form's pre-filled-link base to route research requests / suggestions /
-              contributions there. Empty = falls back to a pre-composed email to CONTACT_EMAIL. */
-const PROXY_URL = "https://mbal-search-957730565502.us-central1.run.app";
+   PROXY_URL: intentionally empty for the public static build. Set only after the
+              endpoint has an exact origin allow-list, request caps, and server-side secrets.
+   FORM_URL : paste a public form URL to route research requests / suggestions / contributions.
+              Empty = keep contribution links inside this site. */
+const PROXY_URL = "";
 const FORM_URL = "";
-const CONTACT_EMAIL = "jon.dinneen@gmail.com";
 let LEDGER_TYPE='all', LEDGER_STATUS='all', LEDGER_TOPIC='all', LEDGER_SORT='signal', LEDGER_QUERY='', LEDGER_ROWS=null;
 let LAKE_QUERY='', LAKE_STATUS='all', LAKE_DOMAIN='all', LAKE_SHOW_ALL=false;
 const $=s=>document.querySelector(s);
 const esc=s=>String(s==null?'':s).replace(/[&<>"'`]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[c]));
+const js=s=>esc(JSON.stringify(String(s==null?'':s)));
 const fmt=n=>n==null?'—':Number(n).toLocaleString();
 const pct=v=>v==null?'—':(100*v).toFixed(1)+'%';
 const mb=n=>n==null?'—':(n>=1024?(n/1024).toFixed(2)+' GB':Number(n).toFixed(1)+' MB');
@@ -1590,7 +1594,7 @@ function renderHeader(){
 /* ---------- start here ---------- */
 function openTarget(id){const i=targetIndexById(id);if(i>=0){DETAIL={type:'target',idx:i};renderDrawer();}}
 function targetMini(id){const t=targetById(id);if(!t)return '';const b=frontierBadge(t.status);const p=(t.plain||'');
-  return `<div class="minicard" onclick="openTarget('${esc(id)}')">
+  return `<div class="minicard" onclick="openTarget(${js(id)})">
     <div class="mh"><span class="mt">${esc(t.label)}</span><span class="badge" style="background:${b.bg};color:${b.text}"><i style="background:${b.text}"></i>${esc(t.status)}</span></div>
     <p>${esc(p.slice(0,168))}${p.length>168?'…':''}</p>
     <div class="go">Open the question →</div></div>`;}
@@ -1670,9 +1674,7 @@ function askAction(a){
 function requestRunHref(q){
   const qq=(q||'').trim();
   if(FORM_URL)return FORM_URL+(FORM_URL.indexOf('?')>=0?'&':'?')+'entry.QUESTION='+encodeURIComponent(qq);
-  const subj=encodeURIComponent('Research request: '+(qq.slice(0,80)||'a question for the lab'));
-  const body=encodeURIComponent((qq?('My question: '+qq+'\n\n'):'')+'If you can, name which of the lab\'s datasets you think apply, and which baseline it should beat.\n\n— sent from Mission Control');
-  return 'mailto:'+CONTACT_EMAIL+'?subject='+subj+'&body='+body;
+  return '#questions';
 }
 function matchAnswered(q){
   const items=(ANSWERED&&ANSWERED.items)||[]; if(!items.length)return [];
@@ -1690,7 +1692,7 @@ function renderAnswerCard(it){
   const g=it.grade||'';
   return `<div class="anscard"><span class="grade grade-${esc(g)}">${esc(g)}</span>`+
     `<h3>${esc(it.q)}</h3><p>${esc(it.a)}</p>`+
-    (it.evidence?`<button class="ev" onclick="askAction('${esc(it.action||'')}')">${esc(it.evidence)} →</button>`:'')+`</div>`;
+    (it.evidence?`<button class="ev" onclick="askAction(${js(it.action||'')})">${esc(it.evidence)} →</button>`:'')+`</div>`;
 }
 function renderWorkerCard(w){
   const txt=esc(w.answer).replace(/\n/g,'<br>').replace(/(Bottom line:|Evidence:|Caveat:)/g,'<b>$1</b>');
@@ -1713,6 +1715,7 @@ function buildAskContext(){
   let ctx=L.join('\n'); if(ctx.length>52000)ctx=ctx.slice(0,52000); return ctx;
 }
 async function callWorker(q){
+  if(!PROXY_URL)return null;
   const r=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},
     body:JSON.stringify({question:q,context:buildAskContext(),mode:'science'})});
   return await r.json();
@@ -1748,7 +1751,7 @@ function renderFrontiers(){
     {title:'Credentialed currents & density',why:'Keyless physics rides already-washed rainfall. A genuinely new axis needs real ocean fields, not proxies.',needs:'FES tides, CMEMS currents/density, gauge access',action:'view:questions'},
     {title:'In-situ turbidity',why:'Satellite ocean-color — the field\'s #2 named FIB predictor — washes out. In-water turbidity is the one lever left on that axis.',needs:'in-situ turbidity sensor series',action:'view:findings'}
   ];
-  el.innerHTML=F.map(f=>`<div class="card" style="cursor:pointer" onclick="askAction('${f.action}')">`+
+  el.innerHTML=F.map(f=>`<div class="card" style="cursor:pointer" onclick="askAction(${js(f.action)})">`+
     `<div class="tag" style="color:#9a6a07"><i style="background:#c9a23a"></i>Open frontier</div>`+
     `<h3 style="margin:6px 0;font-size:15px">${esc(f.title)}</h3>`+
     `<p style="font-size:13.5px;color:var(--ink2);line-height:1.5">${esc(f.why)}</p>`+
@@ -1763,7 +1766,7 @@ function renderLeaderboard(){
     (lane.entries||[]).map(e=>`<div class="lentry"><div class="lw">${esc(e.who||'')}</div>`+
       `<h4>${esc(e.title)}</h4>`+
       `<div class="lr"><b>Approach:</b> ${esc(e.approach||'')}<br><b>Result:</b> ${esc(e.result||'')}</div>`+
-      (e.action?`<button class="ev" onclick="askAction('${esc(e.action)}')">See it →</button>`:'')+`</div>`).join('')+
+      (e.action?`<button class="ev" onclick="askAction(${js(e.action)})">See it →</button>`:'')+`</div>`).join('')+
     `</div>`).join('');
   const c=$('#contribute');
   if(c)c.innerHTML=`<div><h3>Have a question, a suggestion, or something to contribute?</h3>`+
@@ -1823,9 +1826,9 @@ const FEATURED_QUICK_READS={
     careful:'The next proof is prospective replay plus station/region stress testing.'
   },
   claim_gulf_hypoxia_flag:{
-    means:'A guarded model flags which Gulf of Mexico survey casts are likely low-oxygen "dead-zone" water, beating persistence and season on a strict time holdout.',
-    matters:'Dead zones suffocate seafloor life and disrupt fisheries; better flagging helps target monitoring.',
-    careful:'Retrospective survey holdout, not a deployed lead-time forecast; no transfer outside the Gulf is claimed.'
+    means:'The Gulf survey-cast card is no longer a win; its apparent skill tracks sampling effort rather than a usable forecast signal.',
+    matters:'It stays in the ledger so the site records why this tempting dead-zone story was stopped.',
+    careful:'The supported low-oxygen lead result is the Tokyo Bay stratification/onset lane; no Gulf deployment or transfer claim is made.'
   },
   claim_unified_zero_shot_interlingua_pi:{
     means:'The same physics-pi idea ranks bacteria risk across 12 held-out domains without local labels.',
@@ -1884,7 +1887,7 @@ function renderFindings(){
         <div><div class="minilbl">Evidence strength${helpQ(evidenceStrengthExplain(st))}</div><div class="segs">${segs}<em style="color:${b.text}">${STRENGTH_LABEL[strength]}${helpQ(evidenceStrengthExplain(st))}</em></div></div>
         <div class="metricbox"><div class="minilbl">${esc(met.label)}${helpQ(metricExplain(met.label,met.value))}</div><div class="mv">${esc(met.value)}${helpQ(metricExplain(met.label,met.value))}</div></div>
       </div>
-      <div class="ffoot"><span class="mean">${esc(STATUS_MEANING[st])}${helpQ(statusExplain(st))}</span><span class="cta">${open?'Hide details':'View details →'}${helpQ('Open the technical read, metrics, caveats, and raw evidence when available.')}</span></div>
+      <div class="ffoot"><span class="mean">${esc(STATUS_MEANING[st])}${helpQ(statusExplain(st))}</span><span class="cta">${open?'Hide details':'View details →'}${helpQ('Open the technical read, metrics, and caveats when available.')}</span></div>
       ${open?findingDetail(f):''}
     </div>`;
   }).join('') || '<div class="lhempty">No findings in this filter.</div>';
@@ -1918,11 +1921,11 @@ function findingDetail(f){
   const skip=new Set(['tp','fp','fn','tn']);
   const kvs=Object.entries(m).filter(([k,v])=>!skip.has(k)&&(typeof v==='number'||typeof v==='string'||typeof v==='boolean')).slice(0,8)
     .map(([k,v])=>`<span class="k">${esc(k)}${helpQ('This is a saved metric name from the evidence artifact.')}</span><span class="vv">${esc(typeof v==='number'?(Math.abs(v)<1&&v!==0?v.toFixed(4):v.toLocaleString()):v)}${helpQ(metricExplain(k,String(v)))}</span>`).join('');
-  const evbtn = f.evidence&&EVID[f.evidence] ? `<div class="evbtn"><button class="lnk" onclick="toggleEv(this,'${esc(f.evidence)}')">show raw evidence JSON${helpQ('Raw evidence JSON is the saved machine-readable report behind this card. It is for checking, not casual reading.')}</button></div>` : '';
+  const evbtn = '';
   const fullReport=f.full_report?renderFullReport(f.full_report):'';
   return `<div class="fdetail">
     <div class="minilbl">Technical read${helpQ('This explains how the result was checked, usually with holdouts, baselines, or audits.')}</div>
-    <p class="tr">${esc(f.how||f.note||f.plain||'See raw evidence.')}${helpQ(statementHelp(f.how||f.note||f.plain||''))}</p>
+    <p class="tr">${esc(f.how||f.note||f.plain||'See evidence summary.')}${helpQ(statementHelp(f.how||f.note||f.plain||''))}</p>
     ${f.note&&f.how?`<p class="tr" style="color:var(--ink4)"><b style="color:var(--ink3)">Caveat:${helpQ('A caveat is a limit that keeps the claim honest.')}</b> ${esc(f.note)}${helpQ(statementHelp(f.note))}</p>`:''}
     ${kvs?`<div class="kv">${kvs}</div>`:''}
     ${fullReport||detailSections}
@@ -1968,8 +1971,8 @@ function renderFullReport(r){
 }
 function toggleEv(btn,key){
   const wrap=btn.parentElement;
-  if(wrap.querySelector('pre.ev')){wrap.querySelector('pre.ev').remove();btn.textContent='show raw evidence JSON';return;}
-  const d=EVID[key]; btn.textContent='hide raw evidence JSON';
+  if(wrap.querySelector('pre.ev')){wrap.querySelector('pre.ev').remove();btn.textContent='show evidence summary';return;}
+  const d=EVID[key]; btn.textContent='hide evidence summary';
   const pre=document.createElement('pre'); pre.className='ev'; pre.textContent=JSON.stringify(d,null,2).slice(0,6000); wrap.appendChild(pre);
 }
 
@@ -2154,7 +2157,7 @@ function renderLedgerStats(all){
     ['Ledger entries',fmt(all.length),'every published row type'],
     ['Claimable findings',fmt((DATA.counts&&DATA.counts.claimable)||0),'enough evidence to cite · '+fmt(supported)+' supported · '+(DATA.findings||[]).length+' total'],
     ['Data assets',fmt(datasets),fmt(rows)+' governed rows'],
-    ['Evidence + docs',fmt(evidence),'raw artifacts and text chunks']
+    ['Evidence summaries',fmt(evidence),'summary records only']
   ].map(([k,v,s])=>`<div class="ledgerstat"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div><div class="s">${esc(s)}</div></div>`).join('');
 }
 function renderLedgerFilters(all){
@@ -2228,11 +2231,11 @@ function ledgerFieldPairs(row){
 }
 function ledgerActions(row){
   const actions=[];
-  if(row.source&&row.source.type==='finding')actions.push(`<button class="lnk" onclick="openFindingById('${esc(row.source.id)}')">Open finding card →</button>`);
-  if(row.source&&row.source.type==='model')actions.push(`<button class="lnk" onclick="DETAIL={type:'model',idx:${row.source.idx}};renderDrawer()">Open model card →</button>`);
-  if(row.source&&row.source.type==='dataset')actions.push(`<button class="lnk" onclick="DETAIL={type:'dataset',store:'${row.source.store}',idx:${row.source.idx}};renderDrawer()">Open dataset card →</button>`);
-  if(row.source&&row.source.type==='target')actions.push(`<button class="lnk" onclick="DETAIL={type:'target',idx:${row.source.idx}};renderDrawer()">Open question hub →</button>`);
-  if(row.source&&row.source.type==='vocab')actions.push(`<button class="lnk" onclick="DETAIL={type:'vocab',key:'${esc(row.source.key)}'};renderDrawer()">Open vocabulary examples →</button>`);
+  if(row.source&&row.source.type==='finding')actions.push(`<button class="lnk" onclick="openFindingById(${js(row.source.id)})">Open finding card →</button>`);
+  if(row.source&&row.source.type==='model')actions.push(`<button class="lnk" onclick="DETAIL={type:'model',idx:${js(row.source.idx)}};renderDrawer()">Open model card →</button>`);
+  if(row.source&&row.source.type==='dataset')actions.push(`<button class="lnk" onclick="DETAIL={type:'dataset',store:${js(row.source.store)},idx:${js(row.source.idx)}};renderDrawer()">Open dataset card →</button>`);
+  if(row.source&&row.source.type==='target')actions.push(`<button class="lnk" onclick="DETAIL={type:'target',idx:${js(row.source.idx)}};renderDrawer()">Open question hub →</button>`);
+  if(row.source&&row.source.type==='vocab')actions.push(`<button class="lnk" onclick="DETAIL={type:'vocab',key:${js(row.source.key)}};renderDrawer()">Open vocabulary examples →</button>`);
   const dom=mapDomainFor([row.title,row.desc,row.topic,row.meta].join(' '));
   if(dom)actions.push(mapLink(dom,'grid'));
   return actions.length?`<div class="hubsec"><div class="hl">Related views</div><div style="display:flex;gap:8px;flex-wrap:wrap">${actions.join('')}</div></div>`:'';
@@ -2538,7 +2541,7 @@ function targetVocabControls(items,shown){
     ['Medium','Medium',count(it=>it.priority==='Medium')],
     ['Lower','Lower',count(it=>it.priority==='Lower')]
   ].filter(x=>x[2]||x[0]==='all');
-  const btn=(kind,row,on)=>`<button class="fpill${on?' active':''}" onclick="${kind}='${esc(row[0])}';renderDrawer()">${esc(row[1])}<span class="c">${row[2]}</span></button>`;
+  const btn=(kind,row,on)=>`<button class="fpill${on?' active':''}" onclick="${kind}=${js(row[0])};renderDrawer()">${esc(row[1])}<span class="c">${row[2]}</span></button>`;
   return `<div class="hubsec" style="margin-top:0">
     <div class="hl">Target filters${helpQ('These filters separate worked targets from unpromoted lakehouse candidates and narrow candidates by likelihood tier.')}</div>
     <div class="filterrow">${typeDefs.map(r=>btn('VTARGET_TYPE',r,VTARGET_TYPE===r[0])).join('')}</div>
@@ -2615,7 +2618,7 @@ function mapDomainFor(s){const t=String(s||'').toLowerCase();
 const DOMAIN_LABEL={bacteria:'CA beach bacteria',cyano:'US lakes · cyano',domoic:'Domoic-acid piers',ireland:'Ireland bathing water'};
 let _pendingDomain=null,_pendingMode=null;
 function goMap(dom,mode){_pendingDomain=dom||null; _pendingMode=mode||null; if(DETAIL){DETAIL=null;renderDrawer();} location.hash='map';}
-function mapLink(domain,mode='grid'){return domain?`<button class="lnk maplink" onclick="goMap('${domain}','${mode}')">📍 Where's the data &amp; how confident is the model? See the ${esc(DOMAIN_LABEL[domain]||domain)} ${mode==='grid'?'evidence grid':'map'} →${helpQ('This opens the map view for the relevant dataset or target, so you can see where observations exist and where model confidence is honestly scoreable.')}</button>`:'';}
+function mapLink(domain,mode='grid'){return domain?`<button class="lnk maplink" onclick="goMap(${js(domain)},${js(mode)})">📍 Where's the data &amp; how confident is the model? See the ${esc(DOMAIN_LABEL[domain]||domain)} ${mode==='grid'?'evidence grid':'map'} →${helpQ('This opens the map view for the relevant dataset or target, so you can see where observations exist and where model confidence is honestly scoreable.')}</button>`:'';}
 const MAP_DOMAINS=[
   {key:'bacteria',label:'CA beach bacteria',file:'stations.geojson',unit:'samples',valueLabel:'exceedance (AB411 > 104)',siteWord:'stations',hasSkill:true},
   {key:'cyano',label:'US lakes · cyano',file:'lakes_cyano.geojson',unit:'obs-weeks',valueLabel:'bloom frequency',siteWord:'lakes',hasSkill:false},
@@ -2746,7 +2749,7 @@ function renderMap(){
 /* ---------- public data-access notice ---------- */
 function renderDownloads(){
   const box=$('#downloads'); if(!box)return;
-  box.innerHTML='<div class="dl"><div class="di"><div class="dt">Raw public downloads are disabled'+helpQ('The site no longer publishes direct raw data export links or a downloadable manifest.')+'</div><div class="dm">Governed summaries remain visible here. Request raw artifacts through the lab when there is a controlled-access need.</div></div></div>';
+  box.innerHTML='<div class="dl"><div class="di"><div class="dt">Raw public downloads are disabled'+helpQ('The site does not publish direct raw data export links or a downloadable manifest.')+'</div><div class="dm">Governed summaries remain visible here; raw export bundles are not published by this site.</div></div></div>';
 }
 
 /* ---------- questions (research-question spine, grouped by family) ---------- */
@@ -2786,7 +2789,7 @@ function openFindingById(id){
 function hubFindings(id){const fl=findingsForTarget(id); if(!fl.length)return '';
   return `<div class="hubsec"><div class="hl">Evidence · <b>${fl.length}</b> finding${fl.length>1?'s':''}</div>${
     fl.map(f=>{const st=findingStatus(f.kind),bb=STATUS_BADGE[st],mt=pickMetric(f),tx=(f.plain||f.headline||'');
-      return `<div class="hubrow clickable" onclick="openFindingById('${esc(f.id)}')">
+      return `<div class="hubrow clickable" onclick="openFindingById(${js(f.id)})">
         <div class="hm"><span class="hnm">${esc(f.title)}</span><span class="hsub">${esc(tx.slice(0,140))}${tx.length>140?'…':''}</span></div>
         <div class="hr"><span class="vchip" style="background:${bb.bg};color:${bb.text}">${st}</span>${mt&&mt.label!=='Headline'&&mt.value!=='—'?`<span class="vchip" style="background:var(--faint3);color:var(--ink2)">${esc(mt.label)} ${esc(mt.value)}</span>`:''}<span class="chev">→</span></div>
       </div>`;}).join('')}</div>`;}
@@ -2820,7 +2823,7 @@ function targetDrawer(){
       ${hubModels(t.id)}
       ${hubSignals(t.id)}
       ${mapBlock}
-      <div class="hubsec"><div class="hl">Reproduce</div><button class="lnk" onclick="go('data')">Get the data &amp; verify the snapshot →</button></div>
+      <div class="hubsec"><div class="hl">Reproduce</div><button class="lnk" onclick="go('data')">Review source summary &amp; verify the snapshot →</button></div>
     </div>
   </div>`;
 }
@@ -2849,7 +2852,7 @@ function modelDrawer(m){
   if(m.beats_baseline) audit.push(m.beats_baseline);
   if(m.claimable_verified) audit.push('Claim independently verified against stored evidence.');
   if(m.evidence_exists) audit.push('Evidence artifact present in the snapshot.');
-  const evbtn = m.evidence&&EVID[m.evidence] ? `<div class="evbtn"><button class="lnk" onclick="toggleEv(this,'${esc(m.evidence)}')">show raw evidence JSON${helpQ('Raw evidence JSON is the saved machine-readable report behind this model card.')}</button></div>` : '';
+  const evbtn = '';
   const modelPlain=m.plain
     ? `<p class="plain">${esc(m.plain)}${helpQ(statementHelp(m.plain))}</p>`
     : `<p class="plain" style="color:var(--ink4)">No plain-English summary recorded for this model.${helpQ('This model exists in the registry, but the snapshot does not include a short human summary for it.')}</p>`;

@@ -1,17 +1,14 @@
-# Monterey Bay AI Lab — public Mission Control site
+# Monterey Bay AI Lab public Mission Control site
 
-A standalone static site (the lab's findings, models, confusion matrices, lakehouse) with a
-**live search** box. The site itself is static (safe on GitHub Pages); search is answered by a
-small proxy that holds your Google AI Studio key as a secret — so the key is never public.
-The current `index.html` is wired to the live Google Cloud Run proxy at
-`https://mbal-search-957730565502.us-central1.run.app`. The Cloudflare Worker files in this
-repo are an alternate deployment path, not the currently wired live endpoint.
+A standalone static site for public findings, models, confusion matrices, and the governed
+lakehouse inventory. The public build is static: it loads `data.json`, uses curated local
+answers from `answered.json`, and does not call a live model endpoint by default.
 
 Files:
-- `index.html` — the site (loads `data.json`, calls the search proxy)
+- `index.html` — the site (loads `data.json`; `PROXY_URL` stays empty in the public build)
 - `data.json` — published data snapshot (regenerate with `build_snapshot.py`)
 - `build_snapshot.py` — pulls a fresh snapshot from the local cockpit (http://127.0.0.1:8770)
-- `worker.js` + `wrangler.toml` — alternate Cloudflare Worker proxy implementation
+- `worker.js` + `wrangler.toml` — optional search endpoint template, disabled unless wired intentionally
 
 ---
 
@@ -20,7 +17,9 @@ Files:
 python -m http.server 8000      # in this folder
 # open http://127.0.0.1:8000
 ```
-Findings/models/lakehouse render from `data.json`. Raw export downloads are intentionally not published from the site. Search is currently wired through the Cloud Run `PROXY_URL` in `index.html`.
+Findings/models/lakehouse render from `data.json`. Raw export downloads are intentionally
+not published from the site. The Ask view uses curated local answers unless `PROXY_URL` is
+configured after a security review.
 
 ## 2. Publish the site on GitHub Pages
 You run these (they use *your* GitHub login — I never touch your credentials):
@@ -31,16 +30,20 @@ gh repo create mbal-mission-control --public --source . --remote origin --push
 Then on GitHub: **Settings → Pages → Build from branch → `main` / root**.
 Your site appears at `https://YOURNAME.github.io/mbal-mission-control/`.
 
-## 3. Search proxy
-The live site currently calls:
+## 3. Optional search endpoint
+The public site intentionally ships with no live endpoint:
 ```
-const PROXY_URL = "https://mbal-search-957730565502.us-central1.run.app";
+const PROXY_URL = "";
 ```
-Keep `index.html`, this README, and the agent guides in sync if you move that endpoint.
 
-### Alternate: deploy the Cloudflare Worker
-First get a **free Google AI Studio key**: https://aistudio.google.com → "Get API key"
-(signed in as your Google account). This is separate from GCP billing — it has its own free tier.
+Only wire an endpoint after all of these are true:
+- the API key is stored as a deployment secret such as `GOOGLE_AI_KEY`;
+- CORS allows only the published site origin;
+- per-IP and global request caps are enabled;
+- the endpoint receives only the same public summaries already in `data.json`.
+
+### Cloudflare Worker template
+First provision a Google AI Studio key: https://aistudio.google.com → "Get API key".
 ```
 npm i -g wrangler
 wrangler login                                  # your Cloudflare login
@@ -50,23 +53,17 @@ wrangler deploy
 The worker uses Gemini Flash (`gemini-2.0-flash`). To change the model: `wrangler secret put MODEL`
 (or set it under `[vars]` in `wrangler.toml`).
 This prints a URL like `https://mbal-search.YOURNAME.workers.dev`.
-- Lock it to your site: in `wrangler.toml` set `ALLOWED_ORIGIN = "https://YOURNAME.github.io"`, then `wrangler deploy` again.
-- (Optional) turn on rate limiting: `wrangler kv namespace create RL`, paste the id into `wrangler.toml`, `wrangler deploy`.
+- Lock it to your site: in `wrangler.toml` set `ALLOWED_ORIGIN = "https://YOURNAME.github.io"`.
+- Enable request caps: `wrangler kv namespace create RL`, paste the id into `wrangler.toml`.
 
 ## 4. Wire a new search endpoint into the site
-Only change this when intentionally moving away from the current Cloud Run proxy. In `index.html`, set:
+Only change this after the endpoint controls above are active. In `index.html`, set:
 ```
 const PROXY_URL = "https://mbal-search.YOURNAME.workers.dev";
 ```
-Commit + push. Search is now live for visitors.
+Commit + push only after `node scripts/check.mjs` passes.
 
-## 5. Stay within budget
-The free AI Studio tier has its own rate limits and **no charge** — for a shared site that's
-usually all you need (no billing required). The proxy caps model (Gemini Flash), output
-tokens (900 in `worker.js`), context size, and (optionally) requests/day via rate limiting.
-If you later attach billing to the key, set a budget alert in Google Cloud (~$20).
-
-## 6. Refresh the published data later
+## 5. Refresh the published data later
 With the cockpit running locally:
 ```
 python build_snapshot.py        # rewrites data.json from live state
