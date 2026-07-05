@@ -919,7 +919,7 @@
           <div class="pnum">02</div>
           <div class="picon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2.2" fill="var(--surface)"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="15" cy="12" r="2.2" fill="var(--surface)"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="8" cy="18" r="2.2" fill="var(--surface)"/></svg></div>
           <h3>Tune the learning engines</h3>
-          <p>Run many model families — rankers, boosters, neural nets, tensor factorizations, zero-shot foundation models — and make each one earn its keep.</p>
+          <p>Run many model families — rankers, boosters, neural nets, tensor factorizations, zero-shot foundation models — and make each one earn its keep. The wins come from simple, well-baselined physical features; fancier representations (the &ldquo;pi&rdquo;/interlingua re-encodings) are kept only where they beat that bar — several are logged as null.</p>
         </div>
         <div class="pillar">
           <div class="pnum">03</div>
@@ -964,9 +964,9 @@
         <summary>2-day beach-bacteria advisory on free forecast data — the Carrier-Timescale Law (newest win)</summary>
         <div class="pbody">
           <div class="ddbadges"><span>Topic: beach safety</span><span>Target: enterococcus / E. coli exceedance</span><span>Data: free NOAA GFS forecast</span><span>Use: 2-day advisory</span></div>
-          <p>Where a beach's pollution is driven by rain (a fast carrier) and the beach is sampled densely, a <strong>free public NOAA GFS rain-forecast feed</strong> can flag an exceedance <strong>two days ahead</strong>. The lab proved when this works, mapped exactly when it does not, and then deployed it to brand-new beach networks with <strong>zero local training labels</strong>.</p>
+          <p>Where a beach's pollution is driven by rain (a fast carrier) and the beach is sampled densely, a <strong>free public NOAA GFS rain-forecast feed</strong> can flag an exceedance <strong>two days ahead</strong>. The lab showed a <strong>real but modest edge</strong> where this works — a few points of recall over a fair baseline, CI above zero — mapped exactly when it does not, then deployed it to brand-new beach networks with <strong>zero local training labels</strong>. The value is the discipline and portability, not a big accuracy jump.</p>
           <div class="ddstats">
-            <div class="ddstat"><b>0.730</b><span>California 2-day recall @ FPR ≤ 0.15 — beats persistence and a rain-model, CI excludes 0</span></div>
+            <div class="ddstat"><b>0.730</b><span>California 2-day recall @ FPR ≤ 0.15 (absolute rate; ~8 pts over persistence 0.651) — beats persistence and a rain-model, CI excludes 0</span></div>
             <div class="ddstat"><b>3 regions · 2 indicators</b><span>Confirmed CA + NJ (marine enterococcus) and Ohio Lake Erie (freshwater E. coli)</span></div>
             <div class="ddstat"><b>2 networks cold-start</b><span>Zero local labels → NSW Australia (0.536 vs 0.491) and TX Gulf (0.580 vs 0.541, CI excl 0)</span></div>
           </div>
@@ -2152,7 +2152,7 @@ function renderLedgerStats(all){
   const rows=(DATA.data_assets||[]).reduce((a,d)=>a+(d.rows||0),0);
   $('#ledgerstats').innerHTML=[
     ['Ledger entries',fmt(all.length),'every published row type'],
-    ['Supported findings',fmt(supported),(DATA.findings||[]).length+' total findings'],
+    ['Claimable findings',fmt((DATA.counts&&DATA.counts.claimable)||0),'enough evidence to cite · '+fmt(supported)+' supported · '+(DATA.findings||[]).length+' total'],
     ['Data assets',fmt(datasets),fmt(rows)+' governed rows'],
     ['Evidence + docs',fmt(evidence),'raw artifacts and text chunks']
   ].map(([k,v,s])=>`<div class="ledgerstat"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div><div class="s">${esc(s)}</div></div>`).join('');
