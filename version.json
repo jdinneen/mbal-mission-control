@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260705T190329Z-1232-30003",
-  "built_utc": "2026-07-05T19:03:29Z",
-  "message": "Home: feature start-to-finish overview video (below hero, above Why-now); collapse zero-shot briefing into a deep-dive; add Gulf hypoxia deep-dive + featured finding"
+  "deploy_id": "20260705T190723Z-856-4201",
+  "built_utc": "2026-07-05T19:07:24Z",
+  "message": "Home overview video: remove bullet points; faststart re-mux + eager preload so it plays instantly on click"
 }
