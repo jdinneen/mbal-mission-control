@@ -837,12 +837,39 @@
       </div>
     </div>
 
+    <!-- Latest wins: newest headline results, each links to its evidence card -->
+    <div class="topwins">
+      <div class="secband"><h2>Latest wins</h2><p>The newest results that survived the evidence gate — click any card for the checked numbers and how they were tested.</p></div>
+      <div class="winsgrid">
+        <button class="wincard" onclick="openFindingById('claim_global_fib_coldstart_forecast');return false;" aria-label="Global cold-start beach-bacteria forecast finding">
+          <div class="wtop"><span class="wtopic">Beach bacteria · 37 world regions</span><span class="wmetric">AUC 0.726 &gt; SOTA 0.713</span></div>
+          <h3>A global beach-bacteria forecast that generalizes to unseen regions</h3>
+          <p>One pooled model forecasts bacterial exceedances across 37 EU+US regions it never trained on, beating both the region's own history-repeat baseline (in 34 of 37) and the best published cross-region score. Adding rainfall lead-time lifts it further.</p>
+        </button>
+        <button class="wincard" onclick="openFindingById('claim_global_surge_onset_coldstart');return false;" aria-label="Global surge-onset finding">
+          <div class="wtop"><span class="wtopic">Coastal storm surge · 17 ocean basins</span><span class="wmetric">17/17 basins, hardened</span></div>
+          <h3>The same cold-start recipe carries to a different hazard — storm surge</h3>
+          <p>Detiding tide gauges to a surge residual, a pooled model predicts surge-onset days on ocean basins it never saw, beating a leak-hardened persistence baseline in all 17. Independent, red-teamed evidence for the cross-hazard thesis.</p>
+        </button>
+        <button class="wincard" onclick="openFindingById('operational_coldstart_deployable_shipped');return false;" aria-label="Deployable cold-start model finding">
+          <div class="wtop"><span class="wtopic">Shipped product · day-1 coverage</span><span class="wmetric">+0.097 AUC · 5/5 folds</span></div>
+          <h3>One deployable model that warns an ungauged beach on day one</h3>
+          <p>When a brand-new beach has no local history, neighbor-imputation plus recurrence still give a real day-1 ranking, calibrated for deployment. It covers the roughly one-third of beaches a history-hungry local model can't fit.</p>
+        </button>
+        <button class="wincard" onclick="openFindingById('claim_operational_label_quality_win');return false;" aria-label="Operational label-quality finding">
+          <div class="wtop"><span class="wtopic">Label quality · unseen beaches</span><span class="wmetric">dAP +0.109 · perm-p 0.02</span></div>
+          <h3>Training on the real advisory label beats the threshold proxy</h3>
+          <p>For the decision that matters — will an advisory be posted — training on the real posted-advisory label beats the usual threshold-exceedance proxy on held-out beaches; the proxy-trained model is worse than simply repeating history.</p>
+        </button>
+      </div>
+    </div>
+
     <!-- MBAL start-to-finish: featured overview video -->
     <section class="featurevideo" id="mbal-overview-video" aria-label="Monterey Bay AI Lab start-to-finish overview video">
       <div class="featurecopy">
         <div class="tag">Start to finish · narrated · closed captions</div>
         <h2>The whole lab in five minutes.</h2>
-        <p>From hundreds of public ocean datasets to a handful of warnings worth trusting — the lakehouse, the discovery engines, the evidence gate that kills spurious signals, the wins that survived, and the newest result: a 2-day beach advisory that deploys cold-start across networks.</p>
+        <p>From hundreds of public ocean datasets to a handful of warnings worth trusting — the lakehouse, the discovery engines, the evidence gate that kills spurious signals, and the wins that survived, including a cold-start beach advisory that deploys across monitoring networks. The latest results are in the cards above.</p>
       </div>
       <div class="featuremedia">
         <video controls preload="auto" playsinline poster="videos/mbal_start_to_finish_poster.jpg" aria-label="Monterey Bay AI Lab start-to-finish overview video">

@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260705T210109Z-2501-30369",
-  "built_utc": "2026-07-05T21:01:09Z",
-  "message": "Harden public mission control tabs"
+  "deploy_id": "20260708T195426Z-145680-9524",
+  "built_utc": "2026-07-08T19:54:26Z",
+  "message": "Home page: feature the 4 flagship wins (global FIB cold-start forecast, global surge-onset, deployable cold-start model, operational label-quality) + Latest-wins band; findings 49->53, adversary-verified numbers"
 }
