@@ -1,0 +1,524 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Algae Control Explainer — MBAL Mission Control</title>
+<meta name="description" content="How a free satellite decides which lake gets help first — explained for an eighth grader and a data scientist at the same time.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230f8a84'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='white' stroke-width='3'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f5f6f6; --surface:#ffffff; --subtle:#f7f9f9;
+    --border:#e7e9e9; --faint:#eef0f0;
+    --ink:#16181d; --ink2:#3f454c; --ink3:#5b6168; --ink4:#878d94;
+    --acc:#0f8a84; --acc-hover:#13a39c; --acc-bright:#28c4ba; --acc-tint:#eef4f3;
+    --warn:#d9762b; --bad:#c0492f; --good:#0f8a84;
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --sans:'Instrument Sans',system-ui,-apple-system,Segoe UI,sans-serif;
+    --card-sh:0 1px 2px rgba(16,24,40,.04),0 1px 3px rgba(16,24,40,.03);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg);font-family:var(--sans);-webkit-font-smoothing:antialiased;color:var(--ink);font-size:15px;line-height:1.5;overflow-x:clip}
+  a{color:var(--acc);text-decoration:none}
+  .mono{font-family:var(--mono)}
+
+  header{position:sticky;top:0;z-index:50;background:rgba(245,246,246,.85);backdrop-filter:saturate(160%) blur(12px);border-bottom:1px solid #e4e7e7}
+  .hwrap{max-width:1120px;margin:0 auto;padding:14px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+  .brand{display:flex;align-items:center;gap:13px;min-width:0}
+  .logo{width:34px;height:34px;border-radius:9px;background:var(--acc);display:flex;align-items:center;justify-content:center;flex:none;box-shadow:0 2px 6px rgba(15,138,132,.35)}
+  .logo>i{width:13px;height:13px;border:2.4px solid #fff;border-radius:50%}
+  .brand .eyebrow{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--acc);font-weight:500}
+  .brand .name{font-size:16.5px;font-weight:600;letter-spacing:-.01em;line-height:1.1}
+  .actions{display:flex;gap:8px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:7px;min-height:38px;padding:0 14px;border:1px solid var(--acc);border-radius:8px;background:var(--acc);color:#fff;font-weight:600;font-size:13.5px;cursor:pointer;font-family:var(--sans)}
+  .btn.sec{background:#fff;color:var(--acc)}
+  .btn:active{transform:translateY(1px)}
+
+  main{max-width:1120px;margin:0 auto;padding:34px 28px 90px}
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--acc);font-weight:500;margin-bottom:10px}
+  h1.page{margin:0 0 12px;font-size:clamp(1.7rem,3.3vw,2.6rem);line-height:1.08;font-weight:600;letter-spacing:-.02em}
+  .lede{margin:0;font-size:17px;line-height:1.55;color:var(--ink2);max-width:760px;text-wrap:pretty}
+  .audience{display:flex;gap:10px;margin:18px 0 0;flex-wrap:wrap}
+  .atag{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--ink2);background:#fff;border:1px solid var(--border);border-radius:999px;padding:6px 13px;box-shadow:var(--card-sh)}
+  .atag b{font-weight:600}
+  .atag .d{width:8px;height:8px;border-radius:50%}
+
+  /* ---- player ---- */
+  .stage{margin-top:26px;background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:var(--card-sh);overflow:hidden}
+  .screen{position:relative;aspect-ratio:16/9;background:linear-gradient(160deg,#0c2e2c 0%,#0f3a37 45%,#124a45 100%);overflow:hidden}
+  .scene{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;pointer-events:none;display:flex;flex-direction:column}
+  .scene.active{opacity:1}
+  .canvaswrap{position:absolute;inset:0}
+  svg.viz{width:100%;height:100%;display:block}
+
+  /* caption bar (8th-grade plain speak) */
+  .cap{position:absolute;left:0;right:0;bottom:0;padding:20px 30px 22px;background:linear-gradient(transparent, rgba(3,20,19,.55) 32%, rgba(3,20,19,.8));color:#eafffb}
+  .cap .big{font-size:clamp(1.05rem,2.3vw,1.7rem);font-weight:600;line-height:1.18;letter-spacing:-.01em;max-width:900px;text-wrap:balance}
+  .cap .ds{margin-top:9px;font-family:var(--mono);font-size:clamp(.62rem,1.15vw,.8rem);color:#bfeee7;letter-spacing:.02em;max-width:940px;line-height:1.45}
+  .cap .ds b{color:#7ff0e2;font-weight:600}
+  .scenetag{position:absolute;top:14px;left:16px;font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:rgba(230,255,251,.6)}
+  .scenecount{position:absolute;top:14px;right:16px;font-family:var(--mono);font-size:10.5px;color:rgba(230,255,251,.55)}
+
+  /* controls */
+  .controls{display:flex;align-items:center;gap:14px;padding:12px 18px;background:var(--subtle);border-top:1px solid var(--faint)}
+  .cbtn{width:40px;height:40px;border-radius:50%;border:1px solid var(--border);background:#fff;color:var(--acc);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}
+  .cbtn.play{background:var(--acc);color:#fff;border-color:var(--acc)}
+  .cbtn svg{width:16px;height:16px}
+  .track{flex:1;height:8px;border-radius:6px;background:#e3e7e7;position:relative;cursor:pointer;overflow:hidden}
+  .track .fill{position:absolute;left:0;top:0;bottom:0;width:0;background:linear-gradient(90deg,var(--acc),var(--acc-bright));border-radius:6px}
+  .dots{display:flex;gap:6px}
+  .dots i{width:8px;height:8px;border-radius:50%;background:#cfd5d5;cursor:pointer;transition:transform .2s,background .2s}
+  .dots i.on{background:var(--acc);transform:scale(1.35)}
+  .time{font-family:var(--mono);font-size:11.5px;color:var(--ink4);min-width:74px;text-align:right}
+
+  /* metric strip */
+  .meta{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
+  .metric{background:#fff;border:1px solid var(--border);border-radius:12px;padding:16px 16px;box-shadow:var(--card-sh)}
+  .metric b{display:block;font-size:1.5rem;font-weight:600;letter-spacing:-.02em;line-height:1}
+  .metric span{display:block;margin-top:7px;color:var(--ink3);font-size:12.7px;line-height:1.35}
+  .metric .k{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--acc);margin-bottom:9px}
+
+  /* ---- dual write-up ---- */
+  .writeup{margin-top:46px}
+  h2.sec{font-size:26px;font-weight:600;letter-spacing:-.02em;margin:0 0 6px}
+  .sub{color:var(--ink3);font-size:15px;margin:0 0 22px}
+  .qa{background:#fff;border:1px solid var(--border);border-radius:16px;box-shadow:var(--card-sh);padding:22px 24px;margin-bottom:18px}
+  .qa .q{font-size:18px;font-weight:600;letter-spacing:-.01em;margin:0 0 12px;display:flex;gap:10px;align-items:flex-start}
+  .qa .q .n{font-family:var(--mono);font-size:12px;color:#fff;background:var(--acc);border-radius:7px;padding:3px 8px;flex:none;margin-top:2px}
+  .plain{font-size:15.5px;line-height:1.6;color:var(--ink2)}
+  .plain b{color:var(--ink)}
+  details.ds{margin-top:14px;border-top:1px dashed var(--border);padding-top:12px}
+  details.ds summary{cursor:pointer;font-family:var(--mono);font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--acc);font-weight:600;list-style:none}
+  details.ds summary::-webkit-details-marker{display:none}
+  details.ds summary::before{content:"▸ ";color:var(--acc)}
+  details.ds[open] summary::before{content:"▾ "}
+  .dsbody{margin-top:12px;font-size:13.6px;line-height:1.6;color:var(--ink2)}
+  .dsbody code,.dsbody .m{font-family:var(--mono);font-size:12.5px;background:var(--acc-tint);border:1px solid #d9e8e6;border-radius:5px;padding:1px 6px;color:#0c6f6a}
+  .dsbody ul{margin:10px 0 0;padding-left:20px}
+  .dsbody li{margin:5px 0}
+  .verdict{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;font-weight:600;border-radius:999px;padding:5px 12px;margin-bottom:14px}
+  .verdict.win{background:#e7f4f2;color:#0c6f6a;border:1px solid #bfe3de}
+  .verdict.ceil{background:#fbf0e6;color:#a85a1e;border:1px solid #efd6bd}
+  table.mtab{width:100%;border-collapse:collapse;margin-top:12px;font-size:13px}
+  table.mtab th,table.mtab td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--faint)}
+  table.mtab th{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink4);font-weight:500}
+  table.mtab td.n{font-family:var(--mono)}
+  table.mtab tr.hi td{background:var(--acc-tint);font-weight:600}
+  .foot{margin-top:40px;padding-top:18px;border-top:1px solid var(--border);color:var(--ink4);font-size:12.5px;line-height:1.6}
+  .foot code{font-family:var(--mono);background:#eef0f0;border-radius:4px;padding:1px 5px;color:var(--ink3)}
+
+  @media(max-width:760px){
+    .hwrap{padding:12px 16px}
+    main{padding:24px 16px 70px}
+    .meta{grid-template-columns:1fr 1fr}
+    .time{display:none}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="hwrap">
+    <div class="brand">
+      <div class="logo"><i></i></div>
+      <div>
+        <div class="eyebrow">Monterey Bay AI Lab</div>
+        <div class="name">Algae Control — Explainer</div>
+      </div>
+    </div>
+    <nav class="actions">
+      <button class="btn sec" onclick="document.getElementById('writeup').scrollIntoView({behavior:'smooth'})">Read the write-up</button>
+      <a class="btn sec" href="./">Mission Control</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="eyebrow">Explainer · plays in your browser</div>
+  <h1 class="page">Which lake gets help first?</h1>
+  <p class="lede">Harmful algae blooms turn lakes green and toxic. You can't watch every lake, and you can't
+  treat every lake. This is how a <b>free satellite</b> helps a manager decide <b>where to send the crew this week</b> —
+  and an honest look at whether we can call a bloom <b>before</b> it happens.</p>
+  <div class="audience">
+    <span class="atag"><span class="d" style="background:var(--acc-bright)"></span><b>Big text</b> — made for an 8th grader</span>
+    <span class="atag"><span class="d" style="background:var(--warn)"></span><b>Mono line</b> — every number for a data scientist</span>
+  </div>
+
+  <!-- ===== PLAYER ===== -->
+  <section class="stage" aria-label="Animated explainer">
+    <div class="screen" id="screen">
+      <!-- SCENE 1 -->
+      <div class="scene" data-tag="The problem">
+        <div class="canvaswrap"><svg class="viz" viewBox="0 0 160 90" preserveAspectRatio="xMidYMid slice">
+          <g class="s1">
+            <circle class="lk" cx="34" cy="34" r="12" fill="#1e6f5c"/>
+            <circle class="lk" cx="86" cy="26" r="9" fill="#2a7d4f"/>
+            <circle class="lk" cx="120" cy="44" r="14" fill="#3a8a3a"/>
+            <circle class="lk" cx="58" cy="62" r="10" fill="#2f8047"/>
+            <circle class="lk" cx="104" cy="68" r="8" fill="#4f9a2f"/>
+            <text x="80" y="16" fill="#bff3ea" font-size="6" text-anchor="middle" font-family="IBM Plex Mono" opacity=".8">thousands of lakes · one small crew</text>
+          </g>
+        </svg></div>
+        <div class="scenetag">01 · The problem</div><div class="scenecount">1 / 8</div>
+        <div class="cap">
+          <div class="big">Algae blooms can poison a lake. But there are thousands of lakes and only a few crews to send.</div>
+          <div class="ds">TARGET: freshwater cyanobacteria (harmful algal blooms). DECISION: allocate scarce sampling/treatment crews across a whole portfolio of water bodies.</div>
+        </div>
+      </div>
+
+      <!-- SCENE 2 -->
+      <div class="scene" data-tag="The competitors">
+        <div class="canvaswrap"><svg class="viz" viewBox="0 0 160 90">
+          <g font-family="Instrument Sans">
+            <g class="c2 buoy">
+              <rect x="14" y="30" width="34" height="34" rx="6" fill="#0e4b46" stroke="#2bbdb0"/>
+              <circle cx="31" cy="43" r="6" fill="#2bbdb0"/><rect x="29" y="20" width="4" height="12" fill="#2bbdb0"/>
+              <text x="31" y="76" fill="#cfeee9" font-size="6" text-anchor="middle">Buoy</text>
+              <text x="31" y="83" fill="#8fd7cf" font-size="4.5" text-anchor="middle">one lake</text>
+            </g>
+            <g class="c2 sensor">
+              <rect x="63" y="30" width="34" height="34" rx="6" fill="#0e4b46" stroke="#2bbdb0"/>
+              <path d="M72 52 l8 -14 l8 14" fill="none" stroke="#2bbdb0" stroke-width="2"/>
+              <text x="80" y="76" fill="#cfeee9" font-size="6" text-anchor="middle">Sensor</text>
+              <text x="80" y="83" fill="#8fd7cf" font-size="4.5" text-anchor="middle">one spot</text>
+            </g>
+            <g class="c2 scope">
+              <rect x="112" y="30" width="34" height="34" rx="6" fill="#0e4b46" stroke="#2bbdb0"/>
+              <circle cx="129" cy="45" r="7" fill="none" stroke="#2bbdb0" stroke-width="2"/><line x1="134" y1="50" x2="139" y2="55" stroke="#2bbdb0" stroke-width="2"/>
+              <text x="129" y="76" fill="#cfeee9" font-size="6" text-anchor="middle">Microscope</text>
+              <text x="129" y="83" fill="#8fd7cf" font-size="4.5" text-anchor="middle">a grabbed sample</text>
+            </g>
+          </g>
+        </svg></div>
+        <div class="scenetag">02 · Today's tools</div><div class="scenecount">2 / 8</div>
+        <div class="cap">
+          <div class="big">Today's tools are great — but each one watches a single spot, or a single water sample.</div>
+          <div class="ds">Competitors: <b>LG Sonic MPC-Buoy</b> (in-situ phycocyanin sensor + ultrasound, one buoy per body), <b>In-Situ</b> (sensors), <b>FlowCam</b> (image analysis of grab samples). Hardware/instrument-led; no cross-water-body prioritisation.</div>
+        </div>
+      </div>
+
+      <!-- SCENE 3 -->
+      <div class="scene" data-tag="Our idea">
+        <div class="canvaswrap"><svg class="viz" viewBox="0 0 160 90">
+          <g class="s3">
+            <rect x="70" y="6" width="20" height="12" rx="2" fill="#0e4b46" stroke="#2bbdb0"/>
+            <rect x="60" y="9" width="10" height="6" fill="#2bbdb0"/><rect x="90" y="9" width="10" height="6" fill="#2bbdb0"/>
+            <path class="beam" d="M80 18 L40 82 L120 82 Z" fill="rgba(43,189,176,.14)" stroke="rgba(43,189,176,.3)"/>
+            <text x="80" y="30" fill="#bff3ea" font-size="5.5" text-anchor="middle" font-family="IBM Plex Mono">free satellite · sees every lake</text>
+          </g>
+        </svg></div>
+        <div class="scenetag">03 · Our idea</div><div class="scenecount">3 / 8</div>
+        <div class="cap">
+          <div class="big">Our idea: use a free satellite that already photographs every lake on Earth.</div>
+          <div class="ds">Signal = <b>Sentinel-2 NDCI</b> = (B5−B4)/(B5+B4), a water-masked red-edge chlorophyll index, 10–20 m resolution. Free, whole-portfolio, resolves small bodies the 300 m CyAN product can't.</div>
+        </div>
+      </div>
+
+      <!-- SCENE 4 -->
+      <div class="scene" data-tag="Colour the danger">
+        <div class="canvaswrap"><svg class="viz" viewBox="0 0 160 90">
+          <g class="s4">
+            <circle class="l4" cx="30" cy="30" r="9" fill="#2a7d4f"/>
+            <circle class="l4 hot" cx="70" cy="24" r="11" fill="#c0492f"/>
+            <circle class="l4" cx="112" cy="34" r="8" fill="#2f8047"/>
+            <circle class="l4 hot" cx="46" cy="62" r="10" fill="#c0492f"/>
+            <circle class="l4" cx="92" cy="64" r="9" fill="#3a8a3a"/>
+            <circle class="l4 hot" cx="130" cy="62" r="9" fill="#c0492f"/>
+            <text x="80" y="86" fill="#ffd9cd" font-size="5.5" text-anchor="middle" font-family="IBM Plex Mono">red = severe bloom the satellite flags</text>
+          </g>
+        </svg></div>
+        <div class="scenetag">04 · Score every lake</div><div class="scenecount">4 / 8</div>
+        <div class="cap">
+          <div class="big">The satellite gives every lake a score. Red lakes look like a bad, toxic bloom.</div>
+          <div class="ds">Validated against <b>lab microcystin</b>: within-lake AUC <b>0.80</b> (n=30 pairs); independent CA FHABS test AUC <b>0.688</b> (130 confirmed blooms vs 130 reported-but-tested-clean look-alikes). Severe-only: blind to low/moderate.</div>
+        </div>
+      </div>
+
+      <!-- SCENE 5 -->
+      <div class="scene" data-tag="Rank the crew list">
+        <div class="canvaswrap"><svg class="viz" viewBox="0 0 160 90">
+          <g font-family="IBM Plex Mono">
+            <text x="16" y="14" fill="#bff3ea" font-size="6">Where do 2 crews go first?</text>
+            <g class="bars">
+              <rect x="16" y="24" width="0" height="9" rx="2" fill="#2bbdb0" class="bar" data-w="118"/>
+              <rect x="16" y="38" width="0" height="9" rx="2" fill="#2bbdb0" class="bar" data-w="96"/>
+              <rect x="16" y="52" width="0" height="9" rx="2" fill="#5b6168" class="bar" data-w="70"/>
+              <rect x="16" y="66" width="0" height="9" rx="2" fill="#5b6168" class="bar" data-w="52"/>
+              <text x="140" y="31" fill="#7ff0e2" font-size="5" text-anchor="end">satellite pick ✓</text>
+              <text x="140" y="45" fill="#7ff0e2" font-size="5" text-anchor="end">satellite pick ✓</text>
+              <text x="140" y="59" fill="#9aa0a7" font-size="5" text-anchor="end">"usual suspects"</text>
+              <text x="140" y="73" fill="#9aa0a7" font-size="5" text-anchor="end">"usual suspects"</text>
+            </g>
+          </g>
+        </svg></div>
+        <div class="scenetag">05 · Make the list</div><div class="scenecount">5 / 8</div>
+        <div class="cap">
+          <div class="big">We rank the lakes and send crews to the top of the list — instead of just "the lakes that went bad last year."</div>
+          <div class="ds">Baseline to beat = the <b>recurrence-placement heuristic</b> (rank by past advisories) — this is effectively where you'd place scarce buoys. Metric = <b>capture@budget</b> (severe blooms caught in the top-k% of crews sent).</div>
+        </div>
+      </div>
+
+      <!-- SCENE 6 -->
+      <div class="scene" data-tag="Scoreboard">
+        <div class="canvaswrap"><svg class="viz" viewBox="0 0 160 90">
+          <g class="s6" font-family="Instrument Sans">
+            <text x="80" y="20" fill="#eafffb" font-size="10" text-anchor="middle" font-weight="700" class="pop">+0.083</text>
+            <text x="80" y="30" fill="#bff3ea" font-size="5" text-anchor="middle" font-family="IBM Plex Mono">more severe blooms caught, top-15%</text>
+            <g class="checks">
+              <text x="46" y="52" fill="#7ff0e2" font-size="5.4" text-anchor="middle" class="ck">✓ beats "usual suspects"</text>
+              <text x="114" y="52" fill="#7ff0e2" font-size="5.4" text-anchor="middle" class="ck">✓ survives 5 re-runs</text>
+              <text x="46" y="64" fill="#7ff0e2" font-size="5.4" text-anchor="middle" class="ck">✓ 2 adversaries agreed</text>
+              <text x="114" y="64" fill="#7ff0e2" font-size="5.4" text-anchor="middle" class="ck">✓ free · every lake</text>
+            </g>
+          </g>
+        </svg></div>
+        <div class="scenetag">06 · Does it work?</div><div class="scenecount">6 / 8</div>
+        <div class="cap">
+          <div class="big">It works: our list catches more bad blooms than the old way — and two independent critics checked it and agreed.</div>
+          <div class="ds">NDCI − recurrence = <b>+0.083 capture@15%</b>, water-body-clustered CI [0.017, 0.155], perm p=0.024; <b>+0.062</b> [0.004, 0.119] even giving recurrence its strongest hand. Two default-refute adversaries (code + write-up) approved; nothing killed. <b>Honest bound:</b> single study, n=260; it ranks, it isn't a high-recall detector (top-15% still misses ~75%).</div>
+        </div>
+      </div>
+
+      <!-- SCENE 7 -->
+      <div class="scene" data-tag="Can we predict it early?">
+        <div class="canvaswrap"><svg class="viz" viewBox="0 0 160 90">
+          <g class="s7">
+            <rect x="60" y="14" width="40" height="62" rx="3" fill="#0e4b46" stroke="#3a8f88"/>
+            <text x="80" y="48" fill="#cfeee9" font-size="6" text-anchor="middle" font-family="IBM Plex Mono">the</text>
+            <text x="80" y="56" fill="#cfeee9" font-size="6" text-anchor="middle" font-family="IBM Plex Mono">wall</text>
+            <path class="ball" d="M18 44 q18 -20 40 0" fill="none" stroke="#e6b422" stroke-width="1.5" stroke-dasharray="2 3"/>
+            <circle cx="18" cy="44" r="3" fill="#e6b422"/>
+            <text x="128" y="30" fill="#7ff0e2" font-size="5" text-anchor="middle" class="ne">NE + Midwest</text>
+            <text x="128" y="38" fill="#7ff0e2" font-size="4.2" text-anchor="middle" class="ne">small early call ✓</text>
+          </g>
+        </svg></div>
+        <div class="scenetag">07 · Forecasting</div><div class="scenecount">7 / 8</div>
+        <div class="cap">
+          <div class="big">Can we call a bloom <i>before</i> it happens? Mostly no — the future looks a lot like right now. Only in the Northeast &amp; Midwest do free weather forecasts buy a small head start.</div>
+          <div class="ds">General next-week target is at the <b>persistence+recurrence ceiling</b>: a skillful forecast adds +0.006 AP (lever +0.002) — no headroom for anyone, incl LG Sonic. Onset slice: +0.022 AP, carried by 1-week <b>temperature/radiation</b> forecasts (+0.0089 [0.0038,0.0141]; wind/precip null); holds NE +0.041 / MW +0.015 but <b>washes in South &amp; West</b>.</div>
+        </div>
+      </div>
+
+      <!-- SCENE 8 -->
+      <div class="scene" data-tag="Bottom line">
+        <div class="canvaswrap"><svg class="viz" viewBox="0 0 160 90">
+          <g class="s8" font-family="Instrument Sans">
+            <text x="80" y="40" fill="#eafffb" font-size="9" text-anchor="middle" font-weight="700">Send crews smarter.</text>
+            <text x="80" y="54" fill="#bff3ea" font-size="5.5" text-anchor="middle" font-family="IBM Plex Mono">free · every lake · checked twice</text>
+          </g>
+        </svg></div>
+        <div class="scenetag">08 · Bottom line</div><div class="scenecount">8 / 8</div>
+        <div class="cap">
+          <div class="big">Bottom line: a free satellite helps you send crews to the right lakes first — cheaper and everywhere, not one buoy at a time.</div>
+          <div class="ds">Promoted to the signals catalog as <b>ndci_severe_bloom → cyano_control_targeting (PRIMARY)</b>. Not a sensor-skill win over a buoy on a body it monitors; the win is coverage + cost + a real targeting edge.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- controls -->
+    <div class="controls">
+      <button class="cbtn play" id="play" aria-label="Play or pause">
+        <svg id="playicon" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+      </button>
+      <button class="cbtn" id="prev" aria-label="Previous scene"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
+      <button class="cbtn" id="next" aria-label="Next scene"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 6h2v12h-2zM6 6l8.5 6L6 18z"/></svg></button>
+      <div class="track" id="track"><div class="fill" id="fill"></div></div>
+      <div class="dots" id="dots"></div>
+      <div class="time mono" id="time">0:00 / 0:00</div>
+    </div>
+  </section>
+
+  <!-- metric strip -->
+  <section class="meta" aria-label="Key numbers">
+    <div class="metric"><div class="k">Targeting win</div><b>+0.083</b><span>more severe blooms caught in the top 15% of crews sent (vs "usual suspects"; CI excl 0)</span></div>
+    <div class="metric"><div class="k">Validation</div><b>0.80</b><span>within-lake AUC vs lab microcystin; 0.688 on the hard independent test</span></div>
+    <div class="metric"><div class="k">Forecast ceiling</div><b>+0.006</b><span>AP a weather forecast adds to next-week blooms overall — basically nothing</span></div>
+    <div class="metric"><div class="k">Early call</div><b>NE·MW</b><span>the only regions where a free forecast buys a small head start (South/West wash)</span></div>
+  </section>
+
+  <!-- ===== WRITE-UP ===== -->
+  <section class="writeup" id="writeup">
+    <div class="eyebrow">The write-up · both audiences</div>
+    <h2 class="sec">The same story, two depths</h2>
+    <p class="sub">Each question is answered first in plain words, then — open the grey drawer — with every number a data scientist needs.</p>
+
+    <div class="qa">
+      <div class="verdict win">● GOAL 1 · TARGETING — WIN (small, single-study)</div>
+      <div class="q"><span class="n">Q1</span><span>Where should the crew go this week?</span></div>
+      <div class="plain">
+        You can't visit every lake, so you need a good <b>to-do list</b>. The old list is "watch the lakes that
+        went bad before." Our list scores <b>every</b> lake from a free satellite photo and puts the ones that
+        look toxic on top. When we tested both lists against real lab results, <b>our list caught more of the
+        truly bad lakes for the same number of crews</b>. It's not magic — it misses plenty, and it's one study —
+        but it beats the old way, works on lakes nobody is watching, and costs nothing.
+      </div>
+      <details class="ds"><summary>For the data scientist</summary>
+        <div class="dsbody">
+          Held-out unit = <b>water body</b> (120 distinct), water-body-clustered bootstrap CI. Test = CA FHABS,
+          n=260 (130 advisory-confirmed severe blooms vs 130 reported-but-<i>tested-clean</i> hard negatives).
+          Score = Sentinel-2 <span class="m">NDCI</span> severe-bloom index (previously in-situ validated vs lab
+          microcystin: within-lake AUC 0.80, n=30; independent FHABS AUC 0.688 reproduced here).
+          <table class="mtab">
+            <tr><th>Signal</th><th>cap@10%</th><th>cap@15%</th><th>cap@20%</th><th>AUC</th></tr>
+            <tr><td>reactive-random (no prioritisation)</td><td class="n">0.10</td><td class="n">0.14</td><td class="n">0.20</td><td class="n">0.50</td></tr>
+            <tr><td>recurrence-placement heuristic</td><td class="n">0.10</td><td class="n">0.20</td><td class="n">0.24</td><td class="n">0.55</td></tr>
+            <tr class="hi"><td>NDCI satellite (MBAL)</td><td class="n">0.18</td><td class="n">0.25</td><td class="n">0.33</td><td class="n">0.69</td></tr>
+          </table>
+          <ul>
+            <li>Head-to-head @15%: NDCI − recurrence = <span class="m">+0.083</span> CI [0.017, 0.155], perm p=0.024, seed-stable (+0.084–0.086 / 5 seeds); vs recurrence's full un-de-leaked hand still <span class="m">+0.062</span> [0.004, 0.119].</li>
+            <li>The <span class="m">+0.110</span> vs reactive-random is near-tautological (targeting vs no-targeting) — context, not headline.</li>
+            <li>NDCI+recurrence blend <b>loses</b> to NDCI-alone (0.671 &lt; 0.688) → ship NDCI-alone (value gate).</li>
+            <li>High-microcystin (≥8 µg/L) slice: AUC 0.699, cap@20 0.29 vs 0.20 (supportive, no CI, n=180).</li>
+            <li><b>Bounds:</b> single study, n=260; balanced base rate → deltas robust but absolute capture optimistic; operating point is a <i>ranking</i> tool — top-15% misses ~75%, sensitivity 0.42 @90%-specificity. Not a sensor bake-off vs LG Sonic; the win is coverage + cost.</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <div class="qa">
+      <div class="verdict ceil">● GOAL 2 · FORECASTING — ceiling, with a small scoped edge</div>
+      <div class="q"><span class="n">Q2</span><span>Can we predict the bloom before it happens?</span></div>
+      <div class="plain">
+        Everyone wants a crystal ball. The honest answer: for most lakes, <b>next week looks like this week</b>,
+        so "just assume it keeps doing what it's doing" is already hard to beat — and no company beats it, including
+        the expensive buoy. The one place a <b>free weather forecast</b> helps is spotting a <b>currently-clean</b>
+        lake about to bloom in the <b>Northeast &amp; Midwest</b>, using the temperature and sunlight forecast. In the
+        South and West, even that edge disappears.
+      </div>
+      <details class="ds"><summary>For the data scientist</summary>
+        <div class="dsbody">
+          Panel = EPA CyAN weekly × 481 lakes joined to daily open-meteo met; target = high/very_high bloom at
+          week t+1; forward split train ≤2023 / test ≥2024; <b>fair baseline</b> = 8-feature persistence+recurrence
+          +season HGBT (AP 0.776 ≫ best single column 0.705).
+          <ul>
+            <li><b>General target:</b> at the ceiling — weather model +0.006 AP over the fair baseline; forecast lever +0.002. No skill headroom for anyone incl LG Sonic (persistence is physics).</li>
+            <li><b>Onset slice</b> (currently-clean → bloom next week): +0.022 AP over the fair recurrence model [0.0135, 0.0305]; forecast lever <span class="m">+0.008</span> [0.0026, 0.0136].</li>
+            <li><b>Committed decomposition:</b> carried by 1-week temp/radiation forecast (<span class="m">+0.0089</span> [0.0038, 0.0141]); wind/precip forecast null (+0.0007 [−0.0038, 0.0052]) — i.e. the genuinely-forecastable free variables.</li>
+            <li><b>Region transfer (LORO vs fair baseline):</b> NE +0.041 [0.025,0.059], MW +0.015 [0.003,0.027] (CI excl 0); <b>South −0.001, West −0.001</b> (CI incl 0). NE/Midwest-scoped, not universal.</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+
+    <div class="qa">
+      <div class="q"><span class="n">Q3</span><span>How do we know it isn't wishful thinking?</span></div>
+      <div class="plain">
+        Every claim here had to survive a <b>critic whose job was to prove it wrong</b>. One critic re-ran all the
+        code from scratch; a second critic checked that the words matched the numbers and caught a claim we hadn't
+        actually computed yet — so we <b>computed it for real</b> before saying it. What you read is only what
+        survived both.
+      </div>
+      <details class="ds"><summary>For the data scientist</summary>
+        <div class="dsbody">
+          Two independent default-refute adversaries. #1 reproduced both scripts exactly, ran 5-seed sensitivity,
+          gave recurrence its strongest un-de-leaked hand, decomposed the forecast lever → <b>APPROVE-BUT-SCOPE</b>,
+          nothing killed. #2 audited the write-up vs artifacts: found the temp/rad-vs-wind/precip decomposition was
+          asserted but not committed → we added it as a committed, <b>tested</b> run; reframed "LG Sonic ≡ recurrence"
+          as a coverage/cost claim; added the operating-point sensitivity; regenerated a stale JSON. All 13 unit
+          tests pass; promoted to <span class="m">signals/catalog.yaml</span> (validator + 11 catalog tests green).
+        </div>
+      </details>
+    </div>
+
+    <div class="qa">
+      <div class="q"><span class="n">Q4</span><span>Who is this actually for?</span></div>
+      <div class="plain">
+        A water utility or state agency that looks after <b>many lakes and reservoirs</b> but only has a couple of
+        field crews. Each week they get a free, whole-map <b>priority list</b> of which water bodies to sample,
+        treat, or post warning signs at first — including small or unwatched lakes a buoy fleet could never afford
+        to cover. In the Northeast &amp; Midwest they also get a small early heads-up before a clean lake turns.
+      </div>
+    </div>
+  </section>
+
+  <div class="foot">
+    Sources: <code>research/hab/algae_control_targeting_benchmark.py</code>, <code>research/hab/algae_forecast_headtohead.py</code>,
+    <code>docs/findings/algae_control_vs_competitors_20260706.md</code>, <code>reports/hab/algae_control/</code>.
+    Promoted signal: <code>ndci_severe_bloom → cyano_control_targeting (PRIMARY)</code>. Numbers shown are the
+    adversary-approved, scoped values. This page is a browser explainer, not a regulatory tool.
+  </div>
+</main>
+
+<script>
+(function(){
+  const scenes = Array.from(document.querySelectorAll('.scene'));
+  const DUR = [5,6,6,6,6,7,8,6];                 // seconds per scene
+  const total = DUR.reduce((a,b)=>a+b,0);
+  const fill = document.getElementById('fill');
+  const dotsWrap = document.getElementById('dots');
+  const timeEl = document.getElementById('time');
+  const playBtn = document.getElementById('play');
+  const playIcon = document.getElementById('playicon');
+  const PLAY = 'M8 5v14l11-7z', PAUSE='M6 5h4v14H6zm8 0h4v14h-4z';
+  let idx=0, elapsedBefore=0, sceneStart=null, playing=false, raf=null;
+
+  scenes.forEach((_,i)=>{ const d=document.createElement('i'); d.onclick=()=>go(i); dotsWrap.appendChild(d); });
+  const dots=Array.from(dotsWrap.children);
+
+  function fmt(t){ t=Math.max(0,Math.round(t)); return Math.floor(t/60)+':'+String(t%60).padStart(2,'0'); }
+  function cumBefore(i){ let s=0; for(let k=0;k<i;k++) s+=DUR[k]; return s; }
+
+  function show(i){
+    scenes.forEach((s,k)=>s.classList.toggle('active',k===i));
+    dots.forEach((d,k)=>d.classList.toggle('on',k===i));
+    // retrigger CSS animations by reflow
+    const sc=scenes[i]; sc.querySelectorAll('*').forEach(()=>{});
+    void sc.offsetWidth;
+    animateScene(sc);
+  }
+  function animateScene(sc){
+    // bar-grow for scene 5
+    sc.querySelectorAll('.bar').forEach((b,j)=>{ b.setAttribute('width','0'); setTimeout(()=>{ b.style.transition='width .8s cubic-bezier(.2,.7,.2,1)'; b.setAttribute('width', b.dataset.w); }, 120+j*140); });
+  }
+
+  function go(i){ idx=(i+scenes.length)%scenes.length; elapsedBefore=cumBefore(idx); sceneStart=performance.now(); show(idx); update(0); if(!playing) drawStatic(); }
+
+  function update(intoScene){
+    const el = elapsedBefore + intoScene;
+    fill.style.width = (100*el/total)+'%';
+    timeEl.textContent = fmt(el)+' / '+fmt(total);
+  }
+  function drawStatic(){ update(0); }
+
+  function tick(now){
+    if(!playing) return;
+    const into = (now - sceneStart)/1000;
+    if(into >= DUR[idx]){
+      if(idx===scenes.length-1){ playing=false; setIcon(); update(DUR[idx]); return; }
+      idx++; elapsedBefore=cumBefore(idx); sceneStart=now; show(idx);
+    }
+    update(Math.min(into, DUR[idx]));
+    raf=requestAnimationFrame(tick);
+  }
+  function setIcon(){ playIcon.setAttribute('d', playing?PAUSE:PLAY); }
+  function play(){ if(idx===scenes.length-1 && !playing){ go(0); } playing=true; setIcon(); sceneStart=performance.now(); raf=requestAnimationFrame(tick); }
+  function pause(){ playing=false; setIcon(); if(raf) cancelAnimationFrame(raf); }
+
+  playBtn.onclick=()=>{ playing?pause():play(); };
+  document.getElementById('next').onclick=()=>{ pause(); go(idx+1); };
+  document.getElementById('prev').onclick=()=>{ pause(); go(idx-1); };
+  document.getElementById('track').onclick=(e)=>{
+    const r=e.currentTarget.getBoundingClientRect(); const frac=(e.clientX-r.left)/r.width; let t=frac*total, acc=0;
+    for(let i=0;i<scenes.length;i++){ if(t<acc+DUR[i]){ pause(); go(i); break;} acc+=DUR[i]; }
+  };
+  const stageEl=document.getElementById('screen');
+  function playerInView(){ const r=stageEl.getBoundingClientRect(); return r.bottom>60 && r.top < (window.innerHeight-60); }
+  document.addEventListener('keydown',(e)=>{
+    const tag=(e.target.tagName||'').toLowerCase();
+    if(tag==='summary'||tag==='input'||tag==='textarea') return;
+    if(!playerInView()) return;               // don't hijack scroll while reading the write-up
+    if(e.code==='Space'){e.preventDefault(); playing?pause():play();}
+    if(e.code==='ArrowRight'){pause();go(idx+1);}
+    if(e.code==='ArrowLeft'){pause();go(idx-1);}
+  });
+
+  show(0); update(0);
+  // autoplay after a beat
+  setTimeout(play, 600);
+})();
+</script>
+</body>
+</html>

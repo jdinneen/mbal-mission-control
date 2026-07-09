@@ -810,7 +810,7 @@
       <div class="hero">
         <div class="eyebrow">Monterey Bay AI Lab · Mission Control</div>
         <h1 class="page">Bringing together <span class="hl" style="white-space:normal">people, data, AI, and compute</span> to find the hidden signals that make a real difference in people's lives.</h1>
-        <p class="lede">We gather scattered public data about the coast — weather, rivers, satellites, ocean sensors, lab tests — into one checked place, run many learning engines against it, and hunt for the rare signal that genuinely beats <i>"tomorrow will look like today."</i> Every claim has to survive a fair baseline, held-out data, and an adversarial critic — so the wins are real, and the dead ends stay on the record.</p>
+        <p class="lede">We gather scattered public data about the coast — weather, rivers, satellites, ocean sensors, lab tests — into one checked place, run many AI models against it, and hunt for the rare signal that genuinely beats <i>"tomorrow will look like today."</i> Every claim has to survive a fair comparison, data it has never seen, and a tough critic — so the wins are real, and the dead ends stay on the record.</p>
       </div>
       <div class="heroart">
         <svg viewBox="0 0 440 340" role="img" aria-label="A hidden signal rising out of noisy coastal data">
@@ -839,27 +839,27 @@
 
     <!-- Latest wins: newest headline results, each links to its evidence card -->
     <div class="topwins">
-      <div class="secband"><h2>Latest wins</h2><p>The newest results that survived the evidence gate — click any card for the checked numbers and how they were tested.</p></div>
+      <div class="secband"><h2>Latest wins</h2><p>The newest results that passed our evidence checks — click any card for the exact numbers and how they were tested.</p></div>
       <div class="winsgrid">
         <button class="wincard" onclick="openFindingById('claim_global_fib_coldstart_forecast');return false;" aria-label="Global cold-start beach-bacteria forecast finding">
-          <div class="wtop"><span class="wtopic">Beach bacteria · 37 world regions</span><span class="wmetric">AUC 0.726 &gt; SOTA 0.713</span></div>
-          <h3>A global beach-bacteria forecast that generalizes to unseen regions</h3>
-          <p>One pooled model forecasts bacterial exceedances across 37 EU+US regions it never trained on, beating both the region's own history-repeat baseline (in 34 of 37) and the best published cross-region score. Adding rainfall lead-time lifts it further.</p>
+          <div class="wtop"><span class="wtopic">Beach bacteria · 37 world regions</span><span class="wmetric">Beats the best published model</span></div>
+          <h3>One beach-bacteria forecast that works in places it never trained on</h3>
+          <p>A single model predicts when beach bacteria will spike across 37 regions in Europe and the US that it was never trained on. It beats both "assume today repeats" (in 34 of the 37 regions) and the best method published to date. Adding a rain forecast pushes it further ahead.</p>
         </button>
         <button class="wincard" onclick="openFindingById('claim_global_surge_onset_coldstart');return false;" aria-label="Global surge-onset finding">
-          <div class="wtop"><span class="wtopic">Coastal storm surge · 17 ocean basins</span><span class="wmetric">17/17 basins, hardened</span></div>
-          <h3>The same cold-start recipe carries to a different hazard — storm surge</h3>
-          <p>Detiding tide gauges to a surge residual, a pooled model predicts surge-onset days on ocean basins it never saw, beating a leak-hardened persistence baseline in all 17. Independent, red-teamed evidence for the cross-hazard thesis.</p>
+          <div class="wtop"><span class="wtopic">Coastal storm surge · 17 ocean basins</span><span class="wmetric">Works in all 17 coasts tested</span></div>
+          <h3>The same approach works for a different hazard — storm surge</h3>
+          <p>After stripping the normal tide out of tide-gauge records to isolate the storm-driven part, one model predicts surge days on coastlines it never saw — beating "assume today repeats" in all 17. Checked independently, it's evidence the same recipe carries across different coastal hazards.</p>
         </button>
         <button class="wincard" onclick="openFindingById('operational_coldstart_deployable_shipped');return false;" aria-label="Deployable cold-start model finding">
-          <div class="wtop"><span class="wtopic">Shipped product · day-1 coverage</span><span class="wmetric">+0.097 AUC · 5/5 folds</span></div>
-          <h3>One deployable model that warns an ungauged beach on day one</h3>
-          <p>When a brand-new beach has no local history, neighbor-imputation plus recurrence still give a real day-1 ranking, calibrated for deployment. It covers the roughly one-third of beaches a history-hungry local model can't fit.</p>
+          <div class="wtop"><span class="wtopic">Shipped product · works from day one</span><span class="wmetric">Live product</span></div>
+          <h3>A model that can warn a brand-new beach from day one</h3>
+          <p>A brand-new beach usually has no track record to learn from. By borrowing patterns from nearby beaches, this model can still rank the risk on day one — covering the roughly one-third of beaches that a history-hungry model can't handle.</p>
         </button>
         <button class="wincard" onclick="openFindingById('claim_operational_label_quality_win');return false;" aria-label="Operational label-quality finding">
-          <div class="wtop"><span class="wtopic">Label quality · unseen beaches</span><span class="wmetric">dAP +0.109 · perm-p 0.02</span></div>
-          <h3>Training on the real advisory label beats the threshold proxy</h3>
-          <p>For the decision that matters — will an advisory be posted — training on the real posted-advisory label beats the usual threshold-exceedance proxy on held-out beaches; the proxy-trained model is worse than simply repeating history.</p>
+          <div class="wtop"><span class="wtopic">Prediction quality · new beaches</span><span class="wmetric">Better, more useful predictions</span></div>
+          <h3>Teaching the model what officials actually decided beats a stand-in</h3>
+          <p>The decision that really matters is whether officials post a health advisory. Training the model on those real posted advisories — instead of a rule-of-thumb stand-in — makes it noticeably better at new beaches; the stand-in version does worse than just assuming today repeats.</p>
         </button>
       </div>
     </div>
@@ -869,7 +869,7 @@
       <div class="featurecopy">
         <div class="tag">Start to finish · narrated · closed captions</div>
         <h2>The whole lab in five minutes.</h2>
-        <p>From hundreds of public ocean datasets to a handful of warnings worth trusting — the lakehouse, the discovery engines, the evidence gate that kills spurious signals, and the wins that survived, including a cold-start beach advisory that deploys across monitoring networks. The latest results are in the cards above.</p>
+        <p>From hundreds of public ocean datasets to a handful of warnings worth trusting — the shared data store, the AI models that hunt for signal, the checks that throw out false alarms, and the wins that survived, including a beach advisory that works even on brand-new beaches. The latest results are in the cards above.</p>
       </div>
       <div class="featuremedia">
         <video controls preload="auto" playsinline poster="videos/mbal_start_to_finish_poster.jpg" aria-label="Monterey Bay AI Lab start-to-finish overview video">
@@ -943,26 +943,26 @@
         <div class="pillar">
           <div class="pnum">01</div>
           <div class="picon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="8" ry="3"/><path d="M4 5v6c0 1.66 3.58 3 8 3s8-1.34 8-3V5"/><path d="M4 11v6c0 1.66 3.58 3 8 3s8-1.34 8-3v-6"/></svg></div>
-          <h3>Build the lakehouse</h3>
-          <p>Pull scattered public data into one clean, checked store — bronze, silver, and gold tables with units reconciled, joins verified, and leakage guarded.</p>
+          <h3>Build one clean data store</h3>
+          <p>Pull scattered public data into one clean, checked store — raw, cleaned, and ready-to-use layers, with units reconciled, records matched up correctly, and no future information allowed to leak into the past.</p>
         </div>
         <div class="pillar">
           <div class="pnum">02</div>
           <div class="picon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2.2" fill="var(--surface)"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="15" cy="12" r="2.2" fill="var(--surface)"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="8" cy="18" r="2.2" fill="var(--surface)"/></svg></div>
-          <h3>Tune the learning engines</h3>
-          <p>Run many model families — rankers, boosters, neural nets, tensor factorizations, zero-shot foundation models — and make each one earn its keep. The wins come from simple, well-baselined physical features; fancier representations (the &ldquo;pi&rdquo;/interlingua re-encodings) are kept only where they beat that bar — several are logged as null.</p>
+          <h3>Try many AI models</h3>
+          <p>Run many different kinds of models against the data and make each one earn its place. The wins tend to come from simple, physically-grounded features; fancier methods are kept only where they clearly do better — and we keep an honest list of the ones that didn't.</p>
         </div>
         <div class="pillar">
           <div class="pnum">03</div>
           <div class="picon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l2.5-7 5 14L17 12h4"/></svg></div>
           <h3>Find the hidden signals</h3>
-          <p>Hunt for the exogenous signal that beats "tomorrow looks like today" — the escape that turns raw data into a forecast people can act on.</p>
+          <p>Hunt for the outside signal that beats simply assuming "tomorrow looks like today" — the thing that turns raw data into a forecast people can act on.</p>
         </div>
         <div class="pillar">
           <div class="pnum">04</div>
           <div class="picon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg></div>
           <h3>Keep the truth the whole way</h3>
-          <p>Every claim faces a fair baseline, held-out data, a permutation null, and an adversarial critic. Dead ends stay on the record.</p>
+          <p>Every claim is tested against a fair yardstick, on data it hasn't seen, with a shuffle test and a devil's-advocate check. Dead ends stay on the record.</p>
         </div>
       </div>
       <div class="crew">
@@ -970,7 +970,7 @@
         <div class="crewrow">
           <div class="crewitem">
             <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M12 8V4"/><circle cx="12" cy="3" r="1.4"/><circle cx="9" cy="13.5" r="1.2" fill="currentColor" stroke="none"/><circle cx="15" cy="13.5" r="1.2" fill="currentColor" stroke="none"/></svg></div>
-            <div class="tx"><b>Frontier-model agents</b><span>Fleets of AI agents read the data, run the experiments, and adversarially red-team each other's claims.</span></div>
+            <div class="tx"><b>AI research agents</b><span>Fleets of AI agents read the data, run the experiments, and challenge each other's claims to catch mistakes.</span></div>
           </div>
           <div class="crewitem">
             <div class="ci"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="1.5"/><path d="M10 7V4M14 7V4M10 20v-3M14 20v-3M7 10H4M7 14H4M20 10h-3M20 14h-3"/></svg></div>
