@@ -104,7 +104,7 @@
 <script>
 const STATUS_URL = "https://storage.googleapis.com/monterey-bay-lab-mhw/status.json";
 const f1 = x => (x==null?"—":(x>0?"+":"")+Number(x).toFixed(1));
-function fmtDate(s){const d=new Date(s.length<=10?s+"T00:00:00Z":s);return d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});}
+function fmtDate(s){const d=new Date(s.length<=10?s+"T00:00:00Z":s);return d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'});}
 function hoursAgo(iso){return (Date.now()-new Date(iso).getTime())/3.6e6;}
 function agoLabel(h){if(h<1)return Math.max(1,Math.round(h*60))+" min ago";if(h<48)return Math.round(h)+" h ago";return Math.round(h/24)+" days ago";}
 

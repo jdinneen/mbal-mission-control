@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260710T235655Z-232314-1140",
-  "built_utc": "2026-07-10T23:56:55Z",
-  "message": "Correct MHW monitor: offshore co-located site, real 5-day event logic, data-driven cross-check, honest freshness/independence/scope (MBARI review fixes)"
+  "deploy_id": "20260710T235913Z-232455-23624",
+  "built_utc": "2026-07-10T23:59:13Z",
+  "message": "Fix observation-date display to UTC (was off by one in local tz)"
 }
