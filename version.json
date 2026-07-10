@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260710T225903Z-228707-10842",
-  "built_utc": "2026-07-10T22:59:03Z",
-  "message": "Fix mobile overflow on marine heat-wave monitor (flex shrink/wrap)"
+  "deploy_id": "20260710T230533Z-228938-8786",
+  "built_utc": "2026-07-10T23:05:33Z",
+  "message": "Harden mobile layout: wrap header/legend, guard overflow"
 }
