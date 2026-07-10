@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Monterey Bay Marine Heat-Wave Monitor — CeNCOOS × MBAL</title>
-<meta name="description" content="Live, independently cross-verified marine heat-wave status for Monterey Bay.">
+<title>Offshore Monterey Bay Marine Heat-Wave Monitor — CeNCOOS × MBAL</title>
+<meta name="description" content="Live marine-heatwave status at the NDBC 46042 offshore site, with an in-situ consistency cross-check. Monitoring, not a forecast.">
 <style>
   :root{
     --bg:#f5f8f9; --ink:#12292b; --muted:#5c6f72; --line:#dde5e6; --card:#ffffff;
     --teal:#0f8a84; --teal-d:#0b6560; --warm:#e0662f; --warm-bg:#fdefe6; --cool-bg:#e9f4f2;
-    --shadow:0 1px 3px rgba(16,42,44,.06),0 8px 24px rgba(16,42,44,.05);
+    --amber:#b5791f; --amber-bg:#fcf4e3; --shadow:0 1px 3px rgba(16,42,44,.06),0 8px 24px rgba(16,42,44,.05);
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);overflow-x:hidden;
@@ -20,21 +20,21 @@
   header>div{min-width:0}
   .logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,var(--teal),var(--teal-d));
     display:grid;place-items:center;color:#fff;font-size:18px;flex:none}
-  h1{font-size:19px;margin:0;letter-spacing:-.2px;overflow-wrap:break-word}
+  h1{font-size:18px;margin:0;letter-spacing:-.2px;overflow-wrap:break-word}
   .eyebrow{font-size:11px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--teal-d)}
-  .asof{font-size:12px;color:var(--muted);margin:2px 0 18px}
+  .asof{font-size:12px;color:var(--muted);margin:2px 0 14px}
   .asof b{color:var(--ink);font-weight:600}
 
   .hero{border-radius:16px;padding:22px 22px 20px;box-shadow:var(--shadow);border:1px solid var(--line);
-    background:var(--cool-bg);transition:background .2s}
-  .hero.mhw{background:var(--warm-bg);border-color:#f3d3bf}
+    background:var(--cool-bg)}
+  .hero.hot{background:var(--warm-bg);border-color:#f3d3bf}
   .hero .state{font-size:13px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--teal-d)}
-  .hero.mhw .state{color:var(--warm)}
-  .hero h2{font-size:25px;line-height:1.2;margin:6px 0 2px;letter-spacing:-.4px}
-  .hero .sub{color:var(--muted);font-size:14px}
+  .hero.hot .state{color:var(--warm)}
+  .hero h2{font-size:23px;line-height:1.22;margin:6px 0 2px;letter-spacing:-.3px}
+  .hero .sub{color:var(--muted);font-size:13.5px}
   .metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:18px}
-  .metric{background:rgba(255,255,255,.7);border:1px solid var(--line);border-radius:11px;padding:11px 13px}
-  .metric .k{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.2px}
+  .metric{background:rgba(255,255,255,.72);border:1px solid var(--line);border-radius:11px;padding:11px 13px}
+  .metric .k{font-size:11px;color:var(--muted);font-weight:600}
   .metric .v{font-size:21px;font-weight:700;margin-top:1px;letter-spacing:-.4px}
   .metric .v small{font-size:12px;font-weight:600;color:var(--muted)}
 
@@ -47,40 +47,36 @@
 
   .card{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px 17px;box-shadow:var(--shadow)}
   .card h3{margin:0 0 3px;font-size:15px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
-  .card h3 .pill{font-size:10px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;background:var(--teal);color:#fff;padding:2px 7px;border-radius:20px}
+  .card h3 .pill{font-size:10px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;background:var(--teal);color:#fff;padding:2px 7px;border-radius:20px}
   .card .lead{font-size:13px;color:var(--muted);margin:0 0 12px}
   .pair{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .src{border:1px solid var(--line);border-radius:10px;padding:11px 12px;background:#fbfdfd}
   .src .nm{font-size:12px;font-weight:700}
-  .src .ty{font-size:11px;color:var(--muted);margin-bottom:7px}
+  .src .ty{font-size:10.5px;color:var(--muted);margin-bottom:7px;line-height:1.35}
   .src .tmp{font-size:20px;font-weight:700;letter-spacing:-.3px}
   .src .an{font-size:12px;color:var(--muted)}
   .chip{display:inline-block;margin-top:8px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px}
   .chip.hot{background:var(--warm-bg);color:var(--warm)}
   .chip.norm{background:var(--cool-bg);color:var(--teal-d)}
   .verdict{margin-top:13px;padding:11px 13px;border-radius:10px;font-size:13px;background:var(--cool-bg);border:1px solid #cfe6e2}
-  .verdict.split{background:#fff7ec;border-color:#f0dcc0}
-  .verdict b{font-weight:700}
-  .fine{font-size:11.5px;color:var(--muted);margin-top:9px}
+  .verdict.split{background:var(--amber-bg);border-color:#f0dcc0}
+  .fine{font-size:11.5px;color:var(--muted);margin-top:9px;line-height:1.5}
 
   .explain{font-size:13.5px;color:#33484a}
   .explain p{margin:8px 0}
   details{margin-top:10px;border-top:1px solid var(--line);padding-top:10px}
   summary{cursor:pointer;font-size:13px;font-weight:600;color:var(--teal-d)}
   details ul{margin:8px 0 0;padding-left:18px;font-size:12.5px;color:var(--muted)}
-  details li{margin:4px 0}
+  details li{margin:5px 0}
 
   footer{margin-top:22px;font-size:11.5px;color:var(--muted);text-align:center;line-height:1.7}
-  footer a{color:var(--teal-d);text-decoration:none}
-  .banner{border:1px solid #f0dcc0;background:#fff7ec;color:#8a5a22;border-radius:10px;padding:10px 13px;font-size:12.5px;margin-bottom:14px;display:none}
-  .loading{text-align:center;color:var(--muted);padding:40px 0;font-size:14px}
-  .skeleton{animation:pulse 1.4s ease-in-out infinite}
-  @keyframes pulse{0%,100%{opacity:.5}50%{opacity:.9}}
+  .banner{border-radius:10px;padding:10px 13px;font-size:12.5px;margin-bottom:14px;display:none}
+  .banner.warn{border:1px solid #f0dcc0;background:var(--amber-bg);color:#8a5a22}
+  .banner.err{border:1px solid #e6c3c3;background:#fbeeee;color:#8a2a2a}
+  .loading{text-align:center;color:var(--muted);padding:44px 0;font-size:14px}
   @media(max-width:520px){
     .metrics{grid-template-columns:1fr 1fr}.pair{grid-template-columns:1fr}
-    header>div{flex:1 1 100%}
-    h1{font-size:17px}
-    .wrap{padding-left:15px;padding-right:15px}
+    header>div{flex:1 1 100%}.wrap{padding-left:15px;padding-right:15px}
   }
 </style>
 </head>
@@ -90,85 +86,80 @@
     <div class="logo">🌊</div>
     <div>
       <div class="eyebrow">CeNCOOS × Monterey Bay AI Lab</div>
-      <h1>Monterey Bay Marine Heat-Wave Monitor</h1>
+      <h1>Offshore Monterey Bay Marine Heat-Wave Monitor</h1>
     </div>
   </header>
-  <div class="asof" id="asof">Live status · independently cross-verified</div>
+  <div class="asof" id="asof">Observed conditions at one offshore site · monitoring, not a forecast</div>
 
-  <div class="banner" id="banner"></div>
-  <div id="app"><div class="loading skeleton">Loading live ocean conditions…</div></div>
+  <div class="banner" id="staleBanner"></div>
+  <div id="app"><div class="loading">Loading latest ocean observations…</div></div>
 
   <footer>
-    <div id="sources"></div>
-    <div style="margin-top:6px">Monitoring &amp; verification only — this reports <b>observed</b> conditions, not a forecast.</div>
-    <div style="margin-top:6px">Built by the <b>Monterey Bay AI Lab</b> for CeNCOOS · data via NOAA CoastWatch ERDDAP</div>
+    <div id="scope"></div>
+    <div style="margin-top:6px">Monitoring &amp; verification of <b>observed</b> conditions only — <b>not a forecast</b>.</div>
+    <div style="margin-top:6px">Built by the <b>Monterey Bay AI Lab</b> for CeNCOOS · data via NOAA CoastWatch ERDDAP · auto-refreshes hourly</div>
   </footer>
 </div>
 
 <script>
 const STATUS_URL = "https://storage.googleapis.com/monterey-bay-lab-mhw/status.json";
-const f1 = x => (x==null?"—":(x>0?"+":"")+x.toFixed(1));
-const c = x => (x==null?"—":x.toFixed(1)+"°C");
-
-function fmtDate(s){ // "2026-07-09" or ISO
-  const d = new Date(s.length<=10 ? s+"T00:00:00Z" : s);
-  return d.toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'});
-}
-function ago(iso){
-  const mins = Math.round((Date.now()-new Date(iso).getTime())/60000);
-  if(mins<60) return mins+" min ago";
-  const h=Math.round(mins/60); if(h<48) return h+" h ago";
-  return Math.round(h/24)+" days ago";
-}
+const f1 = x => (x==null?"—":(x>0?"+":"")+Number(x).toFixed(1));
+function fmtDate(s){const d=new Date(s.length<=10?s+"T00:00:00Z":s);return d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'});}
+function hoursAgo(iso){return (Date.now()-new Date(iso).getTime())/3.6e6;}
+function agoLabel(h){if(h<1)return Math.max(1,Math.round(h*60))+" min ago";if(h<48)return Math.round(h)+" h ago";return Math.round(h/24)+" days ago";}
 
 function sparkline(series){
   if(!series||series.length<2) return "";
   const W=700,H=120,P=6;
-  const xs=series.map((_,i)=>i), ys=series.flatMap(p=>[p.sst,p.thr]);
+  const ys=series.flatMap(p=>[p.sst,p.thr]);
   const y0=Math.min(...ys)-0.4, y1=Math.max(...ys)+0.4;
   const X=i=>P+(W-2*P)*i/(series.length-1);
   const Y=v=>P+(H-2*P)*(1-(v-y0)/(y1-y0));
-  const line=(key)=>series.map((p,i)=>(i?"L":"M")+X(i).toFixed(1)+" "+Y(p[key]).toFixed(1)).join(" ");
-  // shaded band where sst>thr
+  const line=k=>series.map((p,i)=>(i?"L":"M")+X(i).toFixed(1)+" "+Y(p[k]).toFixed(1)).join(" ");
+  // shade only TRUE >=5-day events (p.event), not single-day exceedances
   let bands="",run=null;
   series.forEach((p,i)=>{
-    if(p.mhw && run===null) run=i;
-    if((!p.mhw||i===series.length-1) && run!==null){
-      const a=X(run), b=X(p.mhw?i:i-1<run?run:i-1);
-      bands+=`<rect x="${a.toFixed(1)}" y="${P}" width="${Math.max(1.5,(b-a)).toFixed(1)}" height="${H-2*P}" fill="#e0662f" opacity="0.13"/>`;
-      run=null;
+    if(p.event && run===null) run=i;
+    if((!p.event||i===series.length-1) && run!==null){
+      const a=X(run), b=X(p.event?i:i-1); bands+=`<rect x="${a.toFixed(1)}" y="${P}" width="${Math.max(1.5,b-a).toFixed(1)}" height="${H-2*P}" fill="#e0662f" opacity="0.14"/>`; run=null;
     }
   });
   return `<svg viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="none" style="display:block;height:120px">
     ${bands}
     <path d="${line('thr')}" fill="none" stroke="#e0662f" stroke-width="1.4" stroke-dasharray="4 3"/>
-    <path d="${line('sst')}" fill="none" stroke="#0b6560" stroke-width="2.1"/>
-  </svg>`;
+    <path d="${line('sst')}" fill="none" stroke="#0b6560" stroke-width="2.1"/></svg>`;
 }
 
+const STATE_COPY = {
+  heatwave:   s=>({hot:true,  st:"Marine heat wave in progress", h2:`Running ${f1(s.anomaly_c)}°C above the seasonal normal`, sub:`Day ${s.event_days} of a ≥5-day event · ${s.category} intensity`}),
+  building:   s=>({hot:false, st:"Above the heat-wave threshold", h2:`${f1(s.anomaly_c)}°C above normal — not yet a heat wave`, sub:`Day ${s.streak_days} above the line; a heat wave needs 5 consecutive days`}),
+  above_normal:s=>({hot:false,st:"Warmer than usual", h2:`${f1(s.anomaly_c)}°C above the seasonal normal`, sub:`Below the heat-wave threshold — no event`}),
+  near_normal:s=>({hot:false,st:"Near seasonal normal", h2:`About normal for the date (${f1(s.anomaly_c)}°C)`, sub:`No marine heat wave`}),
+  below_normal:s=>({hot:false,st:"Cooler than usual", h2:`${f1(s.anomaly_c)}°C below the seasonal normal`, sub:`No marine heat wave`}),
+};
+
 function render(d){
-  const s=d.status, x=d.crosscheck, v=d.verified_crosscheck;
+  const s=d.status, x=d.crosscheck, cs=d.crosscheck_stat, loc=d.location;
+  document.getElementById('scope').innerHTML =
+    `Site: <b>${loc.name}</b> — ${loc.site} (${loc.lat}°N, ${Math.abs(loc.lon)}°W, ${loc.detail}). Conditions at this point, not a bay-wide average.`;
+
+  if(!s){ document.getElementById('app').innerHTML=`<div class="card"><p class="explain">Latest observations are temporarily unavailable. This page auto-refreshes hourly — please try again shortly.</p></div>`; showStale(d,true); return; }
+
+  // freshness from OBSERVATION time (not the pipeline run time)
+  const murAge = s.obs_age_days, buoyAgeH = x? x.obs_age_hours : null;
   document.getElementById('asof').innerHTML =
-    "Live status · independently cross-verified · <b>updated "+ago(d.generated_utc)+"</b>";
+    `Latest observation — satellite <b>${fmtDate(s.obs_date)}</b> (~${murAge<=1?'1 day':murAge+' days'} old)`
+    + (x? ` · in-situ buoy <b>${agoLabel(buoyAgeH)}</b>` : "");
+  showStale(d,false);
 
-  if(!s){ fail("Live conditions are temporarily unavailable. Please refresh in a few minutes."); return; }
-
-  const mhw=s.is_mhw;
-  const heroState = mhw ? "Marine heat wave in progress" : "No marine heat wave right now";
-  const heroH2 = mhw
-    ? `Monterey Bay is running ${f1(s.anomaly_c)}°C above normal`
-    : `Monterey Bay is near its seasonal normal`;
-  const dayLine = mhw
-    ? `Day ${s.days_in_event} of this event · ${s.category} intensity`
-    : `Latest water temperature is at or below the heat-wave threshold`;
-
+  const c = (STATE_COPY[s.state]||STATE_COPY.near_normal)(s);
   let html = `
-  <div class="hero ${mhw?'mhw':''}">
-    <div class="state">${heroState}</div>
-    <h2>${heroH2}</h2>
-    <div class="sub">${dayLine}</div>
+  <div class="hero ${c.hot?'hot':''}">
+    <div class="state">${c.st}</div>
+    <h2>${c.h2}</h2>
+    <div class="sub">${c.sub}</div>
     <div class="metrics">
-      <div class="metric"><div class="k">Water temp</div><div class="v">${s.sst_c.toFixed(1)}<small>°C</small></div></div>
+      <div class="metric"><div class="k">Sea-surface temp</div><div class="v">${s.sst_c.toFixed(1)}<small>°C</small></div></div>
       <div class="metric"><div class="k">Seasonal normal</div><div class="v">${s.climatology_c.toFixed(1)}<small>°C</small></div></div>
       <div class="metric"><div class="k">Anomaly</div><div class="v">${f1(s.anomaly_c)}<small>°C</small></div></div>
     </div>
@@ -177,78 +168,88 @@ function render(d){
   <div class="spark">
     <div class="lab"><b>Last ${s.series.length} days</b><span>satellite SST vs heat-wave threshold</span></div>
     ${sparkline(s.series)}
-    <div class="legend"><span><i style="background:#0b6560"></i>Water temperature</span>
-      <span><i style="background:#e0662f"></i>Heat-wave threshold (90th pct)</span>
-      <span><i style="background:#e0662f;opacity:.4;height:9px;width:9px"></i>Heat-wave days</span></div>
+    <div class="legend"><span><i style="background:#0b6560"></i>SST (MUR analysis)</span>
+      <span><i style="background:#e0662f"></i>Heat-wave threshold (seasonal 90th pct)</span>
+      <span><i style="background:#e0662f;opacity:.45;height:9px;width:9px"></i>Heat-wave events (≥5 days)</span></div>
   </div>
 
   <div class="card">
-    <h3><span class="pill">Cross-verified</span> Two independent sources</h3>
-    <p class="lead">The trust layer: the same question, answered by a satellite and an in-situ ocean buoy that share no equipment.</p>
+    <h3><span class="pill">Cross-check</span> Two co-located measurements</h3>
+    <p class="lead">The trust layer: the satellite analysis and an in-situ buoy at the same offshore point — compared honestly, with their differences shown.</p>
     <div class="pair">
       <div class="src">
-        <div class="nm">Satellite</div><div class="ty">JPL MUR · ${fmtDate(s.date)}</div>
+        <div class="nm">Satellite analysis</div>
+        <div class="ty">MUR L4 · ${s.depth} · obs ${fmtDate(s.obs_date)}</div>
         <div class="tmp">${s.sst_c.toFixed(1)}°C</div>
         <div class="an">${f1(s.anomaly_c)}°C vs normal</div>
-        <div class="chip ${s.is_mhw?'hot':'norm'}">${s.is_mhw?'Above heat-wave line':'Below heat-wave line'}</div>
+        <div class="chip ${s.exceed_today?'hot':'norm'}">${s.exceed_today?'Above threshold':'Below threshold'}</div>
       </div>
       <div class="src">
-        <div class="nm">In-situ buoy</div><div class="ty">NDBC 46042 · ${x?fmtDate(x.time_utc):'—'}</div>
+        <div class="nm">In-situ buoy</div>
+        <div class="ty">NDBC 46042 · ${x?x.depth:'—'} · ${x?agoLabel(x.obs_age_hours):'—'}</div>
         <div class="tmp">${x?x.sst_c.toFixed(1)+'°C':'—'}</div>
         <div class="an">${x&&x.anomaly_c!=null?f1(x.anomaly_c)+'°C vs normal':'—'}</div>
-        <div class="chip ${x&&x.is_mhw?'hot':'norm'}">${x?(x.is_mhw?'Above heat-wave line':'Below heat-wave line'):'—'}</div>
+        <div class="chip ${x&&x.exceed_today?'hot':'norm'}">${x?(x.exceed_today?'Above threshold':'Below threshold'):'unavailable'}</div>
       </div>
     </div>`;
 
   if(x){
-    const split=!x.agrees;
-    html += `<div class="verdict ${split?'split':''}">
-      ${x.agrees
-        ? `<b>Both independent sources agree</b> the bay ${mhw?'is':'is not'} in a marine heat wave right now.`
-        : `<b>Close call.</b> The two sources sit just ${Math.abs(x.diff_c).toFixed(1)}°C apart and land on opposite sides of the heat-wave line — the satellite reads a heat wave while the buoy is just below its own threshold. Showing that honestly is the point.`}
-    </div>`;
+    const agree=x.agree_today, split=!agree;
+    let msg;
+    if(agree){
+      msg = `<b>Both sources currently sit ${x.mur_above?'above':'below'} their heat-wave threshold</b>, ${Math.abs(x.diff_c).toFixed(1)}°C apart.`;
+    }else{
+      const above = x.mur_above? 'the satellite analysis' : 'the in-situ buoy';
+      const below = x.mur_above? 'the in-situ buoy' : 'the satellite analysis';
+      msg = `<b>The two sources disagree today:</b> ${above} is above the heat-wave threshold while ${below} is below it (${Math.abs(x.diff_c).toFixed(1)}°C apart). We show the disagreement rather than hide it — that is the check doing its job.`;
+    }
+    html += `<div class="verdict ${split?'split':''}">${msg}</div>`;
   }
-  html += `<div class="fine">Track record: across a century of Monterey Bay records these two independent
-    approaches agree on daily heat-wave state <b>${v.daily_flag_agreement_pct}% of days</b>
-    (chance-corrected κ = ${v.cohens_kappa}; temperature correlation r = ${v.sst_correlation_r}).
-    Both recover the documented 2014–16 “Blob.”</div>
+  html += `<div class="fine"><b>Track record</b> (${cs.pair}, ${cs.overlap[0].slice(0,4)}–${cs.overlap[1].slice(0,4)}, n=${cs.n_days.toLocaleString()} days):
+    day-to-day the two agree on above/below-threshold state <b>${cs.daily_flag_agreement_pct}%</b> of days —
+    but heat-wave days are only ~${cs.heatwave_base_rate_pct}% of the record, so that headline is base-rate-inflated.
+    The honest measures: chance-corrected <b>κ = ${cs.cohens_kappa}</b>, and on the actual event days the two overlap
+    <b>${Math.round(cs.event_day_jaccard*100)}%</b> of the time (SST correlation r = ${cs.sst_correlation_r}).</div>
+  <div class="fine">⚠︎ ${d.independence_caveat}</div>
   </div>
 
   <div class="card explain">
     <h3>What this means</h3>
-    <p>A <b>marine heat wave</b> is a stretch of at least 5 days when the ocean is hotter than 90% of days
-    historically were for that time of year (Hobday et al., 2016). It stresses kelp, fish, and shellfish and
-    shifts species — so knowing the bay’s status, and being able to <b>trust</b> it, matters.</p>
-    <p>This page reads the live ocean temperature, compares it to what’s normal for the date, and — the part a
-    plain data portal doesn’t do — <b>checks it against a second, independent instrument</b> and tells you
-    whether they agree.</p>
+    <p>A <b>marine heat wave</b> is a stretch of at least <b>5 days</b> when the ocean is hotter than 90% of days
+    historically were for that time of year (Hobday et al., 2016). It stresses kelp, fish, and shellfish and shifts species.</p>
+    <p>This page reads the latest ocean temperature at one offshore point, compares it to what is normal for the date, and —
+    the part a plain data portal doesn't do — <b>compares it to a second measurement</b> and reports how well they agree, with the limits shown.</p>
     <details><summary>Honest fine print (please read before quoting)</summary>
       <ul>
-        <li><b>Not a forecast.</b> This reports observed conditions only; it does not predict future heat waves.</li>
-        <li><b>Thresholds are baselines, not verdicts.</b> A reading just over the line is a mild “Moderate” event; the satellite and buoy can straddle it, as today shows.</li>
-        <li><b>~90% agreement is real but moderate.</b> Most of that 90% is agreement on ordinary calm days; on the days a heat wave is actually flagged, the two sources overlap about a third of the time (κ = 0.47).</li>
-        <li><b>Sources:</b> satellite = JPL MUR 1-km blended SST; in-situ = NDBC buoy 46042; climatology baselines 2003–2020 (MUR) and 1991–2020 (buoy).</li>
+        <li><b>Not a forecast.</b> Observed conditions only; no prediction of future heat waves.</li>
+        <li><b>One offshore point, not "the bay."</b> This is the NDBC 46042 site (~40 km W of Monterey, deep water), chosen because the SST field is smooth there so a gridded product and a point buoy can be compared cleanly. It does not describe conditions throughout Monterey Bay.</li>
+        <li><b>Satellite latency.</b> The MUR analysis is ~1 day behind real time; the buoy is near-real-time. Their timestamps are shown separately.</li>
+        <li><b>Not fully independent.</b> MUR is a blended analysis that ingests in-situ SST (possibly this buoy), so this is a <b>consistency</b> check, not an independent replication. The two also differ in depth (foundation SST vs ~1.5 m) and use their own climatology baselines.</li>
+        <li><b>Agreement is moderate.</b> The high daily-agreement % is mostly agreement on ordinary non-event days; κ and the event-day overlap are the measures that matter.</li>
       </ul>
     </details>
   </div>`;
-
   document.getElementById('app').innerHTML = html;
-  document.getElementById('sources').innerHTML =
-    `Point: ${d.point.name} (${d.point.lat}°N, ${Math.abs(d.point.lon)}°W)`;
-  if(d.errors && d.errors.length){
-    const b=document.getElementById('banner'); b.style.display='block';
-    b.textContent="Note: "+d.errors.join(" · ");
-  }
+  if(d.errors && d.errors.length){ const b=document.getElementById('staleBanner'); if(b.style.display!=='block'){b.className='banner warn';b.style.display='block';b.textContent="Note: "+d.errors.join(" · ");} }
 }
 
-function fail(msg){
-  document.getElementById('app').innerHTML=`<div class="card"><p class="explain">${msg}</p></div>`;
+function showStale(d, hard){
+  const b=document.getElementById('staleBanner');
+  const pipeAgeH = hoursAgo(d.generated_utc);
+  const murAge = d.status? d.status.obs_age_days : 99;
+  if(hard || pipeAgeH>6){
+    b.className='banner err'; b.style.display='block';
+    b.innerHTML = `⚠︎ Auto-update appears delayed — data last refreshed <b>${agoLabel(pipeAgeH)}</b>. Showing the most recent good values; treat with caution.`;
+  } else if(murAge>3){
+    b.className='banner warn'; b.style.display='block';
+    b.innerHTML = `Heads-up: the satellite analysis is <b>${murAge} days</b> old right now (source latency). The in-situ buoy remains current.`;
+  }
 }
 
 fetch(STATUS_URL+"?t="+Date.now())
   .then(r=>{if(!r.ok)throw new Error(r.status);return r.json();})
   .then(render)
-  .catch(e=>fail("Live conditions are temporarily unavailable (couldn’t reach the data service). Please refresh in a few minutes."));
+  .catch(()=>{document.getElementById('app').innerHTML=`<div class="card"><p class="explain">Live conditions are temporarily unavailable (couldn't reach the data service). This page auto-refreshes hourly — please try again shortly.</p></div>`;});
 </script>
 </body>
 </html>
