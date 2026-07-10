@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260710T225605Z-228521-1036",
-  "built_utc": "2026-07-10T22:56:05Z",
-  "message": "Add live Monterey Bay marine heat-wave monitor (mhw.html) for CeNCOOS"
+  "deploy_id": "20260710T225903Z-228707-10842",
+  "built_utc": "2026-07-10T22:59:03Z",
+  "message": "Fix mobile overflow on marine heat-wave monitor (flex shrink/wrap)"
 }
