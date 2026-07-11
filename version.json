@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260711T001800Z-234012-10326",
-  "built_utc": "2026-07-11T00:18:01Z",
-  "message": "MHW page fixes: real re-fetch timer (not just wording), MUR='gridded analysis' not 'measurement', below-normal sign bug (Math.abs), unknown-state fails to 'unavailable', cut self-certifying rhetoric"
+  "deploy_id": "20260711T043130Z-242314-15570",
+  "built_utc": "2026-07-11T04:31:30Z",
+  "message": "Publish Evidence Agent public brief + walkthrough (static presentation pages)"
 }
