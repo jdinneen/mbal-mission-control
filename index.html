@@ -861,6 +861,11 @@
           <h3>Teaching the model what officials actually decided beats a stand-in</h3>
           <p>The decision that really matters is whether officials post a health advisory. Training the model on those real posted advisories — instead of a rule-of-thumb stand-in — makes it noticeably better at new beaches; the stand-in version does worse than just assuming today repeats.</p>
         </button>
+        <button class="wincard" onclick="openFindingById('claim_carrier_forecast_lead_advisory');return false;" aria-label="Carrier-Timescale Law 2-day beach advisory finding">
+          <div class="wtop"><span class="wtopic">Beach bacteria · 2-day advisory</span><span class="wmetric">Beats persistence, CI excl 0</span></div>
+          <h3>A 2-day beach warning that runs on free public forecast data</h3>
+          <p>Where rain drives the pollution, a free NOAA rain-forecast feed can flag a likely exceedance two days ahead — confirmed in California and New Jersey, and it deploys cold-start, with no local training, to brand-new networks in Australia and the Texas Gulf. A free pre-screen tells you in advance which beaches a forecast feed will actually help.</p>
+        </button>
       </div>
     </div>
 
@@ -1827,10 +1832,15 @@ const FEATURED_QUICK_READS={
     matters:'It is a deployable early warning on free data, and it transferred to brand-new beach networks in Australia and Texas with zero local training labels.',
     careful:'Proven for densely-sampled marine enterococcus beaches (CA + NJ) plus one freshwater E. coli case; it is a 2-day (not 3-day) product and effect sizes over recurrence are modest — the strength is discipline, generality, and cross-network portability.'
   },
-  claim_pi_zero_shot_ranking_screen:{
-    means:'Physics-only coordinates can sort risk in places with no local labels yet.',
-    matters:'It is a cold-start screen for new regions before a local model exists.',
-    careful:'It ranks cases; it is not a calibrated local advisory probability.'
+  claim_forward_2026_holdout_pass:{
+    means:'A model frozen before the 2026 season, then scored on that held-back season, still beats station memory (average precision 0.63 vs 0.37).',
+    matters:'Passing a season that was never used to build or tune it is the honest test of whether a forecast will hold up next year.',
+    careful:'One season, bacteria only; it is forward evidence, not a guarantee for every beach or hazard.'
+  },
+  claim_bacteria_honest_forecast_horizon:{
+    means:'The beach-bacteria forecast keeps real skill out to about two days ahead; at three days it loses to just assuming today repeats.',
+    matters:'Stating the honest limit — where the model stops helping — is how the lab avoids over-promising lead time.',
+    careful:'The two-day horizon is specific to this bacteria setup; other hazards have their own limits.'
   },
   claim_da_toxic_onset_ci_separated:{
     means:'The DA model helps spot the next toxic sample after a clean one.',
@@ -1856,11 +1866,6 @@ const FEATURED_QUICK_READS={
     means:'The Gulf survey-cast card is no longer a win; its apparent skill tracks sampling effort rather than a usable forecast signal.',
     matters:'It stays in the ledger so the site records why this tempting dead-zone story was stopped.',
     careful:'The supported low-oxygen lead result is the Tokyo Bay stratification/onset lane; no Gulf deployment or transfer claim is made.'
-  },
-  claim_unified_zero_shot_interlingua_pi:{
-    means:'The same physics-pi idea ranks bacteria risk across 12 held-out domains without local labels.',
-    matters:'It is evidence that some transfer signal exists across regions.',
-    careful:'It is a ranking screen, not a deployed advisory or calibrated probability.'
   }
 };
 function isFeaturedFinding(f){return !!(f&&(f.featured||FEATURED_QUICK_READS[f.id]));}

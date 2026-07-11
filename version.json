@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260711T160331Z-252255-6810",
-  "built_utc": "2026-07-11T16:03:31Z",
-  "message": "Add HAB closure-insurance trigger verification demonstrator (client-facing, real 25y Irish closure backtest)"
+  "deploy_id": "20260711T162347Z-253429-25822",
+  "built_utc": "2026-07-11T16:23:47Z",
+  "message": "Full refresh for MBARI: snapshot to 57 findings/29 models; add Carrier-Timescale 2-day advisory to Latest wins; feature held-out-2026 + honest-horizon credibility signals; drop stale featured refs"
 }
