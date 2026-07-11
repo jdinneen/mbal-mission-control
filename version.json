@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260711T165120Z-254205-26231",
-  "built_utc": "2026-07-11T16:51:20Z",
-  "message": "Add parametric temperature-trigger basis & drift auditor (OISST vs in-situ, red-team-verified)"
+  "deploy_id": "20260711T180528Z-257015-6754",
+  "built_utc": "2026-07-11T18:05:28Z",
+  "message": "Temp auditor v2: add Gulf-of-Alaska salmon region + OISST/MUR/ERSST index bake-off (both agent-built, verified)"
 }
