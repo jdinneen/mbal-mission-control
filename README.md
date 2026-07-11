@@ -61,13 +61,18 @@ Only change this after the endpoint controls above are active. In `index.html`, 
 ```
 const PROXY_URL = "https://mbal-search.YOURNAME.workers.dev";
 ```
-Commit + push only after `node scripts/check.mjs` passes.
+Preview and publish only through the guarded script:
+```
+./publish.sh --dry-run "change search endpoint" index.html
+./publish.sh "change search endpoint" index.html
+```
 
 ## 5. Refresh the published data later
 With the cockpit running locally:
 ```
 python build_snapshot.py        # rewrites data.json from live state
-git add data.json && git commit -m "refresh snapshot" && git push
+./publish.sh --dry-run "refresh snapshot" data.json
+./publish.sh "refresh snapshot" data.json
 ```
 
 `build_geo_downloads.py` may refresh map layers, but it must keep `downloads.json` empty and must not recreate raw CSV, Markdown, or full-snapshot download bundles.
@@ -80,9 +85,22 @@ the published `data.json` contains only the science summaries needed to render t
 
 ## Publishing (read this — do not push by hand)
 
-Deploy ONLY via `./publish.sh "message"`. GitHub Pages debounces rapid pushes and can silently
-**skip** deploying a commit, and its CDN caches per-edge — so pushing directly and eyeballing the
-page (or grepping the repo) can look done while the live site is stale. `publish.sh` stamps a unique
-id into `version.json`, pushes once, then polls the **live** `version.json` until that id appears
-(nudging Pages if it skipped the deploy). It only exits success when the live site verifiably serves
-your change. `version.json` is the source of truth for "what is actually live."
+Deploy ONLY via `publish.sh`, and name every file intended for the release:
+```
+./publish.sh --dry-run "explain the change" index.html
+./publish.sh "explain the change" index.html
+```
+The first command is a dry run: a preview that runs the privacy and integrity checks but changes
+nothing. The file list is mandatory. The script refuses pre-existing staged work, unselected tracked
+changes, and older local commits that are not already on `origin/main`. It stages only the named
+files plus `version.json`; unrelated untracked files remain untouched. Every selected file that
+looks like text is also scanned for local paths, email addresses, and likely secret values,
+including decoded strings inside JSON and GeoJSON map data.
+
+GitHub Pages debounces rapid pushes and can silently **skip** deploying a commit, and its content
+delivery network (CDN), a distributed cache that serves nearby visitors, can retain an older copy.
+Pushing directly and eyeballing the page can therefore look done while the live site is stale.
+`publish.sh` stamps a unique id into `version.json`, pushes once, then polls the **live**
+`version.json` until that id appears (nudging Pages if it skipped the deploy). It only exits success
+after the canonical site serves that exact receipt and every selected file has the same byte
+fingerprint as the committed file (or returns not-found when the release deleted it).
