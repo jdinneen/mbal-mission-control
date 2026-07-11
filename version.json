@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260711T045339Z-243119-16352",
-  "built_utc": "2026-07-11T04:53:39Z",
-  "message": "Evidence Agent one-pager: link to the LIVE Cloud Run app"
+  "deploy_id": "20260711T160331Z-252255-6810",
+  "built_utc": "2026-07-11T16:03:31Z",
+  "message": "Add HAB closure-insurance trigger verification demonstrator (client-facing, real 25y Irish closure backtest)"
 }
