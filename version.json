@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260711T180528Z-257015-6754",
-  "built_utc": "2026-07-11T18:05:28Z",
-  "message": "Temp auditor v2: add Gulf-of-Alaska salmon region + OISST/MUR/ERSST index bake-off (both agent-built, verified)"
+  "deploy_id": "20260711T214159Z-266021-29995",
+  "built_utc": "2026-07-11T21:41:59Z",
+  "message": "Temp auditor v3: multi-site index bake-off (OISST beats MUR 10/12 buoys, book-wide)"
 }
