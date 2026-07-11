@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Offshore Monterey Bay Marine Heat-Wave Monitor — CeNCOOS × MBAL</title>
-<meta name="description" content="Live marine-heatwave status at the NDBC 46042 offshore site, with an in-situ consistency cross-check. Monitoring, not a forecast.">
+<title>Offshore Monterey Bay Marine Heat-Wave Monitor — Monterey Bay AI Lab</title>
+<meta name="description" content="Latest observed marine-heatwave status at the NDBC 46042 offshore site, with an in-situ consistency cross-check. Monitoring, not a forecast.">
 <style>
   :root{
     --bg:#f5f8f9; --ink:#12292b; --muted:#5c6f72; --line:#dde5e6; --card:#ffffff;
@@ -85,7 +85,7 @@
   <header>
     <div class="logo">🌊</div>
     <div>
-      <div class="eyebrow">CeNCOOS × Monterey Bay AI Lab</div>
+      <div class="eyebrow">Monterey Bay AI Lab</div>
       <h1>Offshore Monterey Bay Marine Heat-Wave Monitor</h1>
     </div>
   </header>
@@ -97,7 +97,7 @@
   <footer>
     <div id="scope"></div>
     <div style="margin-top:6px">Monitoring &amp; verification of <b>observed</b> conditions only — <b>not a forecast</b>.</div>
-    <div style="margin-top:6px">Built by the <b>Monterey Bay AI Lab</b> for CeNCOOS · data via NOAA CoastWatch ERDDAP · auto-refreshes hourly</div>
+    <div style="margin-top:6px">Built by the <b>Monterey Bay AI Lab</b> · data via NOAA CoastWatch ERDDAP · auto-refreshes hourly</div>
   </footer>
 </div>
 
@@ -152,7 +152,9 @@ function render(d){
     + (x? ` · in-situ buoy <b>${agoLabel(buoyAgeH)}</b>` : "");
   showStale(d,false);
 
-  const c = (STATE_COPY[s.state]||STATE_COPY.near_normal)(s);
+  // fall back by the SIGN of the anomaly (never mislabel a large anomaly as "near normal")
+  const fb = s.anomaly_c>0.5?STATE_COPY.above_normal:(s.anomaly_c<-0.5?STATE_COPY.below_normal:STATE_COPY.near_normal);
+  const c = (STATE_COPY[s.state]||fb)(s);
   let html = `
   <div class="hero ${c.hot?'hot':''}">
     <div class="state">${c.st}</div>
@@ -249,7 +251,7 @@ function showStale(d, hard){
 fetch(STATUS_URL+"?t="+Date.now())
   .then(r=>{if(!r.ok)throw new Error(r.status);return r.json();})
   .then(render)
-  .catch(()=>{document.getElementById('app').innerHTML=`<div class="card"><p class="explain">Live conditions are temporarily unavailable (couldn't reach the data service). This page auto-refreshes hourly — please try again shortly.</p></div>`;});
+  .catch(()=>{document.getElementById('app').innerHTML=`<div class="card"><p class="explain">Latest conditions are temporarily unavailable (couldn't reach the data service). This page auto-refreshes hourly — please try again shortly.</p></div>`;});
 </script>
 </body>
 </html>

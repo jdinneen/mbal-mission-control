@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260710T235913Z-232455-23624",
-  "built_utc": "2026-07-10T23:59:13Z",
-  "message": "Fix observation-date display to UTC (was off by one in local tz)"
+  "deploy_id": "20260711T000948Z-232972-12602",
+  "built_utc": "2026-07-11T00:09:48Z",
+  "message": "Remove CeNCOOS branding; soften 'live' wording (data-age honesty); fix MUR label + fallback (adversary nits)"
 }
