@@ -773,6 +773,25 @@ def _hypoxia_tokyo_findings():
     return out
 
 
+def _argo_virtual_do_findings():
+    """Argo bottom-CTD virtual-oxygen-sensor nowcast. Reads a pre-hardened HONEST card
+    (the retired +0.156 pooled leave-basin number is deliberately not the headline)."""
+    card = _local_json("reports/threed/argo_real_hypoxia/claim_card_honest.json") or {}
+    if not card.get("id"):
+        return []
+    return [_finding(
+        card["id"],
+        card["title"],
+        card.get("kind", "positive"),
+        card["headline"],
+        card["plain"],
+        card["how"],
+        card.get("evidence", "reports/threed/argo_real_hypoxia/summary.json"),
+        card.get("metrics"),
+        card.get("note"),
+    )]
+
+
 def _cyano_findings():
     out = []
     alberta = _local_json("reports/hab/cyano/mcye_alberta.json") or {}
@@ -1704,6 +1723,7 @@ def _extra_findings():
         _bacteria_operational_findings,
         _experiment_program_findings,
         _hypoxia_tokyo_findings,
+        _argo_virtual_do_findings,
         _cyano_findings,
         _latest_research_findings,
         _source_signal_findings,
