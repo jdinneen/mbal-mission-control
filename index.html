@@ -851,10 +851,10 @@
           <h3>The same approach works for a different hazard — storm surge</h3>
           <p>After stripping the normal tide out of tide-gauge records to isolate the storm-driven part, one model predicts surge days on coastlines it never saw — beating "assume today repeats" in all 17. Checked independently, it's evidence the same recipe carries across different coastal hazards.</p>
         </button>
-        <button class="wincard" onclick="openFindingById('operational_coldstart_deployable_shipped');return false;" aria-label="Deployable cold-start model finding">
-          <div class="wtop"><span class="wtopic">Shipped product · works from day one</span><span class="wmetric">Live product</span></div>
-          <h3>A model that can warn a brand-new beach from day one</h3>
-          <p>A brand-new beach usually has no track record to learn from. By borrowing patterns from nearby beaches, this model can still rank the risk on day one — covering the roughly one-third of beaches that a history-hungry model can't handle.</p>
+        <button class="wincard" onclick="openFindingById('claim_bigelow_psp_referee_win');return false;" aria-label="Bigelow Maine PSP referee verification win">
+          <div class="wtop"><span class="wtopic">Shellfish-toxin forecast · Gulf of Maine</span><span class="wmetric">Referee win · beats baseline ~2×</span></div>
+          <h3>We refereed an operational toxin forecast — and it genuinely works</h3>
+          <p>Instead of building another model, we independently checked an existing operational shellfish-poisoning forecast for the Gulf of Maine. On four held-out years it beats the fair "assume last week repeats" baseline about 2× (average precision +0.34, confidence interval clear of zero), a median week ahead of the lab test — a rare pass, since most outside forecasts we referee fail this bar. Caveat: scored on the ~9% of forecasts that got a lab result.</p>
         </button>
         <button class="wincard" onclick="openFindingById('claim_operational_label_quality_win');return false;" aria-label="Operational label-quality finding">
           <div class="wtop"><span class="wtopic">Prediction quality · new beaches</span><span class="wmetric">Better, more useful predictions</span></div>
@@ -1817,6 +1817,11 @@ function findingsSorted(){
 }
 const QUICK_LABELS={means:'What it means',matters:'Why it matters',careful:'Careful'};
 const FEATURED_QUICK_READS={
+  claim_bigelow_psp_referee_win:{
+    means:'We independently checked an existing Gulf-of-Maine shellfish-toxin forecast; it really does beat the fair baseline about 2× a week ahead.',
+    matters:'Refereeing beats rebuilding — a trustworthy check on someone else’s operational tool is a transferable asset for managers deciding which forecasts to rely on.',
+    careful:'Scored on the ~9% of forecasts that got a lab result, and skill varies by site; do not quote the absolute score externally until the sampling selection is resolved.'
+  },
   claim_bacteria_station_memory_supported:{
     means:'The beach-bacteria model ranks risky beach-days better than old station history and rain rules.',
     matters:'It can help a county choose which beach-days to inspect first.',
