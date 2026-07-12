@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260712T182535Z-5746-9468",
-  "built_utc": "2026-07-12T18:25:35Z",
-  "message": "Remove Innovation tab; fold its 10 curated reviews into the searchable Ledger"
+  "deploy_id": "20260712T183234Z-475-24560",
+  "built_utc": "2026-07-12T18:32:34Z",
+  "message": "Redesign Ledger: single clean filter toolbar (dropdowns + reset), lighter stats, uniform rows"
 }

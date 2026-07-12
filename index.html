@@ -241,17 +241,19 @@
   .registryhead p{margin:0;font-size:14px;line-height:1.5;color:var(--ink3);max-width:760px}
 
   /* ---- complete ledger ---- */
-  .ledgerstats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:0 0 18px}
-  .ledgerstat{background:var(--surface);border:1px solid var(--border);border-radius:13px;box-shadow:var(--card-sh);padding:15px 16px}
-  .ledgerstat .k{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink5);margin-bottom:6px}
-  .ledgerstat .v{font-size:25px;font-weight:600;letter-spacing:-.02em;line-height:1}
-  .ledgerstat .s{font-size:12.5px;color:var(--ink4);margin-top:6px;line-height:1.4}
-  .ledgerbar{display:flex;flex-direction:column;gap:10px;margin:0 0 16px;padding:14px;background:rgba(245,246,246,.86);border:1px solid var(--border);border-radius:14px;box-shadow:var(--card-sh);backdrop-filter:blur(8px)}
-  .ledgersearch{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  .ledgersearch input{flex:1 1 260px;min-width:0;appearance:none;border:1px solid var(--border);background:var(--surface);border-radius:10px;padding:10px 12px;font-family:var(--sans);font-size:14px;color:var(--ink);outline:none}
-  .ledgersearch input:focus{border-color:#bfe0dc;box-shadow:0 0 0 3px rgba(15,138,132,.11)}
-  .ledgerselect{appearance:none;flex:0 1 220px;min-width:0;max-width:100%;border:1px solid var(--border);background:var(--surface);border-radius:10px;padding:10px 32px 10px 12px;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink3);background-image:linear-gradient(45deg,transparent 50%,var(--ink4) 50%),linear-gradient(135deg,var(--ink4) 50%,transparent 50%);background-position:calc(100% - 15px) 16px,calc(100% - 10px) 16px;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
-  .ledgercount{font-family:var(--mono);font-size:12px;color:var(--ink5);margin:0 0 10px}
+  .ledgerstats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0 0 14px}
+  .ledgerstat{background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--card-sh);padding:13px 15px}
+  .ledgerstat .k{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink5);margin-bottom:5px}
+  .ledgerstat .v{font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:1}
+  .ledgerstat .s{font-size:12px;color:var(--ink4);margin-top:5px;line-height:1.4}
+  .ledgerbar{display:flex;align-items:center;flex-wrap:wrap;gap:9px;margin:0 0 12px;padding:11px 12px;background:rgba(245,246,246,.86);border:1px solid var(--border);border-radius:13px;box-shadow:var(--card-sh);backdrop-filter:blur(8px)}
+  .ledgerbar>input{flex:1 1 240px;min-width:0;appearance:none;border:1px solid var(--border);background:var(--surface);border-radius:10px;padding:10px 12px;font-family:var(--sans);font-size:14px;color:var(--ink);outline:none}
+  .ledgerbar>input:focus{border-color:#bfe0dc;box-shadow:0 0 0 3px rgba(15,138,132,.11)}
+  .ledgerselect{appearance:none;flex:0 1 158px;min-width:0;max-width:100%;border:1px solid var(--border);background:var(--surface);border-radius:10px;padding:10px 30px 10px 12px;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink3);cursor:pointer;background-image:linear-gradient(45deg,transparent 50%,var(--ink4) 50%),linear-gradient(135deg,var(--ink4) 50%,transparent 50%);background-position:calc(100% - 15px) 16px,calc(100% - 10px) 16px;background-size:5px 5px,5px 5px;background-repeat:no-repeat}
+  .ledgerselect:focus{outline:none;border-color:#bfe0dc;box-shadow:0 0 0 3px rgba(15,138,132,.11)}
+  .ledgerreset{flex:0 0 auto;appearance:none;cursor:pointer;border:1px solid var(--border);background:var(--surface);color:var(--ink3);border-radius:10px;padding:10px 15px;font-family:var(--sans);font-size:13px;font-weight:600;transition:background .14s,border-color .14s,color .14s}
+  .ledgerreset:hover{background:var(--acc-tint2);border-color:#bfe0dc;color:var(--ink)}
+  .ledgercount{font-family:var(--mono);font-size:11.5px;color:var(--ink5);margin:0 0 9px}
   .ledgerlist{overflow:hidden}
   .l-grid{grid-template-columns:minmax(0,1.55fr) 130px minmax(0,.8fr) 34px}
   .ledgerhead{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink5);background:var(--subtle)}
@@ -261,8 +263,8 @@
   .ledgerrow.click:hover{background:var(--acc-tint2)}
   .ledgerrow:last-child{border-bottom:none}
   .ledgerrow .ltitle{font-size:14.5px;font-weight:600;line-height:1.28;color:var(--ink);word-break:break-word;overflow-wrap:anywhere}
-  .ledgerrow .ldesc{font-size:12.8px;line-height:1.45;color:var(--ink4);margin-top:4px;text-wrap:pretty;overflow-wrap:anywhere}
-  .ledgerrow .lmeta{font-family:var(--mono);font-size:11.5px;color:var(--ink5);margin-top:6px;word-break:break-word;overflow-wrap:anywhere}
+  .ledgerrow .ldesc{font-size:12.8px;line-height:1.45;color:var(--ink4);margin-top:4px;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .ledgerrow .lmeta{font-family:var(--mono);font-size:11.5px;color:var(--ink5);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .ltypechip{display:inline-flex;align-items:center;gap:6px;justify-self:start;font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;font-weight:600;border-radius:7px;padding:4px 9px;background:var(--faint3);color:var(--ink3)}
   .ltypechip i{width:6px;height:6px;border-radius:50%;background:var(--acc)}
   .ledgerrow .lchips{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
@@ -629,7 +631,7 @@
     .insetgrid{grid-template-columns:1fr}
     .vocabgrid{grid-template-columns:1fr}
     .snappill{display:none}
-    .ledgersearch input,.ledgerselect{flex-basis:100%;width:100%}
+    .ledgerbar>input,.ledgerselect,.ledgerreset{flex-basis:100%;width:100%}
     .storyscore{grid-template-columns:1fr}
     .storyimage{height:220px}
     .featurepoints{grid-template-columns:1fr}
@@ -1290,17 +1292,16 @@
     </div>
     <div class="ledgerstats" id="ledgerstats"></div>
     <div class="ledgerbar">
-      <div class="ledgersearch">
-        <input id="ledgersearch" type="search" placeholder="Search title, ID, evidence path, metric, source, or text..." autocomplete="off"/>
-        <select class="ledgerselect" id="ledgertopic"><option value="all">All topics</option></select>
-        <select class="ledgerselect" id="ledgersort">
-          <option value="signal">Important first</option>
-          <option value="type">Group by type</option>
-          <option value="az">A to Z</option>
-        </select>
-      </div>
-      <div class="filterrow" id="ledgertypebar"></div>
-      <div class="filterrow" id="ledgerstatusbar"></div>
+      <input id="ledgersearch" type="search" placeholder="Search the ledger — title, ID, evidence, metric, or text…" autocomplete="off"/>
+      <select class="ledgerselect" id="ledgertype" aria-label="Filter by type"><option value="all">All types</option></select>
+      <select class="ledgerselect" id="ledgerstate" aria-label="Filter by state"><option value="all">All states</option></select>
+      <select class="ledgerselect" id="ledgertopic" aria-label="Filter by topic"><option value="all">All topics</option></select>
+      <select class="ledgerselect" id="ledgersort" aria-label="Sort">
+        <option value="signal">Important first</option>
+        <option value="type">Group by type</option>
+        <option value="az">A to Z</option>
+      </select>
+      <button class="ledgerreset" id="ledgerreset" type="button">Reset</button>
     </div>
     <div class="ledgercount" id="ledgercount"></div>
     <div class="card ledgerlist">
@@ -2163,12 +2164,6 @@ function ledgerRows(){
   LEDGER_ROWS=rows;
   return rows;
 }
-function ledgerTypeButton(row,activeKey){
-  return `<button class="fpill${LEDGER_TYPE===row[0]?' active':''}" data-t="${esc(row[0])}">${esc(row[1])}<span class="c">${row[2]}</span></button>`;
-}
-function ledgerStatusButton(row){
-  return `<button class="fpill${LEDGER_STATUS===row[0]?' active':''}" data-s="${esc(row[0])}">${esc(row[1])}<span class="c">${row[2]}</span></button>`;
-}
 function ledgerFilteredRows(){
   const q=LEDGER_QUERY.trim().toLowerCase();
   let rows=ledgerRows().filter(r=>
@@ -2195,26 +2190,41 @@ function renderLedgerStats(all){
   ].map(([k,v,s])=>`<div class="ledgerstat"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div><div class="s">${esc(s)}</div></div>`).join('');
 }
 function renderLedgerFilters(all){
-  const typeDefs=[['all','All',all.length]].concat(LEDGER_TYPES.map(([k,l])=>[k,l,all.filter(r=>r.type===k).length]).filter(x=>x[2]));
-  $('#ledgertypebar').innerHTML='<span class="fl-label">Type</span>'+typeDefs.map(ledgerTypeButton).join('');
-  document.querySelectorAll('#ledgertypebar .fpill').forEach(b=>b.onclick=()=>{LEDGER_TYPE=b.dataset.t;renderLedger();});
-  const preStatus=all.filter(r=>(LEDGER_TYPE==='all'||r.type===LEDGER_TYPE)&&(LEDGER_TOPIC==='all'||r.topic===LEDGER_TOPIC)&&(!LEDGER_QUERY.trim()||LEDGER_QUERY.trim().toLowerCase().split(/\s+/).every(term=>r.search.includes(term))));
+  const q=LEDGER_QUERY.trim().toLowerCase();
+  const matchQ=r=>!q||q.split(/\s+/).every(term=>r.search.includes(term));
+  // Type dropdown — counts over the whole ledger
+  const typeCounts=LEDGER_TYPES.map(([k,l])=>[k,l,all.filter(r=>r.type===k).length]).filter(x=>x[2]);
+  if(LEDGER_TYPE!=='all'&&!typeCounts.some(x=>x[0]===LEDGER_TYPE))LEDGER_TYPE='all';
+  const tsel=$('#ledgertype');
+  tsel.innerHTML=`<option value="all">All types (${fmt(all.length)})</option>`+typeCounts.map(([k,l,c])=>`<option value="${esc(k)}">${esc(l)} (${fmt(c)})</option>`).join('');
+  tsel.value=LEDGER_TYPE;
+  tsel.onchange=()=>{LEDGER_TYPE=tsel.value;renderLedger();};
+  // State dropdown — states available given the current type/topic/search
+  const preStatus=all.filter(r=>(LEDGER_TYPE==='all'||r.type===LEDGER_TYPE)&&(LEDGER_TOPIC==='all'||r.topic===LEDGER_TOPIC)&&matchQ(r));
   const statusOrder=['Supported','Caveated','Null','Audited','Baseline','Production','Shadow','PASS','WARN','FAIL','Signal','Evidence','Document','Vocabulary','Note','Metadata'];
   const have=[...new Set(preStatus.map(r=>r.status))];
   if(LEDGER_STATUS!=='all'&&!have.includes(LEDGER_STATUS))LEDGER_STATUS='all';
-  const statusDefs=[['all','All states',preStatus.length]].concat(statusOrder.filter(s=>have.includes(s)).map(s=>[s,s,preStatus.filter(r=>r.status===s).length]));
-  $('#ledgerstatusbar').innerHTML='<span class="fl-label">State</span>'+statusDefs.map(ledgerStatusButton).join('');
-  document.querySelectorAll('#ledgerstatusbar .fpill').forEach(b=>b.onclick=()=>{LEDGER_STATUS=b.dataset.s;renderLedger();});
+  const statusDefs=statusOrder.filter(s=>have.includes(s)).map(s=>[s,preStatus.filter(r=>r.status===s).length]);
+  const ssel=$('#ledgerstate');
+  ssel.innerHTML=`<option value="all">All states (${fmt(preStatus.length)})</option>`+statusDefs.map(([s,c])=>`<option value="${esc(s)}">${esc(s)} (${fmt(c)})</option>`).join('');
+  ssel.value=LEDGER_STATUS;
+  ssel.onchange=()=>{LEDGER_STATUS=ssel.value;renderLedger();};
+  // Topic dropdown
   const topics=[...new Set(all.map(r=>r.topic).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+  if(!topics.includes(LEDGER_TOPIC))LEDGER_TOPIC='all';
   const ts=$('#ledgertopic');
   ts.innerHTML='<option value="all">All topics</option>'+topics.map(t=>`<option value="${esc(t)}">${esc(t)}</option>`).join('');
-  ts.value=topics.includes(LEDGER_TOPIC)?LEDGER_TOPIC:'all';
-  LEDGER_TOPIC=ts.value;
+  ts.value=LEDGER_TOPIC;
   ts.onchange=()=>{LEDGER_TOPIC=ts.value;renderLedger();};
+  // Sort
   const sort=$('#ledgersort'); sort.value=LEDGER_SORT; sort.onchange=()=>{LEDGER_SORT=sort.value;renderLedger();};
+  // Search
   const search=$('#ledgersearch');
   if(search.value!==LEDGER_QUERY)search.value=LEDGER_QUERY;
   search.oninput=()=>{LEDGER_QUERY=search.value;renderLedger();};
+  // Reset
+  const reset=$('#ledgerreset');
+  if(reset)reset.onclick=()=>{LEDGER_QUERY='';LEDGER_TYPE='all';LEDGER_STATUS='all';LEDGER_TOPIC='all';LEDGER_SORT='signal';renderLedger();};
 }
 function renderLedger(){
   const all=ledgerRows();
