@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260712T190958Z-2502-29932",
-  "built_utc": "2026-07-12T19:09:58Z",
-  "message": "Redesign Ledger cards: trim to results + research trail, inline collapsible cards, plain-English + model-vs-baseline and confidence-range charts"
+  "deploy_id": "20260712T192505Z-3219-8208",
+  "built_utc": "2026-07-12T19:25:05Z",
+  "message": "Fix Ledger chart honesty: null results never colored/worded as real wins; drop cross-metric-family delta (Argo AUC vs AP gap)"
 }

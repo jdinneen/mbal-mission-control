@@ -2261,14 +2261,16 @@ function ledgerChartData(row){
   if(mv&&bv&&lmetFamily(mv[0])===lmetFamily(bv[0])){
     out.compare={modelVal:mv[1],baseVal:bv[1],baseName:lbaseName(bv[0]),scaleLabel:lmetFamily(mv[0])==='auc'?'AUC':'average precision (AP)'};
   }
+  const isNull=(row.raw&&row.raw.kind==='null')||row.status==='Null';
   const dv=lfirst(m,LDELTA);
-  if(dv){
+  // don't mix metric families: a delta on a different scale than the compare is NOT that compare's "gap"
+  if(dv&&!(out.compare&&mv&&lmetFamily(dv[0])!==lmetFamily(mv[0]))){
     let ci=null;
     for(const k of LCI_KEYS){if(LCIOK(m[k])){ci=m[k];break;}}
     if(!ci&&LCIOK(m[dv[0]+'_ci95']))ci=m[dv[0]+'_ci95'];
     // honesty guard: only attach a range if the point estimate falls inside it
     if(ci&&!(Math.min(ci[0],ci[1])-1e-9<=dv[1]&&dv[1]<=Math.max(ci[0],ci[1])+1e-9))ci=null;
-    out.delta={val:dv[1],lo:ci?ci[0]:null,hi:ci?ci[1]:null};
+    out.delta={val:dv[1],lo:ci?ci[0]:null,hi:ci?ci[1]:null,washed:isNull};
   }
   return out;
 }
@@ -2290,7 +2292,8 @@ function ledgerNumbersSentence(cd){
   }
   if(cd.delta&&cd.delta.lo!=null){
     const lo=Math.min(cd.delta.lo,cd.delta.hi), hi=Math.max(cd.delta.lo,cd.delta.hi);
-    if(lo>0)parts.push(`Because the confidence range (${lnum(lo)} to ${lnum(hi)}) stays above zero, the improvement is very likely real, not luck.`);
+    if(lo>0&&!cd.delta.washed)parts.push(`Because the confidence range (${lnum(lo)} to ${lnum(hi)}) stays above zero, the improvement is very likely real, not luck.`);
+    else if(lo>0&&cd.delta.washed)parts.push(`The confidence range (${lnum(lo)} to ${lnum(hi)}) is above zero, but this result did not clear the lab's full significance test, so it is not counted as a real improvement.`);
     else parts.push(`The confidence range (${lnum(lo)} to ${lnum(hi)}) includes zero, so we can't yet call the improvement real.`);
   } else if(cd.delta){
     parts.push(`The measured improvement is ${cd.delta.val>=0?'+':''}${lnum(cd.delta.val)}, but no confidence range was recorded, so how solid it is stays open.`);
@@ -2330,7 +2333,7 @@ function ledgerRangeChart(title,d){
   let dmin=Math.min(0,lo,d.val), dmax=Math.max(0,hi,d.val);
   const span=(dmax-dmin)||0.02, pad=span*0.18; dmin-=pad; dmax+=pad;
   const X=v=>xL+(v-dmin)/(dmax-dmin)*(xR-xL);
-  const real=hasCI&&lo>0, col=real?'#0f8a84':'#c98a10';
+  const real=hasCI&&lo>0&&!d.washed, col=real?'#0f8a84':'#c98a10';
   const x0=X(0), xv=X(d.val);
   let s=`<svg class="lchart-svg" viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="xMinYMin meet" role="img" aria-label="${esc(title)}">`;
   s+=`<line x1="${x0.toFixed(1)}" y1="18" x2="${x0.toFixed(1)}" y2="${midY+18}" stroke="var(--ink4)" stroke-width="1" stroke-dasharray="3 3"/>`;
@@ -2345,7 +2348,7 @@ function ledgerRangeChart(title,d){
   s+=`<circle cx="${xv.toFixed(1)}" cy="${midY}" r="5" fill="${col}" stroke="var(--surface)" stroke-width="1.5"/>`;
   s+=`<text x="${xv.toFixed(1)}" y="${midY-11}" class="lc-val" text-anchor="middle">${d.val>=0?'+':''}${lnum(d.val)}</text>`;
   s+=`</svg>`;
-  const cap=hasCI?(real?'The range stays above zero — the improvement is likely real.':'The range crosses zero — not yet a proven improvement.'):'No confidence range was recorded for this improvement.';
+  const cap=!hasCI?'No confidence range was recorded for this improvement.':real?'The range stays above zero — the improvement is likely real.':(lo>0&&d.washed?'The range is above zero, but this result did not clear the lab’s full significance test, so it is not counted as real.':'The range crosses zero — not yet a proven improvement.');
   return `<div class="lchart"><div class="lchart-t">${esc(title)}</div><div class="lchart-sub">${esc(cap)}</div>${s}</div>`;
 }
 function ledgerCharts(row,cd){
