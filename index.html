@@ -272,6 +272,46 @@
   .fieldcard .fk{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink5);margin-bottom:5px}
   .fieldcard .fv{font-size:13px;color:#2b3036;line-height:1.42;word-break:break-word;overflow-wrap:anywhere}
 
+  /* ---- ledger accordion rows ---- */
+  .lrow{border-bottom:1px solid var(--faint3)}
+  .lrow:last-child{border-bottom:none}
+  .lrow>summary{display:grid;grid-template-columns:minmax(0,1.55fr) 130px minmax(0,.8fr) 26px;gap:14px;align-items:center;padding:15px 20px;cursor:pointer;list-style:none;transition:background .14s}
+  .lrow>summary::-webkit-details-marker{display:none}
+  .lrow>summary>*{min-width:0}
+  .lrow>summary:hover{background:var(--acc-tint2)}
+  .lrow[open]>summary{background:var(--acc-tint2)}
+  .lrow .lmain{min-width:0}
+  .lrow .ltitle{font-size:14.5px;font-weight:600;line-height:1.28;color:var(--ink);word-break:break-word;overflow-wrap:anywhere}
+  .lrow .ldesc{font-size:12.8px;line-height:1.45;color:var(--ink4);margin-top:4px;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .lrow .lmeta{font-family:var(--mono);font-size:11.5px;color:var(--ink5);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .lrow .lchips{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .lrow .chev{color:var(--ink4);justify-self:end;display:inline-flex;transition:transform .18s ease}
+  .lrow[open] .chev{transform:rotate(180deg);color:var(--acc)}
+  .ldetail{padding:0 20px}
+  .lrow[open] .ldetail{padding:4px 20px 22px}
+  .lplain{font-size:14.5px;line-height:1.6;color:var(--ink2);text-wrap:pretty;margin:2px 0 16px;max-width:720px}
+  .lplain .lnums{color:var(--ink3)}
+  .lcharts{display:flex;flex-wrap:wrap;gap:16px;margin:0 0 20px}
+  .lchart{flex:1 1 340px;max-width:460px;min-width:0;background:var(--subtle);border:1px solid var(--faint);border-radius:11px;padding:13px 14px 10px}
+  .lchart-t{font-size:12.5px;font-weight:600;color:var(--ink2);line-height:1.35;margin-bottom:3px}
+  .lchart-sub{font-family:var(--mono);font-size:10px;color:var(--ink5);margin-bottom:4px}
+  .lchart-svg{display:block;margin-top:6px;overflow:visible}
+  .lchart-svg .lc-axis{font-family:var(--mono);font-size:9.5px;fill:var(--ink5)}
+  .lchart-svg .lc-name{font-family:var(--mono);font-size:10.5px;fill:var(--ink3)}
+  .lchart-svg .lc-val{font-family:var(--mono);font-size:10.5px;font-weight:600;fill:var(--ink)}
+  .ldsec{margin:0 0 6px}
+  .ldsec-h{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink5);margin:0 0 9px}
+  .lfields{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:0 0 16px}
+  .lfield{background:var(--surface);border:1px solid var(--faint);border-radius:10px;padding:11px 12px;min-width:0}
+  .lfield .lfk{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink5);margin-bottom:5px}
+  .lfield .lfv{font-size:13px;color:#2b3036;line-height:1.42;word-break:break-word;overflow-wrap:anywhere}
+  .lmeaning{font-size:12.5px;color:var(--ink4);line-height:1.5;margin:0 0 14px;max-width:720px}
+  .lraw{margin-top:6px;border:1px solid var(--faint);border-radius:9px;background:var(--subtle)}
+  .lraw>summary{cursor:pointer;list-style:none;font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink5);padding:9px 12px}
+  .lraw>summary::-webkit-details-marker{display:none}
+  .lraw>summary:hover{color:var(--ink3)}
+  .lraw .ljson{margin:0;padding:0 12px 12px;overflow:auto;font-family:var(--mono);font-size:11.5px;color:var(--ink2);max-height:360px;white-space:pre-wrap;word-break:break-word}
+
   /* ---- lakehouse lists ---- */
   .lhlists{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
   .lhcard{padding:22px}
@@ -573,6 +613,9 @@
     .m-grid,.d-grid{grid-template-columns:1.6fr 1fr 22px}
     .l-grid{grid-template-columns:minmax(0,1fr) 92px 24px}
     .m-grid .hide-sm,.d-grid .hide-sm,.l-grid .hide-sm{display:none}
+    .lrow>summary{grid-template-columns:minmax(0,1fr) 92px 22px}
+    .lrow .hide-sm{display:none}
+    .lfields{grid-template-columns:1fr}
     .thead{display:none}
     .snappill .b{display:none}
     .brand{min-width:0}
@@ -1230,7 +1273,7 @@
   <section class="view" id="ledger">
     <div style="margin-bottom:22px;max-width:860px">
       <h1 class="sec">Complete ledger</h1>
-      <p class="subhead">Every published entry in the snapshot, in one searchable audit trail: findings, models, research questions, signals, datasets, gates, evidence files, docs, vocabulary, and notes. Use the filters to narrow the long list; click any row for the plain-English meaning, saved fields, provenance, and raw record.</p>
+      <p class="subhead">Every result and its research trail, in one searchable list: findings, models, innovation reviews, research questions, and the signals we tested. Raw data assets live in the Lakehouse. Use the filters to narrow the list; click any row to expand a plain-English explanation, charts, saved fields, and the raw record.</p>
     </div>
     <div class="ledgerstats" id="ledgerstats"></div>
     <div class="ledgerbar">
@@ -1247,7 +1290,6 @@
     </div>
     <div class="ledgercount" id="ledgercount"></div>
     <div class="card ledgerlist">
-      <div class="ledgerrow ledgerhead l-grid"><span>Entry</span><span>Type</span><span class="hide-sm">State / topic</span><span></span></div>
       <div id="ledgerrows"></div>
     </div>
   </section>
@@ -1985,14 +2027,7 @@ const LEDGER_TYPES=[
   ['model','Models','#3a6ea5'],
   ['innovation','Innovation reviews','#3b5bdb'],
   ['question','Questions','#5f7fb0'],
-  ['signal','Signals','#4f9b6e'],
-  ['dataset','Datasets','#0f7a74'],
-  ['gate','Gates','#9a6a07'],
-  ['evidence','Evidence files','#7c6fb0'],
-  ['document','Docs','#586f8a'],
-  ['vocabulary','Vocabulary','#7c828a'],
-  ['note','Notes','#9aa0a7'],
-  ['metadata','Metadata','#5b6168']
+  ['signal','Signals','#4f9b6e']
 ];
 const LEDGER_TYPE_META=Object.fromEntries(LEDGER_TYPES.map((t,i)=>[t[0],{label:t[1],dot:t[2],rank:i}]));
 function targetFamilyTitle(id){for(const F of TARGET_FAMILIES){if(F.ids.includes(id))return F.title;}return 'Cross-cutting & methods';}
@@ -2014,23 +2049,6 @@ function ledgerSignalStatus(g){
   if(sts.some(s=>s==='UNTESTED'||s==='KEEP-research'))return 'Caveated';
   return 'Signal';
 }
-function ledgerEvidenceTitle(path){
-  const base=String(path||'').split('/').pop()||path;
-  return base.replace(/\.(json|md|csv)$/i,'');
-}
-function ledgerEvidenceSummary(v){
-  if(v==null)return 'Saved evidence artifact with no payload in this public snapshot.';
-  if(Array.isArray(v))return `Saved evidence artifact containing ${v.length} records.`;
-  if(typeof v==='object'){
-    const keys=Object.keys(v);
-    const hints=[];
-    for(const k of ['verdict','status','headline','title','summary','plain','model_ap','delta_ap','roc_auc','n','events']){
-      if(v[k]!=null)hints.push(`${pretty(k)}: ${valueText(v[k],90)}`);
-    }
-    return hints.length?`Machine-readable evidence artifact. ${hints.slice(0,3).join('; ')}.`:`Machine-readable evidence artifact with ${keys.length} top-level field${keys.length===1?'':'s'}: ${keys.slice(0,6).map(pretty).join(', ')}.`;
-  }
-  return trimText(v,210);
-}
 function innovText(s){const d=document.createElement('div');d.innerHTML=String(s==null?'':s);return (d.textContent||d.innerText||'').replace(/\s+/g,' ').trim();}
 function ledgerRows(){
   if(LEDGER_ROWS)return LEDGER_ROWS;
@@ -2045,8 +2063,6 @@ function ledgerRows(){
     ].join(' ').toLowerCase();
     rows.push(row);
   };
-  add({type:'metadata',key:'metadata:snapshot',title:'Published snapshot',status:DATA.overall_status||'Metadata',topic:'Snapshot',desc:`Static site snapshot built ${DATA._built_pacific||DATA.snapshot_generated||'unknown build time'}.`,meta:'data.json',raw:{built_pacific:DATA._built_pacific,built_iso:DATA._built_iso,snapshot_generated:DATA.snapshot_generated,overall_status:DATA.overall_status,counts:DATA.counts}});
-  if(DATA.git)add({type:'metadata',key:'metadata:git',title:'Git provenance',status:'Metadata',topic:'Snapshot',desc:`Source branch ${DATA.git.branch||'unknown'} at ${DATA.git.last_commit||'unknown commit'}.`,meta:DATA.git.risk?'risk '+DATA.git.risk:'repository state',raw:DATA.git});
   (DATA.findings||[]).forEach((f,i)=>{
     const st=findingStatus(f.kind), fam=findingFamily(f.id);
     const m=pickMetric(f);
@@ -2062,32 +2078,6 @@ function ledgerRows(){
   (DATA.signals||[]).forEach((g,i)=>{
     const targets=[...new Set((g.verdicts||[]).map(v=>v.target).filter(Boolean))];
     add({type:'signal',key:'signal:'+g.name,id:g.name,index:i,title:g.name,status:ledgerSignalStatus(g),topic:g.modality?pretty(g.modality):targetTopicFromText(g.name+' '+g.what),desc:g.what||'Tracked signal or representation.',meta:`${(g.verdicts||[]).length} verdicts${targets.length?' · '+targets.slice(0,3).map(targetLabel).join(', '):''}`,raw:g});
-  });
-  (DATA.data_assets||[]).forEach((a,i)=>{
-    const range=a.date_min?`${String(a.date_min).slice(0,10)} to ${String(a.date_max||'').slice(0,10)}`:'no date range';
-    add({type:'dataset',key:'dataset:lake:'+a.asset_id,id:a.asset_id,index:i,store:'lake',title:a.asset_id,status:'Production',topic:a.source?pretty(a.source):pretty(a.kind||'dataset'),desc:`Governed public data asset with ${a.rows!=null?fmt(a.rows)+' rows':'unknown row count'} and ${range}.${a.signals&&a.signals.length?' Signals: '+a.signals.join(', ')+'.':''}`,meta:[a.kind,a.status,a.path].filter(Boolean).join(' · '),raw:a,source:{type:'dataset',store:'lake',idx:i}});
-  });
-  shadowAssets().forEach((d,i)=>{
-    add({type:'dataset',key:'dataset:shadow:'+d.name,id:d.name,index:i,store:'shadow',title:d.name,status:'Shadow',topic:pretty(d.source||'shadow'),desc:'Experimental or under-validation dataset tracked before production promotion.',meta:[d.rows!=null?fmt(d.rows)+' rows':null,d.source].filter(Boolean).join(' · '),raw:d,source:{type:'dataset',store:'shadow',idx:i}});
-  });
-  (DATA.gates||[]).forEach((g,i)=>{
-    const st=String(g.overall_status||'Gate').toUpperCase();
-    add({type:'gate',key:'gate:'+g.gate_id,id:g.gate_id,index:i,title:pretty(g.gate_id),status:st,topic:'Audit gates',desc:gateExplain(g),meta:[g.artifact,g.age_days!=null?g.age_days+'d old':null].filter(Boolean).join(' · '),raw:g});
-  });
-  Object.entries(EVID||{}).forEach(([path,obj],i)=>{
-    add({type:'evidence',key:'evidence:'+path,id:path,index:i,title:ledgerEvidenceTitle(path),status:'Evidence',topic:path.split('/').slice(0,2).join('/')||'Evidence files',desc:ledgerEvidenceSummary(obj),meta:path,raw:obj,path});
-  });
-  (PROJECT_DOCS||[]).forEach((d,i)=>{
-    add({type:'document',key:'document:'+i+':'+d.path,id:d.path,index:i,title:d.title||d.path,status:'Document',topic:d.path||'Project docs',desc:d.text||'',meta:[d.path,d.chunk!=null?'chunk '+d.chunk:null,d.priority!=null?'priority '+d.priority:null].filter(Boolean).join(' · '),raw:d});
-  });
-  (DATA.vocabulary||[]).forEach((c,i)=>{
-    add({type:'vocabulary',key:'vocabulary:'+c.key,id:c.key,index:i,title:c.label||c.key,status:'Vocabulary',topic:'Glossary',desc:c.what||'',meta:(c.examples||[]).slice(0,3).join(' · '),raw:c,source:{type:'vocab',key:c.key}});
-  });
-  (DATA.next_actions||[]).forEach((n,i)=>{
-    add({type:'note',key:'note:next:'+i,id:'next_action_'+(i+1),index:i,title:'Build note '+(i+1),status:'Note',topic:'Build notes',desc:n,meta:'next_actions',raw:n});
-  });
-  (DATA.lab_memory||[]).forEach((m,i)=>{
-    add({type:'note',key:'note:memory:'+((m&&m.id)||i),id:(m&&m.id)||'memory_'+i,index:i,title:(m&&m.claim?trimText(m.claim,80):(m&&m.id)||'Lab memory'),status:'Note',topic:m&&m.kind?pretty(m.kind):'Lab memory',desc:(m&&m.claim)||'',meta:m&&m.basis?m.basis:'lab_memory',raw:m});
   });
   (typeof INNOVATIONS!=='undefined'?INNOVATIONS:[]).forEach((x,i)=>{
     const vmap={WIN:'Supported',PARTIAL:'Caveated',CAUTION:'Caveated','DEAD END':'Null',METHOD:'Audited'};
@@ -2111,15 +2101,15 @@ function ledgerFilteredRows(){
   return rows;
 }
 function renderLedgerStats(all){
-  const supported=all.filter(r=>r.status==='Supported').length;
-  const evidence=all.filter(r=>r.type==='evidence'||r.type==='document').length;
-  const datasets=all.filter(r=>r.type==='dataset').length;
-  const rows=(DATA.data_assets||[]).reduce((a,d)=>a+(d.rows||0),0);
+  const nType=t=>all.filter(r=>r.type===t).length;
+  const findings=nType('finding'), supported=all.filter(r=>r.type==='finding'&&r.status==='Supported').length;
+  const signalRows=all.filter(r=>r.type==='signal');
+  const signalsKept=signalRows.filter(r=>r.status==='Signal').length;
   $('#ledgerstats').innerHTML=[
-    ['Ledger entries',fmt(all.length),'every published row type'],
-    ['Claimable findings',fmt((DATA.counts&&DATA.counts.claimable)||0),'enough evidence to cite · '+fmt(supported)+' supported · '+(DATA.findings||[]).length+' total'],
-    ['Data assets',fmt(datasets),fmt(rows)+' governed rows'],
-    ['Evidence summaries',fmt(evidence),'summary records only']
+    ['Ledger entries',fmt(all.length),'results and research trail'],
+    ['Findings',fmt(findings),fmt(supported)+' supported'],
+    ['Models',fmt(nType('model')),'registered systems + baselines'],
+    ['Signals tested',fmt(signalRows.length),fmt(signalsKept)+' kept as real']
   ].map(([k,v,s])=>`<div class="ledgerstat"><div class="k">${esc(k)}</div><div class="v">${esc(v)}</div><div class="s">${esc(s)}</div></div>`).join('');
 }
 function renderLedgerFilters(all){
@@ -2164,18 +2154,28 @@ function renderLedger(){
   renderLedgerStats(all);
   renderLedgerFilters(all);
   const rows=ledgerFilteredRows();
-  $('#ledgercount').textContent=`Showing ${rows.length.toLocaleString()} of ${all.length.toLocaleString()} ledger entries. Click any row for the full saved record.`;
+  $('#ledgercount').textContent=`Showing ${rows.length.toLocaleString()} of ${all.length.toLocaleString()} ledger entries. Click any row to expand it in place.`;
   $('#ledgerrows').innerHTML=rows.map(r=>{
     const b=anyBadge(r.status), meta=LEDGER_TYPE_META[r.type]||{label:r.type,dot:r.dot||'#9aa0a7'};
-    return `<div class="ledgerrow click l-grid" data-k="${esc(r.key)}">
-      <div><div class="ltitle">${esc(r.title)}</div><div class="ldesc">${esc(trimText(r.desc,230))}</div><div class="lmeta">${esc(trimText(r.meta||r.id||'',160))}</div></div>
+    return `<details class="lrow" data-k="${esc(r.key)}"><summary>
+      <div class="lmain"><div class="ltitle">${esc(r.title)}</div><div class="ldesc">${esc(trimText(r.desc,230))}</div><div class="lmeta">${esc(trimText(r.meta||r.id||'',160))}</div></div>
       <span class="ltypechip"><i style="background:${esc(meta.dot)}"></i>${esc(meta.label)}</span>
       <div class="lchips hide-sm"><span class="sbadge" style="background:${b.bg};color:${b.text}">${esc(r.status)}</span><span class="vchip" style="background:var(--faint3);color:var(--ink3)">${esc(trimText(r.topic,42))}</span></div>
-      <span class="chev">→</span>
-    </div>`;
+      <span class="chev">${LCHEV}</span>
+      </summary><div class="ldetail"></div></details>`;
   }).join('') || '<div class="lhempty" style="padding:18px 22px">No ledger entries match the current filters.</div>';
-  document.querySelectorAll('#ledgerrows .ledgerrow').forEach(r=>r.onclick=e=>{if(e.target.closest('.helpq'))return;DETAIL={type:'ledger',key:r.dataset.k};renderDrawer();});
+  document.querySelectorAll('#ledgerrows .lrow').forEach(d=>{
+    d.addEventListener('toggle',()=>{
+      if(!d.open)return;
+      const body=d.querySelector('.ldetail');
+      if(body.dataset.filled)return;
+      const row=ledgerRows().find(r=>r.key===d.dataset.k);
+      body.innerHTML=row?ledgerBody(row):'';
+      body.dataset.filled='1';
+    });
+  });
 }
+const LCHEV='<svg class="chevsvg" viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6l4 4 4-4"/></svg>';
 function ledgerMeaning(type){
   return {
     finding:'A finding is a tested science result. It may be supported, caveated, or null, but it stays in the record either way.',
@@ -2237,6 +2237,171 @@ function ledgerDrawer(key){
       <div class="hubsec"><div class="hl">Raw saved record</div><pre class="jsonpreview">${esc(json.length>12000?json.slice(0,12000)+'\n... truncated in browser drawer ...':json)}</pre></div>
     </div>
   </div>`;
+}
+
+/* ---------- ledger accordion body: plain-English + inline-SVG charts ---------- */
+const LNUM=x=>typeof x==='number'&&isFinite(x);
+const LCIOK=x=>Array.isArray(x)&&x.length>=2&&LNUM(x[0])&&LNUM(x[1]);
+const LMODEL=['model_ap','catboost_ap','best_model_ap','driver_aug_ap','ap_combo','macro_auc_model','heldout_basin_profile_auc','plus_rain_auc','model_auc'];
+const LBASE=['station_memory_ap','best_baseline_ap','baseline_ap','better_naive_ap','hgbt_ap','ap_persist','driver_free_ap','macro_auc_recurrence','heldout_basin_surface_auc'];
+const LDELTA=['delta_ap','margin_ap','best_delta_ap','within_basin_ap_lift','best_lobo_delta_ap','ap_gain','ddpcr_adds_auc'];
+const LCI_KEYS=['ci95','delta_ap_ci95','boot_ci95','dAP_ci'];
+const LBASENAME={station_memory_ap:'station-memory baseline',best_baseline_ap:'best fair baseline',baseline_ap:'fair baseline',better_naive_ap:'best naive baseline',hgbt_ap:'frozen-HGBT baseline',ap_persist:'persistence baseline',driver_free_ap:'weather-free baseline',macro_auc_recurrence:'recurrence baseline',heldout_basin_surface_auc:'surface-only baseline'};
+function lmetFamily(k){return /auc/i.test(k)?'auc':'ap';}
+function lbaseName(k){return LBASENAME[k]||pretty(k.replace(/_ap$|_auc$/,''))+' baseline';}
+function lfirst(m,keys){for(const k of keys)if(LNUM(m[k]))return [k,m[k]];return null;}
+// adaptive number formatting for chart labels / sentences (uses a real minus sign)
+function lnum(v,d){if(v==null||!isFinite(v))return '—';const dd=d==null?(Math.abs(v)<0.1?3:2):d;return (v<0?'−':'')+Math.abs(v).toFixed(dd);}
+function ledgerChartData(row){
+  const out={compare:null,delta:null,base_rate:null};
+  if(row.type!=='finding')return out;
+  const m=(row.raw&&row.raw.metrics)||{};
+  if(LNUM(m.base_rate))out.base_rate=m.base_rate; else if(LNUM(m.test_base_rate))out.base_rate=m.test_base_rate;
+  const mv=lfirst(m,LMODEL), bv=lfirst(m,LBASE);
+  if(mv&&bv&&lmetFamily(mv[0])===lmetFamily(bv[0])){
+    out.compare={modelVal:mv[1],baseVal:bv[1],baseName:lbaseName(bv[0]),scaleLabel:lmetFamily(mv[0])==='auc'?'AUC':'average precision (AP)'};
+  }
+  const dv=lfirst(m,LDELTA);
+  if(dv){
+    let ci=null;
+    for(const k of LCI_KEYS){if(LCIOK(m[k])){ci=m[k];break;}}
+    if(!ci&&LCIOK(m[dv[0]+'_ci95']))ci=m[dv[0]+'_ci95'];
+    // honesty guard: only attach a range if the point estimate falls inside it
+    if(ci&&!(Math.min(ci[0],ci[1])-1e-9<=dv[1]&&dv[1]<=Math.max(ci[0],ci[1])+1e-9))ci=null;
+    out.delta={val:dv[1],lo:ci?ci[0]:null,hi:ci?ci[1]:null};
+  }
+  return out;
+}
+function ledgerPlainText(row){
+  const r=row.raw||{};
+  if(row.type==='finding')return r.plain||r.headline||r.what||row.desc||'';
+  if(row.type==='model')return r.plain||r.beats_baseline||row.desc||'';
+  if(row.type==='question')return r.plain||r.question||row.desc||'';
+  if(row.type==='signal')return r.what||row.desc||'';
+  if(row.type==='innovation')return (r.plain||'')+(r.found?' What we found: '+r.found:'');
+  return row.desc||'';
+}
+function ledgerNumbersSentence(cd){
+  if(!cd)return '';
+  const parts=[];
+  if(cd.compare){
+    const c=cd.compare, gap=cd.delta?cd.delta.val:(c.modelVal-c.baseVal);
+    parts.push(`The model scores ${lnum(c.modelVal)} on a 0-to-1 scale where a fair ${c.baseName} scores ${lnum(c.baseVal)} — a gap of ${gap>=0?'+':''}${lnum(gap)}.`);
+  }
+  if(cd.delta&&cd.delta.lo!=null){
+    const lo=Math.min(cd.delta.lo,cd.delta.hi), hi=Math.max(cd.delta.lo,cd.delta.hi);
+    if(lo>0)parts.push(`Because the confidence range (${lnum(lo)} to ${lnum(hi)}) stays above zero, the improvement is very likely real, not luck.`);
+    else parts.push(`The confidence range (${lnum(lo)} to ${lnum(hi)}) includes zero, so we can't yet call the improvement real.`);
+  } else if(cd.delta){
+    parts.push(`The measured improvement is ${cd.delta.val>=0?'+':''}${lnum(cd.delta.val)}, but no confidence range was recorded, so how solid it is stays open.`);
+  }
+  return parts.join(' ');
+}
+// generic 0..max horizontal bar chart; names above each bar, value labelled at bar end
+function ledgerBarChart(title,items,o){
+  o=o||{};
+  const max=o.max||1, W=440, top=22, nameH=16, barH=15, blockGap=13, axisH=16;
+  const xL=8, xR=W-46, trackW=xR-xL, n=items.length;
+  const H=top+n*(nameH+barH)+(n-1)*blockGap+axisH;
+  const axisY=H-axisH+2;
+  let s=`<svg class="lchart-svg" viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="xMinYMin meet" role="img" aria-label="${esc(title)}">`;
+  s+=`<line x1="${xL}" y1="${axisY}" x2="${xR}" y2="${axisY}" stroke="var(--border)" stroke-width="1"/>`;
+  s+=`<text x="${xL}" y="${axisY+13}" class="lc-axis" text-anchor="start">0</text>`;
+  s+=`<text x="${xR}" y="${axisY+13}" class="lc-axis" text-anchor="end">${o.integer?String(max):(max===1?'1.0':String(max))}</text>`;
+  items.forEach((it,i)=>{
+    const by=top+i*(nameH+barH+blockGap), barY=by+nameH;
+    const w=trackW*Math.max(0,Math.min(1,(it.val||0)/max));
+    s+=`<rect x="${xL}" y="${barY}" width="${trackW}" height="${barH}" rx="4" fill="var(--faint2)"/>`;
+    s+=`<rect x="${xL}" y="${barY}" width="${w.toFixed(1)}" height="${barH}" rx="4" fill="${it.color}"/>`;
+    s+=`<text x="${xL}" y="${by+11}" class="lc-name" text-anchor="start">${esc(it.name)}</text>`;
+    const disp=it.disp!=null?it.disp:lnum(it.val);
+    const vx=Math.min(xL+w+6,xR+2);
+    s+=`<text x="${vx.toFixed(1)}" y="${barY+barH-3}" class="lc-val" text-anchor="start">${esc(disp)}</text>`;
+  });
+  s+=`</svg>`;
+  const sub=o.unit?`<div class="lchart-sub">scale: ${esc(o.unit)}, 0 to 1</div>`:'';
+  return `<div class="lchart"><div class="lchart-t">${esc(title)}</div>${sub}${s}</div>`;
+}
+// horizontal number line that includes 0; point + CI whisker
+function ledgerRangeChart(title,d){
+  const W=440, xL=40, xR=W-40, midY=42, H=84;
+  const hasCI=d.lo!=null&&d.hi!=null;
+  const lo=hasCI?Math.min(d.lo,d.hi):d.val, hi=hasCI?Math.max(d.lo,d.hi):d.val;
+  let dmin=Math.min(0,lo,d.val), dmax=Math.max(0,hi,d.val);
+  const span=(dmax-dmin)||0.02, pad=span*0.18; dmin-=pad; dmax+=pad;
+  const X=v=>xL+(v-dmin)/(dmax-dmin)*(xR-xL);
+  const real=hasCI&&lo>0, col=real?'#0f8a84':'#c98a10';
+  const x0=X(0), xv=X(d.val);
+  let s=`<svg class="lchart-svg" viewBox="0 0 ${W} ${H}" width="100%" preserveAspectRatio="xMinYMin meet" role="img" aria-label="${esc(title)}">`;
+  s+=`<line x1="${x0.toFixed(1)}" y1="18" x2="${x0.toFixed(1)}" y2="${midY+18}" stroke="var(--ink4)" stroke-width="1" stroke-dasharray="3 3"/>`;
+  s+=`<text x="${x0.toFixed(1)}" y="14" class="lc-axis" text-anchor="middle">0</text>`;
+  if(hasCI){
+    s+=`<line x1="${X(lo).toFixed(1)}" y1="${midY}" x2="${X(hi).toFixed(1)}" y2="${midY}" stroke="${col}" stroke-width="2.5" stroke-linecap="round"/>`;
+    s+=`<line x1="${X(lo).toFixed(1)}" y1="${midY-6}" x2="${X(lo).toFixed(1)}" y2="${midY+6}" stroke="${col}" stroke-width="2"/>`;
+    s+=`<line x1="${X(hi).toFixed(1)}" y1="${midY-6}" x2="${X(hi).toFixed(1)}" y2="${midY+6}" stroke="${col}" stroke-width="2"/>`;
+    s+=`<text x="${X(lo).toFixed(1)}" y="${midY+22}" class="lc-axis" text-anchor="middle">${lnum(lo)}</text>`;
+    s+=`<text x="${X(hi).toFixed(1)}" y="${midY+22}" class="lc-axis" text-anchor="middle">${lnum(hi)}</text>`;
+  }
+  s+=`<circle cx="${xv.toFixed(1)}" cy="${midY}" r="5" fill="${col}" stroke="var(--surface)" stroke-width="1.5"/>`;
+  s+=`<text x="${xv.toFixed(1)}" y="${midY-11}" class="lc-val" text-anchor="middle">${d.val>=0?'+':''}${lnum(d.val)}</text>`;
+  s+=`</svg>`;
+  const cap=hasCI?(real?'The range stays above zero — the improvement is likely real.':'The range crosses zero — not yet a proven improvement.'):'No confidence range was recorded for this improvement.';
+  return `<div class="lchart"><div class="lchart-t">${esc(title)}</div><div class="lchart-sub">${esc(cap)}</div>${s}</div>`;
+}
+function ledgerCharts(row,cd){
+  const type=row.type, r=row.raw||{};
+  let out='';
+  if(type==='finding'){
+    if(cd.compare)out+=ledgerBarChart('How the model compares to a fair baseline',[
+      {name:'Model',val:cd.compare.modelVal,color:'#0f8a84'},
+      {name:cd.compare.baseName,val:cd.compare.baseVal,color:'#9aa0a7'}
+    ],{max:1,unit:cd.compare.scaleLabel});
+    if(cd.delta)out+=ledgerRangeChart('Is the improvement real? (crosses zero = not yet)',cd.delta);
+  } else if(type==='model'){
+    const c=r.confusion||{};
+    if(['tp','fp','fn','tn'].every(k=>LNUM(c[k]))){
+      const recall=c.tp/(c.tp+c.fn), precision=c.tp/(c.tp+c.fp);
+      out+=ledgerBarChart('When it flags, how often it is right (precision) and how many real events it catches (recall)',[
+        {name:'Recall',val:recall,color:'#0f8a84'},
+        {name:'Precision',val:precision,color:'#0f8a84'}
+      ],{max:1});
+    }
+  } else if(type==='question'){
+    const items=[
+      {name:'Findings',val:findingsForTarget(r.id).length,color:'#0f8a84'},
+      {name:'Models',val:modelsForTarget(r.id).length,color:'#3a6ea5'},
+      {name:'Signals',val:signalsForTarget(r.id).length,color:'#4f9b6e'}
+    ];
+    const mx=Math.max(1,...items.map(x=>x.val));
+    out+=ledgerBarChart('Evidence linked to this question',items.map(x=>({...x,disp:String(x.val)})),{max:mx,integer:true});
+  } else if(type==='signal'){
+    const vs=(r.verdicts||[]).map(v=>String(v.status||'').toUpperCase());
+    const kept=vs.filter(s=>s==='KEEP'||s==='PRIMARY').length;
+    const washed=vs.filter(s=>s==='WASH'||s==='REJECT').length;
+    const other=vs.length-kept-washed;
+    const items=[
+      {name:'Kept as real',val:kept,color:'#0f8a84'},
+      {name:'Washed / rejected',val:washed,color:'#9aa0a7'},
+      {name:'Untested / blocked',val:other,color:'#c98a10'}
+    ];
+    const mx=Math.max(1,...items.map(x=>x.val));
+    out+=ledgerBarChart("How this signal's tests turned out (verdicts)",items.map(x=>({...x,disp:String(x.val)})),{max:mx,integer:true});
+  }
+  return out?`<div class="lcharts">${out}</div>`:'';
+}
+function ledgerBody(row){
+  const cd=ledgerChartData(row);
+  const plain=ledgerPlainText(row);
+  const nums=ledgerNumbersSentence(cd);
+  let html='<div class="lplain">'+esc(plain)+(nums?' <span class="lnums">'+esc(nums)+'</span>':'')+'</div>';
+  html+=ledgerCharts(row,cd);
+  const fields=ledgerFieldPairs(row).filter(([k,v])=>v!=null&&v!==''&&!(Array.isArray(v)&&!v.length));
+  html+=`<div class="ldsec"><div class="ldsec-h">Details</div><div class="lfields">${fields.slice(0,10).map(([k,v])=>`<div class="lfield"><div class="lfk">${esc(k)}</div><div class="lfv">${esc(valueText(v,420))}</div></div>`).join('')}</div>`;
+  html+=`<p class="lmeaning">${esc(ledgerMeaning(row.type))}</p>`;
+  html+=ledgerActions(row)+'</div>';
+  const json=JSON.stringify(row.raw,null,2);
+  html+=`<details class="lraw"><summary>Raw saved record</summary><pre class="ljson">${esc(json.length>12000?json.slice(0,12000)+'\n... truncated ...':json)}</pre></details>`;
+  return html;
 }
 
 /* ---------- lakehouse ---------- */

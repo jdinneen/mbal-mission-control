@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260712T185119Z-1435-28664",
-  "built_utc": "2026-07-12T18:51:19Z",
-  "message": "Remove the Map tab and its cross-view map links"
+  "deploy_id": "20260712T190958Z-2502-29932",
+  "built_utc": "2026-07-12T19:09:58Z",
+  "message": "Redesign Ledger cards: trim to results + research trail, inline collapsible cards, plain-English + model-vs-baseline and confidence-range charts"
 }
