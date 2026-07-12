@@ -794,7 +794,6 @@
     <button data-v="overview" class="active">Overview</button>
     <button data-v="data">Lakehouse</button>
     <button data-v="models">Discovery Engines</button>
-    <button data-v="innovations">Innovation</button>
     <button data-v="map">Map</button>
     <button data-v="ledger">Ledger</button>
     <button data-v="glossary">Glossary</button>
@@ -1311,15 +1310,6 @@
   </section>
 
   <!-- ===== GLOSSARY ===== -->
-  <section class="view" id="innovations">
-    <div class="ihero">
-      <h1 class="sec">Innovation</h1>
-      <p class="subhead">The modern machine-learning and physics toolkit, applied honestly to ocean-hazard forecasting. Ten ideas we tried &mdash; each with the plain-English version, the bet behind it, what we found, and the technical detail. Wins and dead-ends alike, because knowing which is which is the whole point.</p>
-    </div>
-    <div class="ithrough"><p><b>The through-line.</b> Ocean data is dominated by &ldquo;tomorrow looks like today.&rdquo; Almost every clever driver or fancy model just re-learns that. The two things that truly worked were changing the <b>question</b> (predict the onset, not the level) and changing the <b>place</b> (move a model to a coast it has never seen). Everything else we tried honestly &mdash; and most of it washed, which is exactly what the evidence gate is for.</p></div>
-    <div class="iscore" id="innovscore"></div>
-    <div id="innovlist"></div>
-  </section>
   <section class="view" id="glossary">
     <div style="margin-bottom:18px;max-width:780px">
       <h1 class="sec">Glossary</h1>
@@ -1579,11 +1569,11 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';
 function resetRouteScroll(){window.scrollTo(0,0);setTimeout(()=>window.scrollTo(0,0),80);setTimeout(()=>window.scrollTo(0,0),220);}
 function showView(v){
   v=VIEW_ALIAS[v]||v;
-  if(!['overview','questions','findings','models','map','ledger','data','glossary','innovations'].includes(v))v='overview';
+  if(!['overview','questions','findings','models','map','ledger','data','glossary'].includes(v))v='overview';
   TAB=v; if(DETAIL){DETAIL=null;renderDrawer();}
   document.querySelectorAll('nav.tabs button').forEach(b=>{const on=b.dataset.v===v;b.classList.toggle('active',on);if(on&&b.scrollIntoView)try{b.scrollIntoView({inline:'center',block:'nearest'});}catch(e){}});
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id===v));
-  if(DATA){if(v==='questions')renderQuestions();if(v==='findings')renderFindings();if(v==='models')renderModels();if(v==='ledger')renderLedger();if(v==='data')renderData();if(v==='glossary')renderVocabulary();if(v==='innovations')renderInnovations();}
+  if(DATA){if(v==='questions')renderQuestions();if(v==='findings')renderFindings();if(v==='models')renderModels();if(v==='ledger')renderLedger();if(v==='data')renderData();if(v==='glossary')renderVocabulary();}
   if(v==='map')renderMap();
   resetRouteScroll();
   pv('/'+v,v);
@@ -2059,6 +2049,7 @@ function renderModels(){
 const LEDGER_TYPES=[
   ['finding','Findings','#0f8a84'],
   ['model','Models','#3a6ea5'],
+  ['innovation','Innovation reviews','#3b5bdb'],
   ['question','Questions','#5f7fb0'],
   ['signal','Signals','#4f9b6e'],
   ['dataset','Datasets','#0f7a74'],
@@ -2106,6 +2097,7 @@ function ledgerEvidenceSummary(v){
   }
   return trimText(v,210);
 }
+function innovText(s){const d=document.createElement('div');d.innerHTML=String(s==null?'':s);return (d.textContent||d.innerText||'').replace(/\s+/g,' ').trim();}
 function ledgerRows(){
   if(LEDGER_ROWS)return LEDGER_ROWS;
   const rows=[]; let order=0;
@@ -2162,6 +2154,11 @@ function ledgerRows(){
   });
   (DATA.lab_memory||[]).forEach((m,i)=>{
     add({type:'note',key:'note:memory:'+((m&&m.id)||i),id:(m&&m.id)||'memory_'+i,index:i,title:(m&&m.claim?trimText(m.claim,80):(m&&m.id)||'Lab memory'),status:'Note',topic:m&&m.kind?pretty(m.kind):'Lab memory',desc:(m&&m.claim)||'',meta:m&&m.basis?m.basis:'lab_memory',raw:m});
+  });
+  (typeof INNOVATIONS!=='undefined'?INNOVATIONS:[]).forEach((x,i)=>{
+    const vmap={WIN:'Supported',PARTIAL:'Caveated',CAUTION:'Caveated','DEAD END':'Null',METHOD:'Audited'};
+    const clean={n:x.n,title:innovText(x.title),verdict:x.verdict,plain:innovText(x.plain),bet:innovText(x.bet),found:innovText(x.found),ds:innovText(x.ds)};
+    add({type:'innovation',key:'innovation:'+x.n,id:'innovation_'+x.n,index:i,title:clean.title,status:vmap[x.verdict]||'Caveated',topic:'Innovation reviews',desc:clean.plain+' — What we found: '+clean.found,meta:'Verdict: '+x.verdict+' · innovation review '+x.n,raw:clean});
   });
   LEDGER_ROWS=rows;
   return rows;
@@ -2239,6 +2236,7 @@ function renderLedger(){
 function ledgerMeaning(type){
   return {
     finding:'A finding is a tested science result. It may be supported, caveated, or null, but it stays in the record either way.',
+    innovation:'An innovation review is a plain-English writeup of one modern ML or physics idea the lab tried — the bet, what we found, and the technical detail — kept whether it was a win, a partial, or a dead-end.',
     model:'A model entry is a fitted system or baseline in the registry, with task, family, claimability, and evidence status.',
     question:'A question is a research target: the hazard, transfer problem, or method the lab is trying to answer.',
     signal:'A signal is an input, representation, or feature family tested against one or more targets. Verdicts say whether it helped.',
@@ -2254,6 +2252,7 @@ function ledgerMeaning(type){
 function ledgerFieldPairs(row){
   const r=row.raw||{}, type=row.type;
   if(type==='finding')return [['ID',r.id],['Kind',r.kind],['Status',row.status],['Topic',row.topic],['Evidence',r.evidence],['How tested',r.how],['Caveat / note',r.note],['Key metrics',r.metrics]];
+  if(type==='innovation')return [['Review #',r.n],['Verdict',r.verdict],['Plain-English',r.plain],['The bet',r.bet],['What we found',r.found],['For the data scientist',r.ds]];
   if(type==='model')return [['Model ID',r.model_id],['Family',r.family],['Task',r.task],['Registry status',r.status],['Claimable',r.claimable],['Baseline read',r.beats_baseline],['Evidence',r.evidence],['Evidence present',r.evidence_exists]];
   if(type==='question')return [['ID',r.id],['Question',r.question],['Status',r.status],['Family',row.topic],['Linked findings',findingsForTarget(r.id).length],['Linked models',modelsForTarget(r.id).length],['Linked signals',signalsForTarget(r.id).length]];
   if(type==='signal')return [['Name',r.name],['Modality',r.modality],['Verdicts',r.verdicts],['Targets',(r.verdicts||[]).map(v=>targetLabel(v.target)).join(', ')]];
@@ -2355,32 +2354,6 @@ const INNOVATIONS=[
  found:'The highest-value tool we have. Just this week it caught four promotable-looking results that were mirages: a domoic-acid model that lost to &ldquo;rank by recent toxin,&rdquo; a cyano tool beaten by a one-line rule, a graph net that was disguised memory, and a foundation-model win that only beat a weak baseline.',
  ds:'Claim-card gate = strongest single fair baseline (rolling site-recurrence, never persistence/climatology/union), forward-blocked CV, station-clustered bootstrap CI, permutation and key-shuffle nulls, a default-refuted adversarial verifier, and audit-the-auditor recursion. This is why the verdict chips elsewhere on this site can be trusted.'}
 ];
-function renderInnovations(){
-  const list=document.getElementById('innovlist'); if(!list)return;
-  const CLS={WIN:'win',PARTIAL:'partial','DEAD END':'dead',CAUTION:'caution',METHOD:'method'};
-  const c=v=>INNOVATIONS.filter(x=>x.verdict===v).length;
-  const sc=document.getElementById('innovscore');
-  if(sc)sc.innerHTML=[
-    ['#0f8a84',c('WIN'),'Real wins','onset + zero-shot transfer'],
-    ['#c98a10',c('PARTIAL'),'Partial','worked in the right slot'],
-    ['#9aa0a7',c('DEAD END')+c('CAUTION'),'Washed out','clever, but no real edge'],
-    ['#3b5bdb',c('METHOD'),'Method','the referee that makes it real']
-  ].map(m=>'<div class="imetric" style="border-top-color:'+m[0]+'"><div class="v" style="color:'+m[0]+'">'+m[1]+'</div><div class="k">'+m[2]+'</div><div class="s">'+m[3]+'</div></div>').join('');
-  const GROUPS={'01':['What actually worked','the two real escapes'],'03':['The physics-transfer bets','real, but only in the right slot'],'07':['Honest dead-ends','model cleverness was not the lever'],'10':['The method','the referee that makes the rest trustworthy']};
-  list.innerHTML=INNOVATIONS.map(x=>{const cl=CLS[x.verdict]||'dead', b=INNOV_BADGE[x.verdict]||INNOV_BADGE['DEAD END'];
-    const g=GROUPS[x.n]?('<div class="igroup"><h2>'+GROUPS[x.n][0]+'</h2><span>'+GROUPS[x.n][1]+'</span></div>'):'';
-    return g+'<div class="icard '+cl+'">'
-      +'<div class="ichead"><span class="icnum">'+x.n+'</span><span class="ictitle">'+x.title+'</span>'
-      +'<span class="icverdict" style="background:'+b.bg+';color:'+b.text+'">'+x.verdict+'</span></div>'
-      +'<p class="iclead">'+x.plain+'</p>'
-      +'<div class="icgrid">'
-      +'<div class="iblock ibet"><div class="lbl"><i></i>The bet</div><p>'+x.bet+'</p></div>'
-      +'<div class="iblock ifound '+cl+'"><div class="lbl"><i></i>What we found</div><p>'+x.found+'</p></div>'
-      +'</div>'
-      +'<div class="icds"><span class="dlbl">For the data scientist</span>'+x.ds+'</div>'
-      +'</div>';}).join('');
-}
-
 function renderData(){renderLake();}
 function renderLake(){
   const inv=(DATA.lakehouse_sources||[]);
