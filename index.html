@@ -26,8 +26,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <style>
   :root{
     --bg:#f5f6f6; --surface:#ffffff; --subtle:#f7f9f9;
@@ -347,32 +345,6 @@
 
   .loadwrap{padding:80px 28px;text-align:center;color:var(--ink4);font-family:var(--mono);font-size:14px}
 
-  /* ---- map ---- */
-  .maplink{display:inline-flex;align-items:center;gap:6px;border:1px solid #cfe3e1!important;background:var(--acc-tint2)!important;color:var(--acc)!important;font-family:var(--sans)!important;font-weight:600;font-size:13px!important;padding:9px 13px!important;line-height:1.35;text-align:left}
-  .maplink:hover{background:var(--acc)!important;color:#fff!important;border-color:var(--acc)!important}
-  .mapcontrols{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px}
-  .mapdomain{display:inline-flex;gap:3px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:3px;box-shadow:var(--card-sh)}
-  .mapdomain button{appearance:none;border:none;background:none;cursor:pointer;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink3);padding:7px 14px;border-radius:8px;transition:all .14s}
-  .mapdomain button:hover{color:var(--ink)}
-  .mapdomain button.active{background:var(--ink);color:#fff}
-  .maptoggle{display:inline-flex;gap:3px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:3px;box-shadow:var(--card-sh)}
-  .maptoggle button{appearance:none;border:none;background:none;cursor:pointer;font-family:var(--sans);font-size:13px;font-weight:600;color:var(--ink3);padding:7px 15px;border-radius:8px;transition:all .14s}
-  .maptoggle button:hover{color:var(--ink)}
-  .maptoggle button.active{background:var(--acc);color:#fff}
-  .mapwrap{position:relative;border:1px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:var(--card-sh);background:#eef2f3}
-  #leafmap{height:560px;width:100%}
-  #leafmap .leaflet-container{font-family:var(--sans)}
-  .leaflet-popup-content{font-family:var(--sans);font-size:13px;line-height:1.5}
-  .leaflet-popup-content .pn{font-weight:600;font-size:14px}
-  .leaflet-popup-content .pm{font-family:var(--mono);font-size:12px;color:var(--ink3)}
-  .maplegend{position:absolute;bottom:14px;left:14px;z-index:500;background:rgba(255,255,255,.94);backdrop-filter:blur(4px);border:1px solid var(--border);border-radius:11px;padding:12px 14px;box-shadow:var(--card-sh);max-width:230px}
-  .maplegend .lt{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink4);margin-bottom:8px}
-  .maplegend .lrow{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--ink2);margin:5px 0}
-  .maplegend .sw{width:13px;height:13px;border-radius:50%;flex:none}
-  .maplegend .ring{width:13px;height:13px;border-radius:50%;border:1.5px dashed #9aa0a7;flex:none}
-  .mapnote{margin:12px 2px 0;font-size:12.5px;color:var(--ink4);line-height:1.5}
-  .mapfail{padding:60px 24px;text-align:center;color:var(--ink4);font-size:14px}
-
   /* ---- footer / access ---- */
   .sitefoot{border-top:1px solid var(--border);background:var(--surface);margin-top:20px}
   .footwrap{max-width:1120px;margin:0 auto;padding:34px 28px 48px;display:grid;grid-template-columns:1.3fr 1fr;gap:36px}
@@ -606,8 +578,6 @@
     .brand{min-width:0}
     .brand .name,.brand .eyebrow{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .footwrap{grid-template-columns:1fr;gap:24px;padding:28px 16px 40px}
-    #leafmap{height:420px}
-    .maplegend{max-width:170px;padding:9px 11px}
     .dl{flex-wrap:wrap}
     .ledgerrow{padding:14px 16px}
     .fieldgrid{grid-template-columns:1fr}
@@ -796,7 +766,6 @@
     <button data-v="overview" class="active">Overview</button>
     <button data-v="data">Lakehouse</button>
     <button data-v="models">Discovery Engines</button>
-    <button data-v="map">Map</button>
     <button data-v="ledger">Ledger</button>
     <button data-v="glossary">Glossary</button>
   </nav>
@@ -1257,33 +1226,6 @@
     </div>
   </section>
 
-  <!-- ===== MAP ===== -->
-  <section class="view" id="map">
-    <div style="margin-bottom:18px;max-width:760px">
-      <h1 class="sec">The network, by place</h1>
-      <p class="subhead">Pick a dataset, then a view. <b>Coverage</b> = where monitoring sites are and how often they go over the limit. <b>Model skill</b> (beach bacteria only) colors each site by actual held-out ranking skill (AUC). <b>Evidence grid</b> groups nearby sites into map cells so you can see observation support and model confidence together. We never paint confidence where there's no support, and never interpolate a surface over open water.</p>
-    </div>
-    <div class="mapcontrols">
-      <div class="mapdomain" id="mapdomain">
-        <button data-d="bacteria" class="active">CA beach bacteria</button>
-        <button data-d="cyano">US lakes · cyano</button>
-        <button data-d="domoic">Domoic-acid piers</button>
-        <button data-d="ireland">Ireland bathing water</button>
-      </div>
-      <div class="maptoggle" id="maptoggle">
-        <button data-m="coverage" class="active">Coverage</button>
-        <button data-m="skill">Model skill</button>
-        <button data-m="grid">Evidence grid</button>
-      </div>
-    </div>
-    <div class="mapwrap">
-      <div id="leafmap"></div>
-      <div class="maplegend" id="maplegend"></div>
-    </div>
-    <p class="mapnote" id="mapnote"></p>
-    <p class="mapnote" style="color:var(--ink5)">Other basins (e.g. Japan / Tokyo Bay) are held under a research-only license, so their station data isn't republished here.</p>
-  </section>
-
   <!-- ===== COMPLETE LEDGER ===== -->
   <section class="view" id="ledger">
     <div style="margin-bottom:22px;max-width:860px">
@@ -1467,7 +1409,7 @@ function appendHelpAll(selector,helps){
 function applyStaticHelp(){
   appendHelp('#snaplabel','Published snapshot means a frozen public copy of the current evidence, not a live private workspace.');
   appendHelp('#snapwhen','This is the month and year when the public snapshot was built.');
-  appendHelpAll('nav.tabs button',['Overview is the summary page.','Data and reproduce is the organized evidence inventory and access note.','Discovery Engines explains how the lab searches for signal and gates claims.','Map shows data and model evidence by place.','Ledger is the full searchable audit trail.','Glossary explains the lab words.']);
+  appendHelpAll('nav.tabs button',['Overview is the summary page.','Data and reproduce is the organized evidence inventory and access note.','Discovery Engines explains how the lab searches for signal and gates claims.','Ledger is the full searchable audit trail.','Glossary explains the lab words.']);
   appendHelp('#overview .eyebrow','This page starts with the big picture before showing the evidence cards and datasets.');
   appendHelp('#overview .page','The homepage starts with the work itself: train forecasting engines, compare them to plain baselines, and publish the result.');
   appendHelp('#overview .lede','This paragraph names the current pipeline: lakehouse data, training engines, checked wins, caveats, and failures.');
@@ -1484,12 +1426,8 @@ function applyStaticHelp(){
   appendHelp('#models .subhead','Frontier models help scout and specify jobs, but the claim gate is still held-out evidence against a fair baseline.');
   appendHelp('#lakehouse .sec','Lakehouse means the organized data inventory behind the snapshot.');
   appendHelp('#lakehouse .subhead','Production data is governed; shadow data is experimental or still being validated.');
-  appendHelp('#map .sec','The map shows evidence by place. It does not invent values between stations.');
-  appendHelp('#map .subhead','Coverage shows where data exists; model skill shows point-level held-out confidence; evidence grid groups nearby observations into cells as the honest map-pixel equivalent.');
   appendHelp('#ledger .sec','The ledger is the complete public index of snapshot entries.');
   appendHelp('#ledger .subhead','Use the ledger to trace every row back to its type, status, source fields, and raw record.');
-  appendHelpAll('#mapdomain button',['California beach bacteria monitoring sites and model evidence.','US lake cyanobacteria observations. This map shows coverage, not a finalized lake model.']);
-  appendHelpAll('#maptoggle button',['Coverage means where observations exist and how often the measured condition appears.','Model skill means how well the model ranked held-out events at each site, when enough events exist.','Evidence grid groups nearby sites into map cells so you can see observation support and model confidence together without pretending we have ocean-wide pixels.']);
   appendHelp('#vocabulary .sec','This section explains the lab words so non-experts can read the site without guessing.');
   appendHelp('#vocabulary .subhead','The vocabulary prevents common confusion, like treating an unfitted learner as a trained model.');
   appendHelp('.sitefoot .footcol:nth-child(1) .eyebrow','This section explains what the public snapshot is and how to read it.');
@@ -1570,12 +1508,11 @@ if('scrollRestoration' in history)history.scrollRestoration='manual';
 function resetRouteScroll(){window.scrollTo(0,0);setTimeout(()=>window.scrollTo(0,0),80);setTimeout(()=>window.scrollTo(0,0),220);}
 function showView(v){
   v=VIEW_ALIAS[v]||v;
-  if(!['overview','questions','findings','models','map','ledger','data','glossary'].includes(v))v='overview';
+  if(!['overview','questions','findings','models','ledger','data','glossary'].includes(v))v='overview';
   TAB=v; if(DETAIL){DETAIL=null;renderDrawer();}
   document.querySelectorAll('nav.tabs button').forEach(b=>{const on=b.dataset.v===v;b.classList.toggle('active',on);if(on&&b.scrollIntoView)try{b.scrollIntoView({inline:'center',block:'nearest'});}catch(e){}});
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id===v));
   if(DATA){if(v==='questions')renderQuestions();if(v==='findings')renderFindings();if(v==='models')renderModels();if(v==='ledger')renderLedger();if(v==='data')renderData();if(v==='glossary')renderVocabulary();}
-  if(v==='map')renderMap();
   resetRouteScroll();
   pv('/'+v,v);
 }
@@ -1682,7 +1619,7 @@ function renderBacteriaStory(){
       ${bar('Calibrated AI nowcast',modelAp,'Frozen HGBT + isotonic model on EXCLUDE_SAN_DIEGO test stratum.','#0f8a84')}
       ${bar('AB411 rain rule',rainAp,'Rain-only wet-weather advisory benchmark from the same operational benchmark.','#b8bdc3')}
     </div>
-    <p class="mapnote" style="margin-top:12px">The useful reframe is clean-to-dirty onset: among currently-clean beach-days, the model is ${esc(onsetLift)} over station memory on AP in the saved retrospective gate. The prospective post-freeze lockbox is still the honest next proof.</p>
+    <p style="margin:12px 2px 0;font-size:12.5px;color:var(--ink4);line-height:1.5">The useful reframe is clean-to-dirty onset: among currently-clean beach-days, the model is ${esc(onsetLift)} over station memory on AP in the saved retrospective gate. The prospective post-freeze lockbox is still the honest next proof.</p>
   </section>`;
 }
 /* ================= Ask the lab ================= */
@@ -1934,8 +1871,6 @@ function findingDetail(f){
   const sources=Array.isArray(f.sources)&&f.sources.length?`
     <div class="dlabel" style="margin-top:14px">Source files</div>
     <p class="tr">${f.sources.map(s=>esc(s)).join('<br>')}</p>`:'';
-  const domain=mapDomainFor((f.id||'')+' '+(f.title||'')+' '+(f.plain||'')+' '+(f.evidence||''));
-  const spatial=domain?mapLink(domain,'grid'):`<p class="footnote" style="margin:12px 0 0;color:var(--ink5)">No honest public spatial layer for this finding yet.${helpQ('Some findings are about time series, licensed basins, or non-spatial tests. We only show maps when the snapshot has public location support.')}</p>`;
   let cm='';
   if(hasCM(f)){
     cm=`<div class="cmwrap">
@@ -1960,8 +1895,6 @@ function findingDetail(f){
     ${fullReport?'':sources}
     ${cm}
     ${evbtn}
-    <div class="dlabel" style="margin-top:16px">Spatial evidence${helpQ('This shows whether the finding can be connected to public station/lake locations. The grid groups nearby observations and confidence where possible.')}</div>
-    ${spatial}
   </div>`;
 }
 function renderReportTable(t){
@@ -2282,8 +2215,6 @@ function ledgerActions(row){
   if(row.source&&row.source.type==='dataset')actions.push(`<button class="lnk" onclick="DETAIL={type:'dataset',store:${js(row.source.store)},idx:${js(row.source.idx)}};renderDrawer()">Open dataset card →</button>`);
   if(row.source&&row.source.type==='target')actions.push(`<button class="lnk" onclick="DETAIL={type:'target',idx:${js(row.source.idx)}};renderDrawer()">Open question hub →</button>`);
   if(row.source&&row.source.type==='vocab')actions.push(`<button class="lnk" onclick="DETAIL={type:'vocab',key:${js(row.source.key)}};renderDrawer()">Open vocabulary examples →</button>`);
-  const dom=mapDomainFor([row.title,row.desc,row.topic,row.meta].join(' '));
-  if(dom)actions.push(mapLink(dom,'grid'));
   return actions.length?`<div class="hubsec"><div class="hl">Related views</div><div style="display:flex;gap:8px;flex-wrap:wrap">${actions.join('')}</div></div>`:'';
 }
 function ledgerDrawer(key){
@@ -2627,8 +2558,8 @@ function candidateTargetDrawer(t){
   </div>`;
 }
 
-/* ---------- map: multi-domain (CA bacteria / US lakes), honest views ---------- */
-// which map domain (if any) a result/model belongs to — null = no spatial map yet
+/* ---------- domain classification (topic labels for findings/models/ledger) ---------- */
+// which data domain (if any) a result/model belongs to — null = no domain match
 function mapDomainFor(s){const t=String(s||'').toLowerCase();
   if(/cyano|\blake/.test(t))return 'cyano';
   if(/domoic|pseudo.?nitzschia|\bhab\b|harmful.?alga|\bda_|shellfish.?toxin/.test(t))return 'domoic';
@@ -2636,136 +2567,6 @@ function mapDomainFor(s){const t=String(s||'').toLowerCase();
   if(/bacteria|beach|enterococc|exceedance|station.?memory|clean.?to.?dirty|sampling/.test(t))return 'bacteria';
   return null;}
 const DOMAIN_LABEL={bacteria:'CA beach bacteria',cyano:'US lakes · cyano',domoic:'Domoic-acid piers',ireland:'Ireland bathing water'};
-let _pendingDomain=null,_pendingMode=null;
-function goMap(dom,mode){_pendingDomain=dom||null; _pendingMode=mode||null; if(DETAIL){DETAIL=null;renderDrawer();} location.hash='map';}
-function mapLink(domain,mode='grid'){return domain?`<button class="lnk maplink" onclick="goMap(${js(domain)},${js(mode)})">📍 Where's the data &amp; how confident is the model? See the ${esc(DOMAIN_LABEL[domain]||domain)} ${mode==='grid'?'evidence grid':'map'} →${helpQ('This opens the map view for the relevant dataset or target, so you can see where observations exist and where model confidence is honestly scoreable.')}</button>`:'';}
-const MAP_DOMAINS=[
-  {key:'bacteria',label:'CA beach bacteria',file:'stations.geojson',unit:'samples',valueLabel:'exceedance (AB411 > 104)',siteWord:'stations',hasSkill:true},
-  {key:'cyano',label:'US lakes · cyano',file:'lakes_cyano.geojson',unit:'obs-weeks',valueLabel:'bloom frequency',siteWord:'lakes',hasSkill:false},
-  {key:'domoic',label:'Domoic-acid piers',file:'piers_domoic.geojson',unit:'samples',valueLabel:'domoic-acid exceedance',siteWord:'piers',hasSkill:false},
-  {key:'ireland',label:'Ireland bathing water',file:'ireland_beaches.geojson',unit:'samples',valueLabel:'below-Good rate',siteWord:'beaches',hasSkill:false}
-];
-let _map=null,_mlayer=null,_feats=[],_mmax=1,_mmeta={},_domain=MAP_DOMAINS[0],_mode='coverage',_dcache={};
-function brColor(br){if(br==null)return '#b8bdc3';if(br<0.08)return '#1a7a4f';if(br<0.18)return '#3f9e6b';if(br<0.30)return '#c9a23a';if(br<0.45)return '#e0772f';return '#b4453c';}
-function aucColor(a){if(a==null)return null;if(a<0.6)return '#b4453c';if(a<0.7)return '#e0772f';if(a<0.8)return '#c9a23a';if(a<0.88)return '#3f9e6b';return '#1a7a4f';}
-function mRad(n){return 3+(Math.sqrt(Math.max(n,1))/Math.sqrt(_mmax))*13;}
-function gridStep(){return _domain.key==='bacteria'?0.5:2.5;}
-function gridOpacity(obs,maxObs){return Math.max(.16,Math.min(.82,.16+.66*Math.sqrt(Math.max(obs,0)/Math.max(maxObs,1))));}
-function buildGrid(){
-  const step=gridStep(), cells=new Map();
-  _feats.forEach(f=>{
-    const p=f.properties||{},c=(f.geometry&&f.geometry.coordinates)||[];
-    if(c.length<2)return;
-    const lon0=Math.floor(c[0]/step)*step, lat0=Math.floor(c[1]/step)*step, key=lat0.toFixed(4)+','+lon0.toFixed(4);
-    let cell=cells.get(key);
-    if(!cell){cell={lat0,lon0,obs:0,sites:0,test:0,events:0,rateN:0,rateD:0,aucN:0,aucD:0,memN:0,memD:0,low:0};cells.set(key,cell);}
-    const obs=Number(p.n_obs||0), test=Number(p.n_test||0);
-    cell.obs+=obs; cell.sites+=1; cell.test+=test; cell.events+=Number(p.events||0); if(p.low_support)cell.low+=1;
-    if(p.base_rate!=null&&obs>0){cell.rateN+=Number(p.base_rate)*obs;cell.rateD+=obs;}
-    if(p.model_auc!=null&&test>0){cell.aucN+=Number(p.model_auc)*test;cell.aucD+=test;}
-    if(p.mem_auc!=null&&test>0){cell.memN+=Number(p.mem_auc)*test;cell.memD+=test;}
-  });
-  const arr=[...cells.values()];
-  arr.forEach(c=>{c.rate=c.rateD?c.rateN/c.rateD:null;c.auc=c.aucD?c.aucN/c.aucD:null;c.mem=c.memD?c.memN/c.memD:null;});
-  return arr;
-}
-function gridPopup(c){
-  const model=c.auc!=null?`weighted model AUC ${c.auc.toFixed(2)}${c.mem!=null?` vs station-memory ${c.mem.toFixed(2)}`:''}`:'not enough held-out events for model confidence';
-  const rate=c.rate!=null?`${(_domain.key==='bacteria'?'observed exceedance':'observed bloom')} ${(100*c.rate).toFixed(0)}%`:'observed rate unknown';
-  return `<span class="pn">Evidence grid cell${helpQ('A grid cell groups nearby monitoring sites so you can see support and confidence by area.')}</span><br><span class="pm">${fmt(c.obs)} ${_domain.unit}${helpQ('This is the observation support in this map cell. More observations usually means stronger local support.')} · ${fmt(c.sites)} ${_domain.siteWord}${helpQ('This is how many monitoring places landed in the cell.')} · ${rate}${helpQ('This is the measured outcome rate inside the cell.')}<br>${model}${helpQ('Model confidence here is a held-out, support-weighted AUC when the snapshot has enough events. It is not a fresh live prediction.')}</span>`;
-}
-function drawGrid(){
-  const cells=buildGrid(), step=gridStep(), maxObs=Math.max(1,...cells.map(c=>c.obs));
-  cells.forEach(c=>{
-    const hasSkill=c.auc!=null, fill=_domain.hasSkill?(aucColor(c.auc)||'#cfd2d6'):brColor(c.rate);
-    const op=gridOpacity(c.obs,maxObs), stroke=hasSkill||!_domain.hasSkill?'#fff':'#8e969d';
-    L.rectangle([[c.lat0,c.lon0],[c.lat0+step,c.lon0+step]],{
-      color:stroke,weight:hasSkill?1.2:1,dashArray:hasSkill||!_domain.hasSkill?null:'3 3',
-      fillColor:fill,fillOpacity:op
-    }).bindPopup(gridPopup(c)).addTo(_mlayer);
-  });
-  const scored=cells.filter(c=>c.auc!=null).length;
-  if(_domain.hasSkill){
-    $('#mapnote').innerHTML=`Evidence grid: ${cells.length.toLocaleString()} map cells aggregate ${fmt(cells.reduce((a,c)=>a+c.obs,0))} observations. Color shows support-weighted held-out model AUC where enough events exist; opacity shows observation support. Cells without enough events are gray/dashed. ${helpQ('This is the honest map-pixel equivalent: nearby stations are grouped into cells. It is not an interpolated prediction surface over unsampled water.')}`;
-    $('#maplegend').innerHTML=`<div class="lt">Evidence grid${helpQ('Grid cells summarize nearby observations and model confidence.')}</div>
-      <div class="lrow"><span class="sw" style="background:#b4453c"></span>low confidence / AUC &lt; 0.60${helpQ('The model did not rank events well in this area.')}</div>
-      <div class="lrow"><span class="sw" style="background:#c9a23a"></span>moderate confidence${helpQ('The model has some local ranking skill here.')}</div>
-      <div class="lrow"><span class="sw" style="background:#1a7a4f"></span>high confidence / AUC &gt; 0.88${helpQ('The model ranked held-out events strongly in this cell.')}</div>
-      <div class="lrow"><span class="ring"></span>not enough held-out events${helpQ('There may be observations here, but not enough event cases for an honest local confidence score.')}</div>
-      <div class="lt" style="margin-top:9px">opacity = observation support${helpQ('Darker cells have more observations behind them.')}</div>`;
-  }else{
-    $('#mapnote').innerHTML=`Evidence grid: ${cells.length.toLocaleString()} map cells aggregate ${fmt(cells.reduce((a,c)=>a+c.obs,0))} observed lake-weeks. This domain has coverage only; the snapshot does not publish an honest per-lake confidence layer. ${helpQ('For this domain, grid cells show observation support and observed bloom frequency, not model confidence.')}`;
-    $('#maplegend').innerHTML=`<div class="lt">Coverage grid${helpQ('Grid cells summarize nearby lake observations.')}</div>
-      <div class="lrow"><span class="sw" style="background:#1a7a4f"></span>low observed rate${helpQ('The measured condition was uncommon in this cell.')}</div>
-      <div class="lrow"><span class="sw" style="background:#c9a23a"></span>moderate observed rate${helpQ('The measured condition appeared sometimes in this cell.')}</div>
-      <div class="lrow"><span class="sw" style="background:#b4453c"></span>high observed rate${helpQ('The measured condition appeared often in this cell.')}</div>
-      <div class="lt" style="margin-top:9px">opacity = observation support${helpQ('Darker cells have more observed lake-weeks behind them.')}</div>`;
-  }
-}
-function mPopup(p,mode){
-  const head=`<span class="pn">${esc(p.name)}${helpQ('This is the monitoring site or lake name from the map data.')}</span><br><span class="pm">${esc(p.county||'')}${helpQ('This is the county or area label when available.')} · ${fmt(p.n_obs)} ${_domain.unit}${helpQ('This is how many observations or records are attached to this place.')}`;
-  if(mode==='skill'){const a=p.model_auc;
-    return head+` · ${fmt(p.n_test)} held-out (${fmt(p.events)} events)${helpQ('Held-out records were kept separate for a more honest test. Events are the actual positive cases. ')}`+(a!=null?` · model AUC ${a.toFixed(2)} vs station-memory ${(p.mem_auc!=null?p.mem_auc.toFixed(2):'—')}${helpQ('This compares model ranking skill against station-memory at this place.')}`:` · too few events to score${helpQ('There are not enough held-out events here for a trustworthy local skill number.')}`)+`</span>`;}
-  return head+` · ${esc(_domain.valueLabel.split(' (')[0])} ${p.base_rate!=null?(100*p.base_rate).toFixed(0)+'%':'—'}${helpQ('This is the observed rate for the mapped condition at this place.')}${p.low_support?' · low support'+helpQ('Low support means the site has too few observations for high confidence.'):''}</span>`;
-}
-function mDraw(mode){
-  if(!_mlayer)return; _mode=mode; _mlayer.clearLayers();
-  if(mode==='grid'){
-    drawGrid();
-    document.querySelectorAll('#maptoggle button').forEach(b=>b.classList.toggle('active',b.dataset.m===mode));
-    return;
-  }
-  _feats.forEach(f=>{const p=f.properties,c=f.geometry.coordinates;let fill,op,stroke,wt,dash;
-    if(mode==='skill'){const a=p.model_auc;
-      if(a==null){fill='#cfd2d6';op=0.14;stroke='#9aa0a7';wt=1;dash='2 2';}
-      else{fill=aucColor(a);op=0.85;stroke='#fff';wt=1;dash=null;}
-    }else{const low=p.low_support;fill=brColor(p.base_rate);op=low?0.28:0.82;stroke=low?'#9aa0a7':'#fff';wt=low?1.2:1;dash=low?'2 2':null;}
-    L.circleMarker([c[1],c[0]],{radius:mRad(p.n_obs),fillColor:fill,fillOpacity:op,color:stroke,weight:wt,dashArray:dash}).bindPopup(mPopup(p,mode)).addTo(_mlayer);});
-  const sc=_mmeta.scored_stations||0,tot=(_mmeta.stations||_feats.length),sw=_domain.siteWord;
-  if(mode==='skill'){
-    $('#mapnote').innerHTML=`${sc.toLocaleString()} of ${tot.toLocaleString()} ${sw} have enough held-out events to score honestly; the rest stay hollow. Per-station AUC is noisy at low counts, so we mask rather than colour them. ${esc(_mmeta.note||'')}${helpQ('The map only colors model skill where there is enough held-out data. Empty or hollow sites mean the site is real, but not safely scoreable.')}`;
-    $('#maplegend').innerHTML=`<div class="lt">Held-out model skill (AUC)${helpQ('AUC is model ranking skill. 0.5 is random; closer to 1 is better.')}</div>
-      <div class="lrow"><span class="sw" style="background:#b4453c"></span>poor (&lt; 0.60)${helpQ('Poor means the model barely ranks events better than random at that site.')}</div>
-      <div class="lrow"><span class="sw" style="background:#c9a23a"></span>moderate (~0.75)${helpQ('Moderate means the model has useful but not excellent ranking skill.')}</div>
-      <div class="lrow"><span class="sw" style="background:#1a7a4f"></span>strong (&gt; 0.88)${helpQ('Strong means the model ranks event days much higher than non-event days at that site.')}</div>
-      <div class="lrow"><span class="ring"></span>too few events to score${helpQ('Too few events means the site exists, but there are not enough held-out events for an honest local score.')}</div>
-      <div class="lt" style="margin-top:9px">marker size = ${esc(_domain.unit)}${helpQ('Bigger markers mean more observations or records for that place.')}</div>`;
-  }else{
-    $('#mapnote').innerHTML=`${tot.toLocaleString()} ${sw} with a known location. ${esc(_mmeta.note||'')}${helpQ('Known location means the site can be shown on the map. This is observation coverage, not a prediction surface.')}`;
-    $('#maplegend').innerHTML=`<div class="lt">Observed ${esc(_domain.valueLabel)}${helpQ('Observed means measured in the data, not guessed by the model.')}</div>
-      <div class="lrow"><span class="sw" style="background:#1a7a4f"></span>low${helpQ('Low means this condition was uncommon at the observed site.')}</div>
-      <div class="lrow"><span class="sw" style="background:#c9a23a"></span>moderate${helpQ('Moderate means this condition showed up sometimes.')}</div>
-      <div class="lrow"><span class="sw" style="background:#b4453c"></span>high${helpQ('High means this condition was common in the observations.')}</div>
-      <div class="lrow"><span class="ring"></span>thin support${helpQ('Thin support means not enough observations to treat the color as very reliable.')}</div>
-      <div class="lt" style="margin-top:9px">marker size = ${esc(_domain.unit)}${helpQ('Bigger markers mean more observations or records for that place.')}</div>`;
-  }
-  document.querySelectorAll('#maptoggle button').forEach(b=>b.classList.toggle('active',b.dataset.m===mode));
-}
-function selectDomain(key){
-  const d=MAP_DOMAINS.find(x=>x.key===key)||MAP_DOMAINS[0]; _domain=d;
-  document.querySelectorAll('#mapdomain button').forEach(b=>b.classList.toggle('active',b.dataset.d===d.key));
-  const tog=$('#maptoggle'); if(tog)tog.style.display='inline-flex';
-  const skillBtn=document.querySelector('#maptoggle button[data-m="skill"]'); if(skillBtn)skillBtn.style.display=d.hasSkill?'':'none';
-  if(!d.hasSkill&&_mode==='skill')_mode='grid';
-  const requested=_pendingMode||_mode||'coverage';
-  _mode=(!d.hasSkill&&requested==='skill')?'grid':requested;
-  const done=fc=>{_feats=fc.features||[]; _mmeta=fc.meta||{}; _mmax=1; _feats.forEach(f=>_mmax=Math.max(_mmax,f.properties.n_obs||0));
-    if(_mlayer)_mlayer.clearLayers(); else _mlayer=L.featureGroup().addTo(_map);
-    mDraw(_mode);
-    try{_map.fitBounds(_mlayer.getBounds().pad(0.06));setTimeout(()=>_map.invalidateSize(),60);}catch(e){}};
-  if(_dcache[key])done(_dcache[key]);
-  else{$('#mapnote').innerHTML='Loading '+esc(d.label)+'…'+helpQ('The map data is loaded from a published GeoJSON file.');fetch(d.file,{cache:'no-cache'}).then(r=>r.json()).then(fc=>{_dcache[key]=fc;done(fc);}).catch(()=>{$('#mapnote').innerHTML='Could not load '+esc(d.label)+' data.'+helpQ('The map file was unavailable, but the rest of the snapshot can still load.');});}
-}
-function renderMap(){
-  const host=$('#leafmap'); if(!host)return;
-  if(!window.L){host.innerHTML='<div class="mapfail">The map library did not load. The rest of the public evidence snapshot can still be read.</div>';return;}
-  if(_map){setTimeout(()=>_map.invalidateSize(),60);if(_pendingDomain||_pendingMode){selectDomain(_pendingDomain||_domain.key);_pendingDomain=null;_pendingMode=null;}return;}
-  _map=L.map('leafmap',{scrollWheelZoom:false}).setView([37,-110],4);
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{attribution:'© OpenStreetMap © CARTO',subdomains:'abcd',maxZoom:19}).addTo(_map);
-  document.querySelectorAll('#maptoggle button').forEach(b=>b.onclick=()=>mDraw(b.dataset.m));
-  document.querySelectorAll('#mapdomain button').forEach(b=>b.onclick=()=>selectDomain(b.dataset.d));
-  selectDomain(_pendingDomain||'bacteria'); _pendingDomain=null; _pendingMode=null;
-}
 /* ---------- public data-access notice ---------- */
 function renderDownloads(){
   const box=$('#downloads'); if(!box)return;
@@ -2828,8 +2629,6 @@ function hubSignals(id){const sl=signalsForTarget(id); if(!sl.length)return '';
 function targetDrawer(){
   const t=(DATA.targets||[])[DETAIL.idx]; if(!t)return '';
   const b=frontierBadge(t.status); const kind=t.kind==='method'?'Method':'Research question';
-  const dom=mapDomainFor(t.id||t.label);
-  const mapBlock=`<div class="hubsec"><div class="hl">On the map</div>${dom?mapLink(dom):'<p class="footnote" style="margin:0;color:var(--ink5)">No public spatial layer for this question yet — it needs per-location observations + held-out predictions.</p>'}</div>`;
   return `<div>
     <div class="dhead">
       <div><div class="eb">${esc(kind)} · ${esc(t.status)}</div><div class="ti">${esc(t.label)}</div>${t.question?`<div class="nt">${esc(t.question)}</div>`:''}</div>
@@ -2842,7 +2641,6 @@ function targetDrawer(){
       ${hubFindings(t.id)}
       ${hubModels(t.id)}
       ${hubSignals(t.id)}
-      ${mapBlock}
       <div class="hubsec"><div class="hl">Reproduce</div><button class="lnk" onclick="go('data')">Review source summary &amp; verify the snapshot →</button></div>
     </div>
   </div>`;
@@ -2896,7 +2694,6 @@ function modelDrawer(m){
       </div>
       ${audit.length?`<div class="dlabel">Audit notes${helpQ('Audit notes are checks that support or limit the model claim.')}</div>${audit.map(a=>`<div class="auditli"><i>✓</i><span>${esc(a)}${helpQ(statementHelp(a))}</span></div>`).join('')}`:''}
       ${evbtn}
-      ${(()=>{const d=mapDomainFor((m.task||'')+' '+(m.model_id||''));return d?('<div style="margin-top:14px">'+mapLink(d)+'</div>'):'';})()}
     </div>
   </div>`;
 }
