@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260713T231944Z-16455-8531",
-  "built_utc": "2026-07-13T23:19:44Z",
-  "message": "add Evidence Agent to built tools"
+  "deploy_id": "20260713T232950Z-18821-6550",
+  "built_utc": "2026-07-13T23:29:50Z",
+  "message": "Backfill 11 banked findings onto board (Arctic PSP, Chesapeake O2, Vibrio, lobster, REPHYTOX ranker, shark severity, zero-shot O2, colocation, nFLH, FIB trend, regime-shift)"
 }
