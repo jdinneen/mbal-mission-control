@@ -1393,8 +1393,11 @@ def _findings_campaign_findings():
 
 
 def _serendipity_findings():
-    rows = _local_json("reports/serendipity/couplings_gated.json") or []
-    supported = [r for r in rows if r.get("verdict") == "SUPPORTED"]
+    data = _local_json("reports/serendipity/couplings_gated.json") or []
+    # File shape drifted from a flat list of coupling rows to a summary dict
+    # ({verdict, supported: [...], gated: [...]}). Support both.
+    rows = data.get("supported", []) if isinstance(data, dict) else data
+    supported = [r for r in rows if isinstance(r, dict) and r.get("verdict") == "SUPPORTED"]
     if not supported:
         return []
     top = supported[0]
