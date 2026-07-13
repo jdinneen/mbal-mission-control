@@ -531,6 +531,20 @@
   .wincard p{margin:0;font-size:13px;line-height:1.52;color:var(--ink3);text-wrap:pretty}
   .winsmore{display:inline-flex;align-items:center;gap:6px;margin-top:16px;font-size:13.5px;font-weight:600;color:var(--acc);background:none;border:none;cursor:pointer;font-family:inherit;padding:0}
   .winsmore:hover{text-decoration:underline}
+  .livetools{margin:0 0 6px}
+  .toolgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .toolcard{background:var(--surface);border:1px solid var(--border);border-radius:15px;box-shadow:var(--card-sh);padding:18px 20px}
+  .toolcard .ttop{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:9px}
+  .toolcard .ttag{font-family:var(--mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--ink5)}
+  .toolcard .tstatus{display:inline-flex;align-items:center;gap:6px;font-family:var(--mono);font-size:11px;font-weight:600;color:var(--acc);white-space:nowrap}
+  .toolcard .tstatus .tdot{width:7px;height:7px;border-radius:50%;background:var(--acc);box-shadow:0 0 0 3px rgba(15,138,132,.16)}
+  .toolcard h3{margin:0 0 6px;font-size:16.5px;font-weight:600;line-height:1.28;color:var(--ink);letter-spacing:-.01em}
+  .toolcard p{margin:0;font-size:13px;line-height:1.52;color:var(--ink3);text-wrap:pretty}
+  .toollinks{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:14px}
+  .toollinks .tbtn{display:inline-flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:#fff;background:var(--acc);border:1px solid var(--acc);border-radius:9px;padding:8px 14px;transition:background .15s}
+  .toollinks .tbtn:hover{background:var(--acc-hover)}
+  .toollinks .tsec{font-size:13px;font-weight:600;color:var(--acc)}
+  .toollinks .tsec:hover{text-decoration:underline}
   details.primer{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--card-sh);margin:26px 0;overflow:hidden}
   details.primer>summary{list-style:none;cursor:pointer;padding:16px 22px;font-size:15px;font-weight:600;display:flex;align-items:center;gap:10px}
   details.primer>summary::-webkit-details-marker{display:none}
@@ -597,7 +611,7 @@
   .reprocard li{font-size:14px;line-height:1.6;color:var(--ink2);margin-bottom:7px}
   .reprocard code{font-family:var(--mono);font-size:12.5px;background:var(--faint3);border:1px solid var(--border);border-radius:5px;padding:1px 6px}
   @media (max-width:860px){
-    .featurevideo,.bigrow,.minigrid,.paths,.qcardgrid,.storyintro,.storyflow,.storycompare,.engineflow,.engineportfolio,.winsgrid,.herowrap,.crewrow{grid-template-columns:1fr}
+    .featurevideo,.bigrow,.minigrid,.paths,.qcardgrid,.storyintro,.storyflow,.storycompare,.engineflow,.engineportfolio,.winsgrid,.toolgrid,.herowrap,.crewrow{grid-template-columns:1fr}
     .pillarflow{grid-template-columns:1fr 1fr}
     .pillar::after{display:none}
     .heroart{max-width:440px}
@@ -879,6 +893,22 @@
           <h3>A 2-day beach warning that runs on free public forecast data</h3>
           <p>Where rain drives the pollution, a free NOAA rain-forecast feed can flag a likely exceedance two days ahead — confirmed in California and New Jersey, and it deploys cold-start, with no local training, to brand-new networks in Australia and the Texas Gulf. A free pre-screen tells you in advance which beaches a forecast feed will actually help.</p>
         </button>
+      </div>
+    </div>
+
+    <!-- Built & live: tools anyone can open and try -->
+    <div class="livetools" id="livetools">
+      <div class="secband"><h2>Built &amp; live</h2><p>Not just findings — tools the lab has built and put online. Open one and try it yourself.</p></div>
+      <div class="toolgrid">
+        <div class="toolcard">
+          <div class="ttop"><span class="ttag">Sensor-fusion · sea-surface temperature</span><span class="tstatus"><span class="tdot"></span>Live</span></div>
+          <h3>The Evidence Agent</h3>
+          <p>Cross-checks independent measurements of the same thing to test whether an answer can be defended. For a given day and place it lines up an ocean buoy's thermometer against separate satellite sea-surface-temperature analyses, and shows exactly how they agree or disagree — with an honest uncertainty band and full provenance for every number. It deliberately refuses to assert one "true" value: it presents the evidence, not a single blended figure.</p>
+          <div class="toollinks">
+            <a class="tbtn" href="https://evidence-agent-g52p2ey5oq-uc.a.run.app" target="_blank" rel="noopener">Open the Evidence Agent →</a>
+            <a class="tsec" href="evidence-agent.html" target="_blank" rel="noopener">How it works</a>
+          </div>
+        </div>
       </div>
     </div>
 
