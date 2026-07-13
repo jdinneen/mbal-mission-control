@@ -97,7 +97,7 @@
   <footer>
     <div id="scope"></div>
     <div style="margin-top:6px">Monitoring &amp; verification of <b>observed</b> conditions only — <b>not a forecast</b>.</div>
-    <div style="margin-top:6px">Built by the <b>Monterey Bay AI Lab</b> · data via NOAA CoastWatch ERDDAP · data updates hourly, page re-checks every 30 min</div>
+    <div style="margin-top:6px">Built by the <b>Monterey Bay AI Lab</b> · data via NOAA CoastWatch ERDDAP · source observation times are shown above, page re-checks every 30 min</div>
   </footer>
 </div>
 
@@ -149,7 +149,7 @@ function render(d){
   // freshness from OBSERVATION time (not the pipeline run time)
   const murAge = s.obs_age_days, buoyAgeH = x? x.obs_age_hours : null;
   document.getElementById('asof').innerHTML =
-    `Latest observation — satellite <b>${fmtDate(s.obs_date)}</b> (~${murAge<=1?'1 day':murAge+' days'} old)`
+    `Latest MUR blended analysis — <b>${fmtDate(s.obs_date)}</b> (~${murAge<=1?'1 day':murAge+' days'} old)`
     + (x? ` · in-situ buoy <b>${agoLabel(buoyAgeH)}</b>` : "");
   showStale(d,false);
 
@@ -172,7 +172,7 @@ function render(d){
   </div>
 
   <div class="spark">
-    <div class="lab"><b>Last ${s.series.length} days</b><span>satellite SST vs heat-wave threshold</span></div>
+    <div class="lab"><b>Last ${s.series.length} days</b><span>MUR blended analysis vs heat-wave threshold</span></div>
     ${sparkline(s.series)}
     <div class="legend"><span><i style="background:#0b6560"></i>SST (MUR analysis)</span>
       <span><i style="background:#e0662f"></i>Heat-wave threshold (seasonal 90th pct)</span>
@@ -181,10 +181,10 @@ function render(d){
 
   <div class="card">
     <h3><span class="pill">Cross-check</span> Gridded analysis vs a co-located buoy</h3>
-    <p class="lead">A gridded satellite SST analysis and an in-situ buoy observation at the same offshore point, shown side by side.</p>
+    <p class="lead">A gridded blended SST analysis and an in-situ buoy observation at the same offshore point, shown side by side.</p>
     <div class="pair">
       <div class="src">
-        <div class="nm">Satellite analysis</div>
+        <div class="nm">MUR blended analysis</div>
         <div class="ty">MUR L4 · ${s.depth} · obs ${fmtDate(s.obs_date)}</div>
         <div class="tmp">${s.sst_c.toFixed(1)}°C</div>
         <div class="an">${f1(s.anomaly_c)}°C vs normal</div>
@@ -203,19 +203,19 @@ function render(d){
     const agree=x.agree_today, split=!agree;
     let msg;
     if(agree){
-      msg = `<b>Both sources currently sit ${x.mur_above?'above':'below'} their heat-wave threshold</b>, ${Math.abs(x.diff_c).toFixed(1)}°C apart.`;
+      msg = `<b>At their separately shown observation times, both sources sit ${x.mur_above?'above':'below'} their own heat-wave threshold.</b> Their reported temperatures differ by ${Math.abs(x.diff_c).toFixed(1)}°C.`;
     }else{
-      const above = x.mur_above? 'the satellite analysis' : 'the in-situ buoy';
-      const below = x.mur_above? 'the in-situ buoy' : 'the satellite analysis';
-      msg = `<b>The two sources disagree today:</b> ${above} is above the heat-wave threshold while ${below} is below it (${Math.abs(x.diff_c).toFixed(1)}°C apart).`;
+      const above = x.mur_above? 'the MUR blended analysis' : 'the in-situ buoy';
+      const below = x.mur_above? 'the in-situ buoy' : 'the MUR blended analysis';
+      msg = `<b>At their separately shown observation times, the source states differ:</b> ${above} is above its own heat-wave threshold while ${below} is below its own threshold. Their reported temperatures differ by ${Math.abs(x.diff_c).toFixed(1)}°C.`;
     }
     html += `<div class="verdict ${split?'split':''}">${msg}</div>`;
   }
   html += `<div class="fine"><b>Track record</b> (${cs.pair}, ${cs.overlap[0].slice(0,4)}–${cs.overlap[1].slice(0,4)}, n=${cs.n_days.toLocaleString()} days):
     day-to-day the two agree on above/below-threshold state <b>${cs.daily_flag_agreement_pct}%</b> of days —
-    but heat-wave days are only ~${cs.heatwave_base_rate_pct}% of the record, so that percentage is inflated by
-    agreement on ordinary days. Chance-corrected <b>κ = ${cs.cohens_kappa}</b>; on the days a heat wave is actually
-    flagged the two overlap <b>${Math.round(cs.event_day_jaccard*100)}%</b> of the time (SST correlation r = ${cs.sst_correlation_r}).</div>
+    but above-threshold days are only ~${cs.heatwave_base_rate_pct}% of the record, so that percentage is inflated by
+    agreement on ordinary days. Chance-corrected <b>κ = ${cs.cohens_kappa}</b>; among days when either source is above
+    its threshold, the two overlap <b>${Math.round(cs.event_day_jaccard*100)}%</b> of the time (SST correlation r = ${cs.sst_correlation_r}). These are threshold-state comparisons, not qualified ≥5-day event comparisons.</div>
   <div class="fine">⚠︎ ${d.independence_caveat}</div>
   </div>
 
@@ -223,13 +223,13 @@ function render(d){
     <h3>What this means</h3>
     <p>A <b>marine heat wave</b> is a stretch of at least <b>5 days</b> when the ocean is hotter than 90% of days
     historically were for that time of year (Hobday et al., 2016). It stresses kelp, fish, and shellfish and shifts species.</p>
-    <p>This page reads the latest satellite SST analysis at one offshore point, compares it to what is normal for the date,
+    <p>This page reads the latest MUR blended SST analysis at one offshore point, compares it to what is normal for the date,
     and compares it against a co-located in-situ buoy — reporting how well the two agree and where they differ.</p>
     <details><summary>Method and limitations</summary>
       <ul>
         <li><b>Not a forecast.</b> Observed conditions only; no prediction of future heat waves.</li>
         <li><b>One offshore point, not "the bay."</b> This is the NDBC 46042 site (~40 km W of Monterey, deep water), chosen because the SST field is smooth there so a gridded product and a point buoy can be compared cleanly. It does not describe conditions throughout Monterey Bay.</li>
-        <li><b>Satellite latency.</b> The MUR analysis is ~1 day behind real time; the buoy is near-real-time. Their timestamps are shown separately.</li>
+        <li><b>Analysis latency.</b> The MUR analysis is delayed relative to the near-real-time buoy. Their actual observation times are shown separately.</li>
         <li><b>Not fully independent.</b> MUR is a blended analysis that ingests in-situ SST (possibly this buoy), so this is a <b>consistency</b> check, not an independent replication. The two also differ in depth (foundation SST vs ~1.5 m) and use their own climatology baselines.</li>
         <li><b>Agreement is moderate.</b> The high daily-agreement % is mostly agreement on ordinary non-event days; κ and the event-day overlap are the measures that matter.</li>
       </ul>
@@ -248,7 +248,7 @@ function showStale(d, hard){
     b.innerHTML = `⚠︎ Auto-update appears delayed — data last refreshed <b>${agoLabel(pipeAgeH)}</b>. Showing the most recent good values; treat with caution.`;
   } else if(murAge>3){
     b.className='banner warn'; b.style.display='block';
-    b.innerHTML = `Heads-up: the satellite analysis is <b>${murAge} days</b> old right now (source latency). The in-situ buoy remains current.`;
+    b.innerHTML = `Heads-up: the MUR blended analysis is <b>${murAge} days</b> old right now (source latency). The in-situ buoy remains current.`;
   }
 }
 

@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260712T192505Z-3219-8208",
-  "built_utc": "2026-07-12T19:25:05Z",
-  "message": "Fix Ledger chart honesty: null results never colored/worded as real wins; drop cross-metric-family delta (Argo AUC vs AP gap)"
+  "deploy_id": "20260713T223951Z-11886-26209",
+  "built_utc": "2026-07-13T22:39:51Z",
+  "message": "Refresh Mission Control snapshot; honest MUR-analysis wording on MHW page"
 }
