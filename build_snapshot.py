@@ -1715,9 +1715,157 @@ def _carrier_law_findings():
     )]
 
 
+def _banked_backfill_findings():
+    """Banked, adversary-verified findings that had no hand-wired card and so were
+    invisible on the board (2026-07-13 backfill). Numbers are verified against the
+    cited evidence JSON; a card is only emitted if its evidence file still exists.
+    Two known results are deliberately withheld: the Bigelow/Maine PSP forecast
+    (WIN-vs-WASH flips with the baseline, no single safe number) and the MHW live
+    tool (no clean current result JSON; only a superseded one)."""
+    specs = [
+        dict(
+            fid="banked_arctic_psp_detection", kind="positive",
+            evidence="reports/arctic_psp/psp_alexandrium_detection.json",
+            title="Arctic/Alaska Alexandrium -> PSP cold-start DETECTION",
+            headline="cold-start detection dAP +0.039 CI[0.010,0.072] (perm p=0.002); forward split NULL",
+            plain="Where the alga Alexandrium is seen in the water, shellfish are more likely to be too toxic to eat (paralytic shellfish poisoning). A model trained on other Alaska sites flags this at a brand-new, untested village slightly better than season plus base-rate alone.",
+            how="Leave-site-out cold start; permutation + key-shuffle guards; separate forward-year split checked and is null.",
+            metrics={"n_site_days": 2549, "events": 820, "n_sites": 29, "base_rate": 0.322,
+                     "base_ap": 0.5008, "model_ap": 0.5394, "marginal_ap": 0.0386,
+                     "ci95": [0.0101, 0.0719], "perm_p": 0.002, "psp_action_ug": 80.0, "year_range": [2015, 2026]},
+            note="DETECTION / nowcast only -- the forward-year split is NULL, so it does NOT forecast; the lift is a modest +0.04 AP over a 0.50 baseline and the co-located-only slices are weak. Value = life-safety coverage for subsistence villages with no lab-testing history via a cheap plankton-net reading.",
+        ),
+        dict(
+            fid="banked_chesapeake_hypoxia_virtual_sensor", kind="positive",
+            evidence="reports/hypoxia_chesapeake/coldstart_virtual_sensor/results.json",
+            title="Chesapeake cold-start hypoxia virtual sensor (T/S -> low O2)",
+            headline="unseen-station nowcast dAP +0.068 CI[0.033,0.127] (AP 0.885 -> 0.945)",
+            plain="Bottom-water temperature and salinity alone let you nowcast whether an UNMONITORED Chesapeake station is low-oxygen, filling spatial gaps between real oxygen sensors and helping decide where to deploy scarce ones.",
+            how="Leave-one-station-out cold start vs an ENRICHED cheap baseline (season harmonics + lat/lon + depth^2); station-clustered CI; robust to seeds, deep-drop, leave-region-out, and both phantom checks.",
+            metrics={"n_cruises": 15841, "stations": 26, "base_rate": 0.258,
+                     "enriched_baseline_ap": 0.885, "plus_ts_ap": 0.945, "genuine_ts_dap": 0.068,
+                     "ci95_station_clustered": [0.033, 0.127], "is_forecast": False},
+            note="NOWCAST, not a forecast (fills spatial coverage at unmonitored sites); textbook stratification/limnology, not novel. The separate hypoxia ONSET-forecast experiment is a well-powered NULL -- do not conflate.",
+        ),
+        dict(
+            fid="banked_vibrio_temperature_forecast", kind="positive",
+            evidence="reports/temperature_target/vibrio/adversary_verdict.json",
+            title="Coastal SST -> vibriosis exceedance forecast (2-week lead)",
+            headline="forward marginal AP +0.068 CI[0.021,0.115] at 2wk lead; all leave-one-state-out folds positive",
+            plain="Long coastal water temperature adds a real, modest, forward-in-time improvement over season plus persistence for predicting state-week Vibrio infection spikes two weeks ahead.",
+            how="Rolling-origin forward years 2018-2021, leave-one-state-out jackknife CI; leakage audit (train-only thresholds/climatology, strictly lead-shifted features); verdict CONFIRMED.",
+            metrics={"n_states": 8, "forward_marg_ap_lead2": 0.0681, "forward_marg_ap_lead4": 0.0569,
+                     "loso_jackknife_mean": 0.0678, "ci95": [0.0205, 0.1152], "all_loso_positive": True,
+                     "min_loso": 0.0562},
+            note="Only ~4 forward test years and one fully-clean non-COVID year (2019); 8 states; magnitude modest; uses finalized annual NNDSS so real-time deployment would be noisier.",
+        ),
+        dict(
+            fid="banked_lobster_temperature_timing", kind="positive",
+            evidence="reports/temperature_target/lobster/results.json",
+            title="Spring bottom temp -> Maine lobster run TIMING forecast",
+            headline="forward skill 0.705 vs climatology for run-onset timing (RMSE 0.157 vs 0.290); shuffle p=0.0005",
+            plain="April-May bottom-water temperature, known by June 1, forecasts when the summer Maine lobster 'shedder' run peaks -- useful for ex-vessel price and market planning.",
+            how="Held-out unit = YEAR, rolling-origin one-step-ahead expanding window (test n=13 yrs); non-circular (timing from landings, temp from an independent NERACOOS buoy); beats a year-trend baseline forward in every target.",
+            metrics={"onset_skill_vs_clim": 0.705, "temp_rmse": 0.157, "clim_rmse": 0.290, "trend_rmse": 0.284,
+                     "shuffle_null_forward_p": 0.0005, "loyo_onset_skill": 0.558, "n_years": 21, "n_test_years": 13},
+            note="N=21 years (low statistical power); single primary buoy; landings are a proxy for molt timing (also effort/market-modulated).",
+        ),
+        dict(
+            fid="banked_rephytox_da_alert_ranker", kind="positive",
+            evidence="reports/hab/domoic_alert_model/results.json",
+            title="France domoic-acid exceedance alert ranker",
+            headline="operational domoic alert ranker: top-50 precision 0.72 (AP 0.343, AUC 0.816)",
+            plain="A cheap model ranks which French shellfish sites are most likely over the domoic-acid limit this week; the top-50 flagged sites are right 72% of the time. Skill comes from a site's own recent history and season, not an early-warning driver.",
+            how="Tuned gradient-boosting on own-site event history vs a fair season+persistence+regional-rate baseline; a deep GPU/attention net did NOT beat it; the separate lead-time campaign was an adversary-backed NULL under a >=7d gap.",
+            metrics={"n_test": 5392, "exceedances": 227, "base_rate": 0.0421, "ap": 0.3426, "auc": 0.8162,
+                     "top50_precision": 0.72, "top100_precision": 0.63, "calibration_ece": 0.0603},
+            note="NOWCAST / alert-ranker riding own-site persistence + season, NOT a forecast: the DA lead-time hunt was a comprehensive adversary-backed NULL once a real >=7d gap and regional-rate baseline were enforced.",
+        ),
+        dict(
+            fid="banked_shark_severity_hotspot", kind="positive",
+            evidence="reports/sharks/shark_hotspot_analysis.json",
+            title="Shark-attack SEVERITY hotspot decomposition (GSAF)",
+            headline="exposure-free severity: P(fatal|bite) CA 0.090 vs FL 0.029 (3.1x); white-shark share on ID'd bites CA 0.93 vs FL 0.005",
+            plain="Florida has the most shark bites, but California and Australia bites are far more likely to be fatal and to involve great white sharks. Conditioning on a bite removes the exposure/population confound, so the severity gap is the robust fact.",
+            how="Global Shark Attack File; severity computed conditional on an unprovoked bite (needs no denominator, so exposure-invariant); Wilson CIs; white-shark share recomputed on confirmed-ID bites; critic-passed.",
+            metrics={"n_unprovoked": 4686, "ca_p_fatal": 0.0896, "ca_p_fatal_ci": [0.0581, 0.1357],
+                     "fl_p_fatal": 0.0291, "fl_p_fatal_ci": [0.0202, 0.0417], "au_p_fatal": 0.2361,
+                     "ca_white_share_id": 0.9267, "fl_white_share_id": 0.0051},
+            note="The SEVERITY decomposition is the robust, denominator-free claim; raw FREQUENCY is exposure-confounded. The pinniped-foraging mechanism is plausible but UNCONFIRMED/underpowered.",
+        ),
+        dict(
+            fid="banked_zeroshot_o2_nowcast", kind="caveat",
+            evidence="reports/physics/zeroshot_o2/AGE_FIX_REPORT.json",
+            title="Zero-shot absolute-O2 nowcast: T/S + circulation-age (SCOPED)",
+            headline="a free ocean-model 'water age' channel cuts absolute-O2 RMSE ~74 -> 29 umol/kg in ventilated basins (7/10 improve); universal age->AOU slope 0.257 (R2=0.67)",
+            plain="Temperature/salinity plus a free ocean-model 'water age' channel can estimate absolute dissolved oxygen at depth in most well-ventilated basins with no local oxygen labels -- but only where no existing oxygen atlas already does better.",
+            how="Global Argo/glider corpus, leave-basin-out; within-platform age-shuffle and cross-basin slope transfer confirm real physics; independently RED-TEAMED.",
+            metrics={"north_atlantic_base_ts": 73.9, "north_atlantic_ts_age": 28.59, "basins_improved": 7,
+                     "universal_slope_umol_per_yr": 0.2574, "r2_between_basin_offset": 0.666, "gobai_reference_rmse": 8.8},
+            note="RED-TEAMED and DOWNGRADED to solid-but-KNOWN physics, SCOPED, NOT a breakthrough. Atlas ceiling: it does NOT beat a free WOA climatology on O2 anomalies, and an existing product (GOBAI) reaches RMSE 8.8 vs this ~25-29. Boundary basins Black Sea / Baltic / Arctic are negative. Value = absolute O2 where no atlas/label exists.",
+        ),
+        dict(
+            fid="banked_colocation_sensor_fault", kind="caveat",
+            evidence="reports/verify/sensor_fault_alerts.json",
+            title="Coastal sensor-fault detector (colocation buddy-check)",
+            headline="buddy-check flagged 1/35 SST stations (Monterey buoy drift -1.9C/yr); only SST has real cross-source redundancy (20.6% @10km)",
+            plain="A tool that catches malfunctioning coastal sensors by comparing each one to nearby independent sensors. In a Monterey demo it correctly flagged one drifting buoy while neighbors stayed coherent, and its census shows only sea-surface temperature has enough overlapping sensors for this check.",
+            how="QARTOD self-checks + haversine buddy-check with fault attribution, built on the ~1.4B-row normalized_observations layer; demo verified end-to-end (drift confirmed vs 6 coherent neighbors).",
+            metrics={"demo_n_stations": 35, "demo_n_with_neighbor": 24, "demo_n_flagged": 1,
+                     "flag_drift_per_yr": -1.922, "telemetry_sst_stations": 428,
+                     "sst_cross_source_pct_10km": 20.6, "salinity_pct_10km": 12.2, "do_pct_10km": 0.0},
+            note="MVP proven end-to-end but NOT deployed or scheduled; the strong buddy-check only works for SST (the sole variable with genuine cross-source redundancy). No recall-at-false-alarm-budget measured yet.",
+        ),
+        dict(
+            fid="banked_redtide_nflh_detector", kind="caveat",
+            evidence="reports/redtide_sat/karenia_season_matched.json",
+            title="MODIS nFLH dense-Karenia red-tide detector (season-matched)",
+            headline="season+location-matched nFLH detects dense Karenia blooms: pooled AUC 0.609 (n=45, sign p=0.033)",
+            plain="A free satellite fluorescence signal (nFLH) can spot dense surface red-tide (Karenia) blooms, but the honest, season-controlled skill is weak -- much of the strong-looking raw signal was just a seasonal coincidence.",
+            how="Same-station AND same-season (+/-1mo, nearest year) paired test to remove the seasonal confound, powered to n=45; sign + Wilcoxon tests.",
+            metrics={"n_pairs": 45, "pooled_auc": 0.609, "sign_p": 0.033, "wilcoxon_p": 0.01356,
+                     "raw_same_station_auc": 0.809, "cross_location_auc": 0.743},
+            note="WEAK-but-real: most of the raw same-station AUC 0.809 was a seasonal confound (deflated to 0.609). A REPRODUCTION of decades-old nFLH/RBD science, not Karenia-specific, not a forecast, not novel.",
+        ),
+        dict(
+            fid="banked_josh_fib_trend", kind="null",
+            evidence="analysis/josh_bacteria_trends_2026-07-10/analysis_scripts/results.json",
+            title="CA beach-bacteria secular trend (MBARI/Josh deliverable)",
+            headline="no robust statewide CA FIB trend -- balanced 500-station panel flat (Enterococcus MK p=0.20); weather dominates (wet:dry 1.7-2.9x)",
+            plain="Beach fecal-bacteria exceedances in California show no reliable long-term up or down trend once you use a fair, balanced set of stations; rainfall is by far the biggest driver, and the apparent rise in advisories is largely a reporting artifact.",
+            how="Mann-Kendall on a balanced panel (stations present >=15 yrs) vs naive; logistic driver GLM; left-censored Kendall for the censoring-robust check.",
+            metrics={"balanced_n_stations": 500, "mk_entero_p": 0.201, "mk_fecal_p": 0.0857,
+                     "wet_dry_ratio_entero": 2.17, "rain_or": 7.40, "rain_p": 6.7e-05, "spill7_p": 0.577,
+                     "advisory_unknown_cause_pct": 63.2},
+            note="Descriptive (not a forecast). The one real signal is an analyte-specific fecal-coliform decline vs a well-powered Enterococcus flat; recent-era CA 'surge' is separately confounded by the San Diego post-2021 reporting break.",
+        ),
+        dict(
+            fid="banked_regime_shift_monitor", kind="null",
+            evidence="reports/regime_shift/emerging_hotspots.json",
+            title="Estate regime-shift / emergence monitor",
+            headline="0 novel regime shifts across 496 stations; monitor only recovers the known San Diego 2022 break",
+            plain="A change-point detector scanned the whole data estate for systems that silently jumped to a new regime. It correctly re-found the known San Diego bacteria step but found nothing new anywhere else -- the estate is stable.",
+            how="Best mean-shift split + Bonferroni-over-splits + BH-FDR across stations + permutation confirm.",
+            metrics={"n_stations_scanned": 496, "n_emerging_fdr_lt_005": 5, "novel_outside_san_diego": 0,
+                     "san_diego_hits": 5, "southsd_perm_p": 0.0003},
+            note="Null / tool result: aggregate 'shifts' are artifacts (all-CA driven by San Diego; microcystin by sampling composition), and the San Diego 2022 step is a reporting-comparability break, not a proven environmental regime shift. Tool banked, NOT deployed.",
+        ),
+    ]
+    out = []
+    for s in specs:
+        if not (SOURCE_ROOT / s["evidence"]).exists():
+            continue
+        out.append(_finding(
+            s["fid"], s["title"], s["kind"], s["headline"], s["plain"],
+            s["how"], s["evidence"], s["metrics"], s["note"],
+        ))
+    return out
+
+
 def _extra_findings():
     cards = []
     for maker in (
+        _banked_backfill_findings,
         _flagship_2026_07_findings,
         _claim_card_findings,
         _non_bacteria_claim_card_findings,
