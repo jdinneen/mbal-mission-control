@@ -1872,6 +1872,91 @@ def _banked_backfill_findings():
     return out
 
 
+# 2026-07-14 raw-data red-team of the board's pre-existing "wins" (one independent
+# adversary per claim, each starting from raw data). Map: finding id -> (new_kind,
+# verdict, one-line most-damaging fact). Applied as a post-assembly override so the
+# corrections are auditable in one place instead of rewriting every builder. Verdicts:
+# REFUTED = claim fails vs a fair baseline/phantom guard; WOUNDED = real but overclaimed
+# /needs scoping; SURVIVES = holds (kept for the record, caveat appended, kind unchanged).
+_REDTEAM_2026_07_14 = {
+    # --- REFUTED as framed ---
+    "claim_hypoxia_onset_forecast": ("null", "REFUTED",
+        "Strawman baseline: the fair persist+season=0.818 is in the same file; marginal +0.017 CI[-0.012,0.029] includes 0. Lab's own critic grades it CONFIRMED-NULL (skill is an absolute-temp proxy, not stratification)."),
+    "claim_hab_exceed_strict_critic": ("null", "REFUTED",
+        "The pipeline's persistence baseline is a degenerate binary flag; the fair baseline pda_prev (prior DA conc, already a model feature) scores AP 0.264, tying/beating the model's 0.257. Vs a fair baseline dAP +0.03-0.05, CI includes 0."),
+    "claim_carte_numeric_shared_plane_benchmark": ("null", "REFUTED",
+        "The evidence file's own verdict already reads FAIL(overclaimed): a plain RandomForest scores 0.774-0.780 vs CARTE 0.755-0.762 on identical features; the +0.045 lift exists only vs an unregularized-HGBT strawman on a 97.6%-station-overlap split."),
+    "claim_findings_campaign_targeted_l2_keeps": ("null", "REFUTED",
+        "One geography surface, not 3 signals: the keeps are 98-99% residually redundant (independence 0.006-0.021) and the campaign's own L3 step declined to compose them; latlon is self-described as already-known geography."),
+    "claim_da_toxic_onset_ci_separated": ("null", "REFUTED",
+        "Beats only a single-column strawman at a favorable seed. Vs the fair combined-cheap model margin halves to +0.035, CI[-0.035,0.089] includes 0; fails the lab's mandatory key-shuffle phantom guard (p=0.061); flips negative in 2/10 seeds."),
+    "claim_cache_slough_upstream_escape": ("null", "REFUTED",
+        "Not an advective escape: the two stations are 4.8km apart in the tidal Sacramento Delta; cross-correlation peaks at lag-0 (no travel-time lead); persistence is a broken baseline there. A co-located tidal nowcast, found 1/529 with a leaky lag-select and no FDR."),
+    # --- REFUTED in part / real skill remains -> caveat ---
+    "claim_bacteria_station_memory_supported": ("caveat", "REFUTED-as-stated",
+        "The card's own verdict field says UNTESTED (no permutation-null/LOCO). The +0.2055 is over a weak single-feature prior-rate baseline; against the fair multi-feature baseline the honest marginal is +0.0133 (~15x smaller), and it is a nowcast, not a forecast."),
+    "claim_lightgbm_catboost_paired_boosts": ("caveat", "REFUTED-in-part",
+        "CatBoost half stands; the LightGBM 'REAL BOOST' is refuted by the lab's own verify file - it washes to +0.0004 (CI includes 0) on the deployable 34-feature set."),
+    # --- WOUNDED (real but overclaimed) ---
+    "claim_global_fib_coldstart_forecast": ("caveat", "WOUNDED",
+        "Core survives: beats each region's own station-memory recurrence +0.033 AP (region-clustered CI[0.024,0.042], 34/37). But 'FORECAST beats SOTA' is overclaimed - the honest strictly-prior forecast AUC 0.738 has CI[0.709,0.765] that INCLUDES the SOTA ref 0.713; the number that 'beat' SOTA was a walked-back same-day-rain nowcast."),
+    "claim_hypoxia_gru_sequence_positive": ("caveat", "WOUNDED",
+        "It is a hypoxia STATE target, not onset; +0.03 AP is non-monotonic (7d/21d cross 0), single-seed, and NOT reproduced by the scaled ensemble. Keep only as a scoped Tokyo-Bay state signal."),
+    "claim_forward_2026_holdout_pass": ("caveat", "WOUNDED",
+        "Not an independent holdout - the scorecard's own honest_framing admits these rows were inside the already-scored test split (the real lockbox is empty); no CI; single winter window."),
+    "claim_bacteria_decision_rule": ("caveat", "WOUNDED",
+        "Benchmarked only vs advise-all/advise-none; at the dirty high-event beaches the rule flags 90-97% = effectively advise-all, and it is never compared to the free rain-rule status quo."),
+    "claim_tokyo_shadow_lakehouse_positives": ("caveat", "WOUNDED",
+        "7/40 multiple-comparison-uncorrected probe rows: 4/7 are a near-circular stratification target, only 2 are hypoxia (+0.022 AP over a 0.877 season baseline, ~0 at 14d). Confirms season/memory dominance. (The separate CTD->bottom-DO nowcast is untouched.)"),
+    "claim_cyano_onset_latitude_law_scoped": ("caveat", "WOUNDED",
+        "It is climatology: within a climate zone latitude buys <=0.7 days (CI incl 0 in the north), and the lab's own component gate already stamped it ARCHIVE_AS_STATIC_PRIOR. Drop the word 'law'; the 0.20 skill is a 6-day RMSE gain on a +-52-day residual."),
+    "claim_clean_to_dirty_onset": ("caveat", "WOUNDED",
+        "The 2.1x rides rain on WET prior-clean days; on the genuinely-unforecastable DRY prior-clean slice the honest lift is +0.028 AP (1.18x), CI[0.004,0.063] barely excluding 0. No prospective pass. The dry-day ceiling again."),
+    "claim_adaptive_sampling_pilot": ("caveat", "WOUNDED",
+        "Survives as a ranking result (top-20 0.706 vs 0.530, CI-separated), but the deployable mixed-arm pilot lifts only +2.75pp (~6x smaller than the headline); win is conditional on excluding San Diego."),
+    "claim_new_source_signal_gate_keeps": ("caveat", "WOUNDED",
+        "'3 KEEP' is one soil-moisture signal triple-counted; its single permutation p=0.02 is uncorrected and dies under FDR across the 15-source sweep (~0.29); the rain-dynamic component washes -> it behaves as a static geography surface."),
+    "claim_mcye_alberta_definitive_replication": ("caveat", "WOUNDED",
+        "Statistically real within-lake (Simpson attack fails), but it is a textbook concurrent gene->toxin correlation (mcyE IS the toxin gene) with zero lead time; it does NOT replicate Erie's novel toxigenic-FRACTION decoupling, which is untestable in Alberta."),
+    "claim_mcye_national_replication": ("caveat", "WOUNDED",
+        "Underpowered (n=60, ~12 stations, Ohio-fragile); only the textbook absolute mcyE->toxin correlation holds. The NOVEL Erie fraction-decoupling fails nationally (rho 0.23, n.s.)."),
+    "claim_operational_label_quality_win": ("caveat", "WOUNDED",
+        "The +0.1091 is a train-on-your-target tautology (the proxy has kappa 0.017 with the advisory label). The informative 'op beats recurrence' reverses under leave-one-county-out (-0.067) and time-holdout (-0.10); the lab's own divergence file concludes operational_label_better_target=FALSE."),
+    "claim_russian_river_advection_escape": ("caveat", "WOUNDED",
+        "Real advective combo on a genuine river reach, but it clears at only 1 of 4 leads (and the wrong one - where persistence has decayed, not where advection peaks); upstream-alone never beats persistence; LOBO, not a forward split."),
+    "claim_wet_tail_driver_skill": ("caveat", "WOUNDED",
+        "It is the lab's already-banked rain rule: the tail is defined by the driver itself, and de-confounding with a calendar wet season halves the gain to +0.031; pooled/dry/memory are null-to-negative. Not an exception to driver-null."),
+    "claim_tsunami_halfduration_warning_screen": ("caveat", "WOUNDED",
+        "The 39.1% false-alarm cut is real at 80% recall but ZERO (-0.3%) at the 95% recall a life-safety warning requires; and the feature is retrospective GCMT half-duration, not the real-time W-phase product the deploy story assumes. A detection-skill finding, not a warning tool."),
+    # --- SURVIVES (holds; caveat appended, kind unchanged) ---
+    "claim_global_surge_onset_coldstart": (None, "SURVIVES",
+        "Reproduced from raw; the honest +0.09-0.14 AP (not the +0.19 headline) is already recorded; killed the damped-persistence alternative; basin-clustered CI excludes 0. Residual: CIs optimistic (counts station-days, not independent storm events)."),
+    "claim_bacteria_honest_forecast_horizon": (None, "SURVIVES",
+        "The honest card - already walked back its own 3-day overclaim. Solid at lead 1d, thin at lead 2d (+0.016, CI-clustering unstated)."),
+    "claim_argo_ctd_virtual_oxygen_sensor": (None, "SURVIVES-scoped",
+        "Real and uniquely survives the saturation floor that killed zero-shot O2 (the T/S->hypoxia sign flips between basins; the model generalizes it). But scope to OMZ basins: 'surface at chance 0.48' is a positive-weighting artifact (surface AUC>0.55 in 5/8 basins); the honest novelty over deep-point T/S is +0.106 AUC; ~30k 'events' are really ~3-5 basins."),
+    "claim_carrier_forecast_lead_advisory": (None, "SURVIVES-trivial",
+        "Real vs persistence on the CA leg and phantom-clean, but the edge over the fair antecedent-observed-rain baseline is only +0.012 recall (a plain threshold captures it, no ML add); proxy-only (loses to posting-recurrence on the actual posting decision); the NJ generalization is fragile (388 events on 115 storm-dates)."),
+    "claim_catboost_champion_record_dont_ship": (None, "SURVIVES-hedged",
+        "Real but tiny (+0.005-0.008 vs the frozen champion 0.5099, not 0.5082) and correctly labeled record-don't-ship: net benefit at the advisory threshold is ~+0.0004. The clustered CI excludes model-training-seed noise (spread 0.0036)."),
+}
+
+
+def _apply_redteam_overrides(cards):
+    for c in cards:
+        ov = _REDTEAM_2026_07_14.get(c.get("id"))
+        if not ov:
+            continue
+        new_kind, verdict, fact = ov
+        if new_kind:
+            c["kind"] = new_kind
+        c["headline"] = f"[RED-TEAM {verdict} 2026-07-14] " + c.get("headline", "")
+        prior = c.get("note")
+        c["note"] = (f"RED-TEAM ({verdict}): {fact}" + (f"  |  (orig note) {prior}" if prior else ""))
+        c["redteam_2026_07_14"] = verdict
+    return cards
+
+
 def _extra_findings():
     cards = []
     for maker in (
@@ -1905,7 +1990,7 @@ def _extra_findings():
             continue
         seen.add(c["id"])
         out.append(c)
-    return out
+    return _apply_redteam_overrides(out)
 
 
 def _augment_models(state):
