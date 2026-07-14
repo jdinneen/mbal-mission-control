@@ -868,25 +868,25 @@
     <div class="topwins">
       <div class="secband"><h2>Latest wins</h2><p>The newest results that passed our evidence checks — click any card for the exact numbers and how they were tested.</p></div>
       <div class="winsgrid">
-        <button class="wincard" onclick="openFindingById('claim_global_fib_coldstart_forecast');return false;" aria-label="Global cold-start beach-bacteria forecast finding">
-          <div class="wtop"><span class="wtopic">Beach bacteria · 37 world regions</span><span class="wmetric">Beats the best published model</span></div>
-          <h3>One beach-bacteria forecast that works in places it never trained on</h3>
-          <p>A single model predicts when beach bacteria will spike across 37 regions in Europe and the US that it was never trained on. It beats both "assume today repeats" (in 34 of the 37 regions) and the best method published to date. Adding a rain forecast pushes it further ahead.</p>
+        <button class="wincard" onclick="openFindingById('banked_pn_pda_coldstart_nowcast');return false;" aria-label="Pseudo-nitzschia to domoic-acid cold-start nowcast finding">
+          <div class="wtop"><span class="wtopic">Shellfish toxin · domoic acid</span><span class="wmetric">Byte-verified · works at a new beach</span></div>
+          <h3>Cheap algae counts stand in for an expensive toxin test</h3>
+          <p>Counting the alga <i>Pseudo-nitzschia</i> under a microscope (cheap) flags whether the toxin domoic acid is present — even at a beach the model has never seen, with no local toxin history. It tells a monitoring program which water samples are worth sending for the expensive lab test. An independent critic re-derived every number from the raw data, and a separate run reproduced it exactly.</p>
         </button>
         <button class="wincard" onclick="openFindingById('claim_global_surge_onset_coldstart');return false;" aria-label="Global surge-onset finding">
           <div class="wtop"><span class="wtopic">Coastal storm surge · 17 ocean basins</span><span class="wmetric">Works in all 17 coasts tested</span></div>
           <h3>The same approach works for a different hazard — storm surge</h3>
           <p>After stripping the normal tide out of tide-gauge records to isolate the storm-driven part, one model predicts surge days on coastlines it never saw — beating "assume today repeats" in all 17. Checked independently, it's evidence the same recipe carries across different coastal hazards.</p>
         </button>
-        <button class="wincard" onclick="openFindingById('claim_bigelow_psp_referee_win');return false;" aria-label="Bigelow Maine PSP referee verification win">
-          <div class="wtop"><span class="wtopic">Shellfish-toxin forecast · Gulf of Maine</span><span class="wmetric">Referee win · beats baseline ~2×</span></div>
-          <h3>We refereed an operational toxin forecast — and it genuinely works</h3>
-          <p>Instead of building another model, we independently checked an existing operational shellfish-poisoning forecast for the Gulf of Maine. On four held-out years it beats the fair "assume last week repeats" baseline about 2× (average precision +0.34, confidence interval clear of zero), a median week ahead of the lab test — a rare pass, since most outside forecasts we referee fail this bar. Caveat: scored on the ~9% of forecasts that got a lab result.</p>
+        <button class="wincard" onclick="openFindingById('banked_ireland_mussel_sentinel');return false;" aria-label="Ireland cross-species mussel sentinel finding">
+          <div class="wtop"><span class="wtopic">Shellfish biotoxin · Ireland</span><span class="wmetric">Byte-verified · skip needless tests</span></div>
+          <h3>If the mussels are clean, the oysters probably are too</h3>
+          <p>Mussels soak up algal toxins faster than oysters, scallops or clams. If the co-located mussels test clean for the fast-acting toxins (DSP, AZP), the other harvested species are very unlikely to be over the limit — so labs can fast-track or skip tests and avoid closing harvests they don't need to. It works for those two toxins, not for domoic acid, and an independent critic re-derived it from the raw data.</p>
         </button>
-        <button class="wincard" onclick="openFindingById('claim_operational_label_quality_win');return false;" aria-label="Operational label-quality finding">
-          <div class="wtop"><span class="wtopic">Prediction quality · new beaches</span><span class="wmetric">Better, more useful predictions</span></div>
-          <h3>Teaching the model what officials actually decided beats a stand-in</h3>
-          <p>The decision that really matters is whether officials post a health advisory. Training the model on those real posted advisories — instead of a rule-of-thumb stand-in — makes it noticeably better at new beaches; the stand-in version does worse than just assuming today repeats.</p>
+        <button class="wincard" onclick="openFindingById('banked_chesapeake_hypoxia_virtual_sensor');return false;" aria-label="Chesapeake cold-start hypoxia virtual-sensor finding">
+          <div class="wtop"><span class="wtopic">Low-oxygen water · Chesapeake Bay</span><span class="wmetric">Fills gaps between sensors</span></div>
+          <h3>Reading low-oxygen water where there is no oxygen sensor</h3>
+          <p>Using only temperature and saltiness, the model nowcasts whether an unmonitored Chesapeake Bay station has dangerously low oxygen — filling the gaps between real oxygen sensors and helping decide where to put scarce new ones. It's a same-day reading, not a forecast, and it holds up at stations it never trained on.</p>
         </button>
         <button class="wincard" onclick="openFindingById('claim_carrier_forecast_lead_advisory');return false;" aria-label="Carrier-Timescale Law 2-day beach advisory finding">
           <div class="wtop"><span class="wtopic">Beach bacteria · 2-day advisory</span><span class="wmetric">Beats persistence, CI excl 0</span></div>
@@ -1817,11 +1817,6 @@ function findingsSorted(){
 }
 const QUICK_LABELS={means:'What it means',matters:'Why it matters',careful:'Careful'};
 const FEATURED_QUICK_READS={
-  claim_bigelow_psp_referee_win:{
-    means:'We independently checked an existing Gulf-of-Maine shellfish-toxin forecast; it really does beat the fair baseline about 2× a week ahead.',
-    matters:'Refereeing beats rebuilding — a trustworthy check on someone else’s operational tool is a transferable asset for managers deciding which forecasts to rely on.',
-    careful:'Scored on the ~9% of forecasts that got a lab result, and skill varies by site; do not quote the absolute score externally until the sampling selection is resolved.'
-  },
   claim_bacteria_station_memory_supported:{
     means:'The beach-bacteria model ranks risky beach-days better than old station history and rain rules.',
     matters:'It can help a county choose which beach-days to inspect first.',
