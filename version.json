@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260713T232950Z-18821-6550",
-  "built_utc": "2026-07-13T23:29:50Z",
-  "message": "Backfill 11 banked findings onto board (Arctic PSP, Chesapeake O2, Vibrio, lobster, REPHYTOX ranker, shark severity, zero-shot O2, colocation, nFLH, FIB trend, regime-shift)"
+  "deploy_id": "20260714T152601Z-44635-14944",
+  "built_utc": "2026-07-14T15:26:01Z",
+  "message": "Reframe 11 banked findings to raw-data red-team verdicts (Arctic PSP/O2/REPHYTOX/colocation/nFLH refuted-as-framed; Josh-FIB/regime overstated; vibrio/lobster/shark tightened; Chesapeake unchanged)"
 }
