@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260715T015548Z-1547-29734",
-  "built_utc": "2026-07-15T01:55:48Z",
-  "message": "Add per-card deep links: #findings/<finding-id> opens and scrolls to one finding card"
+  "deploy_id": "20260715T022109Z-3148-19294",
+  "built_utc": "2026-07-15T02:21:09Z",
+  "message": "Correct 4 result cards whose numbers had no evidence behind them (vibrio 7yr year-clustered CI, lobster bootstrap CI + AR1 p + M01 range, shark modern-era ratio/p, Argo surface-AUC + cohort); all 11 positive/claim cards now trace to raw evidence"
 }
