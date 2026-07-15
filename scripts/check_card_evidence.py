@@ -61,8 +61,14 @@ LEDGER = os.path.join(REPO, "reports", "evidence_audit.json")
 SEALED: set[str] = {
     "banked_ca_fib_comparability_breaks",
     "banked_chesapeake_hypoxia_virtual_sensor",
+    "banked_colocation_sensor_fault",
+    "banked_ireland_mussel_sentinel",
+    "banked_pn_pda_coldstart_nowcast",
+    "banked_shark_severity_hotspot",
+    "banked_vibrio_temperature_forecast",
     "caveat_sampling_triage_retrospective_gain_partial_fresh",
     "claim_adaptive_sampling_pilot",
+    "claim_argo_ctd_virtual_oxygen_sensor",
     "claim_bacteria_decision_rule",
     "claim_bacteria_honest_forecast_horizon",
     "claim_bacteria_station_memory_supported",
@@ -182,12 +188,24 @@ def _numeric(v):
     return None
 
 
-def _decimals(x) -> int:
-    """How many decimal places the Card actually displays."""
-    s = repr(float(x))
-    if "e" in s or "E" in s:
-        return 12
-    return len(s.split(".")[1].rstrip("0")) if "." in s else 0
+def _sigfigs(x) -> int:
+    """How many significant digits the Card actually displays.
+
+    Significant digits, not decimal places: a p-value is shown as 1.22e-05 where the
+    file holds 1.2197e-05. Those are the same number to the precision the Card chose.
+    Counting decimals gets that wrong (both round to 0.0000 at 4dp) and would flag a
+    correct number as fabricated -- the fastest way to get a gate switched off.
+    """
+    s = f"{abs(float(x)):e}"           # -> '1.219700e-05'
+    mant = s.split("e")[0].replace(".", "").rstrip("0")
+    return max(1, len(mant))
+
+
+def _round_sig(v: float, sig: int) -> float:
+    if v == 0:
+        return 0.0
+    import math
+    return round(v, -int(math.floor(math.log10(abs(v)))) + (sig - 1))
 
 
 def _match(want: float, leaves: dict, shown) -> str | None:
@@ -203,12 +221,19 @@ def _match(want: float, leaves: dict, shown) -> str | None:
     it collided with an unrelated number. Tolerance must come from the card's own
     displayed precision, never from a fudge factor.
     """
-    dp = _decimals(shown)
+    # A Card showing a whole number is claiming a count. Counts are exact: 40 must
+    # find 40, not 40.4. Sig-fig tolerance is for measurements, never for counts.
+    exact_int = float(want).is_integer()
+    sig = _sigfigs(shown)
     for p, v in leaves.items():
         fv = _numeric(v)
         if fv is None:
             continue
-        if fv == want or round(fv, dp) == round(want, dp):
+        if fv == want:
+            return p
+        if exact_int:
+            continue
+        if _round_sig(fv, sig) == _round_sig(want, sig):
             return p
     return None
 

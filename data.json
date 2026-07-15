@@ -121,7 +121,8 @@
         "plain": "Ranking which French shellfish sites to test first is a real, useful nowcast -- but the honest deliverable is a one-line rule 'retest the sites with the highest recent reading', which beats the tuned model. The ML added nothing and even diluted the signal.",
         "how": "Forward split train<=2014. RED-TEAM scored every fair-baseline column: recent-tissue-value alone hits top-50 precision 1.00 / AP 0.65 vs the XGBoost's 0.72 / 0.34; site-clustered dAP(model-baseline) = -0.12 to -0.29, CI excludes 0.",
         "evidence": [
-          "reports/hab/domoic_alert_model/results.json"
+          "reports/hab/domoic_alert_model/results.json",
+          "reports/hab/domoic_alert_model/baseline_recompute.json"
         ],
         "metrics": {
           "n_test": 5392,
@@ -199,22 +200,25 @@
         "how": "RED-TEAM pulled the flagged buoy vs neighbors from the raw 1.4B-row layer: station 156 (CDIP) agrees with the one true cross-source neighbor (M1 mooring, 7.4km away, also carried as NDBC 46092) -- r=0.968, mean bias 0.02C, though MAE is 0.29C; the 'divergence' was against 6 same-source warm inner-bay buoys during upwelling season (residual -1.66C in June, +0.08C in January). Re-running the shipped detector reproduces the flag byte-exact on 6 same-source neighbors and yields ZERO flags on the identical window once NDBC 46092 is added -- the flag dies from neighbor comparability, not data recency. The lone_divergence trigger clears its threshold by 0.002C (1.188 vs 1.186).",
         "evidence": [
           "reports/verify/sensor_fault_alerts.json",
-          "reports/verify/colocation_census_telemetry.json"
+          "reports/verify/colocation_census_telemetry.json",
+          "reports/verify/colocation_flag_recompute.json"
         ],
         "metrics": {
           "demo_n_flagged": 1,
           "precision_on_adjudicable_case": 0.0,
           "flag_vs_m1_mooring_corr": 0.968,
           "flag_vs_m1_mean_bias_C": 0.02,
-          "flag_vs_m1_mae_C": 0.29,
+          "flag_vs_m1_mae_C": 0.2768,
           "trigger_margin_C": 0.002,
           "flags_with_crosssource_neighbor": 0,
           "flags_by_window": "1 since 2023-01-01 / 0 since 2025-07-01 / 3 since 2026-01-01",
           "labeled_true_faults": 0,
           "sst_cross_source_pct_10km": 20.6,
-          "redteam_2026_07_14": "REFUTED as detector (mechanism corrected 2026-07-15)"
+          "redteam_2026_07_14": "REFUTED as detector (mechanism corrected 2026-07-15)",
+          "aggregation": "daily mean (all four numbers from one config)",
+          "flag_dies_on_current_data": true
         },
-        "note": "CORRECTION 2026-07-15: the 2026-07-14 pass said the flag 'no longer fires on current data'. That mechanism is wrong and window-dependent -- an in-memory re-run of the shipped detector fires 1 flag since 2023-01-01, 0 since 2025-07-01, and 3 since 2026-01-01. The flag actually dies because a cross-source neighbor (NDBC 46092 = the M1 mooring) entered the source set, not because the data got newer. The corrected mechanism is a SHARPER indictment. Also corrected: 'matches to 0.01C' was a cancellation artifact -- 0.02C is the mean bias, but typical daily disagreement is MAE 0.29C (~15x larger); the buoys agree in the mean because seasonal errors cancel. sst_cross_source_pct_10km lives in the sibling colocation_census_telemetry.json, not the cited file. The buddy-check does NOT work as a fault detector as built (neighbors weren't comparable; it flags the most oceanographically-correct sensor in an upwelling system, by a 0.002C margin). What SURVIVES: the redundancy census (SST 20.6% / salinity 12% / DO 0% cross-source) and the univariate QARTOD self-checks. Needs comparable-neighbor selection + labeled faults before any claim."
+        "note": "RECOMPUTE 2026-07-15 (from raw, independent): the published MAE 0.29 was an AGGREGATION MIX-UP and is corrected to 0.2768 -- r=0.968 and mean bias +0.0155 come from daily MEAN, while MAE 0.29/RMSE 0.41 only appear under daily MEDIAN (which gives r=0.963). No single configuration produced all four published numbers; they are now all daily-mean. The recompute also STRENGTHENS the refutation: the flagged station is CDIP 156 and the true reference is the MBARI M1 mooring at depth -1.0m (not NDBC 46092, which only reaches 2025-12-31). The trigger fires at 1.1875 vs a threshold of 1.1860 -- a 0.13% knife-edge on 214 days -- and leave-one-out shows NDBC 46092 (M1, the nearest buddy at 7.4km) is the SOLE neighbor whose inclusion flips it. On current data the trigger does not fire at all (margin -1.357), because ndbc_stdmet was refreshed 2026-07-11 11:20, AFTER sensor_fault_alerts.json was written at 10:20. Station 156 agrees with M1 at r=0.968 / bias +0.016 / MAE 0.28 -- normal colocation, not a fault. TREAT THE FLAG AS NOT SUPPORTED.   |  CORRECTION 2026-07-15: the 2026-07-14 pass said the flag 'no longer fires on current data'. That mechanism is wrong and window-dependent -- an in-memory re-run of the shipped detector fires 1 flag since 2023-01-01, 0 since 2025-07-01, and 3 since 2026-01-01. The flag actually dies because a cross-source neighbor (NDBC 46092 = the M1 mooring) entered the source set, not because the data got newer. The corrected mechanism is a SHARPER indictment. Also corrected: 'matches to 0.01C' was a cancellation artifact -- 0.02C is the mean bias, but typical daily disagreement is MAE 0.29C (~15x larger); the buoys agree in the mean because seasonal errors cancel. sst_cross_source_pct_10km lives in the sibling colocation_census_telemetry.json, not the cited file. The buddy-check does NOT work as a fault detector as built (neighbors weren't comparable; it flags the most oceanographically-correct sensor in an upwelling system, by a 0.002C margin). What SURVIVES: the redundancy census (SST 20.6% / salinity 12% / DO 0% cross-source) and the univariate QARTOD self-checks. Needs comparable-neighbor selection + labeled faults before any claim."
       },
       {
         "id": "banked_redtide_nflh_detector",
@@ -224,7 +228,8 @@
         "plain": "A free satellite fluorescence signal was tested as a dense red-tide (Karenia) detector. Once you put an honest confidence interval on it, the skill can't be told apart from chance -- so this is not a detector, just the already-known fact that more algae means more fluorescence.",
         "how": "Same-station + same-season paired test (n=45). RED-TEAM: Hanley-McNeil CI on AUC 0.609 = [0.493,0.725] (crosses 0.5); the design has no non-bloom negatives; only 45 of 1,460 available pairs were used (one arbitrary seed).",
         "evidence": [
-          "reports/redtide_sat/karenia_season_matched.json"
+          "reports/redtide_sat/karenia_season_matched.json",
+          "reports/redtide_sat/karenia_derived_stats.json"
         ],
         "metrics": {
           "n_pairs": 45,
@@ -878,7 +883,8 @@
         "how": "Leave-basin-out on real Argo GDAC Sprof profiles with measured oxygen (train on all basins but one, test on the held-out basin). Reported as within-held-out-basin discrimination (AUC), which is base-rate-invariant, because the pooled leave-basin average-precision gap (+0.156) was shown by an independent adversary to mostly measure between-basin geography (a basin-base-rate oracle beats both arms) and is deliberately NOT used. Aggregation is stated explicitly because it matters: pooled (run.log:36-37) surface 0.648 / profile 0.775; simple mean across basins 0.630 / 0.827; positive-weighted 0.479 / 0.770. The profile number is robust to the choice (0.770-0.827); the surface number is NOT (0.479-0.648), so the pooled figure is quoted. Non-circular: deep temperature alone gives AP 0.12, essentially the base rate, and the solubility identity explains only R2=0.14, so the skill is real stratification structure, not a temperature-to-oxygen tautology. No leakage (density computed from temperature/salinity only, never from oxygen).",
         "evidence": [
           "reports/threed/argo_real_hypoxia/leave_basin_out.csv",
-          "reports/threed/argo_real_hypoxia/summary.json"
+          "reports/threed/argo_real_hypoxia/summary.json",
+          "reports/threed/argo_real_hypoxia/pooled_metrics.json"
         ],
         "metrics": {
           "n_profiles_evaluated": 204647,

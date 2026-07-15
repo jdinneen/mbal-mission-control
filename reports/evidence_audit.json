@@ -3,16 +3,22 @@
   "generated_from": "mbal-mission-control/data.json",
   "totals": {
     "cards": 66,
-    "metrics": 588,
-    "unbound": 56,
-    "cards_clean": 46,
-    "cards_with_unbound": 20
+    "metrics": 590,
+    "unbound": 38,
+    "cards_clean": 52,
+    "cards_with_unbound": 14
   },
   "sealed": [
     "banked_ca_fib_comparability_breaks",
     "banked_chesapeake_hypoxia_virtual_sensor",
+    "banked_colocation_sensor_fault",
+    "banked_ireland_mussel_sentinel",
+    "banked_pn_pda_coldstart_nowcast",
+    "banked_shark_severity_hotspot",
+    "banked_vibrio_temperature_forecast",
     "caveat_sampling_triage_retrospective_gain_partial_fresh",
     "claim_adaptive_sampling_pilot",
+    "claim_argo_ctd_virtual_oxygen_sensor",
     "claim_bacteria_decision_rule",
     "claim_bacteria_honest_forecast_horizon",
     "claim_bacteria_station_memory_supported",
@@ -66,9 +72,9 @@
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 15,
-      "n_bound": 9,
+      "n_bound": 12,
       "n_derived": 0,
-      "n_unbound": 4,
+      "n_unbound": 1,
       "status": "UNBOUND_NUMBERS",
       "metrics": [
         {
@@ -80,8 +86,8 @@
         {
           "metric": "independent_exceedance_runs",
           "value": 265,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/arctic_psp/psp_alexandrium_detection.json::[\"recompute_audit\"][\"independent_exceedance_runs\"]"
         },
         {
           "metric": "n_sites",
@@ -104,20 +110,20 @@
         {
           "metric": "hasobs_only_marginal_ap",
           "value": 0.0283,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/arctic_psp/psp_alexandrium_detection.json::[\"recompute_audit\"][\"hasobs_only_marginal_ap\"]"
         },
         {
           "metric": "hasobs_share_of_headline",
           "value": 0.733,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/arctic_psp/psp_alexandrium_detection.json::[\"recompute_audit\"][\"hasobs_share_of_headline\"]"
         },
         {
           "metric": "residual_abundance_gradient_ap",
           "value": 0.0103,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/arctic_psp/psp_alexandrium_detection.json::[\"recompute_audit\"][\"residual_abundance_gradient_ap\"]"
         },
         {
           "metric": "abundance_only_cold_ci95[0]",
@@ -140,8 +146,8 @@
         {
           "metric": "key_shuffle_phantom",
           "value": -0.001,
-          "status": "BOUND",
-          "bound_to": "reports/arctic_psp/psp_alexandrium_detection.json::[\"gateB_forward_all\"][\"marginal_ap\"]"
+          "status": "UNBOUND",
+          "bound_to": null
         },
         {
           "metric": "key_shuffle_guard",
@@ -244,10 +250,10 @@
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 15,
-      "n_bound": 9,
+      "n_bound": 10,
       "n_derived": 0,
-      "n_unbound": 1,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "lead",
@@ -288,8 +294,8 @@
         {
           "metric": "postcovid_2023_25_states",
           "value": 10,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/temperature_target/vibrio/hardening_verdict.json::[\"task1_postcovid_replication\"][\"n_states\"]"
         },
         {
           "metric": "postcovid_pooled_marginal_ap",
@@ -325,7 +331,7 @@
           "metric": "postcovid_perm_p",
           "value": 0.0,
           "status": "BOUND",
-          "bound_to": "reports/temperature_target/vibrio/hardening_verdict.json::[\"task1_postcovid_replication\"][\"per_year_marginal_full_minus_base_AP\"][\"test2023\"][\"base_ap\"]"
+          "bound_to": "reports/temperature_target/vibrio/hardening_verdict.json::[\"task1_postcovid_replication\"][\"pooled_2023_2025\"][\"permutation\"][\"p_value\"]"
         },
         {
           "metric": "year_clustered_ci",
@@ -411,14 +417,15 @@
       "id": "banked_rephytox_da_alert_ranker",
       "kind": "caveat",
       "evidence": [
-        "reports/hab/domoic_alert_model/results.json"
+        "reports/hab/domoic_alert_model/results.json",
+        "reports/hab/domoic_alert_model/baseline_recompute.json"
       ],
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 10,
-      "n_bound": 6,
+      "n_bound": 7,
       "n_derived": 0,
-      "n_unbound": 3,
+      "n_unbound": 2,
       "status": "UNBOUND_NUMBERS",
       "metrics": [
         {
@@ -449,7 +456,7 @@
           "metric": "recent_value_baseline_top50",
           "value": 1.0,
           "status": "BOUND",
-          "bound_to": "reports/hab/domoic_alert_model/results.json::[\"AUC\"]"
+          "bound_to": "reports/hab/domoic_alert_model/baseline_recompute.json::[\"recent_value_baseline_topk\"][\"top50\"]"
         },
         {
           "metric": "model_ap",
@@ -460,8 +467,8 @@
         {
           "metric": "recent_value_baseline_ap",
           "value": 0.65,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/hab/domoic_alert_model/baseline_recompute.json::[\"recent_value_baseline_ap\"]"
         },
         {
           "metric": "dap_model_minus_baseline_ci95[0]",
@@ -493,10 +500,10 @@
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 13,
-      "n_bound": 8,
+      "n_bound": 9,
       "n_derived": 3,
-      "n_unbound": 1,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "n_unprovoked",
@@ -570,8 +577,8 @@
         {
           "metric": "modern_only_p",
           "value": 1.22e-05,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/sharks/ecosystem_chain_screen_20260702/era_hardening.json::[\"ca_vs_fl_fatal\"][\"eras\"][\"2000_2026\"][\"p_value\"]"
         },
         {
           "metric": "redteam_2026_07_14",
@@ -644,15 +651,16 @@
       "kind": "caveat",
       "evidence": [
         "reports/verify/sensor_fault_alerts.json",
-        "reports/verify/colocation_census_telemetry.json"
+        "reports/verify/colocation_census_telemetry.json",
+        "reports/verify/colocation_flag_recompute.json"
       ],
       "evidence_missing": [],
       "narrative_evidence": false,
-      "n_metrics": 11,
-      "n_bound": 5,
+      "n_metrics": 13,
+      "n_bound": 9,
       "n_derived": 0,
-      "n_unbound": 4,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "demo_n_flagged",
@@ -669,26 +677,26 @@
         {
           "metric": "flag_vs_m1_mooring_corr",
           "value": 0.968,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/verify/colocation_flag_recompute.json::[\"flag_vs_m1_mooring_corr\"]"
         },
         {
           "metric": "flag_vs_m1_mean_bias_C",
           "value": 0.02,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/verify/colocation_flag_recompute.json::[\"flag_vs_m1_mean_bias_C\"]"
         },
         {
           "metric": "flag_vs_m1_mae_C",
-          "value": 0.29,
-          "status": "UNBOUND",
-          "bound_to": null
+          "value": 0.2768,
+          "status": "BOUND",
+          "bound_to": "reports/verify/colocation_flag_recompute.json::[\"flag_vs_m1_mae_C\"]"
         },
         {
           "metric": "trigger_margin_C",
           "value": 0.002,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/verify/colocation_flag_recompute.json::[\"trigger_margin_C\"]"
         },
         {
           "metric": "flags_with_crosssource_neighbor",
@@ -719,6 +727,18 @@
           "value": "REFUTED as detector (mechanism corrected 2026-07-15)",
           "status": "PROSE",
           "bound_to": null
+        },
+        {
+          "metric": "aggregation",
+          "value": "daily mean (all four numbers from one config)",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "flag_dies_on_current_data",
+          "value": true,
+          "status": "PROSE",
+          "bound_to": null
         }
       ]
     },
@@ -726,14 +746,15 @@
       "id": "banked_redtide_nflh_detector",
       "kind": "null",
       "evidence": [
-        "reports/redtide_sat/karenia_season_matched.json"
+        "reports/redtide_sat/karenia_season_matched.json",
+        "reports/redtide_sat/karenia_derived_stats.json"
       ],
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 10,
-      "n_bound": 4,
+      "n_bound": 7,
       "n_derived": 1,
-      "n_unbound": 4,
+      "n_unbound": 1,
       "status": "UNBOUND_NUMBERS",
       "metrics": [
         {
@@ -751,14 +772,14 @@
         {
           "metric": "auc_ci95[0]",
           "value": 0.493,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/redtide_sat/karenia_derived_stats.json::[\"auc_ci95_lo\"]"
         },
         {
           "metric": "auc_ci95[1]",
           "value": 0.725,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/redtide_sat/karenia_derived_stats.json::[\"auc_ci95_hi\"]"
         },
         {
           "metric": "sign_p_one_sided",
@@ -769,20 +790,20 @@
         {
           "metric": "sign_p_two_sided",
           "value": 0.066,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/redtide_sat/karenia_derived_stats.json::[\"sign_p_two_sided\"]"
         },
         {
           "metric": "non_karenia_negatives",
           "value": 0,
-          "status": "BOUND",
-          "bound_to": "reports/redtide_sat/karenia_season_matched.json::[\"sign_p\"]"
+          "status": "UNBOUND",
+          "bound_to": null
         },
         {
           "metric": "available_pairs",
           "value": 1460,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/redtide_sat/karenia_derived_stats.json::[\"available_pairs\"]"
         },
         {
           "metric": "available_pairs_unused",
@@ -809,9 +830,9 @@
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 14,
-      "n_bound": 8,
+      "n_bound": 9,
       "n_derived": 0,
-      "n_unbound": 2,
+      "n_unbound": 1,
       "status": "UNBOUND_NUMBERS",
       "metrics": [
         {
@@ -853,8 +874,8 @@
         {
           "metric": "fecal_coliform_censored_p",
           "value": 3.4e-09,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "analysis/josh_bacteria_trends_2026-07-10/data_clean/censored_trend.json::[\"analytes\"][\"Fecal Coliforms\"][\"T3_censored_kendall_logconc\"][\"wilcoxon_p_tau_eq_0\"]"
         },
         {
           "metric": "fecal_coliform_stations",
@@ -909,9 +930,9 @@
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 8,
-      "n_bound": 3,
+      "n_bound": 2,
       "n_derived": 0,
-      "n_unbound": 1,
+      "n_unbound": 2,
       "status": "UNBOUND_NUMBERS",
       "metrics": [
         {
@@ -929,8 +950,8 @@
         {
           "metric": "novel_mean_steps",
           "value": 0,
-          "status": "BOUND",
-          "bound_to": "reports/regime_shift/emerging_hotspots.json::[\"top_confirmed_hotspots\"][0][\"before\"]"
+          "status": "UNBOUND",
+          "bound_to": null
         },
         {
           "metric": "missed_variance_shifts_nonSD",
@@ -973,16 +994,16 @@
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 12,
-      "n_bound": 7,
+      "n_bound": 8,
       "n_derived": 0,
-      "n_unbound": 1,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "n_sites",
           "value": 6,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/minime/pn_pda_coldstart.json::[\"n_sites\"]"
         },
         {
           "metric": "bloom_base_ap",
@@ -1125,10 +1146,10 @@
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 10,
-      "n_bound": 7,
+      "n_bound": 8,
       "n_derived": 0,
-      "n_unbound": 1,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "toxins",
@@ -1181,8 +1202,8 @@
         {
           "metric": "asp_key_shuffle_p",
           "value": 0.61,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/minime/ireland_mussel_sentinel.json::[\"asp_key_shuffle_p\"]"
         },
         {
           "metric": "verification",
@@ -2027,7 +2048,7 @@
           "metric": "catboost_ci95[0]",
           "value": 0.01,
           "status": "BOUND",
-          "bound_to": "reports/model_lab/paired_model_test.json::[\"paired_vs_hgbt\"][\"lightgbm\"][\"delta_ap_vs_hgbt\"]"
+          "bound_to": "reports/model_lab/paired_model_test.json::[\"paired_vs_hgbt\"][\"lightgbm\"][\"boot_ci95\"][1]"
         },
         {
           "metric": "catboost_ci95[1]",
@@ -2624,15 +2645,16 @@
       "kind": "positive",
       "evidence": [
         "reports/threed/argo_real_hypoxia/leave_basin_out.csv",
-        "reports/threed/argo_real_hypoxia/summary.json"
+        "reports/threed/argo_real_hypoxia/summary.json",
+        "reports/threed/argo_real_hypoxia/pooled_metrics.json"
       ],
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 22,
-      "n_bound": 8,
+      "n_bound": 11,
       "n_derived": 4,
-      "n_unbound": 3,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "n_profiles_evaluated",
@@ -2687,14 +2709,14 @@
         {
           "metric": "heldout_basin_surface_auc_pooled",
           "value": 0.648,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/threed/argo_real_hypoxia/pooled_metrics.json::[\"heldout_basin_surface_auc_pooled\"]"
         },
         {
           "metric": "heldout_basin_profile_auc_pooled",
           "value": 0.775,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/threed/argo_real_hypoxia/pooled_metrics.json::[\"heldout_basin_profile_auc_pooled\"]"
         },
         {
           "metric": "heldout_basin_surface_auc_simple_mean",
@@ -2705,8 +2727,8 @@
         {
           "metric": "heldout_basin_profile_auc_simple_mean",
           "value": 0.827,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/threed/argo_real_hypoxia/pooled_metrics.json::[\"heldout_basin_profile_auc_simple_mean\"]"
         },
         {
           "metric": "profile_auc_positive_basins",
@@ -3943,7 +3965,7 @@
           "metric": "perm_fwer_pass",
           "value": 0,
           "status": "BOUND",
-          "bound_to": "reports/findings_campaign/bacteria_dry_onset_interaction.json::[\"engines\"][\"interaction\"][\"panel\"][\"slice_base_rate\"]"
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_interaction.json::[\"engines\"][\"interaction\"][\"fdr\"][\"n_pairs_pass_perm_fwer_p05\"]"
         }
       ]
     },
@@ -3989,7 +4011,7 @@
           "metric": "n_survivors",
           "value": 0,
           "status": "BOUND",
-          "bound_to": "reports/findings_campaign/bacteria_dry_onset_symbolic.json::[\"engines\"][\"symbolic\"][\"panel\"][\"slice_base_rate\"]"
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_symbolic.json::[\"engines\"][\"symbolic\"][\"selection_bias_controls\"][\"bh_fdr\"][\"n_survivors\"]"
         },
         {
           "metric": "total_seconds",
@@ -4108,7 +4130,7 @@
           "metric": "real_survivors",
           "value": 0,
           "status": "BOUND",
-          "bound_to": "reports/estate_search/interaction_scan.json::[\"scan\"][\"scan_seconds\"]"
+          "bound_to": "reports/estate_search/interaction_scan.json::[\"top_pairs_by_abs_stat\"][0][\"bh_q\"]"
         }
       ]
     },
@@ -4400,7 +4422,7 @@
           "metric": "fresh_station_days",
           "value": 0,
           "status": "BOUND",
-          "bound_to": "reports/sampling_triage/triage_eval.json::[\"base_rate\"]"
+          "bound_to": "reports/sampling_triage/triage_eval.json::[\"data_freshness\"][\"fresh_station_day_fraction\"]"
         },
         {
           "metric": "total_station_days",
@@ -4412,7 +4434,7 @@
           "metric": "fresh_station_day_fraction",
           "value": 0.0,
           "status": "BOUND",
-          "bound_to": "reports/sampling_triage/triage_eval.json::[\"base_rate\"]"
+          "bound_to": "reports/sampling_triage/triage_eval.json::[\"data_freshness\"][\"fresh_station_day_fraction\"]"
         },
         {
           "metric": "latest_sample_date",
