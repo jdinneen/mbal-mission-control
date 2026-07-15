@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260715T025556Z-4050-3351",
-  "built_utc": "2026-07-15T02:55:56Z",
-  "message": "RETRACT fabricated CA enterococcus decline (ex-SD p=3e-6 was never computed; real ex-SD MK p=0.354, censored Wilcoxon p=0.48 = NULL); correct 4 more cards from the same artifact-free 07-14 pass (arctic phantom, colocation mechanism, nFLH key, estate count)"
+  "deploy_id": "20260715T154625Z-29312-31685",
+  "built_utc": "2026-07-15T15:46:25Z",
+  "message": "Add card-evidence gate: bind every published number to an exact key in a cited file (46/66 cards sealed, 56 numbers still unbound and now visible); evidence becomes a list so multi-source cards can name every file; publish the audit ledger"
 }

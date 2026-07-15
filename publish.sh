@@ -131,6 +131,16 @@ assert_no_unselected_tracked_changes
 echo "[publish] Running repository privacy and integrity checks..."
 node scripts/check.mjs -- "${SELECTED[@]}"
 
+# Card-evidence gate. A Card number must be findable, by exact key, in a file the
+# Card cites. This exists because on 2026-07-14 a red-team pass typed numbers
+# straight into build_snapshot.py with no artifact behind them and nine Cards
+# shipped figures that were in no file at all -- including a claimed California
+# enterococcus decline (p=3e-6) that was never computed. Naming a source file does
+# not help: that Card cited a real file and lied anyway. Only the lookup catches it.
+# Fails on SEALED cards only, so coverage ratchets up and never silently regresses.
+echo "[publish] Checking Card numbers against their evidence files..."
+python scripts/check_card_evidence.py --gate
+
 if [ "$DRY_RUN" -eq 1 ]; then
   echo "[publish] DRY RUN passed. A real release would stage only:"
   printf '  %s\n' "${SELECTED[@]}" version.json

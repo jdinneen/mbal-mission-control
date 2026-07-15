@@ -62,7 +62,11 @@
         "headline": "SST adds a real, modest marginal AP at 2wk lead: +0.068 on the 2018-21 window (8 states, LOSO CI[+0.021,+0.115], 3 of 4 years positive) and INDEPENDENTLY +0.055 on 3 clean post-COVID years (2023-25, 10 states, LOSO CI[+0.025,+0.083], all positive)",
         "plain": "Long coastal water temperature adds a real but modest forward improvement over season+persistence for state-week Vibrio infection spikes two weeks ahead. It holds because it independently replicates on the post-COVID years, not because of any single year.",
         "how": "Rolling-origin forward by year, lead 2wk. TWO separate runs, reported separately because they are not poolable (different NNDSS vintages, 8 vs 10 states, 2017 absent from the panel): adversary_verdict.json covers 2018-21 (8 states, pooled +0.0681, state-clustered LOSO CI[0.0205,0.1152], 3 of 4 years positive, 2018 negative at -0.01); hardening_verdict.json covers 2023-25 (10 states, pooled +0.0547, LOSO CI[0.0254,0.0828], all 3 positive, min +0.0411, permutation p=0, key-shuffle collapses AP 0.424->0.346).",
-        "evidence": "reports/temperature_target/vibrio/hardening_verdict.json",
+        "evidence": [
+          "reports/temperature_target/vibrio/hardening_verdict.json",
+          "reports/temperature_target/vibrio/adversary_verdict.json",
+          "reports/temperature_target/vibrio/gate_results_lead2.json"
+        ],
         "metrics": {
           "lead": "2wk",
           "window_2018_21_states": 8,
@@ -93,7 +97,10 @@
         "headline": "forward skill vs TREND +0.69 (derived: 1-(0.157/0.284)^2); vs climatology 0.705 on the E01 buoy, 0.30-0.38 on the corroborating M01 buoy; NO confidence interval computed (N=21, pilot-grade)",
         "plain": "April-May bottom-water temperature, known by June 1, forecasts when the summer Maine lobster landings peak -- useful for ex-vessel price and market planning. A directional, pilot-grade signal, not a calibrated forecast -- and it independently REPRODUCES a forecast that already exists operationally rather than beating it.",
         "how": "Held-out unit = YEAR, rolling-origin, test n=13 years (2012-2024). Survives year-jackknife (11/13 yrs), a shuffle null (p=0.0005), and a volume-confound test; but 0.705 is E01-buoy-specific -- the corroborating M01 buoy gives 0.30-0.38.",
-        "evidence": "reports/temperature_target/lobster/results.json",
+        "evidence": [
+          "reports/temperature_target/lobster/results.json",
+          "reports/temperature_target/lobster/adversary_indep_20260710.json"
+        ],
         "metrics": {
           "skill_vs_trend": 0.69,
           "skill_vs_clim_e01": 0.705,
@@ -113,7 +120,9 @@
         "headline": "RED-TEAM: a trivial 'rank by last tissue value' baseline BEATS the shipped ML on every metric (top-50 1.00 vs 0.72; AP 0.65 vs 0.34); no driver-forecast skill",
         "plain": "Ranking which French shellfish sites to test first is a real, useful nowcast -- but the honest deliverable is a one-line rule 'retest the sites with the highest recent reading', which beats the tuned model. The ML added nothing and even diluted the signal.",
         "how": "Forward split train<=2014. RED-TEAM scored every fair-baseline column: recent-tissue-value alone hits top-50 precision 1.00 / AP 0.65 vs the XGBoost's 0.72 / 0.34; site-clustered dAP(model-baseline) = -0.12 to -0.29, CI excludes 0.",
-        "evidence": "reports/hab/domoic_alert_model/results.json",
+        "evidence": [
+          "reports/hab/domoic_alert_model/results.json"
+        ],
         "metrics": {
           "n_test": 5392,
           "exceedances": 227,
@@ -137,7 +146,10 @@
         "headline": "CA vs FL P(fatal|bite) 3.1x pooled (p=2.7e-4; upper est., robust floor ~2.4x); modern-era-only gap WIDENS to 11.8x (p=1.2e-5); CA=white-shark regime, FL=small-shark",
         "plain": "Florida has the most shark bites, but California and Australia bites are far more likely to be fatal and to involve great white sharks. The DIRECTION of that severity gap is bulletproof; the exact multiplier is an upper estimate.",
         "how": "Global Shark Attack File, severity conditional on an unprovoked bite. Modern-era control from reports/sharks/ecosystem_chain_screen_20260702/era_hardening.json: 2000-2026 CA 9 fatal / 106 bites vs FL 4 / 599, continuity-corrected risk ratio 11.8, p=1.2e-5. The 'CA over-records severe bites' attack is refuted (CA has MORE trivial bites); but P(fatal|recorded bite) is not recording-invariant (FL fell 0.16->0.007 as its record grew).",
-        "evidence": "reports/sharks/shark_hotspot_analysis.json",
+        "evidence": [
+          "reports/sharks/shark_hotspot_analysis.json",
+          "reports/sharks/ecosystem_chain_screen_20260702/era_hardening.json"
+        ],
         "metrics": {
           "n_unprovoked": 4686,
           "ca_p_fatal": 0.0896,
@@ -185,7 +197,10 @@
         "headline": "RED-TEAM: the sole 'fault' flag is Monterey UPWELLING misread as drift -- station 156 runs 1.7C colder than its 6 same-source neighbors in upwelling season while tracking the M1 mooring (r=0.968, mean bias 0.02C but MAE 0.29C) -- it fires by a 0.002C margin and vanishes the moment one cross-source neighbor (NDBC 46092 = M1) is included. Precision on the only adjudicable case = 0/1",
         "plain": "A tool meant to catch broken coastal sensors by comparing each to its neighbors. Its one demo 'catch' was actually a correctly-working buoy reading real upwelling, and the alert disappears once a genuinely comparable neighbor is in the pool. The useful part is the map of where cross-checking is even possible.",
         "how": "RED-TEAM pulled the flagged buoy vs neighbors from the raw 1.4B-row layer: station 156 (CDIP) agrees with the one true cross-source neighbor (M1 mooring, 7.4km away, also carried as NDBC 46092) -- r=0.968, mean bias 0.02C, though MAE is 0.29C; the 'divergence' was against 6 same-source warm inner-bay buoys during upwelling season (residual -1.66C in June, +0.08C in January). Re-running the shipped detector reproduces the flag byte-exact on 6 same-source neighbors and yields ZERO flags on the identical window once NDBC 46092 is added -- the flag dies from neighbor comparability, not data recency. The lone_divergence trigger clears its threshold by 0.002C (1.188 vs 1.186).",
-        "evidence": "reports/verify/sensor_fault_alerts.json",
+        "evidence": [
+          "reports/verify/sensor_fault_alerts.json",
+          "reports/verify/colocation_census_telemetry.json"
+        ],
         "metrics": {
           "demo_n_flagged": 1,
           "precision_on_adjudicable_case": 0.0,
@@ -208,7 +223,9 @@
         "headline": "RED-TEAM REFUTED: AUC 0.609 CI[0.493,0.725] INCLUDES 0.5; one-sided p=0.033 dies on one Bonferroni comparison or one flipped label; zero non-Karenia negatives so it can't be Karenia-specific",
         "plain": "A free satellite fluorescence signal was tested as a dense red-tide (Karenia) detector. Once you put an honest confidence interval on it, the skill can't be told apart from chance -- so this is not a detector, just the already-known fact that more algae means more fluorescence.",
         "how": "Same-station + same-season paired test (n=45). RED-TEAM: Hanley-McNeil CI on AUC 0.609 = [0.493,0.725] (crosses 0.5); the design has no non-bloom negatives; only 45 of 1,460 available pairs were used (one arbitrary seed).",
-        "evidence": "reports/redtide_sat/karenia_season_matched.json",
+        "evidence": [
+          "reports/redtide_sat/karenia_season_matched.json"
+        ],
         "metrics": {
           "n_pairs": 45,
           "pooled_auc": 0.609,
@@ -232,7 +249,10 @@
         "headline": "RETRACTED 2026-07-15: enterococcus shows NO robust trend (censored Wilcoxon p=0.48 over 455 stations; ex-San-Diego pooled MK p=0.354) -- the previously published 'decline, ex-SD p=3e-6' was never computed. Fecal coliform does decline (p=3.4e-9, n=188) but its frame still includes San Diego. No statewide INCREASE; weather dominates",
         "plain": "California regulatory beach bacteria shows no robust enterococcus trend -- the well-powered station-level test is a null, not an improvement. One indicator (fecal coliform) does decline, but that test has not yet been re-run with San Diego's reporting break excluded, so its scope is unsettled. The apparent rise in advisories is a counting artifact, and rainfall dominates day-to-day spikes.",
         "how": "Per-station censored Kendall-tau on the balanced panel (data_clean/censored_trend.json) vs the underpowered 26-point annual Mann-Kendall. Enterococcus: Wilcoxon p=0.483 over 455 stations, median censored tau -0.0056, 50.5% of station taus negative -- a coin flip. The independent red-team (analysis/josh_MERGED_2026-07-10/redteam_findings.md) re-derived the ex-San-Diego test from raw parquet and got pooled rest-of-CA MK p=0.354 with an ex-SD enterococcus geomean of +1.3%/yr (faintly increasing, not declining).",
-        "evidence": "analysis/josh_bacteria_trends_2026-07-10/data_clean/censored_trend.json",
+        "evidence": [
+          "analysis/josh_bacteria_trends_2026-07-10/data_clean/censored_trend.json",
+          "analysis/josh_bacteria_trends_2026-07-10/analysis_scripts/results.json"
+        ],
         "metrics": {
           "entero_censored_wilcoxon_p": 0.483,
           "entero_censored_stations": 455,
@@ -372,7 +392,10 @@
         "headline": "[RED-TEAM SURVIVES 2026-07-14] 17/17 basins · leak-hardened +0.09 AP over persistence (raw +0.19)",
         "plain": "The same cold-start recipe used for bacteria carries to a completely different hazard: coastal storm-surge onset. Tide-gauge water levels are 'detided' (the predictable astronomical tide removed) to leave the surge residual, and a pooled model predicts surge-onset days on ocean basins it was not trained on. It beats a hardened persistence baseline in all 17 basins tested — orthogonal evidence for the whole cross-hazard thesis.",
         "how": "Detide UHSLC gauges with utide -> surge residual; 95th-percentile onset target; leave-one-basin-out. Red-team attacks strip seasonal-envelope leakage (minimal-feature, causal thresholds, and a high-pass detrend), and the honest claim is the leak-hardened margin, not the raw one.",
-        "evidence": "reports/sea_level/redteam_surge_core.json",
+        "evidence": [
+          "reports/sea_level/redteam_surge_core.json",
+          "reports/sea_level/global_surge_onset_results.json"
+        ],
         "metrics": {
           "n_stations": 231,
           "n_basins": 17,
@@ -853,7 +876,10 @@
         "headline": "[RED-TEAM SURVIVES-scoped 2026-07-14] Held-out ocean basin: vertical temperature/salinity profile reads deep hypoxia better than the surface (pooled AUC 0.775 vs surface 0.648; simple-mean 0.827 vs 0.630); profile AUC positive in all 8 evaluated basins, dAP positive in 7 of 8; 204,647 real Argo profiles",
         "plain": "A dead zone is a patch of ocean so low in oxygen that life there suffocates. Measuring oxygen on the seafloor needs an expensive sensor that fouls and fails; a CTD, which only measures temperature and salinity, is cheap and reliable. On 204,647 real Argo float profiles worldwide, the temperature+salinity profile through the water column reveals whether the bottom is oxygen-starved RIGHT NOW, at spots with no oxygen sensor. Reading the surface alone is materially worse than reading the whole profile (AUC 0.648 vs 0.775 in a basin the model was never trained on), and the profile separates hypoxic from healthy water in all 8 basins that could be evaluated. The same result holds in Tokyo Bay (survived an independent adversary), the California Current, and independently in Chesapeake Bay. It is a NOWCAST -- a cheap sensor standing in for a missing one at the present moment -- not a future forecast; the attempt to extend it to multi-day onset forecasting did not survive a fair baseline and is not claimed.",
         "how": "Leave-basin-out on real Argo GDAC Sprof profiles with measured oxygen (train on all basins but one, test on the held-out basin). Reported as within-held-out-basin discrimination (AUC), which is base-rate-invariant, because the pooled leave-basin average-precision gap (+0.156) was shown by an independent adversary to mostly measure between-basin geography (a basin-base-rate oracle beats both arms) and is deliberately NOT used. Aggregation is stated explicitly because it matters: pooled (run.log:36-37) surface 0.648 / profile 0.775; simple mean across basins 0.630 / 0.827; positive-weighted 0.479 / 0.770. The profile number is robust to the choice (0.770-0.827); the surface number is NOT (0.479-0.648), so the pooled figure is quoted. Non-circular: deep temperature alone gives AP 0.12, essentially the base rate, and the solubility identity explains only R2=0.14, so the skill is real stratification structure, not a temperature-to-oxygen tautology. No leakage (density computed from temperature/salinity only, never from oxygen).",
-        "evidence": "reports/threed/argo_real_hypoxia/leave_basin_out.csv",
+        "evidence": [
+          "reports/threed/argo_real_hypoxia/leave_basin_out.csv",
+          "reports/threed/argo_real_hypoxia/summary.json"
+        ],
         "metrics": {
           "n_profiles_evaluated": 204647,
           "n_profiles_fetched": 260805,
@@ -1358,7 +1384,12 @@
         "headline": "528,906 interactions + 3M formulas + knockoffs: zero shippable survivors",
         "plain": "A large GPU search over nonlinear interactions and symbolic forms did not find a new bacteria signal beyond the frozen baseline.",
         "how": "Interaction scan, symbolic regression, and deep knockoff selection, each with FDR/permutation controls and critic review.",
-        "evidence": "reports/estate_search/FINDINGS.md",
+        "evidence": [
+          "reports/estate_search/FINDINGS.md",
+          "reports/estate_search/interaction_scan.json",
+          "reports/estate_search/symbolic_reg.json",
+          "reports/estate_search/deep_knockoffs.json"
+        ],
         "metrics": {
           "interaction_pairs": 528906,
           "estate_cols_scanned": 1029,

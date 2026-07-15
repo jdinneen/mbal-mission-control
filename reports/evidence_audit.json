@@ -1,0 +1,4836 @@
+{
+  "_note": "Binds each published Card number to an exact key in an exact evidence file. UNBOUND = the number is not in any file the Card cites. Exact key lookup only -- never a fuzzy value search, which launders coincidences.",
+  "generated_from": "mbal-mission-control/data.json",
+  "totals": {
+    "cards": 66,
+    "metrics": 588,
+    "unbound": 56,
+    "cards_clean": 46,
+    "cards_with_unbound": 20
+  },
+  "sealed": [
+    "banked_ca_fib_comparability_breaks",
+    "banked_chesapeake_hypoxia_virtual_sensor",
+    "caveat_sampling_triage_retrospective_gain_partial_fresh",
+    "claim_adaptive_sampling_pilot",
+    "claim_bacteria_decision_rule",
+    "claim_bacteria_honest_forecast_horizon",
+    "claim_bacteria_station_memory_supported",
+    "claim_cache_slough_upstream_escape",
+    "claim_carrier_forecast_lead_advisory",
+    "claim_carte_numeric_shared_plane_benchmark",
+    "claim_catboost_champion_record_dont_ship",
+    "claim_clean_to_dirty_onset",
+    "claim_cyano_onset_latitude_law_scoped",
+    "claim_da_toxic_onset_ci_separated",
+    "claim_findings_campaign_targeted_l2_keeps",
+    "claim_forward_2026_holdout_pass",
+    "claim_global_surge_onset_coldstart",
+    "claim_gulf_hypoxia_flag",
+    "claim_hab_exceed_strict_critic",
+    "claim_hypoxia_gru_sequence_positive",
+    "claim_hypoxia_onset_forecast",
+    "claim_lightgbm_catboost_paired_boosts",
+    "claim_mcye_alberta_definitive_replication",
+    "claim_mcye_national_replication",
+    "claim_operational_label_quality_win",
+    "claim_russian_river_advection_escape",
+    "claim_soil_moisture_gate_positive",
+    "claim_tide_range_caveated_positive",
+    "claim_tokyo_shadow_lakehouse_positives",
+    "claim_tsunami_halfduration_warning_screen",
+    "claim_wet_tail_driver_skill",
+    "null_ddpcr_target_redefinition_artifact",
+    "null_estate_gpu_signal_search",
+    "null_findings_campaign_dry_onset_interaction",
+    "null_findings_campaign_dry_onset_symbolic",
+    "null_interlingua_cyano_daily_refutation",
+    "null_interlingua_eu_resolution_boundary",
+    "null_national_microcystin_driver",
+    "null_physics_pi_reencoding_robust",
+    "null_sog_central_relief_onset_underpowered",
+    "null_tensor_pi_state_qa_only",
+    "status_all_silver_unsupervised_ae_running",
+    "status_bacteria_breakthrough_lockbox",
+    "status_findings_campaign_10h_rerun",
+    "status_h1_trust_index",
+    "status_operational_nowcast_partial_fresh"
+  ],
+  "cards": [
+    {
+      "id": "banked_arctic_psp_detection",
+      "kind": "caveat",
+      "evidence": [
+        "reports/arctic_psp/psp_alexandrium_detection.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 15,
+      "n_bound": 9,
+      "n_derived": 0,
+      "n_unbound": 4,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "n_site_days",
+          "value": 2549,
+          "status": "BOUND",
+          "bound_to": "reports/arctic_psp/psp_alexandrium_detection.json::[\"summary\"][\"n_site_days\"]"
+        },
+        {
+          "metric": "independent_exceedance_runs",
+          "value": 265,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "n_sites",
+          "value": 29,
+          "status": "BOUND",
+          "bound_to": "reports/arctic_psp/psp_alexandrium_detection.json::[\"summary\"][\"n_sites\"]"
+        },
+        {
+          "metric": "base_rate",
+          "value": 0.322,
+          "status": "BOUND",
+          "bound_to": "reports/arctic_psp/psp_alexandrium_detection.json::[\"summary\"][\"base_rate\"]"
+        },
+        {
+          "metric": "headline_marginal_ap",
+          "value": 0.0386,
+          "status": "BOUND",
+          "bound_to": "reports/arctic_psp/psp_alexandrium_detection.json::[\"slices\"][\"coldstart_all_alex\"][\"gateA_leave_site_out\"][\"marginal_ap\"]"
+        },
+        {
+          "metric": "hasobs_only_marginal_ap",
+          "value": 0.0283,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "hasobs_share_of_headline",
+          "value": 0.733,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "residual_abundance_gradient_ap",
+          "value": 0.0103,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "abundance_only_cold_ci95[0]",
+          "value": -0.0058,
+          "status": "BOUND",
+          "bound_to": "reports/arctic_psp/psp_alexandrium_detection.json::[\"slices\"][\"coldstart_coloc_alex\"][\"gateA_leave_site_out\"][\"ci95\"][0]"
+        },
+        {
+          "metric": "abundance_only_cold_ci95[1]",
+          "value": 0.0979,
+          "status": "BOUND",
+          "bound_to": "reports/arctic_psp/psp_alexandrium_detection.json::[\"slices\"][\"coldstart_coloc_alex\"][\"gateA_leave_site_out\"][\"ci95\"][1]"
+        },
+        {
+          "metric": "abundance_only_perm_p",
+          "value": 0.62,
+          "status": "BOUND",
+          "bound_to": "reports/arctic_psp/psp_alexandrium_detection.json::[\"slices\"][\"coldstart_coloc_alex\"][\"gateA_leave_site_out\"][\"perm_p\"]"
+        },
+        {
+          "metric": "key_shuffle_phantom",
+          "value": -0.001,
+          "status": "BOUND",
+          "bound_to": "reports/arctic_psp/psp_alexandrium_detection.json::[\"gateB_forward_all\"][\"marginal_ap\"]"
+        },
+        {
+          "metric": "key_shuffle_guard",
+          "value": "PASSES",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "forward_split_marginal_ap",
+          "value": -0.0008,
+          "status": "BOUND",
+          "bound_to": "reports/arctic_psp/psp_alexandrium_detection.json::[\"gateB_forward_all\"][\"marginal_ap\"]"
+        },
+        {
+          "metric": "redteam_2026_07_14",
+          "value": "WOUNDED->near-REFUTED (phantom clause corrected 2026-07-15)",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "banked_chesapeake_hypoxia_virtual_sensor",
+      "kind": "positive",
+      "evidence": [
+        "reports/hypoxia_chesapeake/coldstart_virtual_sensor/results.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 9,
+      "n_bound": 8,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n_cruises",
+          "value": 15841,
+          "status": "BOUND",
+          "bound_to": "reports/hypoxia_chesapeake/coldstart_virtual_sensor/results.json::[\"n_cruises\"]"
+        },
+        {
+          "metric": "stations",
+          "value": 26,
+          "status": "BOUND",
+          "bound_to": "reports/hypoxia_chesapeake/coldstart_virtual_sensor/results.json::[\"stations\"]"
+        },
+        {
+          "metric": "base_rate",
+          "value": 0.258,
+          "status": "BOUND",
+          "bound_to": "reports/hypoxia_chesapeake/coldstart_virtual_sensor/results.json::[\"base_rate\"]"
+        },
+        {
+          "metric": "enriched_baseline_ap",
+          "value": 0.885,
+          "status": "BOUND",
+          "bound_to": "reports/hypoxia_chesapeake/coldstart_virtual_sensor/results.json::[\"enriched_baseline\"][\"AP\"]"
+        },
+        {
+          "metric": "plus_ts_ap",
+          "value": 0.945,
+          "status": "BOUND",
+          "bound_to": "reports/hypoxia_chesapeake/coldstart_virtual_sensor/results.json::[\"plus_TS_strat\"][\"AP\"]"
+        },
+        {
+          "metric": "genuine_ts_dap",
+          "value": 0.068,
+          "status": "BOUND",
+          "bound_to": "reports/hypoxia_chesapeake/coldstart_virtual_sensor/results.json::[\"genuine_TS_dAP\"]"
+        },
+        {
+          "metric": "ci95_station_clustered[0]",
+          "value": 0.033,
+          "status": "BOUND",
+          "bound_to": "reports/hypoxia_chesapeake/coldstart_virtual_sensor/results.json::[\"genuine_dAP_ci95_station_clustered\"][0]"
+        },
+        {
+          "metric": "ci95_station_clustered[1]",
+          "value": 0.127,
+          "status": "BOUND",
+          "bound_to": "reports/hypoxia_chesapeake/coldstart_virtual_sensor/results.json::[\"genuine_dAP_ci95_station_clustered\"][1]"
+        },
+        {
+          "metric": "is_forecast",
+          "value": false,
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "banked_vibrio_temperature_forecast",
+      "kind": "positive",
+      "evidence": [
+        "reports/temperature_target/vibrio/hardening_verdict.json",
+        "reports/temperature_target/vibrio/adversary_verdict.json",
+        "reports/temperature_target/vibrio/gate_results_lead2.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 15,
+      "n_bound": 9,
+      "n_derived": 0,
+      "n_unbound": 1,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "lead",
+          "value": "2wk",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "window_2018_21_states",
+          "value": 8,
+          "status": "BOUND",
+          "bound_to": "reports/temperature_target/vibrio/gate_results_lead2.json::[\"n_states\"]"
+        },
+        {
+          "metric": "window_2018_21_pooled_marginal_ap",
+          "value": 0.0681,
+          "status": "BOUND",
+          "bound_to": "reports/temperature_target/vibrio/adversary_verdict.json::[\"pooled_forward_marg_AP_lead2\"]"
+        },
+        {
+          "metric": "window_2018_21_loso_ci95_state_clustered[0]",
+          "value": 0.0205,
+          "status": "BOUND",
+          "bound_to": "reports/temperature_target/vibrio/adversary_verdict.json::[\"few_cluster_inference_pooled_lead2\"][\"ci95\"][0]"
+        },
+        {
+          "metric": "window_2018_21_loso_ci95_state_clustered[1]",
+          "value": 0.1152,
+          "status": "BOUND",
+          "bound_to": "reports/temperature_target/vibrio/adversary_verdict.json::[\"few_cluster_inference_pooled_lead2\"][\"ci95\"][1]"
+        },
+        {
+          "metric": "window_2018_21_years_positive",
+          "value": "3 of 4",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "postcovid_2023_25_states",
+          "value": 10,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "postcovid_pooled_marginal_ap",
+          "value": 0.0547,
+          "status": "BOUND",
+          "bound_to": "reports/temperature_target/vibrio/hardening_verdict.json::[\"task1_postcovid_replication\"][\"pooled_2023_2025\"][\"loso\"][\"pooled_marg_AP\"]"
+        },
+        {
+          "metric": "postcovid_loso_ci95[0]",
+          "value": 0.0254,
+          "status": "BOUND",
+          "bound_to": "reports/temperature_target/vibrio/hardening_verdict.json::[\"task1_postcovid_replication\"][\"pooled_2023_2025\"][\"loso\"][\"loso_ci95\"][0]"
+        },
+        {
+          "metric": "postcovid_loso_ci95[1]",
+          "value": 0.0828,
+          "status": "BOUND",
+          "bound_to": "reports/temperature_target/vibrio/hardening_verdict.json::[\"task1_postcovid_replication\"][\"pooled_2023_2025\"][\"loso\"][\"loso_ci95\"][1]"
+        },
+        {
+          "metric": "postcovid_min_loso",
+          "value": 0.0411,
+          "status": "BOUND",
+          "bound_to": "reports/temperature_target/vibrio/hardening_verdict.json::[\"task1_postcovid_replication\"][\"pooled_2023_2025\"][\"loso\"][\"min_loso\"]"
+        },
+        {
+          "metric": "postcovid_years_positive",
+          "value": "3 of 3",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "postcovid_perm_p",
+          "value": 0.0,
+          "status": "BOUND",
+          "bound_to": "reports/temperature_target/vibrio/hardening_verdict.json::[\"task1_postcovid_replication\"][\"per_year_marginal_full_minus_base_AP\"][\"test2023\"][\"base_ap\"]"
+        },
+        {
+          "metric": "year_clustered_ci",
+          "value": "NOT COMPUTED",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "redteam_2026_07_14",
+          "value": "SURVIVES (numbers corrected 2026-07-15)",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "banked_lobster_temperature_timing",
+      "kind": "positive",
+      "evidence": [
+        "reports/temperature_target/lobster/results.json",
+        "reports/temperature_target/lobster/adversary_indep_20260710.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 8,
+      "n_bound": 2,
+      "n_derived": 1,
+      "n_unbound": 2,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "skill_vs_trend",
+          "value": 0.69,
+          "status": "DERIVED",
+          "bound_to": null,
+          "derivation": "1-(temp_RMSE/trend_RMSE)^2 = 1-(0.157/0.284)^2 = 0.694"
+        },
+        {
+          "metric": "skill_vs_clim_e01",
+          "value": 0.705,
+          "status": "BOUND",
+          "bound_to": "reports/temperature_target/lobster/results.json::[\"forward_cv_skill_vs_climatology\"][\"onset25 (25%-cross timing)\"][\"skill\"]"
+        },
+        {
+          "metric": "skill_m01_buoy",
+          "value": "0.30-0.38",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "shuffle_null_forward_p",
+          "value": 0.0005,
+          "status": "BOUND",
+          "bound_to": "reports/temperature_target/lobster/results.json::[\"adversary\"][\"shuffle_null_forward_p\"]"
+        },
+        {
+          "metric": "n_years",
+          "value": 21,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "n_test_years",
+          "value": 13,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "skill_ci95",
+          "value": "NOT COMPUTED",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "redteam_2026_07_14",
+          "value": "SURVIVES (numbers corrected 2026-07-15)",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "banked_rephytox_da_alert_ranker",
+      "kind": "caveat",
+      "evidence": [
+        "reports/hab/domoic_alert_model/results.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 10,
+      "n_bound": 6,
+      "n_derived": 0,
+      "n_unbound": 3,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "n_test",
+          "value": 5392,
+          "status": "BOUND",
+          "bound_to": "reports/hab/domoic_alert_model/results.json::[\"n_test\"]"
+        },
+        {
+          "metric": "exceedances",
+          "value": 227,
+          "status": "BOUND",
+          "bound_to": "reports/hab/domoic_alert_model/results.json::[\"exceedances_test\"]"
+        },
+        {
+          "metric": "base_rate",
+          "value": 0.0421,
+          "status": "BOUND",
+          "bound_to": "reports/hab/domoic_alert_model/results.json::[\"base_rate\"]"
+        },
+        {
+          "metric": "model_top50",
+          "value": 0.72,
+          "status": "BOUND",
+          "bound_to": "reports/hab/domoic_alert_model/results.json::[\"top_k_precision\"][\"top50\"]"
+        },
+        {
+          "metric": "recent_value_baseline_top50",
+          "value": 1.0,
+          "status": "BOUND",
+          "bound_to": "reports/hab/domoic_alert_model/results.json::[\"AUC\"]"
+        },
+        {
+          "metric": "model_ap",
+          "value": 0.343,
+          "status": "BOUND",
+          "bound_to": "reports/hab/domoic_alert_model/results.json::[\"AP\"]"
+        },
+        {
+          "metric": "recent_value_baseline_ap",
+          "value": 0.65,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "dap_model_minus_baseline_ci95[0]",
+          "value": -0.401,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "dap_model_minus_baseline_ci95[1]",
+          "value": -0.131,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "redteam_2026_07_14",
+          "value": "REFUTED as ML win",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "banked_shark_severity_hotspot",
+      "kind": "positive",
+      "evidence": [
+        "reports/sharks/shark_hotspot_analysis.json",
+        "reports/sharks/ecosystem_chain_screen_20260702/era_hardening.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 13,
+      "n_bound": 8,
+      "n_derived": 3,
+      "n_unbound": 1,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "n_unprovoked",
+          "value": 4686,
+          "status": "BOUND",
+          "bound_to": "reports/sharks/shark_hotspot_analysis.json::[\"n_unprovoked\"]"
+        },
+        {
+          "metric": "ca_p_fatal",
+          "value": 0.0896,
+          "status": "BOUND",
+          "bound_to": "reports/sharks/shark_hotspot_analysis.json::[\"severity_by_region\"][1][\"p_fatal\"]"
+        },
+        {
+          "metric": "ca_p_fatal_ci[0]",
+          "value": 0.0581,
+          "status": "BOUND",
+          "bound_to": "reports/sharks/shark_hotspot_analysis.json::[\"severity_by_region\"][1][\"p_fatal_ci\"][0]"
+        },
+        {
+          "metric": "ca_p_fatal_ci[1]",
+          "value": 0.1357,
+          "status": "BOUND",
+          "bound_to": "reports/sharks/shark_hotspot_analysis.json::[\"severity_by_region\"][1][\"p_fatal_ci\"][1]"
+        },
+        {
+          "metric": "fl_p_fatal",
+          "value": 0.0291,
+          "status": "BOUND",
+          "bound_to": "reports/sharks/shark_hotspot_analysis.json::[\"severity_by_region\"][2][\"p_fatal\"]"
+        },
+        {
+          "metric": "fl_p_fatal_ci[0]",
+          "value": 0.0202,
+          "status": "BOUND",
+          "bound_to": "reports/sharks/shark_hotspot_analysis.json::[\"severity_by_region\"][2][\"p_fatal_ci\"][0]"
+        },
+        {
+          "metric": "fl_p_fatal_ci[1]",
+          "value": 0.0417,
+          "status": "BOUND",
+          "bound_to": "reports/sharks/shark_hotspot_analysis.json::[\"severity_by_region\"][2][\"p_fatal_ci\"][1]"
+        },
+        {
+          "metric": "pooled_ratio",
+          "value": 3.1,
+          "status": "DERIVED",
+          "bound_to": null,
+          "derivation": "risk_ratio_cc 3.0966 from era_hardening.json all_1900_2026, rounded"
+        },
+        {
+          "metric": "pooled_p",
+          "value": 0.0002736,
+          "status": "BOUND",
+          "bound_to": "reports/sharks/ecosystem_chain_screen_20260702/era_hardening.json::[\"ca_vs_fl_fatal\"][\"eras\"][\"all_1900_2026\"][\"p_value\"]"
+        },
+        {
+          "metric": "worst_case_floor_ratio",
+          "value": 2.4,
+          "status": "DERIVED",
+          "bound_to": null,
+          "derivation": "0.089623 / ((28+8)/971) = 2.417 -- worst case: all 8 unknown-outcome FL bites counted fatal"
+        },
+        {
+          "metric": "modern_only_ratio",
+          "value": 11.8,
+          "status": "DERIVED",
+          "bound_to": null,
+          "derivation": "risk_ratio_cc 11.838 from era_hardening.json 2000_2026, rounded"
+        },
+        {
+          "metric": "modern_only_p",
+          "value": 1.22e-05,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "redteam_2026_07_14",
+          "value": "SURVIVES (numbers corrected 2026-07-15)",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "banked_zeroshot_o2_nowcast",
+      "kind": "null",
+      "evidence": [
+        "reports/physics/zeroshot_o2/AGE_FIX_REPORT.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 7,
+      "n_bound": 3,
+      "n_derived": 0,
+      "n_unbound": 1,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "beats_free_woa_basins",
+          "value": "0 of 6",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "ventilated_median_rmse",
+          "value": 46.8,
+          "status": "BOUND",
+          "bound_to": "reports/physics/zeroshot_o2/AGE_FIX_REPORT.json::[\"step2_magnitude\"][\"per_basin\"][\"Indian\"][\"rmse_ts_age\"]"
+        },
+        {
+          "metric": "woa_ocean_coverage",
+          "value": 1.0,
+          "status": "BOUND",
+          "bound_to": "reports/physics/zeroshot_o2/AGE_FIX_REPORT.json::[\"step2_magnitude\"][\"per_basin\"][\"Arctic\"][\"age_valid_frac\"]"
+        },
+        {
+          "metric": "gobai_sota_rmse",
+          "value": 8.8,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "anomaly_skill_r",
+          "value": "0.10-0.26",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "age_uniquely_needed_basins",
+          "value": 1,
+          "status": "BOUND",
+          "bound_to": "reports/physics/zeroshot_o2/AGE_FIX_REPORT.json::[\"step2_magnitude\"][\"per_basin\"][\"Arctic\"][\"age_valid_frac\"]"
+        },
+        {
+          "metric": "redteam_2026_07_14",
+          "value": "REFUTED (surviving value); keep as negative",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "banked_colocation_sensor_fault",
+      "kind": "caveat",
+      "evidence": [
+        "reports/verify/sensor_fault_alerts.json",
+        "reports/verify/colocation_census_telemetry.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 11,
+      "n_bound": 5,
+      "n_derived": 0,
+      "n_unbound": 4,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "demo_n_flagged",
+          "value": 1,
+          "status": "BOUND",
+          "bound_to": "reports/verify/sensor_fault_alerts.json::[\"n_flagged\"]"
+        },
+        {
+          "metric": "precision_on_adjudicable_case",
+          "value": 0.0,
+          "status": "BOUND",
+          "bound_to": "reports/verify/sensor_fault_alerts.json::[\"runtime_min\"]"
+        },
+        {
+          "metric": "flag_vs_m1_mooring_corr",
+          "value": 0.968,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "flag_vs_m1_mean_bias_C",
+          "value": 0.02,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "flag_vs_m1_mae_C",
+          "value": 0.29,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "trigger_margin_C",
+          "value": 0.002,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "flags_with_crosssource_neighbor",
+          "value": 0,
+          "status": "BOUND",
+          "bound_to": "reports/verify/sensor_fault_alerts.json::[\"runtime_min\"]"
+        },
+        {
+          "metric": "flags_by_window",
+          "value": "1 since 2023-01-01 / 0 since 2025-07-01 / 3 since 2026-01-01",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "labeled_true_faults",
+          "value": 0,
+          "status": "BOUND",
+          "bound_to": "reports/verify/sensor_fault_alerts.json::[\"runtime_min\"]"
+        },
+        {
+          "metric": "sst_cross_source_pct_10km",
+          "value": 20.6,
+          "status": "BOUND",
+          "bound_to": "reports/verify/colocation_census_telemetry.json::[\"concepts\"][\"sea_water_temperature\"][\"r10km\"][\"pct_with_CROSS_source_neighbor\"]"
+        },
+        {
+          "metric": "redteam_2026_07_14",
+          "value": "REFUTED as detector (mechanism corrected 2026-07-15)",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "banked_redtide_nflh_detector",
+      "kind": "null",
+      "evidence": [
+        "reports/redtide_sat/karenia_season_matched.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 10,
+      "n_bound": 4,
+      "n_derived": 1,
+      "n_unbound": 4,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "n_pairs",
+          "value": 45,
+          "status": "BOUND",
+          "bound_to": "reports/redtide_sat/karenia_season_matched.json::[\"n_pairs\"]"
+        },
+        {
+          "metric": "pooled_auc",
+          "value": 0.609,
+          "status": "BOUND",
+          "bound_to": "reports/redtide_sat/karenia_season_matched.json::[\"pooled_AUC\"]"
+        },
+        {
+          "metric": "auc_ci95[0]",
+          "value": 0.493,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "auc_ci95[1]",
+          "value": 0.725,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "sign_p_one_sided",
+          "value": 0.033,
+          "status": "BOUND",
+          "bound_to": "reports/redtide_sat/karenia_season_matched.json::[\"sign_p\"]"
+        },
+        {
+          "metric": "sign_p_two_sided",
+          "value": 0.066,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "non_karenia_negatives",
+          "value": 0,
+          "status": "BOUND",
+          "bound_to": "reports/redtide_sat/karenia_season_matched.json::[\"sign_p\"]"
+        },
+        {
+          "metric": "available_pairs",
+          "value": 1460,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "available_pairs_unused",
+          "value": 1415,
+          "status": "DERIVED",
+          "bound_to": null,
+          "derivation": "available_pairs 1460 - n_pairs 45 = 1415"
+        },
+        {
+          "metric": "redteam_2026_07_14",
+          "value": "REFUTED (no CI-separated skill)",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "banked_josh_fib_trend",
+      "kind": "caveat",
+      "evidence": [
+        "analysis/josh_bacteria_trends_2026-07-10/data_clean/censored_trend.json",
+        "analysis/josh_bacteria_trends_2026-07-10/analysis_scripts/results.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 14,
+      "n_bound": 8,
+      "n_derived": 0,
+      "n_unbound": 2,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "entero_censored_wilcoxon_p",
+          "value": 0.483,
+          "status": "BOUND",
+          "bound_to": "analysis/josh_bacteria_trends_2026-07-10/data_clean/censored_trend.json::[\"analytes\"][\"Enterococcus\"][\"T3_censored_kendall_logconc\"][\"wilcoxon_p_tau_eq_0\"]"
+        },
+        {
+          "metric": "entero_censored_stations",
+          "value": 455,
+          "status": "BOUND",
+          "bound_to": "analysis/josh_bacteria_trends_2026-07-10/data_clean/censored_trend.json::[\"analytes\"][\"Enterococcus\"][\"n_stations_panel\"]"
+        },
+        {
+          "metric": "entero_median_censored_tau",
+          "value": -0.0056,
+          "status": "BOUND",
+          "bound_to": "analysis/josh_bacteria_trends_2026-07-10/data_clean/censored_trend.json::[\"analytes\"][\"Enterococcus\"][\"T3_censored_kendall_logconc\"][\"median_censored_tau\"]"
+        },
+        {
+          "metric": "entero_frac_stations_negative",
+          "value": 0.505,
+          "status": "BOUND",
+          "bound_to": "analysis/josh_bacteria_trends_2026-07-10/data_clean/censored_trend.json::[\"analytes\"][\"Enterococcus\"][\"T3_censored_kendall_logconc\"][\"frac_censored_tau_negative\"]"
+        },
+        {
+          "metric": "entero_exSD_pooled_mk_p",
+          "value": 0.354,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "entero_exSD_geomean_pct_per_yr",
+          "value": 1.3,
+          "status": "BOUND",
+          "bound_to": "analysis/josh_bacteria_trends_2026-07-10/analysis_scripts/results.json::[\"driver_glm\"][\"logflow\"][\"OR\"]"
+        },
+        {
+          "metric": "fecal_coliform_censored_p",
+          "value": 3.4e-09,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "fecal_coliform_stations",
+          "value": 188,
+          "status": "BOUND",
+          "bound_to": "analysis/josh_bacteria_trends_2026-07-10/data_clean/censored_trend.json::[\"analytes\"][\"Fecal Coliforms\"][\"n_stations_panel\"]"
+        },
+        {
+          "metric": "annual_mk_entero_p",
+          "value": 0.201,
+          "status": "BOUND",
+          "bound_to": "analysis/josh_bacteria_trends_2026-07-10/analysis_scripts/results.json::[\"mk_balanced\"][\"Enterococcus\"][\"p\"]"
+        },
+        {
+          "metric": "annual_mk_note",
+          "value": "underpowered 26-pt test",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "wet_dry_ratio",
+          "value": "1.7-2.9x",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "advisory_unknown_cause_pct",
+          "value": 63.2,
+          "status": "BOUND",
+          "bound_to": "analysis/josh_bacteria_trends_2026-07-10/analysis_scripts/results.json::[\"advisory_cause_share\"][\"Unknown\"]"
+        },
+        {
+          "metric": "surfrider_volunteer",
+          "value": "disagrees (shows increase, p=0.0014)",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "redteam_2026_07_14",
+          "value": "RETRACTED 2026-07-15 (decline claim was never computed)",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "banked_regime_shift_monitor",
+      "kind": "null",
+      "evidence": [
+        "reports/regime_shift/emerging_hotspots.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 8,
+      "n_bound": 3,
+      "n_derived": 0,
+      "n_unbound": 1,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "n_stations_scanned",
+          "value": 496,
+          "status": "BOUND",
+          "bound_to": "reports/regime_shift/emerging_hotspots.json::[\"n_stations_scanned\"]"
+        },
+        {
+          "metric": "scope",
+          "value": "CA enterococcus only",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "novel_mean_steps",
+          "value": 0,
+          "status": "BOUND",
+          "bound_to": "reports/regime_shift/emerging_hotspots.json::[\"top_confirmed_hotspots\"][0][\"before\"]"
+        },
+        {
+          "metric": "missed_variance_shifts_nonSD",
+          "value": "45-82",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "missed_trend_shifts_nonSD",
+          "value": 5,
+          "status": "BOUND",
+          "bound_to": "reports/regime_shift/emerging_hotspots.json::[\"n_emerging_hotspots_FDR<0.05_upward_recent\"]"
+        },
+        {
+          "metric": "discarded_pre2020_upward_steps",
+          "value": 7,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "validation_event",
+          "value": "SD reporting artifact",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "redteam_2026_07_14",
+          "value": "MIXED - narrow number real, headline overstated",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "banked_pn_pda_coldstart_nowcast",
+      "kind": "positive",
+      "evidence": [
+        "reports/minime/pn_pda_coldstart.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 12,
+      "n_bound": 7,
+      "n_derived": 0,
+      "n_unbound": 1,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "n_sites",
+          "value": 6,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "bloom_base_ap",
+          "value": 0.063,
+          "status": "BOUND",
+          "bound_to": "reports/minime/pn_pda_coldstart.json::[\"bloom_base_ap\"]"
+        },
+        {
+          "metric": "bloom_cand_ap",
+          "value": 0.387,
+          "status": "BOUND",
+          "bound_to": "reports/minime/pn_pda_coldstart.json::[\"bloom_cand_ap\"]"
+        },
+        {
+          "metric": "bloom_marginal_ap",
+          "value": 0.324,
+          "status": "BOUND",
+          "bound_to": "reports/minime/pn_pda_coldstart.json::[\"bloom_marginal_ap\"]"
+        },
+        {
+          "metric": "bloom_ci95[0]",
+          "value": 0.25,
+          "status": "BOUND",
+          "bound_to": "reports/minime/pn_pda_coldstart.json::[\"bloom_ci95\"][0]"
+        },
+        {
+          "metric": "bloom_ci95[1]",
+          "value": 0.446,
+          "status": "BOUND",
+          "bound_to": "reports/minime/pn_pda_coldstart.json::[\"bloom_ci95\"][1]"
+        },
+        {
+          "metric": "detection_marginal_ap",
+          "value": 0.275,
+          "status": "BOUND",
+          "bound_to": "reports/minime/pn_pda_coldstart.json::[\"detection_marginal_ap\"]"
+        },
+        {
+          "metric": "key_shuffle_p",
+          "value": 0.005,
+          "status": "BOUND",
+          "bound_to": "reports/minime/pn_pda_coldstart.json::[\"key_shuffle_p\"]"
+        },
+        {
+          "metric": "beats_baseline_sites",
+          "value": "6/6",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "beats_baseline_years",
+          "value": "14/14",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "is_forecast",
+          "value": false,
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "verification",
+          "value": "byte-exact + independent adversary 2026-07-14",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "banked_ca_fib_comparability_breaks",
+      "kind": "caveat",
+      "evidence": [
+        "reports/minime/ca_fib_comparability_breaks.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 8,
+      "n_bound": 4,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n_rows",
+          "value": 1319296,
+          "status": "BOUND",
+          "bound_to": "reports/minime/ca_fib_comparability_breaks.json::[\"n_rows\"]"
+        },
+        {
+          "metric": "units_scanned",
+          "value": 52,
+          "status": "BOUND",
+          "bound_to": "reports/minime/ca_fib_comparability_breaks.json::[\"units_scanned\"]"
+        },
+        {
+          "metric": "significant_breaks",
+          "value": 22,
+          "status": "BOUND",
+          "bound_to": "reports/minime/ca_fib_comparability_breaks.json::[\"significant_breaks\"]"
+        },
+        {
+          "metric": "median_invisible",
+          "value": 11,
+          "status": "BOUND",
+          "bound_to": "reports/minime/ca_fib_comparability_breaks.json::[\"median_invisible_breaks\"]"
+        },
+        {
+          "metric": "orange_fc_break",
+          "value": "2024-01 (frac 0.38->0.86, median ~10 flat)",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "sf_tc_break",
+          "value": "2021-04",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "perm_p",
+          "value": "<0.005",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "verification",
+          "value": "byte-exact independent adversary 2026-07-14",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "banked_ireland_mussel_sentinel",
+      "kind": "positive",
+      "evidence": [
+        "reports/minime/ireland_mussel_sentinel.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 10,
+      "n_bound": 7,
+      "n_derived": 0,
+      "n_unbound": 1,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "toxins",
+          "value": "DSP/AZP (ASP null)",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "dsp_loao_ap",
+          "value": 0.481,
+          "status": "BOUND",
+          "bound_to": "reports/minime/ireland_mussel_sentinel.json::[\"dsp_loao_ap\"]"
+        },
+        {
+          "metric": "dsp_strict_loyo_ap",
+          "value": 0.43,
+          "status": "BOUND",
+          "bound_to": "reports/minime/ireland_mussel_sentinel.json::[\"dsp_strict_loyo_ap\"]"
+        },
+        {
+          "metric": "baseline_ap",
+          "value": 0.023,
+          "status": "BOUND",
+          "bound_to": "reports/minime/ireland_mussel_sentinel.json::[\"baseline_ap_species_season\"]"
+        },
+        {
+          "metric": "dsp_margin",
+          "value": 0.45,
+          "status": "BOUND",
+          "bound_to": "reports/minime/ireland_mussel_sentinel.json::[\"dsp_margin\"]"
+        },
+        {
+          "metric": "ci95_area_clustered[0]",
+          "value": 0.18,
+          "status": "BOUND",
+          "bound_to": "reports/minime/ireland_mussel_sentinel.json::[\"dsp_ci95_area_clustered\"][0]"
+        },
+        {
+          "metric": "ci95_area_clustered[1]",
+          "value": 0.67,
+          "status": "BOUND",
+          "bound_to": "reports/minime/ireland_mussel_sentinel.json::[\"dsp_ci95_area_clustered\"][1]"
+        },
+        {
+          "metric": "key_shuffle_dsp_p",
+          "value": 0.005,
+          "status": "BOUND",
+          "bound_to": "reports/minime/ireland_mussel_sentinel.json::[\"key_shuffle_dsp_p\"]"
+        },
+        {
+          "metric": "asp_key_shuffle_p",
+          "value": 0.61,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "verification",
+          "value": "byte-exact independent adversary 2026-07-14",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "claim_global_fib_coldstart_forecast",
+      "kind": "caveat",
+      "evidence": [
+        "reports/global_fib/coldstart_hgbt_all.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 11,
+      "n_bound": 7,
+      "n_derived": 0,
+      "n_unbound": 4,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "n_regions",
+          "value": 37,
+          "status": "BOUND",
+          "bound_to": "reports/global_fib/coldstart_hgbt_all.json::[\"macro\"][\"n_regions\"]"
+        },
+        {
+          "metric": "macro_auc_model",
+          "value": 0.7301,
+          "status": "BOUND",
+          "bound_to": "reports/global_fib/coldstart_hgbt_all.json::[\"macro\"][\"macro_auc_model\"]"
+        },
+        {
+          "metric": "macro_auc_recurrence",
+          "value": 0.6937,
+          "status": "BOUND",
+          "bound_to": "reports/global_fib/coldstart_hgbt_all.json::[\"macro\"][\"macro_auc_recurrence\"]"
+        },
+        {
+          "metric": "macro_ap_model",
+          "value": 0.2549,
+          "status": "BOUND",
+          "bound_to": "reports/global_fib/coldstart_hgbt_all.json::[\"macro\"][\"macro_ap_model\"]"
+        },
+        {
+          "metric": "macro_ap_recurrence",
+          "value": 0.2207,
+          "status": "BOUND",
+          "bound_to": "reports/global_fib/coldstart_hgbt_all.json::[\"macro\"][\"macro_ap_recurrence\"]"
+        },
+        {
+          "metric": "mean_ap_lift_vs_recurrence",
+          "value": 0.0341,
+          "status": "BOUND",
+          "bound_to": "reports/global_fib/coldstart_hgbt_all.json::[\"macro\"][\"mean_ap_lift_vs_recurrence\"]"
+        },
+        {
+          "metric": "regions_beat_recurrence",
+          "value": 36,
+          "status": "BOUND",
+          "bound_to": "reports/global_fib/coldstart_hgbt_all.json::[\"macro\"][\"regions_model_beats_recurrence\"]"
+        },
+        {
+          "metric": "external_sota_auc",
+          "value": 0.713,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "regions_beat_sota_no_rain",
+          "value": 17,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "plus_rain_auc",
+          "value": 0.7458,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "regions_beat_sota_plus_rain",
+          "value": 22,
+          "status": "UNBOUND",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "claim_global_surge_onset_coldstart",
+      "kind": "claim",
+      "evidence": [
+        "reports/sea_level/redteam_surge_core.json",
+        "reports/sea_level/global_surge_onset_results.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 12,
+      "n_bound": 11,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n_stations",
+          "value": 231,
+          "status": "BOUND",
+          "bound_to": "reports/sea_level/global_surge_onset_results.json::[\"n_stations\"]"
+        },
+        {
+          "metric": "n_basins",
+          "value": 17,
+          "status": "BOUND",
+          "bound_to": "reports/sea_level/redteam_surge_core.json::[\"A_reproduce\"][\"n_basins\"]"
+        },
+        {
+          "metric": "n_rows",
+          "value": 77553,
+          "status": "BOUND",
+          "bound_to": "reports/sea_level/global_surge_onset_results.json::[\"n_rows\"]"
+        },
+        {
+          "metric": "base_rate",
+          "value": 0.052,
+          "status": "BOUND",
+          "bound_to": "reports/sea_level/global_surge_onset_results.json::[\"base_rate\"]"
+        },
+        {
+          "metric": "raw_d_persist_ap",
+          "value": 0.1915,
+          "status": "BOUND",
+          "bound_to": "reports/sea_level/redteam_surge_core.json::[\"A_reproduce\"][\"d_persist\"]"
+        },
+        {
+          "metric": "raw_ci95[0]",
+          "value": 0.155,
+          "status": "BOUND",
+          "bound_to": "reports/sea_level/redteam_surge_core.json::[\"A_reproduce\"][\"ci_lo\"]"
+        },
+        {
+          "metric": "raw_ci95[1]",
+          "value": 0.224,
+          "status": "BOUND",
+          "bound_to": "reports/sea_level/redteam_surge_core.json::[\"A_reproduce\"][\"ci_hi\"]"
+        },
+        {
+          "metric": "hardened_highpass_d_persist_ap",
+          "value": 0.0859,
+          "status": "BOUND",
+          "bound_to": "reports/sea_level/redteam_surge_core.json::[\"attack2_highpass\"][\"d_persist\"]"
+        },
+        {
+          "metric": "hardened_highpass_ci95[0]",
+          "value": 0.0621,
+          "status": "BOUND",
+          "bound_to": "reports/sea_level/redteam_surge_core.json::[\"attack2_highpass\"][\"ci_lo\"]"
+        },
+        {
+          "metric": "hardened_highpass_ci95[1]",
+          "value": 0.1096,
+          "status": "BOUND",
+          "bound_to": "reports/sea_level/redteam_surge_core.json::[\"attack2_highpass\"][\"ci_hi\"]"
+        },
+        {
+          "metric": "hardened_minimal_d_persist_ap",
+          "value": 0.1018,
+          "status": "BOUND",
+          "bound_to": "reports/sea_level/redteam_surge_core.json::[\"attack1_minimal\"][\"d_persist\"]"
+        },
+        {
+          "metric": "basins_model_beats_persistence",
+          "value": "17/17",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "claim_operational_label_quality_win",
+      "kind": "caveat",
+      "evidence": [
+        "reports/label_quality/phase2_gate.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 10,
+      "n_bound": 9,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "ap_operational_label",
+          "value": 0.3482,
+          "status": "BOUND",
+          "bound_to": "reports/label_quality/phase2_gate.json::[\"ap_op_model\"]"
+        },
+        {
+          "metric": "ap_proxy_label",
+          "value": 0.2391,
+          "status": "BOUND",
+          "bound_to": "reports/label_quality/phase2_gate.json::[\"ap_px_model\"]"
+        },
+        {
+          "metric": "ap_baseline",
+          "value": 0.2968,
+          "status": "BOUND",
+          "bound_to": "reports/label_quality/phase2_gate.json::[\"ap_baseline\"]"
+        },
+        {
+          "metric": "dAP_op_minus_proxy",
+          "value": 0.1091,
+          "status": "BOUND",
+          "bound_to": "reports/label_quality/phase2_gate.json::[\"dAP_op_minus_px\"]"
+        },
+        {
+          "metric": "ci95_op_minus_proxy[0]",
+          "value": 0.0504,
+          "status": "BOUND",
+          "bound_to": "reports/label_quality/phase2_gate.json::[\"ci_op_minus_px\"][0]"
+        },
+        {
+          "metric": "ci95_op_minus_proxy[1]",
+          "value": 0.1772,
+          "status": "BOUND",
+          "bound_to": "reports/label_quality/phase2_gate.json::[\"ci_op_minus_px\"][1]"
+        },
+        {
+          "metric": "perm_p",
+          "value": 0.02,
+          "status": "BOUND",
+          "bound_to": "reports/label_quality/phase2_gate.json::[\"ci_op_minus_baseline\"][0]"
+        },
+        {
+          "metric": "proxy_below_baseline",
+          "value": true,
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "held_out_stations",
+          "value": 180,
+          "status": "BOUND",
+          "bound_to": "reports/label_quality/phase2_gate.json::[\"held_out_stations\"]"
+        },
+        {
+          "metric": "n_test",
+          "value": 56720,
+          "status": "BOUND",
+          "bound_to": "reports/label_quality/phase2_gate.json::[\"n_test\"]"
+        }
+      ]
+    },
+    {
+      "id": "claim_bacteria_station_memory_supported",
+      "kind": "caveat",
+      "evidence": [
+        "reports/_eval_cards/claim_cards.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 9,
+      "n_bound": 8,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n",
+          "value": 89321,
+          "status": "BOUND",
+          "bound_to": "reports/_eval_cards/claim_cards.json::[\"bacteria_headline_vs_station_memory\"][\"n\"]"
+        },
+        {
+          "metric": "events",
+          "value": 8999,
+          "status": "BOUND",
+          "bound_to": "reports/_eval_cards/claim_cards.json::[\"bacteria_headline_vs_station_memory\"][\"events\"]"
+        },
+        {
+          "metric": "model_ap",
+          "value": 0.4837,
+          "status": "BOUND",
+          "bound_to": "reports/_eval_cards/claim_cards.json::[\"bacteria_headline_vs_station_memory\"][\"candidate_ap\"]"
+        },
+        {
+          "metric": "station_memory_ap",
+          "value": 0.2782,
+          "status": "BOUND",
+          "bound_to": "reports/_eval_cards/claim_cards.json::[\"bacteria_headline_vs_station_memory\"][\"baseline_ap\"]"
+        },
+        {
+          "metric": "margin_ap",
+          "value": 0.2055,
+          "status": "BOUND",
+          "bound_to": "reports/_eval_cards/claim_cards.json::[\"bacteria_headline_vs_station_memory\"][\"margin\"][\"margin_ap\"]"
+        },
+        {
+          "metric": "ci95[0]",
+          "value": 0.1771,
+          "status": "BOUND",
+          "bound_to": "reports/_eval_cards/claim_cards.json::[\"bacteria_headline_vs_station_memory\"][\"margin\"][\"ci95\"][0]"
+        },
+        {
+          "metric": "ci95[1]",
+          "value": 0.2386,
+          "status": "BOUND",
+          "bound_to": "reports/_eval_cards/claim_cards.json::[\"bacteria_headline_vs_station_memory\"][\"margin\"][\"ci95\"][1]"
+        },
+        {
+          "metric": "roc_auc",
+          "value": null,
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "ece",
+          "value": 0.0097,
+          "status": "BOUND",
+          "bound_to": "reports/_eval_cards/claim_cards.json::[\"bacteria_headline_vs_station_memory\"][\"candidate_ece\"]"
+        }
+      ]
+    },
+    {
+      "id": "claim_tide_range_caveated_positive",
+      "kind": "caveat",
+      "evidence": [
+        "reports/_eval_cards/claim_cards.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 5,
+      "n_bound": 3,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "model_ap",
+          "value": null,
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "baseline_ap",
+          "value": null,
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "margin_ap",
+          "value": 0.0133,
+          "status": "BOUND",
+          "bound_to": "reports/_eval_cards/claim_cards.json::[\"tidal_escape_vs_rain_discharge\"][\"margin\"][\"margin_ap\"]"
+        },
+        {
+          "metric": "ci95[0]",
+          "value": 0.0089,
+          "status": "BOUND",
+          "bound_to": "reports/_eval_cards/claim_cards.json::[\"tidal_escape_vs_rain_discharge\"][\"margin\"][\"ci95\"][0]"
+        },
+        {
+          "metric": "ci95[1]",
+          "value": 0.0175,
+          "status": "BOUND",
+          "bound_to": "reports/_eval_cards/claim_cards.json::[\"tidal_escape_vs_rain_discharge\"][\"margin\"][\"ci95\"][1]"
+        }
+      ]
+    },
+    {
+      "id": "claim_hab_exceed_strict_critic",
+      "kind": "null",
+      "evidence": [
+        "reports/non_bacteria_claim_cards/claim_cards.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 12,
+      "n_bound": 10,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "model_ap",
+          "value": 0.2571,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][0][\"metrics\"][\"model_ap\"]"
+        },
+        {
+          "metric": "best_baseline",
+          "value": "persistence",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "best_baseline_ap",
+          "value": 0.1415,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][0][\"baseline\"][\"persistence_ap\"]"
+        },
+        {
+          "metric": "delta_ap",
+          "value": 0.1156,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][0][\"metrics\"][\"delta_ap_vs_best_baseline\"]"
+        },
+        {
+          "metric": "delta_ap_ci95[0]",
+          "value": 0.0468,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][0][\"uncertainty\"][\"delta_ap_ci95\"][0]"
+        },
+        {
+          "metric": "delta_ap_ci95[1]",
+          "value": 0.265,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][0][\"uncertainty\"][\"delta_ap_ci95\"][1]"
+        },
+        {
+          "metric": "model_auc",
+          "value": 0.8604,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][0][\"metrics\"][\"model_auc\"]"
+        },
+        {
+          "metric": "perm_p",
+          "value": 0.005,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][0][\"null_control\"][\"permutation_p\"]"
+        },
+        {
+          "metric": "test_rows",
+          "value": 1705,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][0][\"holdout\"][\"test_rows\"]"
+        },
+        {
+          "metric": "test_events",
+          "value": 51,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][0][\"holdout\"][\"test_events\"]"
+        },
+        {
+          "metric": "test_base_rate",
+          "value": 0.0299,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][0][\"holdout\"][\"test_base_rate\"]"
+        },
+        {
+          "metric": "ci_excludes_zero",
+          "value": true,
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "claim_gulf_hypoxia_flag",
+      "kind": "caveat",
+      "evidence": [
+        "reports/non_bacteria_claim_cards/claim_cards.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 12,
+      "n_bound": 10,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "model_ap",
+          "value": 0.2698,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][1][\"metrics\"][\"model_ap\"]"
+        },
+        {
+          "metric": "best_baseline",
+          "value": "persistence",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "best_baseline_ap",
+          "value": 0.1453,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][1][\"baseline\"][\"persistence_ap\"]"
+        },
+        {
+          "metric": "delta_ap",
+          "value": 0.1245,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][1][\"metrics\"][\"delta_ap_vs_best_baseline\"]"
+        },
+        {
+          "metric": "delta_ap_ci95[0]",
+          "value": 0.0524,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][1][\"uncertainty\"][\"delta_ap_ci95\"][0]"
+        },
+        {
+          "metric": "delta_ap_ci95[1]",
+          "value": 0.2061,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][1][\"uncertainty\"][\"delta_ap_ci95\"][1]"
+        },
+        {
+          "metric": "model_auc",
+          "value": 0.8696,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][1][\"metrics\"][\"model_auc\"]"
+        },
+        {
+          "metric": "perm_p",
+          "value": 0.005,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][0][\"null_control\"][\"permutation_p\"]"
+        },
+        {
+          "metric": "test_rows",
+          "value": 1277,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][1][\"holdout\"][\"test_rows\"]"
+        },
+        {
+          "metric": "test_events",
+          "value": 97,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][1][\"holdout\"][\"test_events\"]"
+        },
+        {
+          "metric": "test_base_rate",
+          "value": 0.076,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"claim_cards\"][1][\"holdout\"][\"test_base_rate\"]"
+        },
+        {
+          "metric": "ci_excludes_zero",
+          "value": true,
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "status_non_bacteria_night_run_tight_gate",
+      "kind": "status",
+      "evidence": [
+        "reports/non_bacteria_claim_cards/claim_cards.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 4,
+      "n_bound": 1,
+      "n_derived": 0,
+      "n_unbound": 2,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "promoted_claims",
+          "value": 2,
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/claim_cards.json::[\"summary\"][\"claim_cards\"]"
+        },
+        {
+          "metric": "blocked",
+          "value": 4,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "supporting_only",
+          "value": 3,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "verdict",
+          "value": "SUPPORTED_CURRENT_EVIDENCE",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "claim_clean_to_dirty_onset",
+      "kind": "caveat",
+      "evidence": [
+        "reports/science_breakthrough/science_claim_cards.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 7,
+      "n_bound": 7,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n",
+          "value": 80951,
+          "status": "BOUND",
+          "bound_to": "reports/science_breakthrough/science_claim_cards.json::[\"onset_claim\"][\"surprise_slice\"][\"n\"]"
+        },
+        {
+          "metric": "events",
+          "value": 6022,
+          "status": "BOUND",
+          "bound_to": "reports/science_breakthrough/science_claim_cards.json::[\"onset_claim\"][\"surprise_slice\"][\"events\"]"
+        },
+        {
+          "metric": "base_rate",
+          "value": 0.0744,
+          "status": "BOUND",
+          "bound_to": "reports/science_breakthrough/science_claim_cards.json::[\"onset_claim\"][\"surprise_slice\"][\"base_rate\"]"
+        },
+        {
+          "metric": "model_ap",
+          "value": 0.4177,
+          "status": "BOUND",
+          "bound_to": "reports/science_breakthrough/science_claim_cards.json::[\"onset_claim\"][\"surprise_slice\"][\"model_ap\"]"
+        },
+        {
+          "metric": "station_memory_ap",
+          "value": 0.199,
+          "status": "BOUND",
+          "bound_to": "reports/science_breakthrough/science_claim_cards.json::[\"onset_claim\"][\"surprise_slice\"][\"station_memory_ap\"]"
+        },
+        {
+          "metric": "delta_ap",
+          "value": 0.2187,
+          "status": "BOUND",
+          "bound_to": "reports/science_breakthrough/science_claim_cards.json::[\"onset_claim\"][\"surprise_slice\"][\"model_minus_station_memory\"]"
+        },
+        {
+          "metric": "ratio_vs_station_memory",
+          "value": 2.1,
+          "status": "BOUND",
+          "bound_to": "reports/science_breakthrough/science_claim_cards.json::[\"onset_claim\"][\"onset_ratio_vs_station_memory\"]"
+        }
+      ]
+    },
+    {
+      "id": "claim_adaptive_sampling_pilot",
+      "kind": "caveat",
+      "evidence": [
+        "reports/science_breakthrough/science_claim_cards.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 7,
+      "n_bound": 7,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "top20_model_capture",
+          "value": 0.7062,
+          "status": "BOUND",
+          "bound_to": "reports/science_breakthrough/science_claim_cards.json::[\"sampling_pilot\"][\"top_20pct\"][\"model_capture\"]"
+        },
+        {
+          "metric": "top20_station_memory_capture",
+          "value": 0.5299,
+          "status": "BOUND",
+          "bound_to": "reports/science_breakthrough/science_claim_cards.json::[\"sampling_pilot\"][\"top_20pct\"][\"station_memory_capture\"]"
+        },
+        {
+          "metric": "top20_delta",
+          "value": 0.1762,
+          "status": "BOUND",
+          "bound_to": "reports/science_breakthrough/science_claim_cards.json::[\"sampling_pilot\"][\"top_20pct\"][\"model_minus_station_memory\"]"
+        },
+        {
+          "metric": "full_protocol_capture_delta",
+          "value": 0.0275,
+          "status": "BOUND",
+          "bound_to": "reports/science_breakthrough/science_claim_cards.json::[\"sampling_pilot\"][\"full_protocol_replay\"][\"lift_vs_station_memory\"][\"capture_delta\"]"
+        },
+        {
+          "metric": "events_delta",
+          "value": 135,
+          "status": "BOUND",
+          "bound_to": "reports/science_breakthrough/science_claim_cards.json::[\"sampling_pilot\"][\"full_protocol_replay\"][\"lift_vs_station_memory\"][\"events_delta\"]"
+        },
+        {
+          "metric": "ci95[0]",
+          "value": 0.0121,
+          "status": "BOUND",
+          "bound_to": "reports/science_breakthrough/science_claim_cards.json::[\"sampling_pilot\"][\"full_protocol_replay\"][\"lift_vs_station_memory\"][\"week_bootstrap\"][\"ci95\"][0]"
+        },
+        {
+          "metric": "ci95[1]",
+          "value": 0.0436,
+          "status": "BOUND",
+          "bound_to": "reports/science_breakthrough/science_claim_cards.json::[\"sampling_pilot\"][\"full_protocol_replay\"][\"lift_vs_station_memory\"][\"week_bootstrap\"][\"ci95\"][1]"
+        }
+      ]
+    },
+    {
+      "id": "status_bacteria_breakthrough_lockbox",
+      "kind": "status",
+      "evidence": [
+        "reports/bacteria/breakthrough_gate/breakthrough_gate.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 4,
+      "n_bound": 2,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "freeze_cutoff",
+          "value": "2026-06-18",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "scored_forward",
+          "value": true,
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "operational_ap",
+          "value": 0.5099,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/breakthrough_gate/breakthrough_gate.json::[\"metrics\"][\"operational\"][\"ap\"]"
+        },
+        {
+          "metric": "onset_delta_vs_memory",
+          "value": 0.2187,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/breakthrough_gate/breakthrough_gate.json::[\"metrics\"][\"onset_exc_prev_0\"][\"model_minus_station_memory\"]"
+        }
+      ]
+    },
+    {
+      "id": "claim_catboost_champion_record_dont_ship",
+      "kind": "positive",
+      "evidence": [
+        "reports/model_lab/champion_claimcard_B.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 9,
+      "n_bound": 9,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n",
+          "value": 89321,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/champion_claimcard_B.json::[\"n_test\"]"
+        },
+        {
+          "metric": "events",
+          "value": 8999,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/champion_claimcard_B.json::[\"events\"]"
+        },
+        {
+          "metric": "catboost_ap",
+          "value": 0.5164,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/champion_claimcard_B.json::[\"claim_card\"][\"model\"][\"ap\"]"
+        },
+        {
+          "metric": "hgbt_ap",
+          "value": 0.5082,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/champion_claimcard_B.json::[\"claim_card\"][\"baseline\"][\"ap\"]"
+        },
+        {
+          "metric": "margin_ap",
+          "value": 0.0082,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/champion_claimcard_B.json::[\"claim_card\"][\"margin\"][\"margin_ap\"]"
+        },
+        {
+          "metric": "ci95[0]",
+          "value": 0.0041,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/champion_claimcard_B.json::[\"claim_card\"][\"margin\"][\"ci95\"][0]"
+        },
+        {
+          "metric": "ci95[1]",
+          "value": 0.0193,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/champion_claimcard_B.json::[\"claim_card\"][\"margin\"][\"ci95\"][1]"
+        },
+        {
+          "metric": "catboost_ece",
+          "value": 0.0078,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/champion_claimcard_B.json::[\"claim_card\"][\"model\"][\"ece\"]"
+        },
+        {
+          "metric": "hgbt_ece",
+          "value": 0.0089,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/champion_claimcard_B.json::[\"claim_card\"][\"baseline\"][\"ece\"]"
+        }
+      ]
+    },
+    {
+      "id": "claim_lightgbm_catboost_paired_boosts",
+      "kind": "caveat",
+      "evidence": [
+        "reports/model_lab/paired_model_test.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 9,
+      "n_bound": 9,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n_test",
+          "value": 89321,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/paired_model_test.json::[\"n_test\"]"
+        },
+        {
+          "metric": "catboost_delta_ap",
+          "value": 0.0132,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/paired_model_test.json::[\"paired_vs_hgbt\"][\"catboost\"][\"delta_ap_vs_hgbt\"]"
+        },
+        {
+          "metric": "catboost_ci95[0]",
+          "value": 0.01,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/paired_model_test.json::[\"paired_vs_hgbt\"][\"lightgbm\"][\"delta_ap_vs_hgbt\"]"
+        },
+        {
+          "metric": "catboost_ci95[1]",
+          "value": 0.0164,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/paired_model_test.json::[\"paired_vs_hgbt\"][\"catboost\"][\"boot_ci95\"][1]"
+        },
+        {
+          "metric": "catboost_loco_wins",
+          "value": 13,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/paired_model_test.json::[\"loco_vs_hgbt\"][\"catboost\"][\"wins_vs_hgbt\"]"
+        },
+        {
+          "metric": "lightgbm_delta_ap",
+          "value": 0.0081,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/paired_model_test.json::[\"paired_vs_hgbt\"][\"lightgbm\"][\"delta_ap_vs_hgbt\"]"
+        },
+        {
+          "metric": "lightgbm_ci95[0]",
+          "value": 0.0057,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/paired_model_test.json::[\"paired_vs_hgbt\"][\"lightgbm\"][\"boot_ci95\"][0]"
+        },
+        {
+          "metric": "lightgbm_ci95[1]",
+          "value": 0.0105,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/paired_model_test.json::[\"paired_vs_hgbt\"][\"lightgbm\"][\"boot_ci95\"][1]"
+        },
+        {
+          "metric": "lightgbm_loco_wins",
+          "value": 14,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/paired_model_test.json::[\"loco_vs_hgbt\"][\"lightgbm\"][\"wins_vs_hgbt\"]"
+        }
+      ]
+    },
+    {
+      "id": "claim_forward_2026_holdout_pass",
+      "kind": "caveat",
+      "evidence": [
+        "reports/experiment_program/F1/f1_scorecard.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 9,
+      "n_bound": 8,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n",
+          "value": 2487,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/F1/f1_scorecard.json::[\"lock_integrity_gate\"][\"n_selected\"]"
+        },
+        {
+          "metric": "events",
+          "value": 463,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/F1/f1_scorecard.json::[\"forward_holdout\"][\"events\"]"
+        },
+        {
+          "metric": "base_rate",
+          "value": 0.1862,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/F1/f1_scorecard.json::[\"forward_holdout\"][\"base_rate\"]"
+        },
+        {
+          "metric": "model_ap",
+          "value": 0.6335,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/F1/f1_scorecard.json::[\"frozen_model_forward\"][\"ap\"]"
+        },
+        {
+          "metric": "model_roc_auc",
+          "value": 0.848,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/F1/f1_scorecard.json::[\"frozen_model_forward\"][\"roc_auc\"]"
+        },
+        {
+          "metric": "model_ece",
+          "value": 0.023,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/F1/f1_scorecard.json::[\"frozen_model_forward\"][\"ece\"]"
+        },
+        {
+          "metric": "best_baseline",
+          "value": "station_memory",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "best_baseline_ap",
+          "value": 0.3682,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/F1/f1_scorecard.json::[\"baselines_forward\"][\"station_memory\"][\"ap\"]"
+        },
+        {
+          "metric": "delta_ap",
+          "value": 0.2653,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/F1/f1_scorecard.json::[\"stronger_baseline_rule\"][\"model_minus_best_baseline_ap\"]"
+        }
+      ]
+    },
+    {
+      "id": "claim_bacteria_honest_forecast_horizon",
+      "kind": "positive",
+      "evidence": [
+        "bacteria_results/forecast_horizon.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 6,
+      "n_bound": 5,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "lead2_model_ap",
+          "value": 0.3944,
+          "status": "BOUND",
+          "bound_to": "bacteria_results/forecast_horizon.json::[\"skill_decay_EXCLUDE_SAN_DIEGO\"][2][\"model_ap\"]"
+        },
+        {
+          "metric": "lead2_station_memory_ap",
+          "value": 0.3786,
+          "status": "BOUND",
+          "bound_to": "bacteria_results/forecast_horizon.json::[\"skill_decay_EXCLUDE_SAN_DIEGO\"][2][\"station_memory_model_ap\"]"
+        },
+        {
+          "metric": "lead2_margin",
+          "value": 0.0158,
+          "status": "BOUND",
+          "bound_to": "bacteria_results/forecast_horizon.json::[\"skill_decay_EXCLUDE_SAN_DIEGO\"][2][\"margin_vs_station_memory_model\"]"
+        },
+        {
+          "metric": "lead2_ci[0]",
+          "value": 0.0081,
+          "status": "BOUND",
+          "bound_to": "bacteria_results/forecast_horizon.json::[\"skill_decay_EXCLUDE_SAN_DIEGO\"][2][\"margin_vs_station_memory_model_ci\"][0]"
+        },
+        {
+          "metric": "lead2_ci[1]",
+          "value": 0.0233,
+          "status": "BOUND",
+          "bound_to": "bacteria_results/forecast_horizon.json::[\"skill_decay_EXCLUDE_SAN_DIEGO\"][2][\"margin_vs_station_memory_model_ci\"][1]"
+        },
+        {
+          "metric": "lead2_skill",
+          "value": true,
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "claim_bacteria_decision_rule",
+      "kind": "caveat",
+      "evidence": [
+        "reports/bacteria/decision_rule.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 9,
+      "n_bound": 9,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "tau",
+          "value": 0.0635,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/decision_rule.json::[\"deployable_rule\"][\"tau\"]"
+        },
+        {
+          "metric": "tp",
+          "value": 7780,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/decision_rule.json::[\"deployable_rule\"][\"test_operating_point\"][\"TP\"]"
+        },
+        {
+          "metric": "fp",
+          "value": 26026,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/decision_rule.json::[\"deployable_rule\"][\"test_operating_point\"][\"FP\"]"
+        },
+        {
+          "metric": "fn",
+          "value": 1219,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/decision_rule.json::[\"deployable_rule\"][\"test_operating_point\"][\"FN\"]"
+        },
+        {
+          "metric": "tn",
+          "value": 54296,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/decision_rule.json::[\"deployable_rule\"][\"test_operating_point\"][\"TN\"]"
+        },
+        {
+          "metric": "recall",
+          "value": 0.8645,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/decision_rule.json::[\"deployable_rule\"][\"test_operating_point\"][\"recall\"]"
+        },
+        {
+          "metric": "precision",
+          "value": 0.2301,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/decision_rule.json::[\"deployable_rule\"][\"test_operating_point\"][\"precision\"]"
+        },
+        {
+          "metric": "flag_rate",
+          "value": 0.3785,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/decision_rule.json::[\"deployable_rule\"][\"test_operating_point\"][\"flag_rate\"]"
+        },
+        {
+          "metric": "false_advisories_per_caught",
+          "value": 3.35,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/decision_rule.json::[\"deployable_rule\"][\"test_operating_point\"][\"false_advisories_per_caught_exceedance\"]"
+        }
+      ]
+    },
+    {
+      "id": "claim_russian_river_advection_escape",
+      "kind": "caveat",
+      "evidence": [
+        "reports/experiment_program/B1/b1_results.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 8,
+      "n_bound": 8,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "best_lead_days",
+          "value": 2,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B1/b1_results.json::[\"best_lead\"]"
+        },
+        {
+          "metric": "n_oof",
+          "value": 4962,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B1/b1_results.json::[\"lead_sweep\"][\"2\"][\"n_oof\"]"
+        },
+        {
+          "metric": "events",
+          "value": 517,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B1/b1_results.json::[\"lead_sweep\"][\"2\"][\"pos\"]"
+        },
+        {
+          "metric": "ap_persist",
+          "value": 0.7394,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B1/b1_results.json::[\"lead_sweep\"][\"2\"][\"ap_persist\"]"
+        },
+        {
+          "metric": "ap_combo",
+          "value": 0.7883,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B1/b1_results.json::[\"lead_sweep\"][\"2\"][\"ap_combo\"]"
+        },
+        {
+          "metric": "delta_ap",
+          "value": 0.0489,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B1/b1_results.json::[\"lead_sweep\"][\"2\"][\"delta_ap_combo_vs_persist\"]"
+        },
+        {
+          "metric": "ci95[0]",
+          "value": 0.0348,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B1/b1_results.json::[\"lead_sweep\"][\"2\"][\"delta_ci95\"][0]"
+        },
+        {
+          "metric": "ci95[1]",
+          "value": 0.066,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B1/b1_results.json::[\"lead_sweep\"][\"2\"][\"delta_ci95\"][1]"
+        }
+      ]
+    },
+    {
+      "id": "claim_cache_slough_upstream_escape",
+      "kind": "null",
+      "evidence": [
+        "reports/experiment_program/B2/b2_results.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 7,
+      "n_bound": 4,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "upstream_gauge",
+          "value": "11455350",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "downstream_gauge",
+          "value": "11455335",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "lead_days",
+          "value": 1,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B2/b2_results.json::[\"config\"][\"leads\"][0]"
+        },
+        {
+          "metric": "delta_ap",
+          "value": 0.1075,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B2/b2_results.json::[\"results_by_param\"][\"turbidity_fnu\"][\"confirmations\"][1][\"lead_sweep\"][\"1\"][\"dap_vs_baseline\"]"
+        },
+        {
+          "metric": "ci95[0]",
+          "value": 0.05933517372749888,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B2/b2_results.json::[\"results_by_param\"][\"turbidity_fnu\"][\"confirmations\"][1][\"best_lead\"][\"lo\"]"
+        },
+        {
+          "metric": "ci95[1]",
+          "value": 0.13990711139627945,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B2/b2_results.json::[\"results_by_param\"][\"turbidity_fnu\"][\"confirmations\"][1][\"best_lead\"][\"hi\"]"
+        },
+        {
+          "metric": "baseline",
+          "value": "persist",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "claim_wet_tail_driver_skill",
+      "kind": "caveat",
+      "evidence": [
+        "reports/experiment_program/B5/b5_results.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 8,
+      "n_bound": 7,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n",
+          "value": 12188,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B5/b5_results.json::[\"per_hazard\"][\"bacteria_fib\"][\"strata\"][\"wet_tail\"][\"n\"]"
+        },
+        {
+          "metric": "events",
+          "value": 4710,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B5/b5_results.json::[\"per_hazard\"][\"bacteria_fib\"][\"strata\"][\"wet_tail\"][\"events\"]"
+        },
+        {
+          "metric": "driver_free_ap",
+          "value": 0.6968,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B5/b5_results.json::[\"per_hazard\"][\"bacteria_fib\"][\"strata\"][\"wet_tail\"][\"driver_free_ap\"]"
+        },
+        {
+          "metric": "driver_aug_ap",
+          "value": 0.7564,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B5/b5_results.json::[\"per_hazard\"][\"bacteria_fib\"][\"strata\"][\"wet_tail\"][\"driver_aug_ap\"]"
+        },
+        {
+          "metric": "ap_gain",
+          "value": 0.0596,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B5/b5_results.json::[\"per_hazard\"][\"bacteria_fib\"][\"strata\"][\"wet_tail\"][\"ap_gain\"]"
+        },
+        {
+          "metric": "ci95[0]",
+          "value": 0.0479,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B5/b5_results.json::[\"per_hazard\"][\"bacteria_fib\"][\"strata\"][\"wet_tail\"][\"ap_gain_boot_ci\"][\"ci_lo\"]"
+        },
+        {
+          "metric": "ci95[1]",
+          "value": 0.0717,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/B5/b5_results.json::[\"per_hazard\"][\"bacteria_fib\"][\"strata\"][\"wet_tail\"][\"ap_gain_boot_ci\"][\"ci_hi\"]"
+        },
+        {
+          "metric": "beats_best_naive",
+          "value": true,
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "claim_hypoxia_gru_sequence_positive",
+      "kind": "caveat",
+      "evidence": [
+        "reports/predict10x/hypoxia_gru.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 9,
+      "n_bound": 9,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n_test_origins",
+          "value": 6167,
+          "status": "BOUND",
+          "bound_to": "reports/predict10x/hypoxia_gru.json::[\"n_test_origins\"]"
+        },
+        {
+          "metric": "h14_gru_ap",
+          "value": 0.8266,
+          "status": "BOUND",
+          "bound_to": "reports/predict10x/hypoxia_gru.json::[\"per_horizon\"][\"14\"][\"scored\"][\"GRU_genuine\"][\"ap\"]"
+        },
+        {
+          "metric": "h14_hgbt_ap",
+          "value": 0.7917,
+          "status": "BOUND",
+          "bound_to": "reports/predict10x/hypoxia_gru.json::[\"per_horizon\"][\"14\"][\"scored\"][\"HGBT_strat\"][\"ap\"]"
+        },
+        {
+          "metric": "h14_delta_ci[0]",
+          "value": 0.0038,
+          "status": "BOUND",
+          "bound_to": "reports/predict10x/hypoxia_gru.json::[\"per_horizon\"][\"14\"][\"gru_minus_hgbt_ap\"][\"lo\"]"
+        },
+        {
+          "metric": "h14_delta_ci[1]",
+          "value": 0.0444,
+          "status": "BOUND",
+          "bound_to": "reports/predict10x/hypoxia_gru.json::[\"per_horizon\"][\"14\"][\"gru_minus_hgbt_ap\"][\"hi\"]"
+        },
+        {
+          "metric": "h28_gru_ap",
+          "value": 0.8064,
+          "status": "BOUND",
+          "bound_to": "reports/predict10x/hypoxia_gru.json::[\"per_horizon\"][\"28\"][\"scored\"][\"GRU_genuine\"][\"ap\"]"
+        },
+        {
+          "metric": "h28_hgbt_ap",
+          "value": 0.7725,
+          "status": "BOUND",
+          "bound_to": "reports/predict10x/hypoxia_gru.json::[\"per_horizon\"][\"28\"][\"scored\"][\"HGBT_strat\"][\"ap\"]"
+        },
+        {
+          "metric": "h28_delta_ci[0]",
+          "value": 0.0028,
+          "status": "BOUND",
+          "bound_to": "reports/predict10x/hypoxia_gru.json::[\"per_horizon\"][\"28\"][\"gru_minus_hgbt_ap\"][\"lo\"]"
+        },
+        {
+          "metric": "h28_delta_ci[1]",
+          "value": 0.048,
+          "status": "BOUND",
+          "bound_to": "reports/predict10x/hypoxia_gru.json::[\"per_horizon\"][\"28\"][\"gru_minus_hgbt_ap\"][\"hi\"]"
+        }
+      ]
+    },
+    {
+      "id": "claim_hypoxia_onset_forecast",
+      "kind": "null",
+      "evidence": [
+        "reports/experiment_program/G2/hypoxia_onset_forecast.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 6,
+      "n_bound": 6,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "h7_n_test",
+          "value": 4356,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/G2/hypoxia_onset_forecast.json::[\"per_horizon\"][\"7\"][\"n_test\"]"
+        },
+        {
+          "metric": "h7_events",
+          "value": 934,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/G2/hypoxia_onset_forecast.json::[\"per_horizon\"][\"7\"][\"events_test\"]"
+        },
+        {
+          "metric": "h7_model_ap",
+          "value": 0.835,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/G2/hypoxia_onset_forecast.json::[\"per_horizon\"][\"7\"][\"scored\"][\"persist+season+STRAT\"][\"ap\"]"
+        },
+        {
+          "metric": "h7_better_naive_ap",
+          "value": 0.7474,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/G2/hypoxia_onset_forecast.json::[\"per_horizon\"][\"7\"][\"scored\"][\"seasonal_naive\"][\"ap\"]"
+        },
+        {
+          "metric": "h14_model_ap",
+          "value": 0.9167,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/G2/hypoxia_onset_forecast.json::[\"per_horizon\"][\"14\"][\"scored\"][\"persist+season+STRAT\"][\"ap\"]"
+        },
+        {
+          "metric": "h28_model_ap",
+          "value": 0.9365,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/G2/hypoxia_onset_forecast.json::[\"per_horizon\"][\"28\"][\"scored\"][\"persist+season+STRAT\"][\"ap\"]"
+        }
+      ]
+    },
+    {
+      "id": "claim_tokyo_shadow_lakehouse_positives",
+      "kind": "caveat",
+      "evidence": [
+        "reports/tokyo_bay_tbeic/lakehouse_shadow_model_probe.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 6,
+      "n_bound": 4,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "positive_rows",
+          "value": 7,
+          "status": "BOUND",
+          "bound_to": "reports/tokyo_bay_tbeic/lakehouse_shadow_model_probe.json::[\"results\"][0][\"target\"][\"horizon_days\"]"
+        },
+        {
+          "metric": "first_target",
+          "value": "strong_haline_strat_p90",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "first_horizon_days",
+          "value": 7,
+          "status": "BOUND",
+          "bound_to": "reports/tokyo_bay_tbeic/lakehouse_shadow_model_probe.json::[\"results\"][0][\"target\"][\"horizon_days\"]"
+        },
+        {
+          "metric": "first_feature_set",
+          "value": "tokyo_strat",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "first_n_test",
+          "value": 6162,
+          "status": "BOUND",
+          "bound_to": "reports/tokyo_bay_tbeic/lakehouse_shadow_model_probe.json::[\"results\"][0][\"n_test\"]"
+        },
+        {
+          "metric": "incumbent_gpu_ap",
+          "value": 0.3728,
+          "status": "BOUND",
+          "bound_to": "reports/tokyo_bay_tbeic/lakehouse_shadow_model_probe.json::[\"results\"][0][\"incumbent_gpu_ap\"]"
+        }
+      ]
+    },
+    {
+      "id": "claim_argo_ctd_virtual_oxygen_sensor",
+      "kind": "positive",
+      "evidence": [
+        "reports/threed/argo_real_hypoxia/leave_basin_out.csv",
+        "reports/threed/argo_real_hypoxia/summary.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 22,
+      "n_bound": 8,
+      "n_derived": 4,
+      "n_unbound": 3,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "n_profiles_evaluated",
+          "value": 204647,
+          "status": "DERIVED",
+          "bound_to": null,
+          "derivation": "sum(n) over leave_basin_out.csv = 204647"
+        },
+        {
+          "metric": "n_profiles_fetched",
+          "value": 260805,
+          "status": "BOUND",
+          "bound_to": "reports/threed/argo_real_hypoxia/summary.json::[\"n_profiles\"]"
+        },
+        {
+          "metric": "basins_evaluated",
+          "value": "8 of 10 (SAtlantic, Southern skipped: zero positives)",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "n_floats",
+          "value": 2033,
+          "status": "BOUND",
+          "bound_to": "reports/threed/argo_real_hypoxia/summary.json::[\"n_floats\"]"
+        },
+        {
+          "metric": "years",
+          "value": "2002-2026",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "base_rate_evaluated",
+          "value": 0.1497,
+          "status": "DERIVED",
+          "bound_to": null,
+          "derivation": "30644/204647 = 0.1497 from leave_basin_out.csv column sums"
+        },
+        {
+          "metric": "base_rate_fetched_cohort",
+          "value": 0.1175,
+          "status": "BOUND",
+          "bound_to": "reports/threed/argo_real_hypoxia/summary.json::[\"base_rate\"]"
+        },
+        {
+          "metric": "n_hypoxic_profiles",
+          "value": 30644,
+          "status": "BOUND",
+          "bound_to": "reports/threed/argo_real_hypoxia/summary.json::[\"n_pos\"]"
+        },
+        {
+          "metric": "heldout_basin_surface_auc_pooled",
+          "value": 0.648,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "heldout_basin_profile_auc_pooled",
+          "value": 0.775,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "heldout_basin_surface_auc_simple_mean",
+          "value": 0.63,
+          "status": "BOUND",
+          "bound_to": "reports/threed/argo_real_hypoxia/leave_basin_out.csv::[1][\"ap_surf\"]"
+        },
+        {
+          "metric": "heldout_basin_profile_auc_simple_mean",
+          "value": 0.827,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "profile_auc_positive_basins",
+          "value": "8 of 8 evaluated",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "profile_dap_positive_basins",
+          "value": "7 of 8 evaluated (NPacific -0.020)",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "within_basin_dap_simple_mean",
+          "value": 0.176,
+          "status": "DERIVED",
+          "bound_to": null,
+          "derivation": "mean(dAP) over the 8 rows of leave_basin_out.csv = 0.176"
+        },
+        {
+          "metric": "within_basin_dap_pos_weighted",
+          "value": 0.129,
+          "status": "DERIVED",
+          "bound_to": null,
+          "derivation": "pos-weighted mean(dAP) over leave_basin_out.csv = 0.129"
+        },
+        {
+          "metric": "deep_temp_alone_ap",
+          "value": 0.121,
+          "status": "BOUND",
+          "bound_to": "reports/threed/argo_real_hypoxia/summary.json::[\"leave_basin_out\"][\"ap_deepT\"]"
+        },
+        {
+          "metric": "solubility_identity_r2",
+          "value": 0.137,
+          "status": "BOUND",
+          "bound_to": "reports/threed/argo_real_hypoxia/summary.json::[\"solubility_r2\"]"
+        },
+        {
+          "metric": "pooled_leave_basin_dap_RETIRED",
+          "value": 0.156,
+          "status": "BOUND",
+          "bound_to": "reports/threed/argo_real_hypoxia/summary.json::[\"leave_basin_out\"][\"dAP\"]"
+        },
+        {
+          "metric": "positive_concentration",
+          "value": "88.8% of positives in 3 basins (ETropPacific, NIndian, NPacific)",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "independent_events",
+          "value": "NOT COMPUTED (counts profiles, not independent water-mass events)",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "corroborating_basins",
+          "value": "Tokyo Bay (adversary-survived), California Current (clean forward-year gate), Chesapeake Bay (+0.06 AP, separate study)",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "claim_mcye_alberta_definitive_replication",
+      "kind": "caveat",
+      "evidence": [
+        "reports/hab/cyano/mcye_alberta.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 8,
+      "n_bound": 6,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n",
+          "value": 1461,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/mcye_alberta.json::[\"A_total_mcyE_given_biomass_cells\"][\"n\"]"
+        },
+        {
+          "metric": "lakes",
+          "value": 55,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/mcye_alberta.json::[\"A_total_mcyE_given_biomass_cells\"][\"lakes\"]"
+        },
+        {
+          "metric": "partial_rho",
+          "value": 0.6824,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/mcye_alberta.json::[\"A_total_mcyE_given_biomass_cells\"][\"partial_rho\"]"
+        },
+        {
+          "metric": "perm_p",
+          "value": 0.0,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/mcye_alberta.json::[\"A_total_mcyE_given_biomass_cells\"][\"perm_p\"]"
+        },
+        {
+          "metric": "boot_ci95[0]",
+          "value": 0.65,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/mcye_alberta.json::[\"A_total_mcyE_given_biomass_cells\"][\"boot_ci95\"][0]"
+        },
+        {
+          "metric": "boot_ci95[1]",
+          "value": 0.715,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/mcye_alberta.json::[\"A_total_mcyE_given_biomass_cells\"][\"boot_ci95\"][1]"
+        },
+        {
+          "metric": "leave_one_lake_all_positive",
+          "value": true,
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "leave_one_year_all_positive",
+          "value": true,
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "claim_mcye_national_replication",
+      "kind": "caveat",
+      "evidence": [
+        "reports/hab/cyano/mcye_national_replication.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 8,
+      "n_bound": 8,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n",
+          "value": 60,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/mcye_national_replication.json::[\"A_mcyE_absolute_given_biomass\"][\"n\"]"
+        },
+        {
+          "metric": "stations",
+          "value": 12,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/mcye_national_replication.json::[\"A_mcyE_absolute_given_biomass\"][\"stations\"]"
+        },
+        {
+          "metric": "partial_rho",
+          "value": 0.4423,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/mcye_national_replication.json::[\"A_mcyE_absolute_given_biomass\"][\"partial_rho\"]"
+        },
+        {
+          "metric": "perm_p",
+          "value": 0.0024,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/mcye_national_replication.json::[\"A_mcyE_absolute_given_biomass\"][\"perm_p\"]"
+        },
+        {
+          "metric": "boot_ci95[0]",
+          "value": 0.1931,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/mcye_national_replication.json::[\"A_mcyE_absolute_given_biomass\"][\"boot_ci95\"][0]"
+        },
+        {
+          "metric": "boot_ci95[1]",
+          "value": 0.6463,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/mcye_national_replication.json::[\"A_mcyE_absolute_given_biomass\"][\"boot_ci95\"][1]"
+        },
+        {
+          "metric": "loso_positive_folds",
+          "value": 12,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/mcye_national_replication.json::[\"A_mcyE_absolute_given_biomass\"][\"stations\"]"
+        },
+        {
+          "metric": "loyo_positive_folds",
+          "value": 6,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/mcye_national_replication.json::[\"A_mcyE_absolute_given_biomass\"][\"LOYO\"][\"influential_folds\"]"
+        }
+      ]
+    },
+    {
+      "id": "null_national_microcystin_driver",
+      "kind": "null",
+      "evidence": [
+        "reports/hab/erie/national_microcystin_driver_gate.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 5,
+      "n_bound": 4,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n_pairs",
+          "value": 32282,
+          "status": "BOUND",
+          "bound_to": "reports/hab/erie/national_microcystin_driver_gate.json::[\"n_pairs\"]"
+        },
+        {
+          "metric": "n_sites",
+          "value": 533,
+          "status": "BOUND",
+          "bound_to": "reports/hab/erie/national_microcystin_driver_gate.json::[\"n_sites\"]"
+        },
+        {
+          "metric": "loyo_delta_ap",
+          "value": -0.007,
+          "status": "BOUND",
+          "bound_to": "reports/hab/erie/national_microcystin_driver_gate.json::[\"leave_year_out\"][\"delta_ap\"]"
+        },
+        {
+          "metric": "loso_delta_ap",
+          "value": -0.0024,
+          "status": "BOUND",
+          "bound_to": "reports/hab/erie/national_microcystin_driver_gate.json::[\"leave_site_out\"][\"delta_ap\"]"
+        },
+        {
+          "metric": "any_driver_break",
+          "value": false,
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "claim_da_toxic_onset_ci_separated",
+      "kind": "null",
+      "evidence": [
+        "reports/hab/da_forecast.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 12,
+      "n_bound": 10,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n",
+          "value": 1795,
+          "status": "BOUND",
+          "bound_to": "reports/hab/da_forecast.json::[\"headline\"][\"onset_n\"]"
+        },
+        {
+          "metric": "events",
+          "value": 34,
+          "status": "BOUND",
+          "bound_to": "reports/hab/da_forecast.json::[\"headline\"][\"onset_events\"]"
+        },
+        {
+          "metric": "model_ap",
+          "value": 0.1441,
+          "status": "BOUND",
+          "bound_to": "reports/hab/da_forecast.json::[\"headline\"][\"onset_model_ap\"]"
+        },
+        {
+          "metric": "strongest_baseline",
+          "value": "pda_roll3_value",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "strongest_baseline_ap",
+          "value": 0.0955,
+          "status": "BOUND",
+          "bound_to": "reports/hab/da_forecast.json::[\"headline\"][\"onset_strongest_baseline_ap\"]"
+        },
+        {
+          "metric": "margin_ap",
+          "value": 0.0486,
+          "status": "BOUND",
+          "bound_to": "reports/hab/da_forecast.json::[\"headline\"][\"onset_margin_ap\"]"
+        },
+        {
+          "metric": "ci95[0]",
+          "value": 0.0142,
+          "status": "BOUND",
+          "bound_to": "reports/hab/da_forecast.json::[\"headline\"][\"onset_cluster_boot_ci95\"][0]"
+        },
+        {
+          "metric": "ci95[1]",
+          "value": 0.1049,
+          "status": "BOUND",
+          "bound_to": "reports/hab/da_forecast.json::[\"headline\"][\"onset_cluster_boot_ci95\"][1]"
+        },
+        {
+          "metric": "perm_p",
+          "value": 0.002,
+          "status": "BOUND",
+          "bound_to": "reports/hab/da_forecast.json::[\"headline\"][\"onset_perm_p\"]"
+        },
+        {
+          "metric": "pooled_model_ap",
+          "value": 0.2213,
+          "status": "BOUND",
+          "bound_to": "reports/hab/da_forecast.json::[\"test_timeheldout\"][\"model_DA+precursor\"][\"ap\"]"
+        },
+        {
+          "metric": "pooled_best_baseline_ap",
+          "value": 0.1382,
+          "status": "BOUND",
+          "bound_to": "reports/hab/da_forecast.json::[\"test_timeheldout\"][\"persistence\"][\"ap\"]"
+        },
+        {
+          "metric": "loso_model_beats_seasonal",
+          "value": "8/8",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "claim_cyano_onset_latitude_law_scoped",
+      "kind": "caveat",
+      "evidence": [
+        "reports/hab/cyano/cyano_onset_claim_card_redteam.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 12,
+      "n_bound": 12,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n_lake_years",
+          "value": 13131,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/cyano_onset_claim_card_redteam.json::[\"law_evidence_original\"][\"n_lake_years\"]"
+        },
+        {
+          "metric": "n_lakes",
+          "value": 2181,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/cyano_onset_claim_card_redteam.json::[\"law_evidence_original\"][\"n_lakes\"]"
+        },
+        {
+          "metric": "n_states",
+          "value": 47,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/cyano_onset_claim_card_redteam.json::[\"law_evidence_original\"][\"n_states\"]"
+        },
+        {
+          "metric": "year_range[0]",
+          "value": 2020,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/cyano_onset_claim_card_redteam.json::[\"law_evidence_original\"][\"year_range\"][0]"
+        },
+        {
+          "metric": "year_range[1]",
+          "value": 2026,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/cyano_onset_claim_card_redteam.json::[\"law_evidence_original\"][\"year_range\"][1]"
+        },
+        {
+          "metric": "original_leave_one_state_skill",
+          "value": 0.2018,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/cyano_onset_claim_card_redteam.json::[\"law_evidence_original\"][\"lat_quad_leave_one_state\"][\"skill_vs_global\"]"
+        },
+        {
+          "metric": "original_leave_one_state_ci95[0]",
+          "value": 0.0442,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/cyano_onset_claim_card_redteam.json::[\"law_evidence_original\"][\"lat_quad_leave_one_state\"][\"skill_ci\"][0]"
+        },
+        {
+          "metric": "original_leave_one_state_ci95[1]",
+          "value": 0.3151,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/cyano_onset_claim_card_redteam.json::[\"law_evidence_original\"][\"lat_quad_leave_one_state\"][\"skill_ci\"][1]"
+        },
+        {
+          "metric": "winter_met_rows",
+          "value": 11240,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/cyano_onset_claim_card_redteam.json::[\"adversarial_checks\"][\"forecast_valid_prior_winter_met_competitor\"][\"n_lake_years_with_met\"]"
+        },
+        {
+          "metric": "lat_quad_plus_winter_met_skill",
+          "value": 0.2687,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/cyano_onset_claim_card_redteam.json::[\"adversarial_checks\"][\"forecast_valid_prior_winter_met_competitor\"][\"cv\"][\"leave_one_state_out\"][\"models\"][\"lat_quad+winter_met\"][\"skill_vs_global\"]"
+        },
+        {
+          "metric": "lat_quad_plus_winter_met_ci95[0]",
+          "value": 0.1537,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/cyano_onset_claim_card_redteam.json::[\"adversarial_checks\"][\"forecast_valid_prior_winter_met_competitor\"][\"cv\"][\"leave_one_state_out\"][\"models\"][\"lat_quad+winter_met\"][\"skill_ci\"][0]"
+        },
+        {
+          "metric": "lat_quad_plus_winter_met_ci95[1]",
+          "value": 0.3601,
+          "status": "BOUND",
+          "bound_to": "reports/hab/cyano/cyano_onset_claim_card_redteam.json::[\"adversarial_checks\"][\"forecast_valid_prior_winter_met_competitor\"][\"cv\"][\"leave_one_state_out\"][\"models\"][\"lat_quad+winter_met\"][\"skill_ci\"][1]"
+        }
+      ]
+    },
+    {
+      "id": "null_interlingua_cyano_daily_refutation",
+      "kind": "null",
+      "evidence": [
+        "reports/hab/interlingua_cyano_transfer_daily_report.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 10,
+      "n_bound": 10,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n_lakes",
+          "value": 481,
+          "status": "BOUND",
+          "bound_to": "reports/hab/interlingua_cyano_transfer_daily_report.json::[\"n_lakes\"]"
+        },
+        {
+          "metric": "n_regions",
+          "value": 46,
+          "status": "BOUND",
+          "bound_to": "reports/hab/interlingua_cyano_transfer_daily_report.json::[\"n_regions_total\"]"
+        },
+        {
+          "metric": "n_rows_total",
+          "value": 154002,
+          "status": "BOUND",
+          "bound_to": "reports/hab/interlingua_cyano_transfer_daily_report.json::[\"panel_rows\"]"
+        },
+        {
+          "metric": "mean_ap_pi",
+          "value": 0.4155,
+          "status": "BOUND",
+          "bound_to": "reports/hab/interlingua_cyano_transfer_daily_report.json::[\"freshwater_pi_daily\"][\"mean_ap_pi\"]"
+        },
+        {
+          "metric": "mean_ap_calendar",
+          "value": 0.4242,
+          "status": "BOUND",
+          "bound_to": "reports/hab/interlingua_cyano_transfer_daily_report.json::[\"freshwater_pi_daily\"][\"mean_ap_calendar\"]"
+        },
+        {
+          "metric": "mean_ap_persistence",
+          "value": 0.4703,
+          "status": "BOUND",
+          "bound_to": "reports/hab/interlingua_cyano_transfer_daily_report.json::[\"freshwater_pi_daily\"][\"mean_ap_persistence\"]"
+        },
+        {
+          "metric": "pi_minus_calendar_ci95[0]",
+          "value": -0.0298,
+          "status": "BOUND",
+          "bound_to": "reports/hab/interlingua_cyano_transfer_daily_report.json::[\"freshwater_pi_daily\"][\"pi_minus_calendar_ci95\"][0]"
+        },
+        {
+          "metric": "pi_minus_calendar_ci95[1]",
+          "value": 0.0147,
+          "status": "BOUND",
+          "bound_to": "reports/hab/interlingua_cyano_transfer_daily_report.json::[\"freshwater_pi_daily\"][\"pi_minus_calendar_ci95\"][1]"
+        },
+        {
+          "metric": "pi_minus_persistence_ci95[0]",
+          "value": -0.1188,
+          "status": "BOUND",
+          "bound_to": "reports/hab/interlingua_cyano_transfer_daily_report.json::[\"freshwater_pi_daily\"][\"pi_minus_persistence_ci95\"][0]"
+        },
+        {
+          "metric": "pi_minus_persistence_ci95[1]",
+          "value": 0.0168,
+          "status": "BOUND",
+          "bound_to": "reports/hab/interlingua_cyano_transfer_daily_report.json::[\"freshwater_pi_daily\"][\"pi_minus_persistence_ci95\"][1]"
+        }
+      ]
+    },
+    {
+      "id": "null_interlingua_eu_resolution_boundary",
+      "kind": "null",
+      "evidence": [
+        "reports/interlingua_eu_transfer.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 5,
+      "n_bound": 5,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n_site_years",
+          "value": 152192,
+          "status": "BOUND",
+          "bound_to": "reports/interlingua_eu_transfer.json::[\"eu_panel\"][\"n_site_years\"]"
+        },
+        {
+          "metric": "n_countries",
+          "value": 23,
+          "status": "BOUND",
+          "bound_to": "reports/interlingua_eu_transfer.json::[\"eu_panel\"][\"n_countries\"]"
+        },
+        {
+          "metric": "n_sites",
+          "value": 14361,
+          "status": "BOUND",
+          "bound_to": "reports/interlingua_eu_transfer.json::[\"eu_panel\"][\"n_sites\"]"
+        },
+        {
+          "metric": "bad_base_rate",
+          "value": 0.0314,
+          "status": "BOUND",
+          "bound_to": "reports/interlingua_eu_transfer.json::[\"eu_panel\"][\"bad_base_rate\"]"
+        },
+        {
+          "metric": "pi_finite_frac",
+          "value": 0.8234,
+          "status": "BOUND",
+          "bound_to": "reports/interlingua_eu_transfer.json::[\"eu_panel\"][\"pi_finite_frac\"]"
+        }
+      ]
+    },
+    {
+      "id": "null_ddpcr_target_redefinition_artifact",
+      "kind": "null",
+      "evidence": [
+        "reports/bacteria/ddpcr_real_vs_artifact.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 12,
+      "n_bound": 12,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n_culture_safe_with_future",
+          "value": 724,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/ddpcr_real_vs_artifact.json::[\"n_culture_safe_with_future\"]"
+        },
+        {
+          "metric": "ddpcr_pos_n",
+          "value": 425,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/ddpcr_real_vs_artifact.json::[\"ddpcr_pos_n\"]"
+        },
+        {
+          "metric": "ddpcr_neg_n",
+          "value": 299,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/ddpcr_real_vs_artifact.json::[\"ddpcr_neg_n\"]"
+        },
+        {
+          "metric": "future_exc_given_ddpcr_pos",
+          "value": 0.2824,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/ddpcr_real_vs_artifact.json::[\"future_culture_exceed_within_14d\"][\"given_ddpcr_pos\"]"
+        },
+        {
+          "metric": "future_exc_given_ddpcr_neg",
+          "value": 0.0702,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/ddpcr_real_vs_artifact.json::[\"future_culture_exceed_within_14d\"][\"given_ddpcr_neg\"]"
+        },
+        {
+          "metric": "raw_delta_ci95[0]",
+          "value": 0.0842,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/ddpcr_real_vs_artifact.json::[\"future_culture_exceed_within_14d\"][\"delta_ci95\"][0]"
+        },
+        {
+          "metric": "raw_delta_ci95[1]",
+          "value": 0.2795,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/ddpcr_real_vs_artifact.json::[\"future_culture_exceed_within_14d\"][\"delta_ci95\"][1]"
+        },
+        {
+          "metric": "history_only_auc",
+          "value": 0.7411,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/ddpcr_real_vs_artifact.json::[\"confound_control_vs_culture_history\"][\"oof_auc_full_history_only\"]"
+        },
+        {
+          "metric": "history_plus_ddpcr_auc",
+          "value": 0.7558,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/ddpcr_real_vs_artifact.json::[\"confound_control_vs_culture_history\"][\"oof_auc_full_history_plus_ddpcr\"]"
+        },
+        {
+          "metric": "ddpcr_adds_auc",
+          "value": 0.0147,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/ddpcr_real_vs_artifact.json::[\"confound_control_vs_culture_history\"][\"ddpcr_adds_auc\"]"
+        },
+        {
+          "metric": "ddpcr_adds_auc_ci95[0]",
+          "value": -0.0377,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/ddpcr_real_vs_artifact.json::[\"confound_control_vs_culture_history\"][\"ddpcr_adds_auc_ci95\"][0]"
+        },
+        {
+          "metric": "ddpcr_adds_auc_ci95[1]",
+          "value": 0.0697,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/ddpcr_real_vs_artifact.json::[\"confound_control_vs_culture_history\"][\"ddpcr_adds_auc_ci95\"][1]"
+        }
+      ]
+    },
+    {
+      "id": "null_sog_central_relief_onset_underpowered",
+      "kind": "null",
+      "evidence": [
+        "reports/predict10x/sog_central_onset.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 5,
+      "n_bound": 3,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n_days",
+          "value": 6025,
+          "status": "BOUND",
+          "bound_to": "reports/predict10x/sog_central_onset.json::[\"n_days\"]"
+        },
+        {
+          "metric": "date_range",
+          "value": [
+            "2008-09-24",
+            "2026-06-21"
+          ],
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "n_onset_events",
+          "value": 4,
+          "status": "BOUND",
+          "bound_to": "reports/predict10x/sog_central_onset.json::[\"n_onset_events\"]"
+        },
+        {
+          "metric": "min_events",
+          "value": 8,
+          "status": "BOUND",
+          "bound_to": "reports/predict10x/sog_central_onset.json::[\"power_gate\"][\"min_events\"]"
+        },
+        {
+          "metric": "power_gate_passed",
+          "value": false,
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "status_semantic_shadow_refresh_discovery_leads",
+      "kind": "caveat",
+      "evidence": [
+        "reports/semantic_lakehouse/semantic_shadow_discovery.md"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": true,
+      "n_metrics": 13,
+      "n_bound": 0,
+      "n_derived": 0,
+      "n_unbound": 7,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "run_id",
+          "value": "ultimate_overnight_20260621",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "targets_scanned",
+          "value": 25,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "model_rows",
+          "value": 126,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "correlation_rows",
+          "value": 4632,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "top_correlation_domain",
+          "value": "whale",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "top_correlation_target",
+          "value": "inat_mammal_mortality_daily_event_any",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "top_correlation_feature",
+          "value": "rawlh_human_event_roll30",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "top_correlation_rho",
+          "value": 0.3582,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "top_correlation_ci95[0]",
+          "value": 0.1861,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "top_correlation_ci95[1]",
+          "value": 0.4954,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "top_model_domain",
+          "value": "hab",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "top_model_target",
+          "value": "obis_hab_daily_log_count",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "top_model_delta_vs_baseline",
+          "value": 0.1455,
+          "status": "UNBOUND",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "claim_tsunami_halfduration_warning_screen",
+      "kind": "caveat",
+      "evidence": [
+        "reports/tsunami/tsunami_warning_value.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 5,
+      "n_bound": 3,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n_eqs",
+          "value": 22537,
+          "status": "BOUND",
+          "bound_to": "reports/tsunami/tsunami_warning_value.json::[\"n_eqs\"]"
+        },
+        {
+          "metric": "recorded_tsunamis",
+          "value": 1653,
+          "status": "BOUND",
+          "bound_to": "reports/tsunami/tsunami_warning_value.json::[\"recorded_tsunamis\"]"
+        },
+        {
+          "metric": "base_rate",
+          "value": 0.0733,
+          "status": "BOUND",
+          "bound_to": "reports/tsunami/tsunami_warning_value.json::[\"base_rate\"]"
+        },
+        {
+          "metric": "held_out",
+          "value": "leave-one-REGION-out (12 clusters)",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "false_alarm_reduction_at_fixed_recall",
+          "value": [
+            {
+              "target_recall": 0.8,
+              "false_alarms_mag+depth": 12814,
+              "false_alarms_+halfdur": 7806,
+              "false_alarms_avoided": 5008,
+              "pct_reduced": 39.1
+            },
+            {
+              "target_recall": 0.9,
+              "false_alarms_mag+depth": 14957,
+              "false_alarms_+halfdur": 12859,
+              "false_alarms_avoided": 2098,
+              "pct_reduced": 14.0
+            },
+            {
+              "target_recall": 0.95,
+              "false_alarms_mag+depth": 15806,
+              "false_alarms_+halfdur": 15852,
+              "false_alarms_avoided": -46,
+              "pct_reduced": -0.3
+            }
+          ],
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "claim_carte_numeric_shared_plane_benchmark",
+      "kind": "null",
+      "evidence": [
+        "reports/bacteria/carte_critic.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 12,
+      "n_bound": 12,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n_test",
+          "value": 4000,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/carte_critic.json::[\"n_test\"]"
+        },
+        {
+          "metric": "test_events",
+          "value": 285,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/carte_critic.json::[\"test_events\"]"
+        },
+        {
+          "metric": "base_rate",
+          "value": 0.0712,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/carte_critic.json::[\"base_rate\"]"
+        },
+        {
+          "metric": "memory_auc",
+          "value": 0.7096,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/carte_critic.json::[\"stability_mean_std\"][\"memory\"][\"min\"]"
+        },
+        {
+          "metric": "raw_auc",
+          "value": 0.7163,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/carte_critic.json::[\"stability_mean_std\"][\"raw\"][\"vals\"][0]"
+        },
+        {
+          "metric": "fair_id_baseline_auc",
+          "value": 0.7129,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/carte_critic.json::[\"stability_mean_std\"][\"fair_id_baseline\"][\"min\"]"
+        },
+        {
+          "metric": "carte_full_auc",
+          "value": 0.747,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/carte_critic.json::[\"fair_numeric_baselines_AUC\"][\"carte_full\"][0]"
+        },
+        {
+          "metric": "carte_numeric_only_auc",
+          "value": 0.7613,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/carte_critic.json::[\"fair_numeric_baselines_AUC\"][\"carte_numeric_only\"][0]"
+        },
+        {
+          "metric": "carte_full_minus_fair_ci95[0]",
+          "value": 0.0016,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/carte_critic.json::[\"decisive_cis_primary_seed\"][\"carte_full_minus_fair\"][0]"
+        },
+        {
+          "metric": "carte_full_minus_fair_ci95[1]",
+          "value": 0.0674,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/carte_critic.json::[\"decisive_cis_primary_seed\"][\"carte_full_minus_fair\"][1]"
+        },
+        {
+          "metric": "carte_numeric_only_minus_raw_ci95[0]",
+          "value": 0.0143,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/carte_critic.json::[\"decisive_cis_primary_seed\"][\"carte_numeric_only_minus_raw\"][0]"
+        },
+        {
+          "metric": "carte_numeric_only_minus_raw_ci95[1]",
+          "value": 0.0745,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/carte_critic.json::[\"decisive_cis_primary_seed\"][\"carte_numeric_only_minus_raw\"][1]"
+        }
+      ]
+    },
+    {
+      "id": "claim_soil_moisture_gate_positive",
+      "kind": "caveat",
+      "evidence": [
+        "reports/bacteria/new_source_signal_gate/soil_permutation_null.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 4,
+      "n_bound": 4,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "observed_delta_ap",
+          "value": 0.0141,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/new_source_signal_gate/soil_permutation_null.json::[\"observed_delta_ap\"]"
+        },
+        {
+          "metric": "null_mean_delta_ap",
+          "value": 0.0015,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/new_source_signal_gate/soil_permutation_null.json::[\"null_mean_delta_ap\"]"
+        },
+        {
+          "metric": "null_max_delta_ap",
+          "value": 0.0074,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/new_source_signal_gate/soil_permutation_null.json::[\"null_max_delta_ap\"]"
+        },
+        {
+          "metric": "p_value_one_sided",
+          "value": 0.0196,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/new_source_signal_gate/soil_permutation_null.json::[\"p_value_one_sided\"]"
+        }
+      ]
+    },
+    {
+      "id": "claim_new_source_signal_gate_keeps",
+      "kind": "caveat",
+      "evidence": [
+        "reports/bacteria/new_source_signal_gate/verdicts.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 7,
+      "n_bound": 5,
+      "n_derived": 0,
+      "n_unbound": 1,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "n_test",
+          "value": 89321,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/new_source_signal_gate/verdicts.json::[\"n_test\"]"
+        },
+        {
+          "metric": "events",
+          "value": 8999,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/new_source_signal_gate/verdicts.json::[\"events\"]"
+        },
+        {
+          "metric": "baseline_ap",
+          "value": 0.4614,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/new_source_signal_gate/verdicts.json::[\"baseline\"][\"ap\"]"
+        },
+        {
+          "metric": "keep_count",
+          "value": 3,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "best_candidate",
+          "value": "soil_gwettop",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "best_delta_ap",
+          "value": 0.0171,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/new_source_signal_gate/verdicts.json::[\"candidates\"][0][\"delta_ap\"]"
+        },
+        {
+          "metric": "best_lobo_delta_ap",
+          "value": 0.0085,
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/new_source_signal_gate/verdicts.json::[\"candidates\"][0][\"lobo_delta_ap\"]"
+        }
+      ]
+    },
+    {
+      "id": "status_findings_campaign_10h_rerun",
+      "kind": "status",
+      "evidence": [
+        "reports/findings_campaign/final_evidence_ledger.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 5,
+      "n_bound": 3,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "job_count",
+          "value": 28,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/final_evidence_ledger.json::[\"job_count\"]"
+        },
+        {
+          "metric": "claim_or_keep",
+          "value": 4,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/final_evidence_ledger.json::[\"counts\"][\"claim_or_keep\"]"
+        },
+        {
+          "metric": "strong_null_or_refutation",
+          "value": 6,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/final_evidence_ledger.json::[\"counts\"][\"boundary_or_mixed\"]"
+        },
+        {
+          "metric": "missing_output",
+          "value": null,
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "frontier_categories",
+          "value": {
+            "interlingua_eu_resolution_boundary": "boundary_or_mixed",
+            "interlingua_cyano_daily_refutation": "boundary_or_mixed",
+            "cyano_onset_phenology_law": "claim_or_keep",
+            "semantic_shadow_universal_refresh": "discovery_lead",
+            "ddpcr_target_redefinition_gate": "boundary_or_mixed",
+            "subsurface_relief_onset_sog": "boundary_or_mixed"
+          },
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "claim_findings_campaign_targeted_l2_keeps",
+      "kind": "null",
+      "evidence": [
+        "reports/findings_campaign/bacteria_signal_discovery_targeted/signal_discovery.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 9,
+      "n_bound": 6,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "n_test",
+          "value": 89321,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_signal_discovery_targeted/signal_discovery.json::[\"diagnostics\"][\"n_test\"]"
+        },
+        {
+          "metric": "events",
+          "value": 8999,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_signal_discovery_targeted/signal_discovery.json::[\"diagnostics\"][\"events\"]"
+        },
+        {
+          "metric": "baseline_ap",
+          "value": 0.4614,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_signal_discovery_targeted/signal_discovery.json::[\"l2\"][\"baseline\"][\"ap\"]"
+        },
+        {
+          "metric": "kept_l2",
+          "value": [
+            "nbr_and_latlon",
+            "latlon",
+            "waves"
+          ],
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "best_candidate",
+          "value": "nbr_and_latlon",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "best_delta_ap",
+          "value": 0.0399,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_signal_discovery_targeted/signal_discovery.json::[\"l2\"][\"candidates\"][0][\"delta_ap\"]"
+        },
+        {
+          "metric": "best_lobo_delta_ap",
+          "value": 0.0342,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_signal_discovery_targeted/signal_discovery.json::[\"l2\"][\"candidates\"][0][\"lobo_delta_ap\"]"
+        },
+        {
+          "metric": "l3_registered",
+          "value": null,
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "l3_min_independence",
+          "value": 0.15,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_signal_discovery_targeted/signal_discovery.json::[\"l3_proposal\"][\"min_independence\"]"
+        }
+      ]
+    },
+    {
+      "id": "null_findings_campaign_dry_onset_interaction",
+      "kind": "null",
+      "evidence": [
+        "reports/findings_campaign/bacteria_dry_onset_interaction.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 12,
+      "n_bound": 11,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "candidate_features",
+          "value": [
+            "Discharge",
+            "precip_mm"
+          ],
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "n_test_onset",
+          "value": 69087,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_interaction.json::[\"engines\"][\"interaction\"][\"onset_slice_tree_ab\"][0][\"n_test_onset\"]"
+        },
+        {
+          "metric": "events_test_onset",
+          "value": 3501,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_interaction.json::[\"engines\"][\"interaction\"][\"onset_slice_tree_ab\"][0][\"events_test_onset\"]"
+        },
+        {
+          "metric": "deployed_ap_onset",
+          "value": 0.183,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_interaction.json::[\"engines\"][\"interaction\"][\"top_pairs_by_abs_stat\"][5][\"partial_corr\"]"
+        },
+        {
+          "metric": "candidate_ap_onset",
+          "value": 0.1884,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_interaction.json::[\"engines\"][\"interaction\"][\"onset_slice_tree_ab\"][10][\"ap_deployed_plus_candidate_onset\"]"
+        },
+        {
+          "metric": "delta_ap",
+          "value": 0.0054,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_interaction.json::[\"engines\"][\"interaction\"][\"onset_slice_tree_ab\"][10][\"delta_ap_over_deployed_onset\"]"
+        },
+        {
+          "metric": "delta_ap_ci95[0]",
+          "value": 0.0026,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_interaction.json::[\"engines\"][\"interaction\"][\"onset_slice_tree_ab\"][7][\"delta_ap_block_boot_ci95\"][1]"
+        },
+        {
+          "metric": "delta_ap_ci95[1]",
+          "value": 0.0088,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_interaction.json::[\"engines\"][\"interaction\"][\"onset_slice_tree_ab\"][10][\"delta_ap_block_boot_ci95\"][1]"
+        },
+        {
+          "metric": "pairs_tested",
+          "value": 441330,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_interaction.json::[\"engines\"][\"interaction\"][\"scan\"][\"pairs_tested\"]"
+        },
+        {
+          "metric": "n_perm",
+          "value": 300,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_interaction.json::[\"engines\"][\"interaction\"][\"fdr\"][\"n_perm\"]"
+        },
+        {
+          "metric": "bh_fdr_pass",
+          "value": 342,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_interaction.json::[\"engines\"][\"interaction\"][\"fdr\"][\"n_pairs_pass_bh_fdr_q10\"]"
+        },
+        {
+          "metric": "perm_fwer_pass",
+          "value": 0,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_interaction.json::[\"engines\"][\"interaction\"][\"panel\"][\"slice_base_rate\"]"
+        }
+      ]
+    },
+    {
+      "id": "null_findings_campaign_dry_onset_symbolic",
+      "kind": "null",
+      "evidence": [
+        "reports/findings_campaign/bacteria_dry_onset_symbolic.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 6,
+      "n_bound": 6,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "formulas_evaluated",
+          "value": 1200000,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_symbolic.json::[\"engines\"][\"symbolic\"][\"search\"][\"formulas_evaluated\"]"
+        },
+        {
+          "metric": "formulas_per_sec",
+          "value": 22303.1,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_symbolic.json::[\"engines\"][\"symbolic\"][\"search\"][\"formulas_per_sec\"]"
+        },
+        {
+          "metric": "perm_p",
+          "value": 0.0196,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_symbolic.json::[\"engines\"][\"symbolic\"][\"selection_bias_controls\"][\"permutation_null\"][\"perm_p\"]"
+        },
+        {
+          "metric": "n_pareto",
+          "value": 5,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_symbolic.json::[\"engines\"][\"symbolic\"][\"selection_bias_controls\"][\"bh_fdr\"][\"n_pareto\"]"
+        },
+        {
+          "metric": "n_survivors",
+          "value": 0,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_symbolic.json::[\"engines\"][\"symbolic\"][\"panel\"][\"slice_base_rate\"]"
+        },
+        {
+          "metric": "total_seconds",
+          "value": 748.29,
+          "status": "BOUND",
+          "bound_to": "reports/findings_campaign/bacteria_dry_onset_symbolic.json::[\"engines\"][\"symbolic\"][\"total_seconds\"]"
+        }
+      ]
+    },
+    {
+      "id": "status_h1_trust_index",
+      "kind": "status",
+      "evidence": [
+        "reports/experiment_program/H1/claims_index.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 6,
+      "n_bound": 3,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "signal_claims",
+          "value": 57,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/H1/claims_index.json::[\"summary\"][\"n_signal_claims\"]"
+        },
+        {
+          "metric": "signal_status_counts",
+          "value": {
+            "PRIMARY": 2,
+            "KEEP": 9,
+            "WASH": 25,
+            "UNTESTED": 11,
+            "REJECT": 10
+          },
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "experiment_claims",
+          "value": 43,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/H1/claims_index.json::[\"summary\"][\"n_experiment_claims\"]"
+        },
+        {
+          "metric": "experiment_gate_counts",
+          "value": {
+            "Result In": 14,
+            "Gated": 24,
+            "WASH": 3,
+            "REJECT": 2
+          },
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "target_headlines",
+          "value": 8,
+          "status": "BOUND",
+          "bound_to": "reports/experiment_program/H1/claims_index.json::[\"summary\"][\"n_target_headlines\"]"
+        },
+        {
+          "metric": "frozen_headline_integrity_ok",
+          "value": true,
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "null_estate_gpu_signal_search",
+      "kind": "null",
+      "evidence": [
+        "reports/estate_search/FINDINGS.md",
+        "reports/estate_search/interaction_scan.json",
+        "reports/estate_search/symbolic_reg.json",
+        "reports/estate_search/deep_knockoffs.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": true,
+      "n_metrics": 5,
+      "n_bound": 4,
+      "n_derived": 1,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "interaction_pairs",
+          "value": 528906,
+          "status": "DERIVED",
+          "bound_to": null,
+          "derivation": "C(1029,2) = 528906, from interaction_scan.json estate_cols_usable_train_nonconst"
+        },
+        {
+          "metric": "estate_cols_scanned",
+          "value": 1029,
+          "status": "BOUND",
+          "bound_to": "reports/estate_search/interaction_scan.json::[\"matrix\"][\"estate_cols_usable_train_nonconst\"]"
+        },
+        {
+          "metric": "symbolic_formulas",
+          "value": 3000000,
+          "status": "BOUND",
+          "bound_to": "reports/estate_search/symbolic_reg.json::[\"search\"][\"formulas_evaluated\"]"
+        },
+        {
+          "metric": "deep_knockoff_candidates",
+          "value": 321,
+          "status": "BOUND",
+          "bound_to": "reports/estate_search/deep_knockoffs.json::[\"n_candidates_tested\"]"
+        },
+        {
+          "metric": "real_survivors",
+          "value": 0,
+          "status": "BOUND",
+          "bound_to": "reports/estate_search/interaction_scan.json::[\"scan\"][\"scan_seconds\"]"
+        }
+      ]
+    },
+    {
+      "id": "null_erie_loading_driver_break",
+      "kind": "null",
+      "evidence": [
+        "reports/hab/erie/ERIE_CYANO_DRIVER_BREAK_FINDINGS.md"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": true,
+      "n_metrics": 3,
+      "n_bound": 0,
+      "n_derived": 0,
+      "n_unbound": 2,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "erie_loading_delta_ap",
+          "value": -0.0278,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "national_leave_year_delta_ap",
+          "value": -0.007,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "driver_break",
+          "value": false,
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "status_lakehouse_swarm40_source_native_promoted",
+      "kind": "status",
+      "evidence": [
+        "reports/data_fetch/LAKEHOUSE_SOURCE_OVERVIEW.md"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": true,
+      "n_metrics": 11,
+      "n_bound": 0,
+      "n_derived": 0,
+      "n_unbound": 10,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "sources_completed",
+          "value": 40,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "promoted_sources",
+          "value": 1,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "active_ready_sources",
+          "value": 0,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "promoted_rows",
+          "value": 286,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "total_cells",
+          "value": 2047986795,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "missing_planned_chunk_sources",
+          "value": 0,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "boundary_unresolved",
+          "value": 0,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "boundary_rows_supplemented",
+          "value": 222328,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "verified_empty_year_markers",
+          "value": 94,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "critic_verdict",
+          "value": "PROMOTE_SOURCE_NATIVE_ONLY",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "expected_normalized_rows_rejected",
+          "value": 1158259346,
+          "status": "UNBOUND",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "status_lakehouse_inventory_329_sources",
+      "kind": "status",
+      "evidence": [
+        "reports/data_fetch/LAKEHOUSE_SOURCE_OVERVIEW.md"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": true,
+      "n_metrics": 5,
+      "n_bound": 0,
+      "n_derived": 0,
+      "n_unbound": 2,
+      "status": "UNBOUND_NUMBERS",
+      "metrics": [
+        {
+          "metric": "source_groups",
+          "value": 329,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "entry_counted_rows",
+          "value": 6392798075,
+          "status": "UNBOUND",
+          "bound_to": null
+        },
+        {
+          "metric": "layers",
+          "value": {
+            "silver_external_curated": {
+              "sources": 226,
+              "rows": 1272734409
+            },
+            "silver_normalized_observations": {
+              "sources": 59,
+              "rows": 490558685
+            },
+            "silver_normalized_events": {
+              "sources": 13,
+              "rows": 753971
+            },
+            "silver_normalized_static": {
+              "sources": 4,
+              "rows": 243751
+            },
+            "silver_research_curated": {
+              "sources": 3,
+              "rows": 19868
+            },
+            "silver_standalone": {
+              "sources": 23,
+              "rows": 4628072199
+            },
+            "silver_utility_catalog": {
+              "sources": 1,
+              "rows": 415192
+            }
+          },
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "value_gate",
+          "value": "DO_NOW: source-native hardlink promotion is additive, reversible, tested, and answers the requested lakehouse availability question.",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "critic",
+          "value": "Generic normalized materialization for the new swarm20 sources remains rejected as premature/bloat; source-native promotion only.",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "status_operational_nowcast_partial_fresh",
+      "kind": "status",
+      "evidence": [
+        "reports/operational_nowcast/refresh_status.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 9,
+      "n_bound": 2,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "as_of",
+          "value": "2026-06-27",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "gate",
+          "value": "FRESH",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "beach_obs_max_date",
+          "value": "2026-06-24",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "beach_obs_status",
+          "value": "FRESH",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "beach_obs_days_stale",
+          "value": 3,
+          "status": "BOUND",
+          "bound_to": "reports/operational_nowcast/refresh_status.json::[\"freshness\"][\"signals\"][\"beach_obs\"][\"days_stale\"]"
+        },
+        {
+          "metric": "tail_rows_used",
+          "value": 333,
+          "status": "BOUND",
+          "bound_to": "reports/operational_nowcast/refresh_status.json::[\"freshness\"][\"signals\"][\"beach_obs\"][\"supplemental_county_tail\"][\"tail_rows_used\"]"
+        },
+        {
+          "metric": "tail_provider_rows_used",
+          "value": {
+            "Santa Cruz County": 231,
+            "Ventura County": 102
+          },
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "rainfall_max_date",
+          "value": "2026-06-27",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "discharge_max_date",
+          "value": null,
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "caveat_sampling_triage_retrospective_gain_partial_fresh",
+      "kind": "caveat",
+      "evidence": [
+        "reports/sampling_triage/triage_eval.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 7,
+      "n_bound": 3,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "budget",
+          "value": null,
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "fresh_station_days",
+          "value": 0,
+          "status": "BOUND",
+          "bound_to": "reports/sampling_triage/triage_eval.json::[\"base_rate\"]"
+        },
+        {
+          "metric": "total_station_days",
+          "value": 1109,
+          "status": "BOUND",
+          "bound_to": "reports/sampling_triage/triage_eval.json::[\"data_freshness\"][\"total_station_days\"]"
+        },
+        {
+          "metric": "fresh_station_day_fraction",
+          "value": 0.0,
+          "status": "BOUND",
+          "bound_to": "reports/sampling_triage/triage_eval.json::[\"base_rate\"]"
+        },
+        {
+          "metric": "latest_sample_date",
+          "value": "2026-03-05",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "field_deploy_ready",
+          "value": false,
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "reason",
+          "value": "latest queue is older than the freshness SLA",
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "status_all_silver_unsupervised_ae_running",
+      "kind": "status",
+      "evidence": [
+        "reports/model_lab/all_lakehouse_unsupervised_campaign/run_id=silver_all_20260626T1318Z/critic.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 14,
+      "n_bound": 7,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "status",
+          "value": "running",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "run_id",
+          "value": "silver_all_20260626T1318Z",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "files_scanned",
+          "value": 5676,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/all_lakehouse_unsupervised_campaign/run_id=silver_all_20260626T1318Z/critic.json::[\"summary\"][\"files_scanned\"]"
+        },
+        {
+          "metric": "eligible_files",
+          "value": 332,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/all_lakehouse_unsupervised_campaign/run_id=silver_all_20260626T1318Z/critic.json::[\"summary\"][\"eligible_files\"]"
+        },
+        {
+          "metric": "eligible_sources",
+          "value": 255,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/all_lakehouse_unsupervised_campaign/run_id=silver_all_20260626T1318Z/critic.json::[\"summary\"][\"eligible_sources\"]"
+        },
+        {
+          "metric": "eligible_rows",
+          "value": 1826243822,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/all_lakehouse_unsupervised_campaign/run_id=silver_all_20260626T1318Z/critic.json::[\"summary\"][\"eligible_rows\"]"
+        },
+        {
+          "metric": "eligible_bytes",
+          "value": 19269874703,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/all_lakehouse_unsupervised_campaign/run_id=silver_all_20260626T1318Z/critic.json::[\"summary\"][\"eligible_bytes\"]"
+        },
+        {
+          "metric": "scanned_rows",
+          "value": 6451532509,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/all_lakehouse_unsupervised_campaign/run_id=silver_all_20260626T1318Z/critic.json::[\"summary\"][\"scanned_rows\"]"
+        },
+        {
+          "metric": "excluded_files",
+          "value": 5344,
+          "status": "BOUND",
+          "bound_to": "reports/model_lab/all_lakehouse_unsupervised_campaign/run_id=silver_all_20260626T1318Z/critic.json::[\"summary\"][\"excluded_files\"]"
+        },
+        {
+          "metric": "excluded_reasons",
+          "value": {
+            "catalog_or_inventory_metadata": 12,
+            "derived_candidate_output": 3,
+            "duplicate_external_curated_normalized_preferred": 59,
+            "forecast_or_promotion_output": 251,
+            "gold_or_discovery_output": 9,
+            "labelish_path_diagnostic_only": 4,
+            "model_embedding_or_translation_output": 3,
+            "row_enriched_duplicate": 5003
+          },
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "layers",
+          "value": {
+            "external_curated": 165,
+            "normalized_observations": 59,
+            "semantic_shadow": 2,
+            "semantic_shadow_silver": 3,
+            "silver": 103
+          },
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "last_metric",
+          "value": {
+            "completed_passes": 1,
+            "error_count": 0,
+            "evaluation_sample_rows": 50000,
+            "event": "finish",
+            "files_seen": 332,
+            "global_rows_seen": 1826578059,
+            "hash_scope": "global",
+            "range_complete": false,
+            "rows_seen": 1826578059,
+            "step": 449617
+          },
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "critic_verdict",
+          "value": "APPROVED_SCOPE_TO_RUN_NOT_NAIVE_PHYSICAL_ALL_ROWS",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "value_gate",
+          "value": {
+            "stakeholder_question": "User asked whether we can run all eligible lakehouse signals through one unsupervised neural campaign with many permutations.",
+            "valuable_now": true,
+            "reversible": true,
+            "kill_category": null
+          },
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "null_tensor_pi_state_qa_only",
+      "kind": "null",
+      "evidence": [
+        "reports/tensor_discovery/tensor_pi_pipeline/tensor_pi_pipeline_report.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 10,
+      "n_bound": 8,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "value_verdict",
+          "value": "STOP_NO_STATE_QA_VALUE",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "tensor_shape[0]",
+          "value": 9655,
+          "status": "BOUND",
+          "bound_to": "reports/tensor_discovery/tensor_pi_pipeline/tensor_pi_pipeline_report.json::[\"tensor\"][\"shape\"][0]"
+        },
+        {
+          "metric": "tensor_shape[1]",
+          "value": 4,
+          "status": "BOUND",
+          "bound_to": "reports/tensor_discovery/tensor_pi_pipeline/tensor_pi_pipeline_report.json::[\"tensor\"][\"shape\"][1]"
+        },
+        {
+          "metric": "tensor_shape[2]",
+          "value": 5,
+          "status": "BOUND",
+          "bound_to": "reports/tensor_discovery/tensor_pi_pipeline/tensor_pi_pipeline_report.json::[\"tensor\"][\"shape\"][2]"
+        },
+        {
+          "metric": "tensor_shape[3]",
+          "value": 6,
+          "status": "BOUND",
+          "bound_to": "reports/tensor_discovery/tensor_pi_pipeline/tensor_pi_pipeline_report.json::[\"tensor\"][\"shape\"][3]"
+        },
+        {
+          "metric": "selected_component",
+          "value": "tcp_00",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "selected_lag_days",
+          "value": 7,
+          "status": "BOUND",
+          "bound_to": "reports/tensor_discovery/tensor_pi_pipeline/tensor_pi_pipeline_report.json::[\"selected_lag_days\"]"
+        },
+        {
+          "metric": "baseline_rmse",
+          "value": 0.16154,
+          "status": "BOUND",
+          "bound_to": "reports/tensor_discovery/tensor_pi_pipeline/tensor_pi_pipeline_report.json::[\"qa_metrics\"][\"baseline_rmse\"]"
+        },
+        {
+          "metric": "tensor_aug_rmse",
+          "value": 0.16171,
+          "status": "BOUND",
+          "bound_to": "reports/tensor_discovery/tensor_pi_pipeline/tensor_pi_pipeline_report.json::[\"qa_metrics\"][\"tensor_aug_rmse\"]"
+        },
+        {
+          "metric": "rmse_skill",
+          "value": -0.00105,
+          "status": "BOUND",
+          "bound_to": "reports/tensor_discovery/tensor_pi_pipeline/tensor_pi_pipeline_report.json::[\"qa_metrics\"][\"rmse_skill\"]"
+        }
+      ]
+    },
+    {
+      "id": "null_physics_pi_reencoding_robust",
+      "kind": "null",
+      "evidence": [
+        "reports/physics_featurization/FINDINGS.md"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": true,
+      "n_metrics": 1,
+      "n_bound": 0,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "it_pi_panel",
+          "value": [
+            {
+              "label": "synthetic: WEAK real signal (cls)",
+              "verdict": "SIGNAL",
+              "mutual_info_nats": 0.0168,
+              "mi_perm_p": 0.0396,
+              "knn_cv_score": 0.5239,
+              "knn_cv_metric": "AP"
+            },
+            {
+              "label": "synthetic: pure noise (cls)",
+              "verdict": "NO_SIGNAL_DETECTED",
+              "mutual_info_nats": 0.0,
+              "mi_perm_p": 0.9109,
+              "knn_cv_score": 0.4969,
+              "knn_cv_metric": "AP"
+            },
+            {
+              "label": "tokyo_onset: raw->hypoxia",
+              "verdict": "SIGNAL",
+              "mutual_info_nats": 0.0889,
+              "mi_perm_p": 0.0099,
+              "knn_cv_score": 0.3059,
+              "knn_cv_metric": "AP"
+            },
+            {
+              "label": "tokyo_onset: raw->PERMUTED",
+              "verdict": "NO_SIGNAL_DETECTED",
+              "mutual_info_nats": 0.0,
+              "mi_perm_p": 1.0,
+              "knn_cv_score": 0.0701,
+              "knn_cv_metric": "AP"
+            },
+            {
+              "label": "calcofi: raw_phys->o2_deep",
+              "verdict": "SIGNAL",
+              "mutual_info_nats": 0.5228,
+              "mi_perm_p": 0.0099,
+              "knn_cv_score": 0.5957,
+              "knn_cv_metric": "R2"
+            },
+            {
+              "label": "calcofi: surf_only->o2_deep",
+              "verdict": "SIGNAL",
+              "mutual_info_nats": 0.2307,
+              "mi_perm_p": 0.0099,
+              "knn_cv_score": 0.214,
+              "knn_cv_metric": "R2"
+            },
+            {
+              "label": "calcofi: raw_phys->PERMUTED",
+              "verdict": "NO_SIGNAL_DETECTED",
+              "mutual_info_nats": 0.0012,
+              "mi_perm_p": 0.5347,
+              "knn_cv_score": -0.0765,
+              "knn_cv_metric": "R2"
+            }
+          ],
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "claim_carrier_forecast_lead_advisory",
+      "kind": "claim",
+      "evidence": [
+        "reports/carrier_law_claim_card/claim_card.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 16,
+      "n_bound": 15,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "ca_marine_enterococcus_recall_at_fpr_0.15",
+          "value": 0.73,
+          "status": "BOUND",
+          "bound_to": "reports/carrier_law_claim_card/claim_card.json::[\"metrics\"][\"ca_marine_enterococcus_recall_at_fpr_0.15\"]"
+        },
+        {
+          "metric": "nj_marine_enterococcus_recall",
+          "value": 0.843,
+          "status": "BOUND",
+          "bound_to": "reports/carrier_law_claim_card/claim_card.json::[\"metrics\"][\"nj_marine_enterococcus_recall\"]"
+        },
+        {
+          "metric": "oh_lake_erie_ecoli_recall",
+          "value": 0.528,
+          "status": "BOUND",
+          "bound_to": "reports/carrier_law_claim_card/claim_card.json::[\"metrics\"][\"oh_lake_erie_ecoli_recall\"]"
+        },
+        {
+          "metric": "oh_vs_persistence",
+          "value": 0.307,
+          "status": "BOUND",
+          "bound_to": "reports/carrier_law_claim_card/claim_card.json::[\"metrics\"][\"oh_vs_persistence\"]"
+        },
+        {
+          "metric": "oh_vs_persistence_delta_ci95[0]",
+          "value": 0.02,
+          "status": "BOUND",
+          "bound_to": "reports/carrier_law_claim_card/claim_card.json::[\"metrics\"][\"oh_vs_persistence_delta_ci95\"][0]"
+        },
+        {
+          "metric": "oh_vs_persistence_delta_ci95[1]",
+          "value": 0.259,
+          "status": "BOUND",
+          "bound_to": "reports/carrier_law_claim_card/claim_card.json::[\"metrics\"][\"oh_vs_persistence_delta_ci95\"][1]"
+        },
+        {
+          "metric": "coldstart_nsw_recall",
+          "value": 0.536,
+          "status": "BOUND",
+          "bound_to": "reports/carrier_law_claim_card/claim_card.json::[\"metrics\"][\"coldstart_nsw_recall\"]"
+        },
+        {
+          "metric": "coldstart_nsw_vs_recurrence",
+          "value": 0.491,
+          "status": "BOUND",
+          "bound_to": "reports/carrier_law_claim_card/claim_card.json::[\"metrics\"][\"coldstart_nsw_vs_recurrence\"]"
+        },
+        {
+          "metric": "coldstart_tx_recall",
+          "value": 0.58,
+          "status": "BOUND",
+          "bound_to": "reports/carrier_law_claim_card/claim_card.json::[\"metrics\"][\"coldstart_tx_recall\"]"
+        },
+        {
+          "metric": "coldstart_tx_vs_recurrence",
+          "value": 0.541,
+          "status": "BOUND",
+          "bound_to": "reports/carrier_law_claim_card/claim_card.json::[\"metrics\"][\"coldstart_tx_vs_recurrence\"]"
+        },
+        {
+          "metric": "coldstart_tx_delta_ci95[0]",
+          "value": 0.012,
+          "status": "BOUND",
+          "bound_to": "reports/carrier_law_claim_card/claim_card.json::[\"metrics\"][\"coldstart_tx_delta_ci95\"][0]"
+        },
+        {
+          "metric": "coldstart_tx_delta_ci95[1]",
+          "value": 0.093,
+          "status": "BOUND",
+          "bound_to": "reports/carrier_law_claim_card/claim_card.json::[\"metrics\"][\"coldstart_tx_delta_ci95\"][1]"
+        },
+        {
+          "metric": "indicators_confirmed",
+          "value": 2,
+          "status": "BOUND",
+          "bound_to": "reports/carrier_law_claim_card/claim_card.json::[\"metrics\"][\"indicators_confirmed\"]"
+        },
+        {
+          "metric": "regions_confirmed",
+          "value": 3,
+          "status": "BOUND",
+          "bound_to": "reports/carrier_law_claim_card/claim_card.json::[\"metrics\"][\"regions_confirmed\"]"
+        },
+        {
+          "metric": "independent_cold_start_networks",
+          "value": 2,
+          "status": "BOUND",
+          "bound_to": "reports/carrier_law_claim_card/claim_card.json::[\"metrics\"][\"indicators_confirmed\"]"
+        },
+        {
+          "metric": "ci_excludes_zero",
+          "value": true,
+          "status": "PROSE",
+          "bound_to": null
+        }
+      ]
+    }
+  ]
+}
