@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260715T022109Z-3148-19294",
-  "built_utc": "2026-07-15T02:21:09Z",
-  "message": "Correct 4 result cards whose numbers had no evidence behind them (vibrio 7yr year-clustered CI, lobster bootstrap CI + AR1 p + M01 range, shark modern-era ratio/p, Argo surface-AUC + cohort); all 11 positive/claim cards now trace to raw evidence"
+  "deploy_id": "20260715T025556Z-4050-3351",
+  "built_utc": "2026-07-15T02:55:56Z",
+  "message": "RETRACT fabricated CA enterococcus decline (ex-SD p=3e-6 was never computed; real ex-SD MK p=0.354, censored Wilcoxon p=0.48 = NULL); correct 4 more cards from the same artifact-free 07-14 pass (arctic phantom, colocation mechanism, nFLH key, estate count)"
 }

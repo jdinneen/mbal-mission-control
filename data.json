@@ -7,9 +7,9 @@
         "id": "banked_arctic_psp_detection",
         "title": "Arctic/Alaska Alexandrium -> PSP cold-start (RED-TEAMED: mostly artifact)",
         "kind": "caveat",
-        "headline": "RED-TEAM WOUNDED: ~73% of the +0.039 is a 'is-this-village-monitored' flag; Alexandrium-abundance-only cold-start is NULL (dAP +0.062, CI[-0.007,0.102], perm p=0.62)",
+        "headline": "RED-TEAM WOUNDED: ~73% of the +0.039 is a 'is-this-village-monitored' flag; Alexandrium-abundance-only cold-start is NULL (dAP +0.062, CI[-0.006,0.098], perm p=0.62)",
         "plain": "Original claim: seeing the alga Alexandrium lets a model flag toxic shellfish at an untested Alaska village. Red-team from raw data: most of the apparent skill comes from a flag for whether a village is monitored at all, not from the Alexandrium counts -- and the clean abundance-only test is a null.",
-        "how": "Leave-site-out cold start. Raw-data red-team decomposed the signal: a pure monitoring-presence indicator recovers +0.028 of the +0.039; abundance-only co-located slice is null; within-site key-shuffle leaves a phantom +0.024.",
+        "how": "Leave-site-out cold start. Raw-data red-team decomposed the signal: a pure monitoring-presence indicator alone recovers +0.0283 of the +0.0386 (73.3%), leaving only ~+0.010 for the actual abundance gradient; the abundance-only co-located slice is a null. The within-site key-shuffle guard PASSES (phantom -0.001), so the residual is genuine day-level alignment, not a static site-mean artifact.",
         "evidence": "reports/arctic_psp/psp_alexandrium_detection.json",
         "metrics": {
           "n_site_days": 2549,
@@ -17,16 +17,20 @@
           "n_sites": 29,
           "base_rate": 0.322,
           "headline_marginal_ap": 0.0386,
-          "hasobs_only_marginal_ap": 0.028,
+          "hasobs_only_marginal_ap": 0.0283,
+          "hasobs_share_of_headline": 0.733,
+          "residual_abundance_gradient_ap": 0.0103,
           "abundance_only_cold_ci95": [
-            -0.007,
-            0.102
+            -0.0058,
+            0.0979
           ],
           "abundance_only_perm_p": 0.62,
+          "key_shuffle_phantom": -0.001,
+          "key_shuffle_guard": "PASSES",
           "forward_split_marginal_ap": -0.0008,
-          "redteam_2026_07_14": "WOUNDED->near-REFUTED"
+          "redteam_2026_07_14": "WOUNDED->near-REFUTED (phantom clause corrected 2026-07-15)"
         },
-        "note": "Disjoint non-circular sources are real, and the forward split is honestly NULL. But the detection headline is a monitoring-COVERAGE artifact: the abundance-only cold-start test is a null (CI crosses 0, perm p=0.62) and the '820 events' were really 265 independent runs. Do NOT treat as a deployable detector."
+        "note": "CORRECTION 2026-07-15: the 2026-07-14 pass claimed 'within-site key-shuffle leaves a phantom +0.024'. That is FALSE and contradicted by this card's own cited evidence -- the artifact's phantom is -0.0010 and its VERDICT.md states the key-shuffle guard PASSES; across 5 re-seeds the phantom ranges [-0.0134,+0.0027], never near +0.024. The clause unfairly harshened our own finding and is removed. The CI is quoted from the artifact ([-0.0058,+0.0979]); it is RNG-seed-sensitive. What stands: disjoint non-circular sources are real and the forward split is honestly NULL, but the detection headline is largely a monitoring-COVERAGE artifact (73.3% of it is a pure is-this-village-monitored flag), the abundance-only cold-start test is a null (CI crosses 0, perm p=0.62), and the '820 events' were really 265 independent runs. Do NOT treat as a deployable detector."
       },
       {
         "id": "banked_chesapeake_hypoxia_virtual_sensor",
@@ -178,21 +182,24 @@
         "id": "banked_colocation_sensor_fault",
         "title": "Sensor-fault buddy-check: REFUTED as detector (census survives)",
         "kind": "caveat",
-        "headline": "RED-TEAM: the sole 'fault' flag is Monterey UPWELLING misread as drift -- the buoy matches the M1 mooring to 0.01C (r=0.968) -- and it no longer fires on current data. Precision on the only adjudicable case = 0/1",
-        "plain": "A tool meant to catch broken coastal sensors by comparing each to its neighbors. Its one demo 'catch' was actually a correctly-working buoy reading real upwelling, and the alert disappears on newer data. The useful part is the map of where cross-checking is even possible.",
-        "how": "RED-TEAM pulled the flagged buoy vs neighbors from the raw 1.4B-row layer: it agrees with the one true cross-source neighbor (M1 mooring) year-round; the 'divergence' was against 6 same-source warm inner-bay buoys during upwelling season. Re-running the shipped detector on current data yields 0 flags.",
+        "headline": "RED-TEAM: the sole 'fault' flag is Monterey UPWELLING misread as drift -- station 156 runs 1.7C colder than its 6 same-source neighbors in upwelling season while tracking the M1 mooring (r=0.968, mean bias 0.02C but MAE 0.29C) -- it fires by a 0.002C margin and vanishes the moment one cross-source neighbor (NDBC 46092 = M1) is included. Precision on the only adjudicable case = 0/1",
+        "plain": "A tool meant to catch broken coastal sensors by comparing each to its neighbors. Its one demo 'catch' was actually a correctly-working buoy reading real upwelling, and the alert disappears once a genuinely comparable neighbor is in the pool. The useful part is the map of where cross-checking is even possible.",
+        "how": "RED-TEAM pulled the flagged buoy vs neighbors from the raw 1.4B-row layer: station 156 (CDIP) agrees with the one true cross-source neighbor (M1 mooring, 7.4km away, also carried as NDBC 46092) -- r=0.968, mean bias 0.02C, though MAE is 0.29C; the 'divergence' was against 6 same-source warm inner-bay buoys during upwelling season (residual -1.66C in June, +0.08C in January). Re-running the shipped detector reproduces the flag byte-exact on 6 same-source neighbors and yields ZERO flags on the identical window once NDBC 46092 is added -- the flag dies from neighbor comparability, not data recency. The lone_divergence trigger clears its threshold by 0.002C (1.188 vs 1.186).",
         "evidence": "reports/verify/sensor_fault_alerts.json",
         "metrics": {
           "demo_n_flagged": 1,
           "precision_on_adjudicable_case": 0.0,
           "flag_vs_m1_mooring_corr": 0.968,
-          "flag_vs_m1_residual_C": 0.01,
-          "flags_on_current_data": 0,
+          "flag_vs_m1_mean_bias_C": 0.02,
+          "flag_vs_m1_mae_C": 0.29,
+          "trigger_margin_C": 0.002,
+          "flags_with_crosssource_neighbor": 0,
+          "flags_by_window": "1 since 2023-01-01 / 0 since 2025-07-01 / 3 since 2026-01-01",
           "labeled_true_faults": 0,
           "sst_cross_source_pct_10km": 20.6,
-          "redteam_2026_07_14": "REFUTED as detector"
+          "redteam_2026_07_14": "REFUTED as detector (mechanism corrected 2026-07-15)"
         },
-        "note": "The buddy-check does NOT work as a fault detector as built (neighbors weren't comparable; flags the most oceanographically-correct sensor in an upwelling system). What SURVIVES: the redundancy census (SST 20.6% / salinity 12% / DO 0% cross-source) and the univariate QARTOD self-checks. Needs comparable-neighbor selection + labeled faults before any claim."
+        "note": "CORRECTION 2026-07-15: the 2026-07-14 pass said the flag 'no longer fires on current data'. That mechanism is wrong and window-dependent -- an in-memory re-run of the shipped detector fires 1 flag since 2023-01-01, 0 since 2025-07-01, and 3 since 2026-01-01. The flag actually dies because a cross-source neighbor (NDBC 46092 = the M1 mooring) entered the source set, not because the data got newer. The corrected mechanism is a SHARPER indictment. Also corrected: 'matches to 0.01C' was a cancellation artifact -- 0.02C is the mean bias, but typical daily disagreement is MAE 0.29C (~15x larger); the buoys agree in the mean because seasonal errors cancel. sst_cross_source_pct_10km lives in the sibling colocation_census_telemetry.json, not the cited file. The buddy-check does NOT work as a fault detector as built (neighbors weren't comparable; it flags the most oceanographically-correct sensor in an upwelling system, by a 0.002C margin). What SURVIVES: the redundancy census (SST 20.6% / salinity 12% / DO 0% cross-source) and the univariate QARTOD self-checks. Needs comparable-neighbor selection + labeled faults before any claim."
       },
       {
         "id": "banked_redtide_nflh_detector",
@@ -212,30 +219,37 @@
           "sign_p_one_sided": 0.033,
           "sign_p_two_sided": 0.066,
           "non_karenia_negatives": 0,
-          "available_pairs_unused": 1460,
+          "available_pairs": 1460,
+          "available_pairs_unused": 1415,
           "redteam_2026_07_14": "REFUTED (no CI-separated skill)"
         },
-        "note": "No CI-separated evidence of skill -- the number should not be read as a 'detector'. What is real is the METHODS lesson: same-station pairing wasn't enough; a season-match caught a 0.81->0.61 seasonal inflation. Consistent with the known dense-biomass/RBD effect but this test does not establish Karenia specificity."
+        "note": "CORRECTION 2026-07-15: the metric key 'available_pairs_unused: 1460' was mislabelled -- 1460 is the TOTAL eligible pairs (reproduces exactly from the raw habsos_karenia parquet); unused is 1460-45 = 1415. The prose was already correct. The CI [0.493,0.725] and two-sided p=0.066 are exact Hanley-McNeil / 2x-one-sided derivations, not fabrications. Reproducibility gap: the 45 season-matched rows were never saved and no script reproduces them (karenia_paired_hardening.py hard-caps at 40 pairs), so pooled_auc 0.609 rests on the JSON's self-report. No CI-separated evidence of skill -- the number should not be read as a 'detector'. What is real is the METHODS lesson: same-station pairing wasn't enough; a season-match caught a 0.81->0.61 seasonal inflation. Consistent with the known dense-biomass/RBD effect but this test does not establish Karenia specificity."
       },
       {
         "id": "banked_josh_fib_trend",
-        "title": "CA beach-bacteria trend (MBARI/Josh): improving, not flat",
+        "title": "CA beach-bacteria trend (MBARI/Josh): enterococcus is a well-powered NULL, not an improvement",
         "kind": "caveat",
-        "headline": "RED-TEAM: 'no trend' is overstated -- corrected regulatory data show well-powered station-level DECLINES in enterococcus (ex-SD p=3e-6) and fecal coliform (p=3.4e-9). There is no INCREASE; weather dominates day-to-day",
-        "plain": "California regulatory beach bacteria is not flat -- it is slowly improving. Two indicators show real declines once you use the powered station-level test and remove a San Diego reporting glitch. The apparent rise in advisories is a counting artifact, and rainfall dominates day-to-day spikes.",
-        "how": "Per-station Kendall-tau on the balanced panel (powered) vs the underpowered 26-point annual Mann-Kendall used originally. RED-TEAM: the earlier enterococcus 'null' was a San Diego ddPCR contamination in the silver source; ex-SD the same test shows a decline (p=3e-6).",
-        "evidence": "analysis/josh_bacteria_trends_2026-07-10/analysis_scripts/results.json",
+        "headline": "RETRACTED 2026-07-15: enterococcus shows NO robust trend (censored Wilcoxon p=0.48 over 455 stations; ex-San-Diego pooled MK p=0.354) -- the previously published 'decline, ex-SD p=3e-6' was never computed. Fecal coliform does decline (p=3.4e-9, n=188) but its frame still includes San Diego. No statewide INCREASE; weather dominates",
+        "plain": "California regulatory beach bacteria shows no robust enterococcus trend -- the well-powered station-level test is a null, not an improvement. One indicator (fecal coliform) does decline, but that test has not yet been re-run with San Diego's reporting break excluded, so its scope is unsettled. The apparent rise in advisories is a counting artifact, and rainfall dominates day-to-day spikes.",
+        "how": "Per-station censored Kendall-tau on the balanced panel (data_clean/censored_trend.json) vs the underpowered 26-point annual Mann-Kendall. Enterococcus: Wilcoxon p=0.483 over 455 stations, median censored tau -0.0056, 50.5% of station taus negative -- a coin flip. The independent red-team (analysis/josh_MERGED_2026-07-10/redteam_findings.md) re-derived the ex-San-Diego test from raw parquet and got pooled rest-of-CA MK p=0.354 with an ex-SD enterococcus geomean of +1.3%/yr (faintly increasing, not declining).",
+        "evidence": "analysis/josh_bacteria_trends_2026-07-10/data_clean/censored_trend.json",
         "metrics": {
+          "entero_censored_wilcoxon_p": 0.483,
+          "entero_censored_stations": 455,
+          "entero_median_censored_tau": -0.0056,
+          "entero_frac_stations_negative": 0.505,
+          "entero_exSD_pooled_mk_p": 0.354,
+          "entero_exSD_geomean_pct_per_yr": 1.3,
           "fecal_coliform_censored_p": 3.4e-09,
-          "entero_decline_exSD_p": 3e-06,
+          "fecal_coliform_stations": 188,
           "annual_mk_entero_p": 0.201,
           "annual_mk_note": "underpowered 26-pt test",
           "wet_dry_ratio": "1.7-2.9x",
           "advisory_unknown_cause_pct": 63.2,
-          "surfrider_volunteer": "disagrees (shows increase)",
-          "redteam_2026_07_14": "NULL OVERSTATED -> declines"
+          "surfrider_volunteer": "disagrees (shows increase, p=0.0014)",
+          "redteam_2026_07_14": "RETRACTED 2026-07-15 (decline claim was never computed)"
         },
-        "note": "What survives: no statewide INCREASE, weather dominates, advisory-count rise is a reporting artifact. What was wrong: 'no robust trend' buried two well-powered declines; the flat annual test is underpowered and the enterococcus 'null' was a San Diego ddPCR artifact. Volunteer Surfrider data disagrees (shows an increase). Re-run 07_censored_trend on the method-aware source before citing."
+        "note": "RETRACTION 2026-07-15: the 2026-07-14 red-team pass rewrote this card to 'improving, not flat' on the strength of an enterococcus ex-San-Diego decline at p=3e-6. THAT NUMBER WAS NEVER COMPUTED -- no San-Diego-exclusion logic exists in any of the 7 analysis scripts, and the ex-SD test that WAS run (by the independent red-team, from raw parquet) returns p=0.354, a null. The card also INVERTED the San Diego story: SD's ddPCR reporting break manufactured a fake statewide RISE, so removing it makes the record flatter, never declining. The lab's own red-team explicitly lists 'statewide improvement or proven-flat' under 'what must still NOT be claimed'. WHAT SURVIVES: no statewide INCREASE in regulatory enterococcus, weather dominates (wet/dry 1.7-2.9x), advisory-count rise is a reporting artifact (63.2% unknown-cause). Fecal coliform's p=3.4e-9 decline is real but its censored frame silently includes San Diego -- re-run 07_censored_trend on the method-aware source before citing it. Volunteer Surfrider data shows an INCREASE (p=0.0014)."
       },
       {
         "id": "banked_regime_shift_monitor",
@@ -1341,17 +1355,18 @@
         "id": "null_estate_gpu_signal_search",
         "title": "Estate-wide GPU signal search finds no new bacteria carrier",
         "kind": "null",
-        "headline": "474,825 interactions + 3M formulas + knockoffs: zero shippable survivors",
+        "headline": "528,906 interactions + 3M formulas + knockoffs: zero shippable survivors",
         "plain": "A large GPU search over nonlinear interactions and symbolic forms did not find a new bacteria signal beyond the frozen baseline.",
         "how": "Interaction scan, symbolic regression, and deep knockoff selection, each with FDR/permutation controls and critic review.",
         "evidence": "reports/estate_search/FINDINGS.md",
         "metrics": {
-          "interaction_pairs": 474825,
+          "interaction_pairs": 528906,
+          "estate_cols_scanned": 1029,
           "symbolic_formulas": 3000000,
           "deep_knockoff_candidates": 321,
           "real_survivors": 0
         },
-        "note": "The null is valid; future positives from the wide matrices require stricter leakage filters first."
+        "note": "CORRECTION 2026-07-15: the published '474,825 pairs over 975 columns' came from the narrative FINDINGS.md, which was superseded ~45h later by the machine-written interaction_scan.json in the same directory (1,029 usable columns -> 528,906 pairs; 1029*1028/2 checks out). A wider search that still finds nothing only strengthens the null. The null is valid; future positives from the wide matrices require stricter leakage filters first."
       },
       {
         "id": "null_erie_loading_driver_break",
