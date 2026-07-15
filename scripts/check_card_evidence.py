@@ -15,14 +15,35 @@ failed. Palantir's lineage has the same hole: it tells you a human put a number
 there, it does not tell you the number is true.
 
 So this checker does not trust any stamp. For each numeric metric on a Card it
-demands an EXACT key lookup in the cited file:
+requires that the value EXIST in a cited file, and it records the exact key path
+where it found it:
 
     metric `pooled_auc` = 0.609   ->   karenia_season_matched.json ["pooled_AUC"]
 
-Exact key path, exact value. Never a fuzzy value search: an earlier prototype that
-scanned a file for "some number within 2%" PASSED entero_exSD_pooled_mk_p=0.354,
-which is not in the cited file at all -- it collided with an unrelated number. A
-checker that can be fooled by coincidence is worse than none, because it launders.
+WHAT THIS IS AND IS NOT (read before trusting it)
+-------------------------------------------------
+This is a VALUE search across every leaf of the cited files, reported with the key
+path it landed on. It is NOT a key lookup: the Card's metric name is never required
+to match the evidence file's key name. So a number CAN bind to a semantically wrong
+key that happens to hold the same value. Two consequences you must hold in mind:
+
+  * BOUND means "this number exists somewhere in a file the Card cites" -- which is
+    a real and useful bar, because a FABRICATED number exists nowhere. It does NOT
+    mean "this number means what the Card says it means."
+  * UNBOUND is the strong signal. It is the fabrication detector, and it works:
+    the known-fabricated p=3e-6 does not bind, and neither does the correct 0.354
+    against the files that Card originally cited.
+
+Binding a metric name to an explicit key path per metric would close the collision
+hole. That is the right next step and it is NOT done. Do not describe this tool as
+key-bound until it is.
+
+Matching is exact, or equal at the precision the Card itself displays (sig figs for
+measurements; exact for integers, because a Card showing a whole number is claiming
+a count). Never a fudge factor: an earlier prototype that accepted "within 2%"
+PASSED entero_exSD_pooled_mk_p=0.354 against files not containing it -- it collided
+with an unrelated number. A checker foolable by coincidence is worse than none,
+because it launders.
 
 STATUS PER METRIC
   BOUND      key found in an evidence file, value matches exactly
@@ -59,13 +80,20 @@ LEDGER = os.path.join(REPO, "reports", "evidence_audit.json")
 # Cards proven clean and frozen. publish.sh --gate fails if any of these regress.
 # Add a card here ONLY after it audits with zero UNBOUND numbers.
 SEALED: set[str] = {
+    "banked_arctic_psp_detection",
     "banked_ca_fib_comparability_breaks",
     "banked_chesapeake_hypoxia_virtual_sensor",
     "banked_colocation_sensor_fault",
     "banked_ireland_mussel_sentinel",
+    "banked_josh_fib_trend",
+    "banked_lobster_temperature_timing",
     "banked_pn_pda_coldstart_nowcast",
+    "banked_redtide_nflh_detector",
+    "banked_regime_shift_monitor",
+    "banked_rephytox_da_alert_ranker",
     "banked_shark_severity_hotspot",
     "banked_vibrio_temperature_forecast",
+    "banked_zeroshot_o2_nowcast",
     "caveat_sampling_triage_retrospective_gain_partial_fresh",
     "claim_adaptive_sampling_pilot",
     "claim_argo_ctd_virtual_oxygen_sensor",
@@ -81,6 +109,7 @@ SEALED: set[str] = {
     "claim_da_toxic_onset_ci_separated",
     "claim_findings_campaign_targeted_l2_keeps",
     "claim_forward_2026_holdout_pass",
+    "claim_global_fib_coldstart_forecast",
     "claim_global_surge_onset_coldstart",
     "claim_gulf_hypoxia_flag",
     "claim_hab_exceed_strict_critic",
@@ -89,6 +118,7 @@ SEALED: set[str] = {
     "claim_lightgbm_catboost_paired_boosts",
     "claim_mcye_alberta_definitive_replication",
     "claim_mcye_national_replication",
+    "claim_new_source_signal_gate_keeps",
     "claim_operational_label_quality_win",
     "claim_russian_river_advection_escape",
     "claim_soil_moisture_gate_positive",
@@ -97,6 +127,7 @@ SEALED: set[str] = {
     "claim_tsunami_halfduration_warning_screen",
     "claim_wet_tail_driver_skill",
     "null_ddpcr_target_redefinition_artifact",
+    "null_erie_loading_driver_break",
     "null_estate_gpu_signal_search",
     "null_findings_campaign_dry_onset_interaction",
     "null_findings_campaign_dry_onset_symbolic",
@@ -110,7 +141,11 @@ SEALED: set[str] = {
     "status_bacteria_breakthrough_lockbox",
     "status_findings_campaign_10h_rerun",
     "status_h1_trust_index",
+    "status_lakehouse_inventory_329_sources",
+    "status_lakehouse_swarm40_source_native_promoted",
+    "status_non_bacteria_night_run_tight_gate",
     "status_operational_nowcast_partial_fresh",
+    "status_semantic_shadow_refresh_discovery_leads",
 }
 
 # Metrics that are legitimately arithmetic on other published numbers, not lookups.
@@ -184,7 +219,14 @@ def _numeric(v):
     if isinstance(v, bool):
         return None
     if isinstance(v, (int, float)):
-        return float(v)
+        f = float(v)
+        # NaN/inf can never be a Card's published number, and they crash the sig-fig
+        # rounding (log10 of NaN). Evidence files legitimately carry them: a model
+        # gauntlet row writes NaN into `ap`/`roc_auc` for a continuous target. Treat
+        # them as non-numeric so they are skipped rather than exploding the audit.
+        if f != f or f in (float("inf"), float("-inf")):
+            return None
+        return f
     return None
 
 

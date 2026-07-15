@@ -1,6 +1,6 @@
 {
-  "built_iso": "2026-07-14T22:35:01.015462+00:00",
-  "built_pacific": "2026-07-14 15:35 Pacific Daylight Time",
+  "built_iso": "2026-07-15T17:04:54.244228+00:00",
+  "built_pacific": "2026-07-15 10:04 Pacific Daylight Time",
   "state": {
     "findings": [
       {
@@ -10,7 +10,10 @@
         "headline": "RED-TEAM WOUNDED: ~73% of the +0.039 is a 'is-this-village-monitored' flag; Alexandrium-abundance-only cold-start is NULL (dAP +0.062, CI[-0.006,0.098], perm p=0.62)",
         "plain": "Original claim: seeing the alga Alexandrium lets a model flag toxic shellfish at an untested Alaska village. Red-team from raw data: most of the apparent skill comes from a flag for whether a village is monitored at all, not from the Alexandrium counts -- and the clean abundance-only test is a null.",
         "how": "Leave-site-out cold start. Raw-data red-team decomposed the signal: a pure monitoring-presence indicator alone recovers +0.0283 of the +0.0386 (73.3%), leaving only ~+0.010 for the actual abundance gradient; the abundance-only co-located slice is a null. The within-site key-shuffle guard PASSES (phantom -0.001), so the residual is genuine day-level alignment, not a static site-mean artifact.",
-        "evidence": "reports/arctic_psp/psp_alexandrium_detection.json",
+        "evidence": [
+          "reports/arctic_psp/psp_alexandrium_detection.json",
+          "reports/arctic_psp/recompute_2026_07_15.json"
+        ],
         "metrics": {
           "n_site_days": 2549,
           "independent_exceedance_runs": 265,
@@ -99,7 +102,8 @@
         "how": "Held-out unit = YEAR, rolling-origin, test n=13 years (2012-2024). Survives year-jackknife (11/13 yrs), a shuffle null (p=0.0005), and a volume-confound test; but 0.705 is E01-buoy-specific -- the corroborating M01 buoy gives 0.30-0.38.",
         "evidence": [
           "reports/temperature_target/lobster/results.json",
-          "reports/temperature_target/lobster/adversary_indep_20260710.json"
+          "reports/temperature_target/lobster/adversary_indep_20260710.json",
+          "reports/temperature_target/lobster/recompute_2026_07_15.json"
         ],
         "metrics": {
           "skill_vs_trend": 0.69,
@@ -133,10 +137,11 @@
           "model_ap": 0.343,
           "recent_value_baseline_ap": 0.65,
           "dap_model_minus_baseline_ci95": [
-            -0.401,
-            -0.131
+            -0.3998,
+            -0.1338
           ],
-          "redteam_2026_07_14": "REFUTED as ML win"
+          "redteam_2026_07_14": "REFUTED as ML win",
+          "bootstrap_note": "site-clustered, 253 sites, 2000 draws; original bounds stated no seed"
         },
         "note": "The persistence+season ceiling SCIENCE is real and reinforced (lead-time forecast genuinely NULL at >=7d). But the shipped XGBoost is not a win -- a trivial recent-value baseline beats it. Deliverable = free heuristic, not the model."
       },
@@ -179,7 +184,10 @@
         "headline": "RED-TEAM REFUTED value: T/S+age O2 loses to the FREE WOA climatology in 6/6 basins it works in (16-28 vs 30-86 RMSE); WOA covers 100% of ocean 0-2000m, so the 'no-atlas' niche is empty",
         "plain": "A free ocean-model 'water age' channel plus temperature/salinity really does reconstruct deep oxygen physics -- but a free existing oxygen atlas already covers the entire ocean and beats it everywhere, so there is no place this would actually be used. Banked as a clean negative.",
         "how": "Leave-basin-out. RED-TEAM measured WOA23 O2 coverage directly (100.00% of ocean cells 0-2000m, incl. marginal seas) and confirmed the model loses to that free lookup in all 6 ventilated basins; ~29 was a best-3 cherry (true ventilated median ~47).",
-        "evidence": "reports/physics/zeroshot_o2/AGE_FIX_REPORT.json",
+        "evidence": [
+          "reports/physics/zeroshot_o2/AGE_FIX_REPORT.json",
+          "reports/physics/zeroshot_o2/external_reference_2026_07_15.json"
+        ],
         "metrics": {
           "beats_free_woa_basins": "0 of 6",
           "ventilated_median_rmse": 46.8,
@@ -218,7 +226,7 @@
           "aggregation": "daily mean (all four numbers from one config)",
           "flag_dies_on_current_data": true
         },
-        "note": "RECOMPUTE 2026-07-15 (from raw, independent): the published MAE 0.29 was an AGGREGATION MIX-UP and is corrected to 0.2768 -- r=0.968 and mean bias +0.0155 come from daily MEAN, while MAE 0.29/RMSE 0.41 only appear under daily MEDIAN (which gives r=0.963). No single configuration produced all four published numbers; they are now all daily-mean. The recompute also STRENGTHENS the refutation: the flagged station is CDIP 156 and the true reference is the MBARI M1 mooring at depth -1.0m (not NDBC 46092, which only reaches 2025-12-31). The trigger fires at 1.1875 vs a threshold of 1.1860 -- a 0.13% knife-edge on 214 days -- and leave-one-out shows NDBC 46092 (M1, the nearest buddy at 7.4km) is the SOLE neighbor whose inclusion flips it. On current data the trigger does not fire at all (margin -1.357), because ndbc_stdmet was refreshed 2026-07-11 11:20, AFTER sensor_fault_alerts.json was written at 10:20. Station 156 agrees with M1 at r=0.968 / bias +0.016 / MAE 0.28 -- normal colocation, not a fault. TREAT THE FLAG AS NOT SUPPORTED.   |  CORRECTION 2026-07-15: the 2026-07-14 pass said the flag 'no longer fires on current data'. That mechanism is wrong and window-dependent -- an in-memory re-run of the shipped detector fires 1 flag since 2023-01-01, 0 since 2025-07-01, and 3 since 2026-01-01. The flag actually dies because a cross-source neighbor (NDBC 46092 = the M1 mooring) entered the source set, not because the data got newer. The corrected mechanism is a SHARPER indictment. Also corrected: 'matches to 0.01C' was a cancellation artifact -- 0.02C is the mean bias, but typical daily disagreement is MAE 0.29C (~15x larger); the buoys agree in the mean because seasonal errors cancel. sst_cross_source_pct_10km lives in the sibling colocation_census_telemetry.json, not the cited file. The buddy-check does NOT work as a fault detector as built (neighbors weren't comparable; it flags the most oceanographically-correct sensor in an upwelling system, by a 0.002C margin). What SURVIVES: the redundancy census (SST 20.6% / salinity 12% / DO 0% cross-source) and the univariate QARTOD self-checks. Needs comparable-neighbor selection + labeled faults before any claim."
+        "note": "CORRECTION 2026-07-15: the 2026-07-14 pass said the flag 'no longer fires on current data'. That mechanism is wrong and window-dependent -- an in-memory re-run of the shipped detector fires 1 flag since 2023-01-01, 0 since 2025-07-01, and 3 since 2026-01-01. The flag actually dies because a cross-source neighbor (NDBC 46092 = the M1 mooring) entered the source set, not because the data got newer. The corrected mechanism is a SHARPER indictment. Also corrected: 'matches to 0.01C' was a cancellation artifact -- 0.02C is the mean bias, but typical daily disagreement is MAE 0.29C (~15x larger); the buoys agree in the mean because seasonal errors cancel. sst_cross_source_pct_10km lives in the sibling colocation_census_telemetry.json, not the cited file. The buddy-check does NOT work as a fault detector as built (neighbors weren't comparable; it flags the most oceanographically-correct sensor in an upwelling system, by a 0.002C margin). What SURVIVES: the redundancy census (SST 20.6% / salinity 12% / DO 0% cross-source) and the univariate QARTOD self-checks. Needs comparable-neighbor selection + labeled faults before any claim."
       },
       {
         "id": "banked_redtide_nflh_detector",
@@ -229,7 +237,8 @@
         "how": "Same-station + same-season paired test (n=45). RED-TEAM: Hanley-McNeil CI on AUC 0.609 = [0.493,0.725] (crosses 0.5); the design has no non-bloom negatives; only 45 of 1,460 available pairs were used (one arbitrary seed).",
         "evidence": [
           "reports/redtide_sat/karenia_season_matched.json",
-          "reports/redtide_sat/karenia_derived_stats.json"
+          "reports/redtide_sat/karenia_derived_stats.json",
+          "reports/redtide_sat/recompute_2026_07_15.json"
         ],
         "metrics": {
           "n_pairs": 45,
@@ -256,7 +265,8 @@
         "how": "Per-station censored Kendall-tau on the balanced panel (data_clean/censored_trend.json) vs the underpowered 26-point annual Mann-Kendall. Enterococcus: Wilcoxon p=0.483 over 455 stations, median censored tau -0.0056, 50.5% of station taus negative -- a coin flip. The independent red-team (analysis/josh_MERGED_2026-07-10/redteam_findings.md) re-derived the ex-San-Diego test from raw parquet and got pooled rest-of-CA MK p=0.354 with an ex-SD enterococcus geomean of +1.3%/yr (faintly increasing, not declining).",
         "evidence": [
           "analysis/josh_bacteria_trends_2026-07-10/data_clean/censored_trend.json",
-          "analysis/josh_bacteria_trends_2026-07-10/analysis_scripts/results.json"
+          "analysis/josh_bacteria_trends_2026-07-10/analysis_scripts/results.json",
+          "analysis/josh_MERGED_2026-07-10/recompute_2026_07_15.json"
         ],
         "metrics": {
           "entero_censored_wilcoxon_p": 0.483,
@@ -283,18 +293,21 @@
         "headline": "RED-TEAM: '0 novel / estate stable' overstated -- scan is CA enterococcus only, catches only abrupt MEAN steps (blind to 45-82 variance-shift + 5 gradual-trend non-SD signals), and its one 'hit' is the San Diego reporting artifact",
         "plain": "A change-point tool scanned for systems that jumped to a new regime and reported none. But it only looked at one bacteria indicator, only catches sudden step-changes, and its single detection is a known data glitch -- so 'the estate is stable' isn't established.",
         "how": "Best mean-shift split + Bonferroni + BH-FDR. RED-TEAM added variance-shift (Levene) and gradual-trend (Mann-Kendall) passes on the same raw data: 45-82 non-SD variance shifts and 5 non-SD upward trends the mean-step method is blind to; hypoxia/red-tide lanes were non-functional (DO used a record-ID column).",
-        "evidence": "reports/regime_shift/emerging_hotspots.json",
+        "evidence": [
+          "reports/regime_shift/emerging_hotspots.json",
+          "reports/regime_shift/recompute_2026_07_15.json"
+        ],
         "metrics": {
           "n_stations_scanned": 496,
           "scope": "CA enterococcus only",
           "novel_mean_steps": 0,
           "missed_variance_shifts_nonSD": "45-82",
           "missed_trend_shifts_nonSD": 5,
-          "discarded_pre2020_upward_steps": 7,
+          "discarded_pre2020_upward_steps": "NOT REPRODUCIBLE (published 7; recompute finds 1)",
           "validation_event": "SD reporting artifact",
           "redteam_2026_07_14": "MIXED - narrow number real, headline overstated"
         },
-        "note": "The narrow number (0 novel recent abrupt mean-steps in CA enterococcus) reproduces. But 'estate is stable' overstates: single-analyte, blind to variance and gradual-trend regimes, discards 7 pre-2020 upward steps by its 'recent' gate, never validly tested hypoxia/red tide, and its lone validated hit is a reporting-comparability artifact."
+        "note": "RECOMPUTE 2026-07-15: published discarded_pre2020_upward_steps=7 is UNREACHABLE. The reproduction is exact on all three controls (496 stations, 5 emerging, 0 novel), but the discarded count is 1 (San Mateo 2015). Across ALL years only 6 significant upward steps exist, 5 of which are the reported San Diego hits -- so 7 exceeds the total available under any definition tried (8 alternatives; closest was 6, dropping FDR). Withdrawn pending a rerun.   |  The narrow number (0 novel recent abrupt mean-steps in CA enterococcus) reproduces. But 'estate is stable' overstates: single-analyte, blind to variance and gradual-trend regimes, discards 7 pre-2020 upward steps by its 'recent' gate, never validly tested hypoxia/red tide, and its lone validated hit is a reporting-comparability artifact."
       },
       {
         "id": "banked_pn_pda_coldstart_nowcast",
@@ -373,7 +386,11 @@
         "headline": "[RED-TEAM WOUNDED 2026-07-14] 37 regions · leave-one-region-out AUC 0.73 vs recurrence 0.694 · beats recurrence in 36/37 · +rain -> 0.746",
         "plain": "One pooled model, trained on many regions and tested on a held-out region it never saw ('cold start'), forecasts which beaches will breach the bacteria standard across 37 European and US regions. It beats the region's own history-repeat baseline ('recurrence') and edges the best published cross-region transfer score; adding rainfall as a lead-time input lifts it further.",
         "how": "Leave-one-region-out (train on all regions but one, test on the held-out one) across 37 regions; macro-averaged AUC and average precision (AP) versus a recurrence baseline and versus the published external transfer SOTA; rainfall lead-time added as a separate test.",
-        "evidence": "reports/global_fib/coldstart_hgbt_all.json",
+        "evidence": [
+          "reports/global_fib/coldstart_hgbt_all.json",
+          "reports/global_fib/coldstart_rain_hgbt.json",
+          "reports/global_fib/external_reference_2026_07_15.json"
+        ],
         "metrics": {
           "n_regions": 37,
           "macro_auc_model": 0.7301,
@@ -555,7 +572,10 @@
         "headline": "HAB promoted; Gulf retained as caveat after effort-control audit",
         "plain": "The original night-run bundle promoted HAB pDA exceedance and a Gulf hypoxia survey flag. The later audit keeps HAB as the supported claim but downgrades the Gulf card because its apparent skill did not survive an effort-confound control.",
         "how": "Claim-card critic over the non-bacteria night-run bundle, enforcing chronological holdout, stronger baseline, bootstrap CI, permutation null, and leakage controls.",
-        "evidence": "reports/non_bacteria_claim_cards/claim_cards.json",
+        "evidence": [
+          "reports/non_bacteria_claim_cards/claim_cards.json",
+          "reports/non_bacteria_claim_cards/recompute_2026_07_15.json"
+        ],
         "metrics": {
           "promoted_claims": 2,
           "blocked": 4,
@@ -1132,7 +1152,10 @@
         "headline": "25 targets · 4632 correlations",
         "plain": "The universal shadow-lakehouse refresh found cross-domain correlations and temporal-holdout model lifts, but they remain discovery leads until independently reproduced.",
         "how": "All-domain semantic-shadow discovery runner over bacteria, HAB, and whale targets with temporal holdouts and target-namespace exclusions.",
-        "evidence": "reports/semantic_lakehouse/semantic_shadow_discovery.md",
+        "evidence": [
+          "reports/semantic_lakehouse/semantic_shadow_discovery.md",
+          "reports/semantic_lakehouse/semantic_shadow_discovery.json"
+        ],
         "metrics": {
           "run_id": "ultimate_overnight_20260621",
           "targets_scanned": 25,
@@ -1244,7 +1267,10 @@
         "headline": "[RED-TEAM WOUNDED 2026-07-14] 3 KEEP candidates; best dAP +0.0171",
         "plain": "The new-source signal gate found several small but positive bacteria feature candidates before stricter operational redundancy checks.",
         "how": "EXCLUDE_SAN_DIEGO source gate against FEATS+rain baseline with LOBO deltas.",
-        "evidence": "reports/bacteria/new_source_signal_gate/verdicts.json",
+        "evidence": [
+          "reports/bacteria/new_source_signal_gate/verdicts.json",
+          "reports/bacteria/new_source_signal_gate/recompute_2026_07_15.json"
+        ],
         "metrics": {
           "n_test": 89321,
           "events": 8999,
@@ -1412,7 +1438,11 @@
         "headline": "loading dAP -0.028; national met dAP -0.007",
         "plain": "Even in the canonical nutrient-driven Erie system, tributary loading does not add station-level microcystin forecast skill once history and season are controlled.",
         "how": "Erie GLERL toxin plus Heidelberg loading, critic probes, and national WQP microcystin driver gate.",
-        "evidence": "reports/hab/erie/ERIE_CYANO_DRIVER_BREAK_FINDINGS.md",
+        "evidence": [
+          "reports/hab/erie/ERIE_CYANO_DRIVER_BREAK_FINDINGS.md",
+          "reports/hab/erie/erie_microcystin_driver_gate.json",
+          "reports/hab/erie/national_microcystin_driver_gate.json"
+        ],
         "metrics": {
           "erie_loading_delta_ap": -0.0278,
           "national_leave_year_delta_ap": -0.007,
@@ -1424,15 +1454,21 @@
         "id": "status_lakehouse_swarm40_source_native_promoted",
         "title": "Forty new full-data sources are visible in silver without normalized bloat",
         "kind": "status",
-        "headline": "1 source-native sources; 286 rows",
+        "headline": "2 source-native sources; 155 rows",
         "plain": "The new source sweep is promoted source-native only: the lakehouse can scan every completed dataset, while the rejected generic long-table expansion is not materialized.",
         "how": "Fetcher-all completion audit, source-native lakehouse promotion manifest, and explicit critic rejection of generic normalization.",
-        "evidence": "reports/data_fetch/LAKEHOUSE_SOURCE_OVERVIEW.md",
+        "evidence": [
+          "reports/data_fetch/LAKEHOUSE_SOURCE_OVERVIEW.md",
+          "reports/data_fetch/swarm_20/swarm_40_full_summary.json",
+          "reports/data_fetch/lakehouse_external_curated_promotion.json",
+          "reports/data_fetch/swarm_20/lakehouse_promotion_critic.json",
+          "reports/data_fetch/recompute_2026_07_15.json"
+        ],
         "metrics": {
           "sources_completed": 40,
-          "promoted_sources": 1,
+          "promoted_sources": 2,
           "active_ready_sources": 0,
-          "promoted_rows": 286,
+          "promoted_rows": 155,
           "total_cells": 2047986795,
           "missing_planned_chunk_sources": 0,
           "boundary_unresolved": 0,
@@ -1441,7 +1477,7 @@
           "critic_verdict": "PROMOTE_SOURCE_NATIVE_ONLY",
           "expected_normalized_rows_rejected": 1158259346
         },
-        "note": "Value gate: DO_NOW because it answers the user's lakehouse-availability question with an additive source-native manifest. Critic: PROMOTE_SOURCE_NATIVE_ONLY; generic normalization rejected as bloat/leakage risk."
+        "note": "RECOMPUTE 2026-07-15: published promoted_sources=1 / promoted_rows=286 do NOT reproduce. Re-counted row-by-row from raw parquet: 2 sources, 155 rows (95+60). The original figures came from a LIVE manifest that has since regenerated, so the frozen card silently went stale.   |  Value gate: DO_NOW because it answers the user's lakehouse-availability question with an additive source-native manifest. Critic: PROMOTE_SOURCE_NATIVE_ONLY; generic normalization rejected as bloat/leakage risk."
       },
       {
         "id": "status_lakehouse_inventory_329_sources",
@@ -1450,7 +1486,10 @@
         "headline": "329 source/groups; 6,392,798,075 entry-counted rows",
         "plain": "The public snapshot now carries the source overview the page was missing: layer, source, row count, schema hint, date range, domain, materialization, and provenance basis.",
         "how": "Read-only inventory build over lakehouse silver manifests and standalone silver groups.",
-        "evidence": "reports/data_fetch/LAKEHOUSE_SOURCE_OVERVIEW.md",
+        "evidence": [
+          "reports/data_fetch/LAKEHOUSE_SOURCE_OVERVIEW.md",
+          "reports/data_fetch/recompute_2026_07_15.json"
+        ],
         "metrics": {
           "source_groups": 329,
           "entry_counted_rows": 6392798075,
@@ -2048,7 +2087,7 @@
         "exists": true,
         "size_mb": 0.103,
         "modified_utc": "2026-07-05T19:59:55Z",
-        "age_days": 5.8,
+        "age_days": 9.9,
         "overall_status": "PASS",
         "generated_at_utc": "2026-07-05T19:59:55.216921+00:00",
         "check_statuses": {
@@ -2068,9 +2107,9 @@
         "exists": true,
         "size_mb": 0.007,
         "modified_utc": "2026-07-05T23:43:42Z",
-        "age_days": 5.7,
+        "age_days": 9.7,
         "overall_status": "WARN",
-        "generated_at_utc": "2026-07-11T16:12:38+00:00",
+        "generated_at_utc": "2026-07-15T16:35:53+00:00",
         "check_statuses": {
           "release_gate_report": "PASS",
           "promotion_summary": "PASS",
@@ -2088,7 +2127,7 @@
         "exists": true,
         "size_mb": 0.021,
         "modified_utc": "2026-07-04T21:21:52Z",
-        "age_days": 6.8,
+        "age_days": 10.8,
         "overall_status": "PASS",
         "generated_at_utc": "UNKNOWN",
         "promoted_row_count": 31,
@@ -2101,7 +2140,7 @@
         "exists": true,
         "size_mb": 0.007,
         "modified_utc": "2026-06-11T03:38:34Z",
-        "age_days": 30.5,
+        "age_days": 34.5,
         "overall_status": "PASS",
         "generated_at_utc": "2026-06-08T20:15:56+00:00",
         "check_statuses": {
@@ -7707,23 +7746,23 @@
         "asset_id": "m1_history",
         "kind": "parquet",
         "exists": true,
-        "size_mb": 20.058,
-        "rows": 3134654,
+        "size_mb": 74.587,
+        "rows": 10854575,
         "time_column": "time",
-        "date_min": "2020-08-31 21:30:00+00:00",
-        "date_max": "2026-06-08 22:00:00+00:00",
-        "status": "stale"
+        "date_min": "2004-10-21 14:30:00+00:00",
+        "date_max": "2026-07-12 18:00:00+00:00",
+        "status": "ready"
       },
       {
         "asset_id": "m2_history",
         "kind": "parquet",
         "exists": true,
-        "size_mb": 8.886,
+        "size_mb": 10.217,
         "rows": 714241,
         "time_column": "time",
         "date_min": "2004-04-30 06:30:00+00:00",
         "date_max": "2011-09-29 14:30:00+00:00",
-        "status": "stale"
+        "status": "ready"
       },
       {
         "asset_id": "noaa_drivers_daily",
@@ -7789,7 +7828,7 @@
         "exists": true,
         "size_mb": 0.237,
         "rows": 7465,
-        "status": "ready"
+        "status": "stale"
       },
       {
         "asset_id": "statewide_training_frame",
@@ -7800,7 +7839,7 @@
         "time_column": "sample_date",
         "date_min": "2000-01-03 00:00:00",
         "date_max": "2026-03-05 00:00:00",
-        "status": "ready"
+        "status": "stale"
       },
       {
         "asset_id": "statewide_observations",
@@ -7811,7 +7850,7 @@
         "time_column": "sample_date",
         "date_min": "2005-01-01 00:00:00",
         "date_max": "2026-03-05 00:00:00",
-        "status": "ready"
+        "status": "stale"
       },
       {
         "asset_id": "statewide_advisories",
@@ -7822,7 +7861,7 @@
         "time_column": "advisory_date",
         "date_min": "2005-01-01 00:00:00",
         "date_max": "2026-03-06 00:00:00",
-        "status": "ready"
+        "status": "stale"
       },
       {
         "asset_id": "rainfall_grid",
@@ -7931,14 +7970,14 @@
       "cockpit API unavailable during build (<urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>); using project_status + report corpus"
     ],
     "overall_status": "YELLOW",
-    "snapshot_generated": "2026-07-11T16:12:38Z",
+    "snapshot_generated": "2026-07-15T16:35:53Z",
     "counts": {
       "models": 29,
       "claimable": 2,
       "lake_datasets": 329,
       "shadow_datasets": 0,
       "data_assets": 351,
-      "lakehouse_sources": 701,
+      "lakehouse_sources": 704,
       "findings": 66,
       "positive_findings": 11,
       "caveated_findings": 35,
@@ -11909,8 +11948,8 @@
     "git": {
       "branch": "experiment/research-harness",
       "risk": "high",
-      "changed_path_count": 686,
-      "untracked_count": 609
+      "changed_path_count": 902826,
+      "untracked_count": 902698
     },
     "lakehouse_summary": {
       "generated_at": "2026-06-26T13:16:06.230797+00:00",
@@ -19458,6 +19497,26 @@
         ]
       },
       {
+        "id": "cdph_biotoxin_monthly_narrative",
+        "name": "CDPH marine-biotoxin monthly report narrative records",
+        "status": "FETCHED_NEEDS_REVIEW",
+        "rows": 5519,
+        "columns": 16,
+        "date_min": "2020-01-01",
+        "date_max": "2026-04-01",
+        "serving_allowed": false,
+        "signals": [
+          "statement_record_id",
+          "report_kind",
+          "report_period",
+          "report_period_start",
+          "asset_kind",
+          "node_path",
+          "text",
+          "value_kind"
+        ]
+      },
+      {
         "id": "emodnet_eut_baltic_profiles_o2",
         "name": "EMODnet Chemistry Baltic Sea eutrophication DEPTH PROFILES (O2)",
         "status": "READY_FOR_MODELING",
@@ -21504,6 +21563,26 @@
         ]
       },
       {
+        "id": "cdph_biotoxin_annual_summary",
+        "name": "CDPH marine-biotoxin annual report summaries",
+        "status": "FETCHED_NEEDS_REVIEW",
+        "rows": 725,
+        "columns": 16,
+        "date_min": "2020-01-01",
+        "date_max": "2024-01-01",
+        "serving_allowed": false,
+        "signals": [
+          "statement_record_id",
+          "report_kind",
+          "report_period",
+          "report_period_start",
+          "asset_kind",
+          "node_path",
+          "text",
+          "value_kind"
+        ]
+      },
+      {
         "id": "swarm20_crcp_invertebrates_esacorals_puerto_rico",
         "name": "CRCP_Invertebrates_ESACorals_Puerto_Rico",
         "status": "READY_FOR_MODELING",
@@ -23106,6 +23185,26 @@
         ]
       },
       {
+        "id": "cdph_biotoxin_closures",
+        "name": "CDPH marine biotoxin advisory events and map references (California)",
+        "status": "FETCHED_NEEDS_REVIEW",
+        "rows": 95,
+        "columns": 18,
+        "date_min": "2019-12-20",
+        "date_max": "2026-07-14",
+        "serving_allowed": false,
+        "signals": [
+          "record_kind",
+          "area_name",
+          "county",
+          "toxin",
+          "action",
+          "status",
+          "event_date",
+          "snapshot_time"
+        ]
+      },
+      {
         "id": "china_nmefc_ecology_bgc_forecast_payloads",
         "name": "China NMEFC ecological nutrient, oxygen, and pH forecast image payloads",
         "status": "FETCHED_NEEDS_REVIEW",
@@ -23161,6 +23260,26 @@
           "product_name",
           "bulletin_date",
           "pdf_url"
+        ]
+      },
+      {
+        "id": "cdph_biotoxin_report_registry",
+        "name": "CDPH marine-biotoxin public report registry (versioned)",
+        "status": "FETCHED_NEEDS_REVIEW",
+        "rows": 89,
+        "columns": 22,
+        "date_min": "2019-02-01",
+        "date_max": "2026-04-01",
+        "serving_allowed": false,
+        "signals": [
+          "report_kind",
+          "report_period",
+          "report_period_start",
+          "asset_kind",
+          "title",
+          "availability_status",
+          "owner",
+          "access"
         ]
       },
       {
@@ -23400,6 +23519,26 @@
         ]
       },
       {
+        "id": "cdph_biotoxin_tissue",
+        "name": "CDPH marine biotoxin shellfish-tissue numeric mentions (review only)",
+        "status": "FETCHED_NEEDS_REVIEW",
+        "rows": 60,
+        "columns": 19,
+        "date_min": "2020-05-01",
+        "date_max": "2026-03-01",
+        "serving_allowed": false,
+        "signals": [
+          "county",
+          "toxin",
+          "over_alert_level",
+          "value_kind",
+          "tuple_validation_status",
+          "modeling_eligible",
+          "statement_record_id",
+          "collection_date"
+        ]
+      },
+      {
         "id": "solid_ca_marine_oil_terminals",
         "name": "solid_ca_marine_oil_terminals (auto-registered backlog, source-native, needs review)",
         "status": "FETCHED_NEEDS_REVIEW",
@@ -23457,26 +23596,6 @@
           "week_start",
           "week_end",
           "snapshot_epoch"
-        ]
-      },
-      {
-        "id": "cdph_biotoxin_closures",
-        "name": "CDPH marine biotoxin quarantine/advisory CLOSURE EVENTS (California)",
-        "status": "FETCHED_NEEDS_REVIEW",
-        "rows": 53,
-        "columns": 14,
-        "date_min": "2020-05-01",
-        "date_max": "2026-07-08",
-        "serving_allowed": false,
-        "signals": [
-          "record_kind",
-          "area_name",
-          "county",
-          "toxin",
-          "action",
-          "status",
-          "event_date",
-          "snapshot_time"
         ]
       },
       {
@@ -23666,24 +23785,6 @@
           "layer",
           "vessel_density_mean",
           "vessel_density_sum"
-        ]
-      },
-      {
-        "id": "cdph_biotoxin_tissue",
-        "name": "CDPH marine biotoxin shellfish-TISSUE toxin panel (PSP/DA, California)",
-        "status": "FETCHED_NEEDS_REVIEW",
-        "rows": 37,
-        "columns": 10,
-        "date_min": "2020-03-01",
-        "date_max": "2020-11-01",
-        "serving_allowed": false,
-        "signals": [
-          "county",
-          "toxin",
-          "over_alert_level",
-          "report_month",
-          "context",
-          "source_ref"
         ]
       },
       {

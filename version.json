@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260715T163651Z-30915-13973",
-  "built_utc": "2026-07-15T16:36:51Z",
-  "message": "Recompute 23 unbound Card numbers from raw: 20 reproduce and are promoted (unbound 56->38, sealed 46->52). One FAILED: colocation MAE 0.29 was an aggregation mix-up, corrected to 0.2768. Argo pooled AUCs re-derived from profiles.parquet, no longer log-only"
+  "deploy_id": "20260715T170811Z-32223-10658",
+  "built_utc": "2026-07-15T17:08:11Z",
+  "message": "Recompute every unbound Card number from raw: 56 -> 0 unbound, 66/66 cards clean and sealed. 4 did NOT reproduce and were corrected not promoted (promoted_sources 1->2, promoted_rows 286->155, colocation MAE 0.29->0.2768, regime discarded_pre2020_upward_steps 7 -> NOT REPRODUCIBLE). Checker docstring corrected: it is a value search, not a key lookup"
 }

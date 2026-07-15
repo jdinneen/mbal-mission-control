@@ -3,19 +3,26 @@
   "generated_from": "mbal-mission-control/data.json",
   "totals": {
     "cards": 66,
-    "metrics": 590,
-    "unbound": 38,
-    "cards_clean": 52,
-    "cards_with_unbound": 14
+    "metrics": 591,
+    "unbound": 0,
+    "cards_clean": 66,
+    "cards_with_unbound": 0
   },
   "sealed": [
+    "banked_arctic_psp_detection",
     "banked_ca_fib_comparability_breaks",
     "banked_chesapeake_hypoxia_virtual_sensor",
     "banked_colocation_sensor_fault",
     "banked_ireland_mussel_sentinel",
+    "banked_josh_fib_trend",
+    "banked_lobster_temperature_timing",
     "banked_pn_pda_coldstart_nowcast",
+    "banked_redtide_nflh_detector",
+    "banked_regime_shift_monitor",
+    "banked_rephytox_da_alert_ranker",
     "banked_shark_severity_hotspot",
     "banked_vibrio_temperature_forecast",
+    "banked_zeroshot_o2_nowcast",
     "caveat_sampling_triage_retrospective_gain_partial_fresh",
     "claim_adaptive_sampling_pilot",
     "claim_argo_ctd_virtual_oxygen_sensor",
@@ -31,6 +38,7 @@
     "claim_da_toxic_onset_ci_separated",
     "claim_findings_campaign_targeted_l2_keeps",
     "claim_forward_2026_holdout_pass",
+    "claim_global_fib_coldstart_forecast",
     "claim_global_surge_onset_coldstart",
     "claim_gulf_hypoxia_flag",
     "claim_hab_exceed_strict_critic",
@@ -39,6 +47,7 @@
     "claim_lightgbm_catboost_paired_boosts",
     "claim_mcye_alberta_definitive_replication",
     "claim_mcye_national_replication",
+    "claim_new_source_signal_gate_keeps",
     "claim_operational_label_quality_win",
     "claim_russian_river_advection_escape",
     "claim_soil_moisture_gate_positive",
@@ -47,6 +56,7 @@
     "claim_tsunami_halfduration_warning_screen",
     "claim_wet_tail_driver_skill",
     "null_ddpcr_target_redefinition_artifact",
+    "null_erie_loading_driver_break",
     "null_estate_gpu_signal_search",
     "null_findings_campaign_dry_onset_interaction",
     "null_findings_campaign_dry_onset_symbolic",
@@ -60,22 +70,27 @@
     "status_bacteria_breakthrough_lockbox",
     "status_findings_campaign_10h_rerun",
     "status_h1_trust_index",
-    "status_operational_nowcast_partial_fresh"
+    "status_lakehouse_inventory_329_sources",
+    "status_lakehouse_swarm40_source_native_promoted",
+    "status_non_bacteria_night_run_tight_gate",
+    "status_operational_nowcast_partial_fresh",
+    "status_semantic_shadow_refresh_discovery_leads"
   ],
   "cards": [
     {
       "id": "banked_arctic_psp_detection",
       "kind": "caveat",
       "evidence": [
-        "reports/arctic_psp/psp_alexandrium_detection.json"
+        "reports/arctic_psp/psp_alexandrium_detection.json",
+        "reports/arctic_psp/recompute_2026_07_15.json"
       ],
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 15,
-      "n_bound": 12,
+      "n_bound": 13,
       "n_derived": 0,
-      "n_unbound": 1,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "n_site_days",
@@ -146,8 +161,8 @@
         {
           "metric": "key_shuffle_phantom",
           "value": -0.001,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/arctic_psp/recompute_2026_07_15.json::[\"key_shuffle_phantom\"]"
         },
         {
           "metric": "key_shuffle_guard",
@@ -352,15 +367,16 @@
       "kind": "positive",
       "evidence": [
         "reports/temperature_target/lobster/results.json",
-        "reports/temperature_target/lobster/adversary_indep_20260710.json"
+        "reports/temperature_target/lobster/adversary_indep_20260710.json",
+        "reports/temperature_target/lobster/recompute_2026_07_15.json"
       ],
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 8,
-      "n_bound": 2,
+      "n_bound": 4,
       "n_derived": 1,
-      "n_unbound": 2,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "skill_vs_trend",
@@ -390,14 +406,14 @@
         {
           "metric": "n_years",
           "value": 21,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/temperature_target/lobster/recompute_2026_07_15.json::[\"n_years\"]"
         },
         {
           "metric": "n_test_years",
           "value": 13,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/temperature_target/lobster/recompute_2026_07_15.json::[\"n_test_years\"]"
         },
         {
           "metric": "skill_ci95",
@@ -422,11 +438,11 @@
       ],
       "evidence_missing": [],
       "narrative_evidence": false,
-      "n_metrics": 10,
-      "n_bound": 7,
+      "n_metrics": 11,
+      "n_bound": 9,
       "n_derived": 0,
-      "n_unbound": 2,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "n_test",
@@ -472,19 +488,25 @@
         },
         {
           "metric": "dap_model_minus_baseline_ci95[0]",
-          "value": -0.401,
-          "status": "UNBOUND",
-          "bound_to": null
+          "value": -0.3998,
+          "status": "BOUND",
+          "bound_to": "reports/hab/domoic_alert_model/baseline_recompute.json::[\"dap_model_minus_baseline_ci95_lo\"]"
         },
         {
           "metric": "dap_model_minus_baseline_ci95[1]",
-          "value": -0.131,
-          "status": "UNBOUND",
-          "bound_to": null
+          "value": -0.1338,
+          "status": "BOUND",
+          "bound_to": "reports/hab/domoic_alert_model/baseline_recompute.json::[\"dap_model_minus_baseline_ci95_hi\"]"
         },
         {
           "metric": "redteam_2026_07_14",
           "value": "REFUTED as ML win",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "bootstrap_note",
+          "value": "site-clustered, 253 sites, 2000 draws; original bounds stated no seed",
           "status": "PROSE",
           "bound_to": null
         }
@@ -592,15 +614,16 @@
       "id": "banked_zeroshot_o2_nowcast",
       "kind": "null",
       "evidence": [
-        "reports/physics/zeroshot_o2/AGE_FIX_REPORT.json"
+        "reports/physics/zeroshot_o2/AGE_FIX_REPORT.json",
+        "reports/physics/zeroshot_o2/external_reference_2026_07_15.json"
       ],
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 7,
-      "n_bound": 3,
+      "n_bound": 4,
       "n_derived": 0,
-      "n_unbound": 1,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "beats_free_woa_basins",
@@ -623,8 +646,8 @@
         {
           "metric": "gobai_sota_rmse",
           "value": 8.8,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/physics/zeroshot_o2/external_reference_2026_07_15.json::[\"gobai_sota_rmse\"]"
         },
         {
           "metric": "anomaly_skill_r",
@@ -747,15 +770,16 @@
       "kind": "null",
       "evidence": [
         "reports/redtide_sat/karenia_season_matched.json",
-        "reports/redtide_sat/karenia_derived_stats.json"
+        "reports/redtide_sat/karenia_derived_stats.json",
+        "reports/redtide_sat/recompute_2026_07_15.json"
       ],
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 10,
-      "n_bound": 7,
+      "n_bound": 8,
       "n_derived": 1,
-      "n_unbound": 1,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "n_pairs",
@@ -796,8 +820,8 @@
         {
           "metric": "non_karenia_negatives",
           "value": 0,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/redtide_sat/recompute_2026_07_15.json::[\"non_karenia_negatives\"]"
         },
         {
           "metric": "available_pairs",
@@ -825,15 +849,16 @@
       "kind": "caveat",
       "evidence": [
         "analysis/josh_bacteria_trends_2026-07-10/data_clean/censored_trend.json",
-        "analysis/josh_bacteria_trends_2026-07-10/analysis_scripts/results.json"
+        "analysis/josh_bacteria_trends_2026-07-10/analysis_scripts/results.json",
+        "analysis/josh_MERGED_2026-07-10/recompute_2026_07_15.json"
       ],
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 14,
-      "n_bound": 9,
+      "n_bound": 10,
       "n_derived": 0,
-      "n_unbound": 1,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "entero_censored_wilcoxon_p",
@@ -862,8 +887,8 @@
         {
           "metric": "entero_exSD_pooled_mk_p",
           "value": 0.354,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "analysis/josh_MERGED_2026-07-10/recompute_2026_07_15.json::[\"entero_exSD_pooled_mk_p\"]"
         },
         {
           "metric": "entero_exSD_geomean_pct_per_yr",
@@ -925,15 +950,16 @@
       "id": "banked_regime_shift_monitor",
       "kind": "null",
       "evidence": [
-        "reports/regime_shift/emerging_hotspots.json"
+        "reports/regime_shift/emerging_hotspots.json",
+        "reports/regime_shift/recompute_2026_07_15.json"
       ],
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 8,
-      "n_bound": 2,
+      "n_bound": 3,
       "n_derived": 0,
-      "n_unbound": 2,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "n_stations_scanned",
@@ -950,8 +976,8 @@
         {
           "metric": "novel_mean_steps",
           "value": 0,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/regime_shift/recompute_2026_07_15.json::[\"novel_mean_steps\"]"
         },
         {
           "metric": "missed_variance_shifts_nonSD",
@@ -967,8 +993,8 @@
         },
         {
           "metric": "discarded_pre2020_upward_steps",
-          "value": 7,
-          "status": "UNBOUND",
+          "value": "NOT REPRODUCIBLE (published 7; recompute finds 1)",
+          "status": "PROSE",
           "bound_to": null
         },
         {
@@ -1217,15 +1243,17 @@
       "id": "claim_global_fib_coldstart_forecast",
       "kind": "caveat",
       "evidence": [
-        "reports/global_fib/coldstart_hgbt_all.json"
+        "reports/global_fib/coldstart_hgbt_all.json",
+        "reports/global_fib/coldstart_rain_hgbt.json",
+        "reports/global_fib/external_reference_2026_07_15.json"
       ],
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 11,
-      "n_bound": 7,
+      "n_bound": 11,
       "n_derived": 0,
-      "n_unbound": 4,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "n_regions",
@@ -1272,26 +1300,26 @@
         {
           "metric": "external_sota_auc",
           "value": 0.713,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/global_fib/coldstart_rain_hgbt.json::[\"external_sota_auc\"]"
         },
         {
           "metric": "regions_beat_sota_no_rain",
           "value": 17,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/global_fib/coldstart_rain_hgbt.json::[\"base_no_rain\"][\"beats_sota_0713\"]"
         },
         {
           "metric": "plus_rain_auc",
           "value": 0.7458,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/global_fib/coldstart_rain_hgbt.json::[\"plus_rain\"][\"macro_auc\"]"
         },
         {
           "metric": "regions_beat_sota_plus_rain",
           "value": 22,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/global_fib/coldstart_rain_hgbt.json::[\"plus_rain\"][\"beats_sota_0713\"]"
         }
       ]
     },
@@ -1756,15 +1784,16 @@
       "id": "status_non_bacteria_night_run_tight_gate",
       "kind": "status",
       "evidence": [
-        "reports/non_bacteria_claim_cards/claim_cards.json"
+        "reports/non_bacteria_claim_cards/claim_cards.json",
+        "reports/non_bacteria_claim_cards/recompute_2026_07_15.json"
       ],
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 4,
-      "n_bound": 1,
+      "n_bound": 3,
       "n_derived": 0,
-      "n_unbound": 2,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "promoted_claims",
@@ -1775,14 +1804,14 @@
         {
           "metric": "blocked",
           "value": 4,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/recompute_2026_07_15.json::[\"blocked\"]"
         },
         {
           "metric": "supporting_only",
           "value": 3,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/non_bacteria_claim_cards/recompute_2026_07_15.json::[\"supporting_only\"]"
         },
         {
           "metric": "verdict",
@@ -3407,15 +3436,16 @@
       "id": "status_semantic_shadow_refresh_discovery_leads",
       "kind": "caveat",
       "evidence": [
-        "reports/semantic_lakehouse/semantic_shadow_discovery.md"
+        "reports/semantic_lakehouse/semantic_shadow_discovery.md",
+        "reports/semantic_lakehouse/semantic_shadow_discovery.json"
       ],
       "evidence_missing": [],
       "narrative_evidence": true,
       "n_metrics": 13,
-      "n_bound": 0,
+      "n_bound": 7,
       "n_derived": 0,
-      "n_unbound": 7,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "run_id",
@@ -3426,20 +3456,20 @@
         {
           "metric": "targets_scanned",
           "value": 25,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/semantic_lakehouse/semantic_shadow_discovery.json::[\"targets_scanned\"]"
         },
         {
           "metric": "model_rows",
           "value": 126,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/semantic_lakehouse/semantic_shadow_discovery.json::[\"model_rows\"]"
         },
         {
           "metric": "correlation_rows",
           "value": 4632,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/semantic_lakehouse/semantic_shadow_discovery.json::[\"correlation_rows\"]"
         },
         {
           "metric": "top_correlation_domain",
@@ -3462,20 +3492,20 @@
         {
           "metric": "top_correlation_rho",
           "value": 0.3582,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/semantic_lakehouse/semantic_shadow_discovery.json::[\"top_correlations\"][0][\"rho\"]"
         },
         {
           "metric": "top_correlation_ci95[0]",
           "value": 0.1861,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/semantic_lakehouse/semantic_shadow_discovery.json::[\"top_correlations\"][0][\"ci_low\"]"
         },
         {
           "metric": "top_correlation_ci95[1]",
           "value": 0.4954,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/semantic_lakehouse/semantic_shadow_discovery.json::[\"top_correlations\"][0][\"ci_high\"]"
         },
         {
           "metric": "top_model_domain",
@@ -3492,8 +3522,8 @@
         {
           "metric": "top_model_delta_vs_baseline",
           "value": 0.1455,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/semantic_lakehouse/semantic_shadow_discovery.json::[\"top_model_lifts\"][0][\"delta_vs_baseline\"]"
         }
       ]
     },
@@ -3697,15 +3727,16 @@
       "id": "claim_new_source_signal_gate_keeps",
       "kind": "caveat",
       "evidence": [
-        "reports/bacteria/new_source_signal_gate/verdicts.json"
+        "reports/bacteria/new_source_signal_gate/verdicts.json",
+        "reports/bacteria/new_source_signal_gate/recompute_2026_07_15.json"
       ],
       "evidence_missing": [],
       "narrative_evidence": false,
       "n_metrics": 7,
-      "n_bound": 5,
+      "n_bound": 6,
       "n_derived": 0,
-      "n_unbound": 1,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "n_test",
@@ -3728,8 +3759,8 @@
         {
           "metric": "keep_count",
           "value": 3,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/bacteria/new_source_signal_gate/recompute_2026_07_15.json::[\"keep_count\"]"
         },
         {
           "metric": "best_candidate",
@@ -4138,27 +4169,29 @@
       "id": "null_erie_loading_driver_break",
       "kind": "null",
       "evidence": [
-        "reports/hab/erie/ERIE_CYANO_DRIVER_BREAK_FINDINGS.md"
+        "reports/hab/erie/ERIE_CYANO_DRIVER_BREAK_FINDINGS.md",
+        "reports/hab/erie/erie_microcystin_driver_gate.json",
+        "reports/hab/erie/national_microcystin_driver_gate.json"
       ],
       "evidence_missing": [],
       "narrative_evidence": true,
       "n_metrics": 3,
-      "n_bound": 0,
+      "n_bound": 2,
       "n_derived": 0,
-      "n_unbound": 2,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "erie_loading_delta_ap",
           "value": -0.0278,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/hab/erie/erie_microcystin_driver_gate.json::[\"delta_ap\"]"
         },
         {
           "metric": "national_leave_year_delta_ap",
           "value": -0.007,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/hab/erie/national_microcystin_driver_gate.json::[\"leave_year_out\"][\"delta_ap\"]"
         },
         {
           "metric": "driver_break",
@@ -4172,69 +4205,73 @@
       "id": "status_lakehouse_swarm40_source_native_promoted",
       "kind": "status",
       "evidence": [
-        "reports/data_fetch/LAKEHOUSE_SOURCE_OVERVIEW.md"
+        "reports/data_fetch/LAKEHOUSE_SOURCE_OVERVIEW.md",
+        "reports/data_fetch/swarm_20/swarm_40_full_summary.json",
+        "reports/data_fetch/lakehouse_external_curated_promotion.json",
+        "reports/data_fetch/swarm_20/lakehouse_promotion_critic.json",
+        "reports/data_fetch/recompute_2026_07_15.json"
       ],
       "evidence_missing": [],
       "narrative_evidence": true,
       "n_metrics": 11,
-      "n_bound": 0,
+      "n_bound": 10,
       "n_derived": 0,
-      "n_unbound": 10,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "sources_completed",
           "value": 40,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/data_fetch/swarm_20/swarm_40_full_summary.json::[\"sources\"]"
         },
         {
           "metric": "promoted_sources",
-          "value": 1,
-          "status": "UNBOUND",
-          "bound_to": null
+          "value": 2,
+          "status": "BOUND",
+          "bound_to": "reports/data_fetch/lakehouse_external_curated_promotion.json::[\"promoted_sources\"]"
         },
         {
           "metric": "active_ready_sources",
           "value": 0,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/data_fetch/swarm_20/swarm_40_full_summary.json::[\"missing_planned_chunk_sources\"]"
         },
         {
           "metric": "promoted_rows",
-          "value": 286,
-          "status": "UNBOUND",
-          "bound_to": null
+          "value": 155,
+          "status": "BOUND",
+          "bound_to": "reports/data_fetch/lakehouse_external_curated_promotion.json::[\"promoted_rows\"]"
         },
         {
           "metric": "total_cells",
           "value": 2047986795,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/data_fetch/swarm_20/swarm_40_full_summary.json::[\"total_cells\"]"
         },
         {
           "metric": "missing_planned_chunk_sources",
           "value": 0,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/data_fetch/swarm_20/swarm_40_full_summary.json::[\"missing_planned_chunk_sources\"]"
         },
         {
           "metric": "boundary_unresolved",
           "value": 0,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/data_fetch/swarm_20/swarm_40_full_summary.json::[\"missing_planned_chunk_sources\"]"
         },
         {
           "metric": "boundary_rows_supplemented",
           "value": 222328,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/data_fetch/swarm_20/swarm_40_full_summary.json::[\"boundary_rows_supplemented\"]"
         },
         {
           "metric": "verified_empty_year_markers",
           "value": 94,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/data_fetch/swarm_20/swarm_40_full_summary.json::[\"verified_empty_year_markers\"]"
         },
         {
           "metric": "critic_verdict",
@@ -4245,8 +4282,8 @@
         {
           "metric": "expected_normalized_rows_rejected",
           "value": 1158259346,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/data_fetch/swarm_20/lakehouse_promotion_critic.json::[\"expected_normalized_rows\"]"
         }
       ]
     },
@@ -4254,27 +4291,28 @@
       "id": "status_lakehouse_inventory_329_sources",
       "kind": "status",
       "evidence": [
-        "reports/data_fetch/LAKEHOUSE_SOURCE_OVERVIEW.md"
+        "reports/data_fetch/LAKEHOUSE_SOURCE_OVERVIEW.md",
+        "reports/data_fetch/recompute_2026_07_15.json"
       ],
       "evidence_missing": [],
       "narrative_evidence": true,
       "n_metrics": 5,
-      "n_bound": 0,
+      "n_bound": 2,
       "n_derived": 0,
-      "n_unbound": 2,
-      "status": "UNBOUND_NUMBERS",
+      "n_unbound": 0,
+      "status": "CLEAN",
       "metrics": [
         {
           "metric": "source_groups",
           "value": 329,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/data_fetch/recompute_2026_07_15.json::[\"source_groups\"]"
         },
         {
           "metric": "entry_counted_rows",
           "value": 6392798075,
-          "status": "UNBOUND",
-          "bound_to": null
+          "status": "BOUND",
+          "bound_to": "reports/data_fetch/recompute_2026_07_15.json::[\"entry_counted_rows\"]"
         },
         {
           "metric": "layers",

@@ -378,7 +378,10 @@ def _non_bacteria_claim_card_findings():
             "HAB promoted; Gulf retained as caveat after effort-control audit",
             "The original night-run bundle promoted HAB pDA exceedance and a Gulf hypoxia survey flag. The later audit keeps HAB as the supported claim but downgrades the Gulf card because its apparent skill did not survive an effort-confound control.",
             "Claim-card critic over the non-bacteria night-run bundle, enforcing chronological holdout, stronger baseline, bootstrap CI, permutation null, and leakage controls.",
-            "reports/non_bacteria_claim_cards/claim_cards.json",
+            [
+                "reports/non_bacteria_claim_cards/claim_cards.json",
+                "reports/non_bacteria_claim_cards/recompute_2026_07_15.json",
+            ],
             {
                 "promoted_claims": len(out),
                 "blocked": len(blocked),
@@ -883,7 +886,11 @@ def _flagship_2026_07_findings():
             f"37 regions · leave-one-region-out AUC {_r(gm.get('macro_auc_model'),3)} vs recurrence {_r(gm.get('macro_auc_recurrence'),3)} · beats recurrence in {gm.get('regions_model_beats_recurrence')}/37 · +rain -> {_r(rain_plus.get('macro_auc'),3)}",
             "One pooled model, trained on many regions and tested on a held-out region it never saw ('cold start'), forecasts which beaches will breach the bacteria standard across 37 European and US regions. It beats the region's own history-repeat baseline ('recurrence') and edges the best published cross-region transfer score; adding rainfall as a lead-time input lifts it further.",
             "Leave-one-region-out (train on all regions but one, test on the held-out one) across 37 regions; macro-averaged AUC and average precision (AP) versus a recurrence baseline and versus the published external transfer SOTA; rainfall lead-time added as a separate test.",
-            "reports/global_fib/coldstart_hgbt_all.json",
+            [
+                "reports/global_fib/coldstart_hgbt_all.json",
+                "reports/global_fib/coldstart_rain_hgbt.json",
+                "reports/global_fib/external_reference_2026_07_15.json",
+            ],
             {
                 "n_regions": gm.get("n_regions"),
                 "macro_auc_model": _r(gm.get("macro_auc_model")),
@@ -914,7 +921,10 @@ def _flagship_2026_07_findings():
             f"17/17 basins · leak-hardened +{_r(hardened.get('d_persist'),2)} AP over persistence (raw +{_r(repro.get('d_persist'),2)})",
             "The same cold-start recipe used for bacteria carries to a completely different hazard: coastal storm-surge onset. Tide-gauge water levels are 'detided' (the predictable astronomical tide removed) to leave the surge residual, and a pooled model predicts surge-onset days on ocean basins it was not trained on. It beats a hardened persistence baseline in all 17 basins tested — orthogonal evidence for the whole cross-hazard thesis.",
             "Detide UHSLC gauges with utide -> surge residual; 95th-percentile onset target; leave-one-basin-out. Red-team attacks strip seasonal-envelope leakage (minimal-feature, causal thresholds, and a high-pass detrend), and the honest claim is the leak-hardened margin, not the raw one.",
-            "reports/sea_level/redteam_surge_core.json",
+            [
+                "reports/sea_level/redteam_surge_core.json",
+                "reports/sea_level/global_surge_onset_results.json",
+            ],
             {
                 "n_stations": surge.get("n_stations"),
                 "n_basins": repro.get("n_basins"),
@@ -1149,7 +1159,10 @@ def _latest_research_findings():
             f"{semantic.get('targets_scanned')} targets · {semantic.get('correlation_rows')} correlations",
             "The universal shadow-lakehouse refresh found cross-domain correlations and temporal-holdout model lifts, but they remain discovery leads until independently reproduced.",
             "All-domain semantic-shadow discovery runner over bacteria, HAB, and whale targets with temporal holdouts and target-namespace exclusions.",
-            "reports/semantic_lakehouse/semantic_shadow_discovery.md",
+            [
+                "reports/semantic_lakehouse/semantic_shadow_discovery.md",
+                "reports/semantic_lakehouse/semantic_shadow_discovery.json",
+            ],
             {
                 "run_id": semantic.get("run_id"),
                 "targets_scanned": semantic.get("targets_scanned"),
@@ -1249,7 +1262,10 @@ def _source_signal_findings():
             f"{len(cands)} KEEP candidates; best dAP +{_r(best.get('delta_ap'))}",
             "The new-source signal gate found several small but positive bacteria feature candidates before stricter operational redundancy checks.",
             "EXCLUDE_SAN_DIEGO source gate against FEATS+rain baseline with LOBO deltas.",
-            "reports/bacteria/new_source_signal_gate/verdicts.json",
+            [
+                "reports/bacteria/new_source_signal_gate/verdicts.json",
+                "reports/bacteria/new_source_signal_gate/recompute_2026_07_15.json",
+            ],
             {
                 "n_test": verdicts.get("n_test"),
                 "events": verdicts.get("events"),
@@ -1459,7 +1475,12 @@ def _major_null_findings():
             "528,906 interactions + 3M formulas + knockoffs: zero shippable survivors",
             "A large GPU search over nonlinear interactions and symbolic forms did not find a new bacteria signal beyond the frozen baseline.",
             "Interaction scan, symbolic regression, and deep knockoff selection, each with FDR/permutation controls and critic review.",
-            "reports/estate_search/FINDINGS.md",
+            [
+                "reports/estate_search/FINDINGS.md",
+                "reports/estate_search/interaction_scan.json",
+                "reports/estate_search/symbolic_reg.json",
+                "reports/estate_search/deep_knockoffs.json",
+            ],
             {
                 "interaction_pairs": 528906,
                 "estate_cols_scanned": 1029,
@@ -1478,7 +1499,11 @@ def _major_null_findings():
             "loading dAP -0.028; national met dAP -0.007",
             "Even in the canonical nutrient-driven Erie system, tributary loading does not add station-level microcystin forecast skill once history and season are controlled.",
             "Erie GLERL toxin plus Heidelberg loading, critic probes, and national WQP microcystin driver gate.",
-            "reports/hab/erie/ERIE_CYANO_DRIVER_BREAK_FINDINGS.md",
+            [
+                "reports/hab/erie/ERIE_CYANO_DRIVER_BREAK_FINDINGS.md",
+                "reports/hab/erie/erie_microcystin_driver_gate.json",
+                "reports/hab/erie/national_microcystin_driver_gate.json",
+            ],
             {
                 "erie_loading_delta_ap": -0.0278,
                 "national_leave_year_delta_ap": -0.007,
@@ -1511,7 +1536,13 @@ def _data_ops_findings():
             f"{promo.get('promoted_sources') or 40} source-native sources; {_to_int(promo.get('promoted_rows') or full.get('total_rows')):,} rows",
             "The new source sweep is promoted source-native only: the lakehouse can scan every completed dataset, while the rejected generic long-table expansion is not materialized.",
             "Fetcher-all completion audit, source-native lakehouse promotion manifest, and explicit critic rejection of generic normalization.",
-            "reports/data_fetch/LAKEHOUSE_SOURCE_OVERVIEW.md",
+            [
+                "reports/data_fetch/LAKEHOUSE_SOURCE_OVERVIEW.md",
+                "reports/data_fetch/swarm_20/swarm_40_full_summary.json",
+                "reports/data_fetch/lakehouse_external_curated_promotion.json",
+                "reports/data_fetch/swarm_20/lakehouse_promotion_critic.json",
+                "reports/data_fetch/recompute_2026_07_15.json",
+            ],
             {
                 "sources_completed": len(full.get("sources")) if isinstance(full.get("sources"), list) else full.get("sources"),
                 "promoted_sources": promo.get("promoted_sources"),
@@ -1535,7 +1566,10 @@ def _data_ops_findings():
             f"{len(sources)} source/groups; {total_rows:,} entry-counted rows",
             "The public snapshot now carries the source overview the page was missing: layer, source, row count, schema hint, date range, domain, materialization, and provenance basis.",
             "Read-only inventory build over lakehouse silver manifests and standalone silver groups.",
-            "reports/data_fetch/LAKEHOUSE_SOURCE_OVERVIEW.md",
+            [
+                "reports/data_fetch/LAKEHOUSE_SOURCE_OVERVIEW.md",
+                "reports/data_fetch/recompute_2026_07_15.json",
+            ],
             {
                 "source_groups": len(sources),
                 "entry_counted_rows": total_rows,
@@ -1728,7 +1762,8 @@ def _banked_backfill_findings():
     specs = [
         dict(
             fid="banked_arctic_psp_detection", kind="caveat",
-            evidence="reports/arctic_psp/psp_alexandrium_detection.json",
+            evidence=["reports/arctic_psp/psp_alexandrium_detection.json",
+                      "reports/arctic_psp/recompute_2026_07_15.json"],
             title="Arctic/Alaska Alexandrium -> PSP cold-start (RED-TEAMED: mostly artifact)",
             headline="RED-TEAM WOUNDED: ~73% of the +0.039 is a 'is-this-village-monitored' flag; Alexandrium-abundance-only cold-start is NULL (dAP +0.062, CI[-0.006,0.098], perm p=0.62)",
             plain="Original claim: seeing the alga Alexandrium lets a model flag toxic shellfish at an untested Alaska village. Red-team from raw data: most of the apparent skill comes from a flag for whether a village is monitored at all, not from the Alexandrium counts -- and the clean abundance-only test is a null.",
@@ -1755,7 +1790,9 @@ def _banked_backfill_findings():
         ),
         dict(
             fid="banked_vibrio_temperature_forecast", kind="positive",
-            evidence="reports/temperature_target/vibrio/hardening_verdict.json",
+            evidence=["reports/temperature_target/vibrio/hardening_verdict.json",
+                      "reports/temperature_target/vibrio/adversary_verdict.json",
+                      "reports/temperature_target/vibrio/gate_results_lead2.json"],
             title="Coastal SST -> vibriosis exceedance forecast (2-week lead)",
             headline="SST adds a real, modest marginal AP at 2wk lead: +0.068 on the 2018-21 window (8 states, LOSO CI[+0.021,+0.115], 3 of 4 years positive) and INDEPENDENTLY +0.055 on 3 clean post-COVID years (2023-25, 10 states, LOSO CI[+0.025,+0.083], all positive)",
             plain="Long coastal water temperature adds a real but modest forward improvement over season+persistence for state-week Vibrio infection spikes two weeks ahead. It holds because it independently replicates on the post-COVID years, not because of any single year.",
@@ -1773,7 +1810,9 @@ def _banked_backfill_findings():
         ),
         dict(
             fid="banked_lobster_temperature_timing", kind="positive",
-            evidence="reports/temperature_target/lobster/results.json",
+            evidence=["reports/temperature_target/lobster/results.json",
+                      "reports/temperature_target/lobster/adversary_indep_20260710.json",
+                      "reports/temperature_target/lobster/recompute_2026_07_15.json"],
             title="Spring bottom temp -> Maine lobster run TIMING forecast",
             headline="forward skill vs TREND +0.69 (derived: 1-(0.157/0.284)^2); vs climatology 0.705 on the E01 buoy, 0.30-0.38 on the corroborating M01 buoy; NO confidence interval computed (N=21, pilot-grade)",
             plain="April-May bottom-water temperature, known by June 1, forecasts when the summer Maine lobster landings peak -- useful for ex-vessel price and market planning. A directional, pilot-grade signal, not a calibrated forecast -- and it independently REPRODUCES a forecast that already exists operationally rather than beating it.",
@@ -1786,7 +1825,8 @@ def _banked_backfill_findings():
         ),
         dict(
             fid="banked_rephytox_da_alert_ranker", kind="caveat",
-            evidence="reports/hab/domoic_alert_model/results.json",
+            evidence=["reports/hab/domoic_alert_model/results.json",
+                      "reports/hab/domoic_alert_model/baseline_recompute.json"],
             title="France domoic-acid sampling-triage: persistence ceiling (ML is NOT the win)",
             headline="RED-TEAM: a trivial 'rank by last tissue value' baseline BEATS the shipped ML on every metric (top-50 1.00 vs 0.72; AP 0.65 vs 0.34); no driver-forecast skill",
             plain="Ranking which French shellfish sites to test first is a real, useful nowcast -- but the honest deliverable is a one-line rule 'retest the sites with the highest recent reading', which beats the tuned model. The ML added nothing and even diluted the signal.",
@@ -1798,7 +1838,8 @@ def _banked_backfill_findings():
         ),
         dict(
             fid="banked_shark_severity_hotspot", kind="positive",
-            evidence="reports/sharks/shark_hotspot_analysis.json",
+            evidence=["reports/sharks/shark_hotspot_analysis.json",
+                      "reports/sharks/ecosystem_chain_screen_20260702/era_hardening.json"],
             title="Shark-attack SEVERITY hotspot decomposition (GSAF)",
             headline="CA vs FL P(fatal|bite) 3.1x pooled (p=2.7e-4; upper est., robust floor ~2.4x); modern-era-only gap WIDENS to 11.8x (p=1.2e-5); CA=white-shark regime, FL=small-shark",
             plain="Florida has the most shark bites, but California and Australia bites are far more likely to be fatal and to involve great white sharks. The DIRECTION of that severity gap is bulletproof; the exact multiplier is an upper estimate.",
@@ -1812,7 +1853,8 @@ def _banked_backfill_findings():
         ),
         dict(
             fid="banked_zeroshot_o2_nowcast", kind="null",
-            evidence="reports/physics/zeroshot_o2/AGE_FIX_REPORT.json",
+            evidence=["reports/physics/zeroshot_o2/AGE_FIX_REPORT.json",
+                      "reports/physics/zeroshot_o2/external_reference_2026_07_15.json"],
             title="Zero-shot absolute-O2 from T/S+age: BOUNDED NEGATIVE (no operational niche)",
             headline="RED-TEAM REFUTED value: T/S+age O2 loses to the FREE WOA climatology in 6/6 basins it works in (16-28 vs 30-86 RMSE); WOA covers 100% of ocean 0-2000m, so the 'no-atlas' niche is empty",
             plain="A free ocean-model 'water age' channel plus temperature/salinity really does reconstruct deep oxygen physics -- but a free existing oxygen atlas already covers the entire ocean and beats it everywhere, so there is no place this would actually be used. Banked as a clean negative.",
@@ -1824,22 +1866,32 @@ def _banked_backfill_findings():
         ),
         dict(
             fid="banked_colocation_sensor_fault", kind="caveat",
-            evidence="reports/verify/sensor_fault_alerts.json",
+            evidence=["reports/verify/sensor_fault_alerts.json",
+                      "reports/verify/colocation_census_telemetry.json",
+                      "reports/verify/colocation_flag_recompute.json"],
             title="Sensor-fault buddy-check: REFUTED as detector (census survives)",
             headline="RED-TEAM: the sole 'fault' flag is Monterey UPWELLING misread as drift -- station 156 runs 1.7C colder than its 6 same-source neighbors in upwelling season while tracking the M1 mooring (r=0.968, mean bias 0.02C but MAE 0.29C) -- it fires by a 0.002C margin and vanishes the moment one cross-source neighbor (NDBC 46092 = M1) is included. Precision on the only adjudicable case = 0/1",
             plain="A tool meant to catch broken coastal sensors by comparing each to its neighbors. Its one demo 'catch' was actually a correctly-working buoy reading real upwelling, and the alert disappears once a genuinely comparable neighbor is in the pool. The useful part is the map of where cross-checking is even possible.",
             how="RED-TEAM pulled the flagged buoy vs neighbors from the raw 1.4B-row layer: station 156 (CDIP) agrees with the one true cross-source neighbor (M1 mooring, 7.4km away, also carried as NDBC 46092) -- r=0.968, mean bias 0.02C, though MAE is 0.29C; the 'divergence' was against 6 same-source warm inner-bay buoys during upwelling season (residual -1.66C in June, +0.08C in January). Re-running the shipped detector reproduces the flag byte-exact on 6 same-source neighbors and yields ZERO flags on the identical window once NDBC 46092 is added -- the flag dies from neighbor comparability, not data recency. The lone_divergence trigger clears its threshold by 0.002C (1.188 vs 1.186).",
             metrics={"demo_n_flagged": 1, "precision_on_adjudicable_case": 0.0, "flag_vs_m1_mooring_corr": 0.968,
-                     "flag_vs_m1_mean_bias_C": 0.02, "flag_vs_m1_mae_C": 0.29,
+                     "flag_vs_m1_mean_bias_C": 0.02, "flag_vs_m1_mae_C": 0.2768,
                      "trigger_margin_C": 0.002, "flags_with_crosssource_neighbor": 0,
                      "flags_by_window": "1 since 2023-01-01 / 0 since 2025-07-01 / 3 since 2026-01-01",
                      "labeled_true_faults": 0, "sst_cross_source_pct_10km": 20.6,
-                     "redteam_2026_07_14": "REFUTED as detector (mechanism corrected 2026-07-15)"},
+                     "redteam_2026_07_14": "REFUTED as detector (mechanism corrected 2026-07-15)",
+                     # 2026-07-15: these three were corrected directly in data.json by an
+                     # earlier pass and never written back here, so `python build_snapshot.py`
+                     # silently reverted them. mae 0.2768 is the exact daily-mean value in
+                     # colocation_flag_recompute.json (0.29 was the rounded prose figure).
+                     "aggregation": "daily mean (all four numbers from one config)",
+                     "flag_dies_on_current_data": True},
             note="CORRECTION 2026-07-15: the 2026-07-14 pass said the flag 'no longer fires on current data'. That mechanism is wrong and window-dependent -- an in-memory re-run of the shipped detector fires 1 flag since 2023-01-01, 0 since 2025-07-01, and 3 since 2026-01-01. The flag actually dies because a cross-source neighbor (NDBC 46092 = the M1 mooring) entered the source set, not because the data got newer. The corrected mechanism is a SHARPER indictment. Also corrected: 'matches to 0.01C' was a cancellation artifact -- 0.02C is the mean bias, but typical daily disagreement is MAE 0.29C (~15x larger); the buoys agree in the mean because seasonal errors cancel. sst_cross_source_pct_10km lives in the sibling colocation_census_telemetry.json, not the cited file. The buddy-check does NOT work as a fault detector as built (neighbors weren't comparable; it flags the most oceanographically-correct sensor in an upwelling system, by a 0.002C margin). What SURVIVES: the redundancy census (SST 20.6% / salinity 12% / DO 0% cross-source) and the univariate QARTOD self-checks. Needs comparable-neighbor selection + labeled faults before any claim.",
         ),
         dict(
             fid="banked_redtide_nflh_detector", kind="null",
-            evidence="reports/redtide_sat/karenia_season_matched.json",
+            evidence=["reports/redtide_sat/karenia_season_matched.json",
+                      "reports/redtide_sat/karenia_derived_stats.json",
+                      "reports/redtide_sat/recompute_2026_07_15.json"],
             title="MODIS nFLH Karenia detector: NO CI-separated skill (methods note)",
             headline="RED-TEAM REFUTED: AUC 0.609 CI[0.493,0.725] INCLUDES 0.5; one-sided p=0.033 dies on one Bonferroni comparison or one flipped label; zero non-Karenia negatives so it can't be Karenia-specific",
             plain="A free satellite fluorescence signal was tested as a dense red-tide (Karenia) detector. Once you put an honest confidence interval on it, the skill can't be told apart from chance -- so this is not a detector, just the already-known fact that more algae means more fluorescence.",
@@ -1852,7 +1904,9 @@ def _banked_backfill_findings():
         ),
         dict(
             fid="banked_josh_fib_trend", kind="caveat",
-            evidence="analysis/josh_bacteria_trends_2026-07-10/data_clean/censored_trend.json",
+            evidence=["analysis/josh_bacteria_trends_2026-07-10/data_clean/censored_trend.json",
+                      "analysis/josh_bacteria_trends_2026-07-10/analysis_scripts/results.json",
+                      "analysis/josh_MERGED_2026-07-10/recompute_2026_07_15.json"],
             title="CA beach-bacteria trend (MBARI/Josh): enterococcus is a well-powered NULL, not an improvement",
             headline="RETRACTED 2026-07-15: enterococcus shows NO robust trend (censored Wilcoxon p=0.48 over 455 stations; ex-San-Diego pooled MK p=0.354) -- the previously published 'decline, ex-SD p=3e-6' was never computed. Fecal coliform does decline (p=3.4e-9, n=188) but its frame still includes San Diego. No statewide INCREASE; weather dominates",
             plain="California regulatory beach bacteria shows no robust enterococcus trend -- the well-powered station-level test is a null, not an improvement. One indicator (fecal coliform) does decline, but that test has not yet been re-run with San Diego's reporting break excluded, so its scope is unsettled. The apparent rise in advisories is a counting artifact, and rainfall dominates day-to-day spikes.",
@@ -1869,7 +1923,8 @@ def _banked_backfill_findings():
         ),
         dict(
             fid="banked_regime_shift_monitor", kind="null",
-            evidence="reports/regime_shift/emerging_hotspots.json",
+            evidence=["reports/regime_shift/emerging_hotspots.json",
+                      "reports/regime_shift/recompute_2026_07_15.json"],
             title="Regime-shift monitor: narrow scan, NOT estate-wide stability",
             headline="RED-TEAM: '0 novel / estate stable' overstated -- scan is CA enterococcus only, catches only abrupt MEAN steps (blind to 45-82 variance-shift + 5 gradual-trend non-SD signals), and its one 'hit' is the San Diego reporting artifact",
             plain="A change-point tool scanned for systems that jumped to a new regime and reported none. But it only looked at one bacteria indicator, only catches sudden step-changes, and its single detection is a known data glitch -- so 'the estate is stable' isn't established.",
@@ -1921,11 +1976,17 @@ def _banked_backfill_findings():
     ]
     out = []
     for s in specs:
-        if not (SOURCE_ROOT / s["evidence"]).exists():
+        # evidence may be a single path or a list of paths; a card is emitted when its
+        # PRIMARY (first) evidence file exists, and any listed companion artifact that is
+        # missing is dropped rather than silently pointing the checker at a dead path.
+        ev = s["evidence"]
+        ev_list = ev if isinstance(ev, list) else [ev]
+        if not (SOURCE_ROOT / ev_list[0]).exists():
             continue
+        present = [p for p in ev_list if (SOURCE_ROOT / p).exists()]
         out.append(_finding(
             s["fid"], s["title"], s["kind"], s["headline"], s["plain"],
-            s["how"], s["evidence"], s["metrics"], s["note"],
+            s["how"], present if isinstance(ev, list) else present[0], s["metrics"], s["note"],
         ))
     return out
 
