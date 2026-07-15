@@ -1576,16 +1576,28 @@ function findingFamily(fid){return _findingFamily[fid]||{family:'Cross-cutting &
 document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>go(b.dataset.v));
 function go(v){if(location.hash.slice(1)!==v)location.hash=v;else showView(v);}
 const VIEW_ALIAS={frontiers:'questions',lakehouse:'data',vocabulary:'glossary',engines:'models',discovery:'models'};
+// A route is "<view>" or "<view>/<finding-id>"; the second form deep-links one finding card open.
+function parseRoute(h){h=String(h||'').replace(/^#/,'');const i=h.indexOf('/');return i<0?{v:h,fid:null}:{v:h.slice(0,i),fid:decodeURIComponent(h.slice(i+1))};}
+function findingIndexById(id){return ((DATA&&DATA.findings)||[]).findIndex(f=>f.id===id);}
 if('scrollRestoration' in history)history.scrollRestoration='manual';
 function resetRouteScroll(){window.scrollTo(0,0);setTimeout(()=>window.scrollTo(0,0),80);setTimeout(()=>window.scrollTo(0,0),220);}
+// Deep-linked card: land its title just below the sticky header (an expanded card is taller than the
+// viewport, so block:'center' would push the title off-screen). Absolute target, so the retry is idempotent.
+function scrollToFinding(i){[160,320].forEach(ms=>setTimeout(()=>{
+  const el=document.querySelector('#fgrid .fcard[data-i="'+i+'"]'); if(!el)return;
+  const hd=document.querySelector('header'), off=(hd?hd.offsetHeight:0)+16;
+  window.scrollTo({top:Math.max(0,el.getBoundingClientRect().top+window.scrollY-off),behavior:'smooth'});
+},ms));}
 function showView(v){
-  v=VIEW_ALIAS[v]||v;
+  const R=parseRoute(v); v=VIEW_ALIAS[R.v]||R.v;
   if(!['overview','questions','findings','models','ledger','data','glossary'].includes(v))v='overview';
   TAB=v; if(DETAIL){DETAIL=null;renderDrawer();}
+  let fi=-1;
+  if(R.fid&&v==='findings'&&DATA){fi=findingIndexById(R.fid); if(fi>=0){OPENF=fi;FFILTER='all';FFAM='all';}}
   document.querySelectorAll('nav.tabs button').forEach(b=>{const on=b.dataset.v===v;b.classList.toggle('active',on);if(on&&b.scrollIntoView)try{b.scrollIntoView({inline:'center',block:'nearest'});}catch(e){}});
   document.querySelectorAll('.view').forEach(s=>s.classList.toggle('active',s.id===v));
   if(DATA){if(v==='questions')renderQuestions();if(v==='findings')renderFindings();if(v==='models')renderModels();if(v==='ledger')renderLedger();if(v==='data')renderData();if(v==='glossary')renderVocabulary();}
-  resetRouteScroll();
+  if(fi>=0)scrollToFinding(fi); else resetRouteScroll();
   pv('/'+v,v);
 }
 let _lastPV=null;
@@ -2795,9 +2807,9 @@ function renderQuestions(){
 }
 // jump from a hub to the matching finding card, expanded
 function openFindingById(id){
-  const i=(DATA.findings||[]).findIndex(f=>f.id===id); if(i<0)return;
-  OPENF=i; FFILTER='all'; DETAIL=null; go('findings');
-  setTimeout(()=>{const el=document.querySelector('#fgrid .fcard[data-i="'+i+'"]'); if(el)el.scrollIntoView({block:'center',behavior:'smooth'});},140);
+  if(findingIndexById(id)<0)return;
+  const h='findings/'+encodeURIComponent(id);
+  if(location.hash.slice(1)===h)showView(h); else location.hash=h; // hashchange -> showView opens + scrolls
 }
 /* ---------- the question hub (everything for one question in one place) ---------- */
 function hubFindings(id){const fl=findingsForTarget(id); if(!fl.length)return '';

@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260714T224656Z-50276-2063",
-  "built_utc": "2026-07-14T22:46:56Z",
-  "message": "Add 3 byte-verified findings (PN->DA nowcast, CA-FIB comparability breaks, Ireland mussel sentinel); refresh Latest wins to red-team survivors + new byte-verified wins; drop stale withheld quick-read"
+  "deploy_id": "20260715T015548Z-1547-29734",
+  "built_utc": "2026-07-15T01:55:48Z",
+  "message": "Add per-card deep links: #findings/<finding-id> opens and scrolls to one finding card"
 }
