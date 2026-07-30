@@ -874,6 +874,10 @@ def _flagship_2026_07_findings():
     # 1) Global cold-start beach-bacteria forecast (37 EU+US regions) — beats published transfer SOTA.
     gfib = _local_json("reports/global_fib/coldstart_hgbt_all.json") or {}
     grain = _local_json("reports/global_fib/coldstart_rain_hgbt.json") or {}
+    # The genuinely history-less regime. "Cold start" has been used for BOTH regimes; they differ
+    # ~18x in region count and flip the sign of the AP lift. Always report both.
+    gzero = _local_json("reports/global_fib/coldstart_hgbt_zeroshot.json") or {}
+    gz = gzero.get("macro") or {}
     gm = gfib.get("macro") or {}
     if gm:
         rain_base = grain.get("base_no_rain") or {}
@@ -883,11 +887,12 @@ def _flagship_2026_07_findings():
             "claim_global_fib_coldstart_forecast",
             "First global cold-start beach-bacteria forecast beats published transfer SOTA",
             "claim",
-            f"37 regions · leave-one-region-out AUC {_r(gm.get('macro_auc_model'),3)} vs recurrence {_r(gm.get('macro_auc_recurrence'),3)} · beats recurrence in {gm.get('regions_model_beats_recurrence')}/37 · +rain -> {_r(rain_plus.get('macro_auc'),3)}",
-            "One pooled model, trained on many regions and tested on a held-out region it never saw ('cold start'), forecasts which beaches will breach the bacteria standard across 37 European and US regions. It beats the region's own history-repeat baseline ('recurrence') and edges the best published cross-region transfer score; adding rainfall as a lead-time input lifts it further.",
+            f"37 regions · region held out of TRAINING (its own history still used) AUC {_r(gm.get('macro_auc_model'),3)} vs recurrence {_r(gm.get('macro_auc_recurrence'),3)} · beats recurrence {gm.get('regions_model_beats_recurrence')}/37 · but with NO local record at all only {gz.get('regions_model_beats_recurrence')}/37 (AUC {_r(gz.get('macro_auc_model'),3)}) · +rain -> {_r(rain_plus.get('macro_auc'),3)}",
+            "One pooled model, trained on many regions and tested on a region whose data it was never trained on, forecasts which beaches will breach the bacteria standard across 37 European and US regions. IMPORTANT — 'cold start' here means no training LABELS from that region; the region's own past readings are still used when scoring. That version beats the history-repeat baseline ('recurrence') in 36 of 37 regions. At a beach with NO local record at all — the genuinely ungauged case — the same model beats recurrence in only 2 of 37 regions and is on average WORSE than assuming the beach repeats itself. The transfer removes the need for local training labels, not the need for a local record.",
             "Leave-one-region-out (train on all regions but one, test on the held-out one) across 37 regions; macro-averaged AUC and average precision (AP) versus a recurrence baseline and versus the published external transfer SOTA; rainfall lead-time added as a separate test.",
             [
                 "reports/global_fib/coldstart_hgbt_all.json",
+                "reports/global_fib/coldstart_hgbt_zeroshot.json",
                 "reports/global_fib/coldstart_rain_hgbt.json",
                 "reports/global_fib/external_reference_2026_07_15.json",
             ],
@@ -1514,6 +1519,62 @@ def _major_null_findings():
     return out
 
 
+# Row-by-row recount of the one promotion event this card describes, from
+# reports/data_fetch/recompute_2026_07_15.json. Frozen on purpose -- see the card below.
+# active_ready_sources was NOT part of the recompute's correction: the promotion manifest and the
+# published card both carry 0, so it stays 0 rather than being re-derived alongside the other two.
+_SWARM40_FROZEN = {"promoted_sources": 2, "promoted_rows": 155, "active_ready_sources": 0}
+
+_RECOMPUTE_NOTES = {
+    # Corrections that were hand-applied to data.json on 2026-07-15 and therefore lived ONLY in
+    # the published artifact -- every rebuild silently reverted them until they landed here.
+    "status_lakehouse_swarm40_source_native_promoted": (
+        "RECOMPUTE 2026-07-15: published promoted_sources=1 / promoted_rows=286 do NOT reproduce. "
+        "Re-counted row-by-row from raw parquet: 2 sources, 155 rows (95+60). The original figures "
+        "came from a LIVE manifest that has since regenerated, so the frozen card silently went stale."),
+    "banked_regime_shift_monitor": (
+        "RECOMPUTE 2026-07-15: published discarded_pre2020_upward_steps=7 is UNREACHABLE. The "
+        "reproduction is exact on all three controls (496 stations, 5 emerging, 0 novel), but the "
+        "discarded count is 1 (San Mateo 2015). Across ALL years only 6 significant upward steps "
+        "exist, 5 of which are the reported San Diego hits -- so 7 exceeds the total available under "
+        "any definition tried (8 alternatives; closest was 6, dropping FDR). Withdrawn pending a rerun."),
+    "banked_rephytox_da_alert_ranker": (
+        "RECOMPUTE 2026-07-15: the circulated dAP CI [-0.401,-0.131] stated no seed and is not "
+        "exactly reproducible. The seeded site-clustered bootstrap (253 sites, 2000 draws) yields "
+        "[-0.3998,-0.1338]. The conclusion is seed-independent: the interval excludes zero on the "
+        "negative side under both."),
+}
+
+
+# Cards whose numbers are real but whose cited evidence does not contain them. bacteria_lobo
+# comes from the cockpit, which cites the spatial-holdout file while its two headline metrics
+# (san_diego_excluded_macro_ap / _macro_roc_auc) actually live in the statewide metrics file.
+# Name the file that holds the number, so the value is checkable rather than merely asserted.
+_EXTRA_EVIDENCE = {
+    "bacteria_lobo": ["bacteria_results/statewide/metrics.json"],
+}
+
+
+def _apply_extra_evidence(cards):
+    for c in cards:
+        extra = _EXTRA_EVIDENCE.get(c.get("id"))
+        if not extra:
+            continue
+        ev = c.get("evidence")
+        ev = [ev] if isinstance(ev, str) and ev else (list(ev) if isinstance(ev, list) else [])
+        c["evidence"] = ev + [p for p in extra if p not in ev]
+    return cards
+
+
+def _apply_recompute_notes(cards):
+    """Prepend each card's recompute correction to its note, once."""
+    for c in cards:
+        extra = _RECOMPUTE_NOTES.get(c.get("id"))
+        if extra and extra not in (c.get("note") or ""):
+            c["note"] = f"{extra}   |  {c.get('note') or ''}".strip()
+    return cards
+
+
 def _data_ops_findings():
     out = []
     full = _local_json("reports/data_fetch/swarm_20/swarm_40_full_summary.json") or {}
@@ -1533,7 +1594,15 @@ def _data_ops_findings():
             "status_lakehouse_swarm40_source_native_promoted",
             "Forty new full-data sources are visible in silver without normalized bloat",
             "status",
-            f"{promo.get('promoted_sources') or 40} source-native sources; {_to_int(promo.get('promoted_rows') or full.get('total_rows')):,} rows",
+            # FROZEN, not live. This card describes one historical promotion event, but it used to
+            # read promo['promoted_sources'/'promoted_rows'] from a manifest that REGENERATES --
+            # so the card silently re-staled on every rebuild (that is exactly how the published
+            # 1 source / 286 rows went wrong). The 2026-07-15 recompute re-counted row-by-row from
+            # raw parquet: 2 sources (cdph_biotoxin_closures, cdph_biotoxin_tissue), 155 rows
+            # (95+60), recorded in reports/data_fetch/recompute_2026_07_15.json. Do not re-point
+            # these at the live manifest.
+            f"{_SWARM40_FROZEN['promoted_sources']} source-native sources; "
+            f"{_SWARM40_FROZEN['promoted_rows']:,} rows",
             "The new source sweep is promoted source-native only: the lakehouse can scan every completed dataset, while the rejected generic long-table expansion is not materialized.",
             "Fetcher-all completion audit, source-native lakehouse promotion manifest, and explicit critic rejection of generic normalization.",
             [
@@ -1545,9 +1614,9 @@ def _data_ops_findings():
             ],
             {
                 "sources_completed": len(full.get("sources")) if isinstance(full.get("sources"), list) else full.get("sources"),
-                "promoted_sources": promo.get("promoted_sources"),
-                "active_ready_sources": promo.get("active_ready_sources"),
-                "promoted_rows": promo.get("promoted_rows") or full.get("total_rows"),
+                "promoted_sources": _SWARM40_FROZEN["promoted_sources"],
+                "active_ready_sources": _SWARM40_FROZEN["active_ready_sources"],
+                "promoted_rows": _SWARM40_FROZEN["promoted_rows"],
                 "total_cells": full.get("total_cells"),
                 "missing_planned_chunk_sources": full.get("missing_planned_chunk_sources"),
                 "boundary_unresolved": full.get("boundary_unresolved"),
@@ -1833,7 +1902,15 @@ def _banked_backfill_findings():
             how="Forward split train<=2014. RED-TEAM scored every fair-baseline column: recent-tissue-value alone hits top-50 precision 1.00 / AP 0.65 vs the XGBoost's 0.72 / 0.34; site-clustered dAP(model-baseline) = -0.12 to -0.29, CI excludes 0.",
             metrics={"n_test": 5392, "exceedances": 227, "base_rate": 0.0421, "model_top50": 0.72,
                      "recent_value_baseline_top50": 1.00, "model_ap": 0.343, "recent_value_baseline_ap": 0.65,
-                     "dap_model_minus_baseline_ci95": [-0.401, -0.131], "redteam_2026_07_14": "REFUTED as ML win"},
+                     # The circulated [-0.401,-0.131] states no seed and is not exactly
+                     # reproducible. These are the seeded recompute's bounds, which exist as
+                     # real keys in baseline_recompute.json; the conclusion (interval excludes
+                     # zero on the negative side) is seed-independent. Do not restore the old
+                     # pair -- data.json was hand-corrected to these on 2026-07-15 and every
+                     # rebuild silently reverted it until the fix landed here.
+                     "dap_model_minus_baseline_ci95": [-0.3998, -0.1338],
+                     "bootstrap_note": "site-clustered, 253 sites, 2000 draws; original bounds stated no seed",
+                     "redteam_2026_07_14": "REFUTED as ML win"},
             note="The persistence+season ceiling SCIENCE is real and reinforced (lead-time forecast genuinely NULL at >=7d). But the shipped XGBoost is not a win -- a trivial recent-value baseline beats it. Deliverable = free heuristic, not the model.",
         ),
         dict(
@@ -1931,7 +2008,11 @@ def _banked_backfill_findings():
             how="Best mean-shift split + Bonferroni + BH-FDR. RED-TEAM added variance-shift (Levene) and gradual-trend (Mann-Kendall) passes on the same raw data: 45-82 non-SD variance shifts and 5 non-SD upward trends the mean-step method is blind to; hypoxia/red-tide lanes were non-functional (DO used a record-ID column).",
             metrics={"n_stations_scanned": 496, "scope": "CA enterococcus only", "novel_mean_steps": 0,
                      "missed_variance_shifts_nonSD": "45-82", "missed_trend_shifts_nonSD": 5,
-                     "discarded_pre2020_upward_steps": 7, "validation_event": "SD reporting artifact",
+                     # Published as 7; the 2026-07-15 recompute finds exactly 1 (San Mateo,
+                     # split 2015, delta +0.362, FDR q=0.0161) and records the verdict
+                     # "MISMATCH -- DOES NOT REPRODUCE". Ship the failure, not the number.
+                     "discarded_pre2020_upward_steps": "NOT REPRODUCIBLE (published 7; recompute finds 1)",
+                     "validation_event": "SD reporting artifact",
                      "redteam_2026_07_14": "MIXED - narrow number real, headline overstated"},
             note="The narrow number (0 novel recent abrupt mean-steps in CA enterococcus) reproduces. But 'estate is stable' overstates: single-analyte, blind to variance and gradual-trend regimes, discards 7 pre-2020 upward steps by its 'recent' gate, never validly tested hypoxia/red tide, and its lone validated hit is a reporting-comparability artifact.",
         ),
@@ -2018,7 +2099,7 @@ _REDTEAM_2026_07_14 = {
         "CatBoost half stands; the LightGBM 'REAL BOOST' is refuted by the lab's own verify file - it washes to +0.0004 (CI includes 0) on the deployable 34-feature set."),
     # --- WOUNDED (real but overclaimed) ---
     "claim_global_fib_coldstart_forecast": ("caveat", "WOUNDED",
-        "Core survives: beats each region's own station-memory recurrence +0.033 AP (region-clustered CI[0.024,0.042], 34/37). But 'FORECAST beats SOTA' is overclaimed - the honest strictly-prior forecast AUC 0.738 has CI[0.709,0.765] that INCLUDES the SOTA ref 0.713; the number that 'beat' SOTA was a walked-back same-day-rain nowcast."),
+        "Core survives: beats each region's own station-memory recurrence +0.033 AP (region-clustered CI[0.024,0.042], 34/37). But 'FORECAST beats SOTA' is overclaimed - the honest strictly-prior forecast AUC 0.738 has CI[0.709,0.765] that INCLUDES the SOTA ref 0.713; the number that 'beat' SOTA was a walked-back same-day-rain nowcast. ALSO (2026-07-29): 'zero-shot'/'cold start' was used for two different regimes. Held out of TRAINING with local history available = AUC 0.730, 36/37, AP lift +0.034. Genuinely history-less = AUC 0.553, 2/37, AP lift -0.118 (worse than recurrence). Any 'ungauged coastline' framing must quote the second."),
     "claim_hypoxia_gru_sequence_positive": ("caveat", "WOUNDED",
         "It is a hypoxia STATE target, not onset; +0.03 AP is non-monotonic (7d/21d cross 0), single-seed, and NOT reproduced by the scaled ensemble. Keep only as a scoped Tokyo-Bay state signal."),
     "claim_forward_2026_holdout_pass": ("caveat", "WOUNDED",
@@ -2109,7 +2190,7 @@ def _extra_findings():
             continue
         seen.add(c["id"])
         out.append(c)
-    return _apply_redteam_overrides(out)
+    return _apply_recompute_notes(_apply_redteam_overrides(out))
 
 
 def _augment_models(state):
@@ -2212,9 +2293,76 @@ def _lakehouse_source_asset(src):
     return {k: v for k, v in item.items() if v is not None}
 
 
+def _inventory_built_iso():
+    """When the source inventory was last rebuilt. The inventory is a bare list with no
+    embedded timestamp, so its file mtime is the honest 'as of' for the dataset list."""
+    p = SOURCE_ROOT / "lakehouse" / "silver" / "source_inventory" / "source_inventory.json"
+    try:
+        return datetime.fromtimestamp(p.stat().st_mtime, timezone.utc).isoformat()
+    except Exception:
+        return None
+
+
+def _layer_from_path(path):
+    """silver_external_curated from lakehouse/silver/external_curated/<src>/<src>.parquet."""
+    parts = [p for p in re.split(r"[\\/]+", str(path or "")) if p]
+    if len(parts) >= 3 and parts[0] == "lakehouse":
+        return f"{parts[1]}_{parts[2]}"
+    return None
+
+
+def _merged_lakehouse_sources():
+    """The dataset list the Data page renders, from the FRESHEST record of each source.
+
+    WHY THIS IS NOT JUST THE OVERVIEW FILE: reports/data_fetch/lakehouse_source_overview.json
+    is written by a sweep that no longer runs -- it froze on 2026-06-26 with 329 sources, while
+    lakehouse/silver/source_inventory/source_inventory.json is rebuilt by the readiness refresh
+    and currently holds 756. Reading only the overview published a dataset list that was a month
+    behind the lab and silently omitted every source landed since. So: the inventory is the base,
+    the overview only CONTRIBUTES the descriptive fields it uniquely carries (domain, what_it_has,
+    parquet_bytes, table_kind) plus the lab-internal derived tables that are not registry sources
+    and therefore never appear in the inventory.
+    """
+    inv = _local_json("lakehouse/silver/source_inventory/source_inventory.json") or []
+    overview = _local_json("reports/data_fetch/lakehouse_source_overview.json") or {}
+    ov_rows = overview.get("sources") or []
+    ov_by_id = {r.get("source"): r for r in ov_rows if r.get("source")}
+
+    merged, seen = [], set()
+    for r in inv:
+        sid = r.get("source")
+        if not sid or sid in seen:
+            continue
+        seen.add(sid)
+        ov = ov_by_id.get(sid) or {}
+        merged.append({
+            "source": sid,
+            "title": r.get("title") or ov.get("title") or sid,
+            "rows": r.get("rows"),
+            "columns": r.get("columns"),
+            "date_min": r.get("date_min"),
+            "date_max": r.get("date_max"),
+            "status": r.get("status") or ov.get("status"),
+            "ready_for_modeling": r.get("ready_for_modeling"),
+            "layer": _layer_from_path(r.get("lakehouse_path")) or ov.get("layer"),
+            # descriptive fields only the older sweep computed; absent for newer sources
+            "domain": ov.get("domain"),
+            "what_it_has": ov.get("what_it_has"),
+            "table_kind": ov.get("table_kind"),
+            "parquet_bytes": ov.get("parquet_bytes"),
+        })
+    # lab-internal derived tables (bacteria_observations, forecast_splits, ...) exist in the
+    # lakehouse but are not registry sources, so keep the overview's record of them
+    for r in ov_rows:
+        if r.get("source") and r["source"] not in seen:
+            seen.add(r["source"])
+            merged.append(r)
+    return merged
+
+
 def _augment_lakehouse_inventory(state):
     overview = _local_json("reports/data_fetch/lakehouse_source_overview.json") or {}
-    sources = overview.get("sources") or []
+    sources = _merged_lakehouse_sources()
     if not sources:
         return state
 
@@ -2244,7 +2392,7 @@ def _augment_lakehouse_inventory(state):
         ]
     }
     inv.setdefault("shadow", {"datasets": []})
-    inv["built_iso"] = overview.get("generated_at") or inv.get("built_iso")
+    inv["built_iso"] = _inventory_built_iso() or overview.get("generated_at") or inv.get("built_iso")
     state["inventory"] = inv
 
     layers = {}
@@ -2255,7 +2403,8 @@ def _augment_lakehouse_inventory(state):
         rec["rows"] += _to_int(a.get("rows"))
         rec["parquet_bytes"] += _to_int(a.get("parquet_bytes"))
     state["lakehouse_summary"] = {
-        "generated_at": overview.get("generated_at"),
+        # when the inventory was last rebuilt -- NOT the frozen 2026-06-26 overview sweep
+        "generated_at": _inventory_built_iso() or overview.get("generated_at"),
         "source_groups": len(lake_assets),
         "entry_counted_rows": sum(_to_int(a.get("rows")) for a in lake_assets),
         "layers": layers,
@@ -2383,7 +2532,7 @@ def _augment_state(state):
             legacy_archive.append(f)
         else:
             legacy_keep.append(f)
-    state["findings"] = extra + legacy_keep + legacy_archive
+    state["findings"] = _apply_extra_evidence(extra + legacy_keep + legacy_archive)
     _augment_models(state)
     _append_latest_public_data_assets(state)
     _augment_lakehouse_inventory(state)

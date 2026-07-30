@@ -2,10 +2,10 @@
   "_note": "Binds each published Card number to an exact key in an exact evidence file. UNBOUND = the number is not in any file the Card cites. Exact key lookup only -- never a fuzzy value search, which launders coincidences.",
   "generated_from": "mbal-mission-control/data.json",
   "totals": {
-    "cards": 66,
-    "metrics": 591,
+    "cards": 70,
+    "metrics": 604,
     "unbound": 0,
-    "cards_clean": 66,
+    "cards_clean": 70,
     "cards_with_unbound": 0
   },
   "sealed": [
@@ -499,14 +499,14 @@
           "bound_to": "reports/hab/domoic_alert_model/baseline_recompute.json::[\"dap_model_minus_baseline_ci95_hi\"]"
         },
         {
-          "metric": "redteam_2026_07_14",
-          "value": "REFUTED as ML win",
+          "metric": "bootstrap_note",
+          "value": "site-clustered, 253 sites, 2000 draws; original bounds stated no seed",
           "status": "PROSE",
           "bound_to": null
         },
         {
-          "metric": "bootstrap_note",
-          "value": "site-clustered, 253 sites, 2000 draws; original bounds stated no seed",
+          "metric": "redteam_2026_07_14",
+          "value": "REFUTED as ML win",
           "status": "PROSE",
           "bound_to": null
         }
@@ -1244,6 +1244,7 @@
       "kind": "caveat",
       "evidence": [
         "reports/global_fib/coldstart_hgbt_all.json",
+        "reports/global_fib/coldstart_hgbt_zeroshot.json",
         "reports/global_fib/coldstart_rain_hgbt.json",
         "reports/global_fib/external_reference_2026_07_15.json"
       ],
@@ -4068,18 +4069,18 @@
       "metrics": [
         {
           "metric": "signal_claims",
-          "value": 57,
+          "value": 79,
           "status": "BOUND",
           "bound_to": "reports/experiment_program/H1/claims_index.json::[\"summary\"][\"n_signal_claims\"]"
         },
         {
           "metric": "signal_status_counts",
           "value": {
-            "PRIMARY": 2,
-            "KEEP": 9,
-            "WASH": 25,
-            "UNTESTED": 11,
-            "REJECT": 10
+            "PRIMARY": 6,
+            "KEEP": 15,
+            "WASH": 36,
+            "REJECT": 16,
+            "BLOCKED": 6
           },
           "status": "PROSE",
           "bound_to": null
@@ -4103,7 +4104,7 @@
         },
         {
           "metric": "target_headlines",
-          "value": 8,
+          "value": 27,
           "status": "BOUND",
           "bound_to": "reports/experiment_program/H1/claims_index.json::[\"summary\"][\"n_target_headlines\"]"
         },
@@ -4229,7 +4230,7 @@
           "metric": "promoted_sources",
           "value": 2,
           "status": "BOUND",
-          "bound_to": "reports/data_fetch/lakehouse_external_curated_promotion.json::[\"promoted_sources\"]"
+          "bound_to": "reports/data_fetch/recompute_2026_07_15.json::[\"recomputed_promoted_sources_2026_07_15\"]"
         },
         {
           "metric": "active_ready_sources",
@@ -4241,7 +4242,7 @@
           "metric": "promoted_rows",
           "value": 155,
           "status": "BOUND",
-          "bound_to": "reports/data_fetch/lakehouse_external_curated_promotion.json::[\"promoted_rows\"]"
+          "bound_to": "reports/data_fetch/recompute_2026_07_15.json::[\"recomputed_promoted_rows_2026_07_15\"]"
         },
         {
           "metric": "total_cells",
@@ -4889,6 +4890,149 @@
           "value": true,
           "status": "PROSE",
           "bound_to": null
+        }
+      ]
+    },
+    {
+      "id": "bacteria_lobo",
+      "kind": "classification",
+      "evidence": [
+        "research/bacteria/reproduce/expected/spatial_holdout.json",
+        "bacteria_results/statewide/metrics.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 2,
+      "n_bound": 2,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "macro_ap_ex_sd",
+          "value": 0.4531,
+          "status": "BOUND",
+          "bound_to": "bacteria_results/statewide/metrics.json::[\"_headline\"][\"san_diego_excluded_macro_ap\"]"
+        },
+        {
+          "metric": "macro_roc_ex_sd",
+          "value": 0.826,
+          "status": "BOUND",
+          "bound_to": "bacteria_results/statewide/metrics.json::[\"_headline\"][\"san_diego_excluded_macro_roc_auc\"]"
+        }
+      ]
+    },
+    {
+      "id": "bacteria_statewide",
+      "kind": "classification",
+      "evidence": [
+        "bacteria_results\\statewide\\metrics.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 5,
+      "n_bound": 4,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "event_rate",
+          "value": 0.2403,
+          "status": "BOUND",
+          "bound_to": "bacteria_results\\statewide\\metrics.json::[\"statewide_with_rainfall\"][\"test_event_rate\"]"
+        },
+        {
+          "metric": "model",
+          "value": "rf",
+          "status": "PROSE",
+          "bound_to": null
+        },
+        {
+          "metric": "n_features",
+          "value": 39,
+          "status": "BOUND",
+          "bound_to": "bacteria_results\\statewide\\metrics.json::[\"statewide_with_rainfall\"][\"n_features\"]"
+        },
+        {
+          "metric": "n_test",
+          "value": 61938,
+          "status": "BOUND",
+          "bound_to": "bacteria_results\\statewide\\metrics.json::[\"statewide_with_rainfall\"][\"test\"]"
+        },
+        {
+          "metric": "test_events",
+          "value": 14883,
+          "status": "BOUND",
+          "bound_to": "bacteria_results\\statewide\\metrics.json::[\"statewide_with_rainfall\"][\"test_events\"]"
+        }
+      ]
+    },
+    {
+      "id": "bacteria_ablation",
+      "kind": "ablation",
+      "evidence": [
+        "bacteria_results\\statewide\\metrics.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 3,
+      "n_bound": 3,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "ap_full",
+          "value": 0.8675,
+          "status": "BOUND",
+          "bound_to": "bacteria_results\\statewide\\metrics.json::[\"statewide_with_rainfall\"][\"avg_precision\"]"
+        },
+        {
+          "metric": "ap_no_lab",
+          "value": 0.8197,
+          "status": "BOUND",
+          "bound_to": "bacteria_results\\statewide\\metrics.json::[\"statewide_no_lab_history_ablation\"][\"avg_precision\"]"
+        },
+        {
+          "metric": "n_features",
+          "value": 17,
+          "status": "BOUND",
+          "bound_to": "bacteria_results\\statewide\\metrics.json::[\"statewide_no_lab_history_ablation\"][\"n_features\"]"
+        }
+      ]
+    },
+    {
+      "id": "bacteria_monterey",
+      "kind": "negative",
+      "evidence": [
+        "bacteria_results\\statewide\\metrics.json"
+      ],
+      "evidence_missing": [],
+      "narrative_evidence": false,
+      "n_metrics": 3,
+      "n_bound": 3,
+      "n_derived": 0,
+      "n_unbound": 0,
+      "status": "CLEAN",
+      "metrics": [
+        {
+          "metric": "event_rate",
+          "value": 0.0347,
+          "status": "BOUND",
+          "bound_to": "bacteria_results\\statewide\\metrics.json::[\"monterey_only\"][\"test_event_rate\"]"
+        },
+        {
+          "metric": "n_test",
+          "value": 691,
+          "status": "BOUND",
+          "bound_to": "bacteria_results\\statewide\\metrics.json::[\"monterey_only\"][\"test\"]"
+        },
+        {
+          "metric": "test_events",
+          "value": 24,
+          "status": "BOUND",
+          "bound_to": "bacteria_results\\statewide\\metrics.json::[\"monterey_only\"][\"test_events\"]"
         }
       ]
     }

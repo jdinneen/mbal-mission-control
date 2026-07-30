@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260715T170811Z-32223-10658",
-  "built_utc": "2026-07-15T17:08:11Z",
-  "message": "Recompute every unbound Card number from raw: 56 -> 0 unbound, 66/66 cards clean and sealed. 4 did NOT reproduce and were corrected not promoted (promoted_sources 1->2, promoted_rows 286->155, colocation MAE 0.29->0.2768, regime discarded_pre2020_upward_steps 7 -> NOT REPRODUCIBLE). Checker docstring corrected: it is a value search, not a key lookup"
+  "deploy_id": "20260730T182359Z-4242-27460",
+  "built_utc": "2026-07-30T18:23:59Z",
+  "message": "Refresh Mission Control datasets/signals: 756 landed sources (was 329 from a frozen June sweep); freeze recompute-corrected card numbers so rebuilds stop reverting them"
 }
