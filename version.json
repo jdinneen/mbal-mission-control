@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260730T182359Z-4242-27460",
-  "built_utc": "2026-07-30T18:23:59Z",
-  "message": "Refresh Mission Control datasets/signals: 756 landed sources (was 329 from a frozen June sweep); freeze recompute-corrected card numbers so rebuilds stop reverting them"
+  "deploy_id": "20260731T164030Z-53720-5820",
+  "built_utc": "2026-07-31T16:40:31Z",
+  "message": "Refresh: 3 Tijuana-corridor forecast sources landed (inventory 756->759)"
 }
