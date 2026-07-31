@@ -1,0 +1,4 @@
+# Runtime ledgers hold real station data — never commit them.
+runtime/
+__pycache__/
+*.pyc

@@ -1,0 +1,60 @@
+{
+  "pilot_id": "da_onset_prospective_2026H2",
+  "model_id": "da_forecast_hgbt",
+  "authored_utc": "2026-07-31",
+  "status_when_unstarted": "PREREGISTERED_NOT_STARTED",
+  "one_line": "Forward-time test of whether the frozen domoic-acid onset model beats its rolling baseline at prior-clean stations, scored by the lab's existing scorer.",
+
+  "claim_under_test": "At a CalHABMAP station with no recent domoic-acid detections (prior-clean), the frozen da_forecast_hgbt model ranks the NEXT roughly-weekly visit's toxic-onset risk better than the pda_roll3_value baseline, using only information available before that visit is sampled.",
+
+  "retrospective_result_being_replicated": {
+    "source_evidence": "reports/hab/da_forecast.json",
+    "slice": "prior-clean toxic onset",
+    "model_ap": 0.1441,
+    "baseline_id": "pda_roll3_value",
+    "baseline_ap": 0.0955,
+    "d_ap": 0.0486,
+    "d_ap_ci95": [0.0142, 0.1049],
+    "perm_p": 0.002,
+    "note": "These are RETROSPECTIVE numbers. The pilot exists to see if they hold forward in time."
+  },
+
+  "prospective_success_gate": {
+    "primary_metric": "d_ap = AP(model) - AP(baseline) over resolved prior-clean onset predictions",
+    "direction": "model > baseline",
+    "d_ap_ci95_lower_must_exceed": 0.0,
+    "perm_p_max": 0.05,
+    "min_independent_onset_events": 30,
+    "cluster_unit": "onset_event (station x episode)",
+    "constants_note": "Mirrors the MBAL evidence gate: power n>=30, PERM_ALPHA 0.05. Do NOT loosen without re-deriving from data."
+  },
+
+  "verdicts": {
+    "PASS": "n>=30 AND d_ap>0 AND d_ap_ci95_lower>0 AND perm_p<=0.05 -> prospectively confirmed; eligible to promote from candidate.",
+    "FAIL": "n>=30 AND (d_ap<=0 OR perm_p>0.05) -> retrospective win did not replicate forward; record as honest null.",
+    "COLLECTING": "n<30 -> underpowered; keep logging, do not read the result yet.",
+    "INCONCLUSIVE": "n>=30, d_ap>0, perm_p<=0.05, but CI lower touches 0 -> collect more before believing it."
+  },
+
+  "onset_definition": {
+    "prior_clean_window_days": null,
+    "da_toxic_threshold": null,
+    "threshold_units": null,
+    "MUST_MATCH": "reports/hab/da_forecast.json onset definition. Fill these three from the frozen model's training config. Do NOT invent a threshold — a mismatch here silently changes the labels and invalidates the comparison."
+  },
+
+  "leakage_rules": [
+    "A prediction is written at decision time, BEFORE the target visit is sampled.",
+    "decision_utc must be strictly earlier than the target visit's lab-result timestamp.",
+    "predictions.jsonl and outcomes.jsonl are both append-only; nothing is edited in place.",
+    "Outcomes join to predictions only by (station_id, target_visit_date).",
+    "Scoring calls adapter.score(), which must delegate to the lab's existing AP/bootstrap/permutation scorer. This harness does not re-implement statistics."
+  ],
+
+  "runtime_files": {
+    "predictions_ledger": "runtime/predictions.jsonl",
+    "outcomes_ledger": "runtime/outcomes.jsonl",
+    "summary_out": "runtime/pilot_state.json",
+    "note": "All runtime files are git-ignored: they hold real station data and must not enter the public repo. Only aggregate summary numbers (no per-station rows) are ever surfaced to the site."
+  }
+}
