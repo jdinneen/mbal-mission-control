@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260731T164030Z-53720-5820",
-  "built_utc": "2026-07-31T16:40:31Z",
-  "message": "Refresh: 3 Tijuana-corridor forecast sources landed (inventory 756->759)"
+  "deploy_id": "20260731T170334Z-54471-31156",
+  "built_utc": "2026-07-31T17:03:34Z",
+  "message": "Correct NWM reach identities: only 1 of 3 is the Tijuana River (Otay + Sweetwater drain to San Diego Bay)"
 }
