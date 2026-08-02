@@ -1,5 +1,5 @@
 {
-  "deploy_id": "20260731T170334Z-54471-31156",
-  "built_utc": "2026-07-31T17:03:34Z",
-  "message": "Correct NWM reach identities: only 1 of 3 is the Tijuana River (Otay + Sweetwater drain to San Diego Bay)"
+  "deploy_id": "20260802T165522Z-649-17152",
+  "built_utc": "2026-08-02T16:55:22Z",
+  "message": "Refresh Mission Control lakehouse inventory"
 }
