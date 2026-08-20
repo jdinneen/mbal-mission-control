@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A searchable catalog of registered harmful-algal-bloom sources and environmental context at Monterey Bay AI Lab.">
+  <title>Registered HAB source catalog | Monterey Bay AI Lab</title>
+  <style>
+    :root {
+      --ink: #112c36;
+      --muted: #54707a;
+      --paper: #f6f2e9;
+      --card: #fffdf8;
+      --line: #d7ddd8;
+      --sea: #076a72;
+      --sea-dark: #03454d;
+      --aqua: #d7efea;
+      --coral: #db7659;
+      --gold: #e1b65a;
+      --shadow: 0 18px 50px rgba(17, 44, 54, .09);
+      color-scheme: light;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font: 16px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    a { color: var(--sea-dark); }
+    .shell { width: min(1440px, calc(100% - 32px)); margin: 0 auto; }
+    header {
+      position: relative;
+      overflow: hidden;
+      padding: 32px 0 76px;
+      background:
+        radial-gradient(circle at 88% 20%, rgba(225,182,90,.34), transparent 25%),
+        radial-gradient(circle at 12% 84%, rgba(215,239,234,.22), transparent 30%),
+        linear-gradient(125deg, #023f49, #08747a 62%, #0b5965);
+      color: white;
+    }
+    header::after {
+      content: "";
+      position: absolute;
+      left: -5%; right: -5%; bottom: -38px;
+      height: 82px;
+      border-radius: 50% 50% 0 0;
+      background: var(--paper);
+    }
+    nav { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { font-weight: 760; letter-spacing: .06em; text-transform: uppercase; font-size: .84rem; }
+    .navlinks { display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+    .button {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 10px 14px; border-radius: 999px; border: 1px solid rgba(255,255,255,.42);
+      color: white; text-decoration: none; font-weight: 700; font-size: .9rem;
+      background: rgba(255,255,255,.1);
+    }
+    .button.primary { background: #fff; color: var(--sea-dark); border-color: #fff; }
+    .hero { max-width: 900px; padding-top: 62px; }
+    .eyebrow { font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .16em; color: #bde9e4; }
+    h1 { margin: 14px 0 16px; font: 800 clamp(2.45rem, 6vw, 5.2rem)/.98 Georgia, serif; letter-spacing: -.045em; }
+    .dek { max-width: 780px; margin: 0; font-size: clamp(1.05rem, 2vw, 1.3rem); color: #e7f5f2; }
+    main { padding: 28px 0 80px; }
+    .summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin: 8px 0 24px; }
+    .metric { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 18px; box-shadow: var(--shadow); }
+    .metric .value { display: block; font: 800 clamp(1.8rem, 3vw, 2.55rem)/1 Georgia, serif; color: var(--sea-dark); }
+    .metric .label { display: block; margin-top: 7px; color: var(--muted); font-size: .9rem; }
+    .notice {
+      display: grid; grid-template-columns: 42px 1fr; gap: 14px;
+      padding: 18px 20px; margin: 20px 0;
+      background: #fff8e7; border: 1px solid #ecd89f; border-radius: 16px;
+    }
+    .notice .mark { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: var(--gold); font-weight: 900; }
+    .notice p { margin: 0; }
+    .method { display: grid; grid-template-columns: 1.2fr .8fr; gap: 18px; margin: 24px 0 28px; }
+    .panel { padding: 22px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; }
+    .panel h2 { margin: 0 0 8px; font: 750 1.35rem/1.2 Georgia, serif; }
+    .panel p { margin: 8px 0; color: var(--muted); }
+    .filters {
+      position: sticky; top: 0; z-index: 10;
+      display: grid; grid-template-columns: minmax(240px, 2fr) repeat(3, minmax(150px, 1fr)); gap: 10px;
+      padding: 14px; margin: 0 0 12px;
+      background: rgba(246,242,233,.94); backdrop-filter: blur(10px);
+      border: 1px solid var(--line); border-radius: 16px;
+    }
+    label { display: grid; gap: 5px; color: var(--muted); font-size: .76rem; font-weight: 750; text-transform: uppercase; letter-spacing: .05em; }
+    input, select {
+      width: 100%; min-height: 44px; padding: 10px 12px;
+      background: white; color: var(--ink); border: 1px solid #b9c8c8; border-radius: 10px;
+      font: inherit; font-size: .92rem;
+    }
+    .results-line { display: flex; justify-content: space-between; gap: 12px; align-items: center; margin: 12px 2px; color: var(--muted); }
+    .table-wrap { overflow-x: auto; background: var(--card); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); }
+    table { width: 100%; border-collapse: collapse; min-width: 1040px; }
+    th { position: sticky; top: 76px; z-index: 3; padding: 13px 14px; background: #e8f0ed; color: var(--sea-dark); text-align: left; font-size: .75rem; text-transform: uppercase; letter-spacing: .055em; }
+    td { padding: 15px 14px; border-top: 1px solid #e4e8e5; vertical-align: top; }
+    tbody tr:hover { background: #f4faf7; }
+    .dataset { min-width: 290px; }
+    .dataset strong { display: block; font-size: .98rem; }
+    .dataset code { display: block; margin-top: 4px; color: var(--muted); font-size: .73rem; overflow-wrap: anywhere; }
+    .dataset p { max-width: 580px; margin: 9px 0 0; color: var(--muted); font-size: .84rem; }
+    .badge { display: inline-flex; align-items: center; padding: 4px 8px; border-radius: 999px; background: var(--aqua); color: var(--sea-dark); font-size: .72rem; font-weight: 780; }
+    .badge.context { background: #ece9df; color: #5d5a50; }
+    .badge.warn { background: #fff0c7; color: #74520b; }
+    .badge.fail { background: #fde1d8; color: #842f1d; }
+    .small { color: var(--muted); font-size: .82rem; }
+    .num { font-variant-numeric: tabular-nums; white-space: nowrap; }
+    details { max-width: 390px; }
+    summary { cursor: pointer; color: var(--sea-dark); font-weight: 700; }
+    .columns { margin-top: 8px; max-height: 220px; overflow: auto; padding: 10px; background: #f1f5f2; border-radius: 10px; font: .74rem/1.55 ui-monospace, SFMono-Regular, Consolas, monospace; overflow-wrap: anywhere; }
+    .pagination { display: flex; justify-content: center; align-items: center; gap: 10px; margin: 18px 0; }
+    .pagination button { border: 1px solid var(--line); background: white; color: var(--sea-dark); padding: 9px 14px; border-radius: 999px; font-weight: 750; cursor: pointer; }
+    .pagination button:disabled { opacity: .4; cursor: default; }
+    footer { padding: 28px 0 54px; border-top: 1px solid var(--line); color: var(--muted); font-size: .84rem; }
+    .error { padding: 24px; background: #fde1d8; border-radius: 14px; color: #842f1d; }
+    @media (max-width: 900px) {
+      .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .method { grid-template-columns: 1fr; }
+      .filters { position: static; grid-template-columns: 1fr 1fr; }
+      th { position: static; }
+    }
+    @media (max-width: 580px) {
+      .shell { width: min(100% - 20px, 1440px); }
+      nav { align-items: flex-start; }
+      .navlinks { display: grid; }
+      .summary-grid, .filters { grid-template-columns: 1fr; }
+      header { padding-top: 20px; }
+      .hero { padding-top: 42px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="shell">
+      <nav aria-label="Primary">
+        <div class="brand">Monterey Bay AI Lab</div>
+        <div class="navlinks">
+          <a class="button" href="index.html">Mission Control</a>
+          <a class="button primary" href="#catalogHeading">Explore the catalog</a>
+        </div>
+      </nav>
+      <div class="hero">
+        <div class="eyebrow">Partner data room · public metadata</div>
+        <h1>Registered harmful algal bloom source catalog</h1>
+        <p class="dek">A searchable inventory of harmful algal bloom (“HAB”) records and environmental context registered on the Lab—what each source is called, its landed columns or planned fields, row count, observed dates, and review status.</p>
+      </div>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="summary-grid" aria-label="Catalog summary">
+      <div class="metric"><span class="value" id="metricSources">—</span><span class="label">audited source records</span></div>
+      <div class="metric"><span class="value" id="metricHab">—</span><span class="label">HAB-audited source records</span></div>
+      <div class="metric"><span class="value" id="metricContext">—</span><span class="label">environmental context sources</span></div>
+      <div class="metric"><span class="value" id="metricRows">—</span><span class="label">stored rows across sources</span></div>
+    </section>
+
+    <div class="notice">
+      <div class="mark">!</div>
+      <p><strong>Inclusion is not a scientific claim.</strong> An environmental source appears because its registered scope makes it a plausible context layer—not because the Lab has shown it predicts a bloom or toxin. Row totals measure storage volume, not independent observations, and related sources can overlap. Nothing here is a water-safety advisory or a statement of current conditions.</p>
+    </div>
+
+    <section class="method">
+      <div class="panel">
+        <h2>How this inventory was built</h2>
+        <p>The starting point is the Lab’s frozen, adversarially reviewed HAB holdings contract and its separate environmental-support contract. Today’s source registry, fetch receipts, and Lab source manifest supply the current row counts, dates, statuses, and observed column names.</p>
+        <p>HAB-audited sources remain role-labeled: an observation table, forecast, catalog, or document is not automatically a direct toxin measurement. Environmental sources remain context-only.</p>
+      </div>
+      <div class="panel">
+        <h2>How to read “columns” and “ready”</h2>
+        <p>For landed sources, column names are measured schema metadata. For registered-only sources, the page shows planned or required fields and labels that basis explicitly. A name alone does not establish a variable’s scientific meaning or units. “Validation passed” means a landed table passed its registered structural checks. “Approved for modeling” is a stricter and separate Lab decision.</p>
+        <p>Display names are registry labels and can contain editorial shorthand; they are not scientific findings. The source key printed below each name is the stable identity.</p>
+        <p>A directory-gap audit found no additional unregistered, positive-row direct HAB source. Unregistered environmental caches remain outside the totals until provenance, overlap, and reuse rights are reconciled.</p>
+        <p id="generatedAt" class="small">Loading catalog receipt…</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="catalogHeading">
+      <h2 id="catalogHeading" style="font: 800 2rem/1.1 Georgia, serif; margin: 34px 0 14px;">Explore the sources</h2>
+      <div class="filters">
+        <label>Search
+          <input id="search" type="search" placeholder="Dataset, column, source key…" autocomplete="off">
+        </label>
+        <label>Relationship
+          <select id="relationship"><option value="">All sources</option></select>
+        </label>
+        <label>Category
+          <select id="category"><option value="">All categories</option></select>
+        </label>
+        <label>Acquisition status
+          <select id="status"><option value="">All statuses</option></select>
+        </label>
+      </div>
+      <div class="results-line"><strong id="resultCount">Loading…</strong><span>50 sources per page</span></div>
+      <div id="error" class="error" hidden></div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Dataset</th>
+              <th>Role and category</th>
+              <th>Observed dates</th>
+              <th>Stored size</th>
+              <th>Review status</th>
+              <th>Columns</th>
+            </tr>
+          </thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </div>
+      <div class="pagination">
+        <button id="prev" type="button">Previous</button>
+        <span id="pageLabel" class="small">Page 1</span>
+        <button id="next" type="button">Next</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">Monterey Bay AI Lab · Public catalog metadata only · Raw data, private proof files, and credentials are not published here.</div>
+  </footer>
+
+  <script>
+    const PAGE_SIZE = 50;
+    let catalog = null;
+    let filtered = [];
+    let page = 0;
+
+    const $ = (id) => document.getElementById(id);
+    const fmt = new Intl.NumberFormat('en-US');
+    const compact = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 });
+
+    function text(value) {
+      const span = document.createElement('span');
+      span.textContent = value ?? '';
+      return span.innerHTML;
+    }
+
+    function option(select, value, label) {
+      const node = document.createElement('option');
+      node.value = value;
+      node.textContent = label;
+      select.appendChild(node);
+    }
+
+    function badges(source) {
+      const relationshipClass = source.relationship === 'environmental context' ? ' context' : '';
+      return `<span class="badge${relationshipClass}">${text(source.relationship)}</span><br><span class="small">${text(source.role_label)}<br>${text(source.category_label)}</span>`;
+    }
+
+    function statusCell(source) {
+      const validationClass = source.validation === 'failed' ? ' fail' : source.validation === 'not_recorded' ? ' warn' : '';
+      const ready = source.approved_for_modeling ? 'Approved for modeling' : 'Not approved for modeling';
+      const rights = source.reuse_rights === 'Not verified in the Lab registry' ? 'Reuse rights not verified' : source.reuse_rights;
+      return `<span class="badge${validationClass}">Validation: ${text(source.validation)}</span><div class="small" style="margin-top:7px">${text(source.acquisition_status || 'Not recorded')}<br>${text(ready)}<br>Registry reuse-rights note: ${text(rights)}</div>`;
+    }
+
+    function render() {
+      const query = $('search').value.trim().toLowerCase();
+      const relationship = $('relationship').value;
+      const category = $('category').value;
+      const status = $('status').value;
+      filtered = catalog.sources.filter((source) => {
+        const haystack = [source.source_id, source.name, source.role_label, source.category_label, ...(source.columns || [])].join(' ').toLowerCase();
+        return (!query || haystack.includes(query)) &&
+          (!relationship || source.relationship === relationship) &&
+          (!category || source.category === category) &&
+          (!status || source.acquisition_status === status);
+      });
+      const pages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+      page = Math.min(page, pages - 1);
+      const visible = filtered.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
+      $('rows').innerHTML = visible.map((source) => {
+        const provider = source.provider_url ? `<a href="${text(source.provider_url)}" target="_blank" rel="noopener">Provider information</a>` : '<span class="small">Provider link not recorded</span>';
+        const dates = source.date_start || source.date_end ? `${text(source.date_start || 'unknown')} to ${text(source.date_end || 'unknown')}` : 'Dates not recorded';
+        const columns = source.columns?.length ? source.columns.map(text).join('<br>') : 'No observed schema; registered fields unavailable';
+        return `<tr>
+          <td class="dataset"><strong>${text(source.name)}</strong><code>${text(source.source_id)}</code><div class="small" style="margin-top:8px">${provider}</div></td>
+          <td>${badges(source)}<div class="small" style="margin-top:8px">${text(source.inclusion_basis)}</div></td>
+          <td><strong>${dates}</strong></td>
+          <td><strong class="num">${fmt.format(source.rows)}</strong> rows<div class="small">${fmt.format(source.column_count)} columns</div></td>
+          <td>${statusCell(source)}</td>
+          <td><details><summary>${fmt.format(source.column_count)} columns</summary><div class="columns">${columns}</div><div class="small">Schema basis: ${text(source.schema_basis)}</div></details></td>
+        </tr>`;
+      }).join('');
+      $('resultCount').textContent = `${fmt.format(filtered.length)} matching sources`;
+      $('pageLabel').textContent = `Page ${page + 1} of ${pages}`;
+      $('prev').disabled = page === 0;
+      $('next').disabled = page >= pages - 1;
+    }
+
+    async function init() {
+      try {
+        const response = await fetch('hab-data-catalog.json', { cache: 'no-store' });
+        if (!response.ok) throw new Error(`Catalog request returned ${response.status}`);
+        catalog = await response.json();
+        $('metricSources').textContent = fmt.format(catalog.summary.sources);
+        $('metricHab').textContent = fmt.format(catalog.summary.hab_sources);
+        $('metricContext').textContent = fmt.format(catalog.summary.context_sources);
+        $('metricRows').textContent = compact.format(catalog.summary.recorded_rows);
+        $('generatedAt').textContent = `Catalog receipt generated ${new Date(catalog.generated_utc).toLocaleString()} from ${fmt.format(catalog.summary.landed_sources)} landed sources and ${fmt.format(catalog.summary.registered_only_sources)} registered-only sources.`;
+        [...new Set(catalog.sources.map((row) => row.relationship))].sort().forEach((value) => option($('relationship'), value, value));
+        Object.entries(catalog.category_labels).sort((a, b) => a[1].localeCompare(b[1])).forEach(([value, label]) => option($('category'), value, label));
+        [...new Set(catalog.sources.map((row) => row.acquisition_status).filter(Boolean))].sort().forEach((value) => option($('status'), value, value));
+        ['search', 'relationship', 'category', 'status'].forEach((id) => $(id).addEventListener(id === 'search' ? 'input' : 'change', () => { page = 0; render(); }));
+        $('prev').addEventListener('click', () => { page -= 1; render(); window.scrollTo({ top: $('catalogHeading').offsetTop, behavior: 'smooth' }); });
+        $('next').addEventListener('click', () => { page += 1; render(); window.scrollTo({ top: $('catalogHeading').offsetTop, behavior: 'smooth' }); });
+        render();
+      } catch (error) {
+        $('error').hidden = false;
+        $('error').textContent = `The catalog could not be loaded: ${error.message}`;
+        $('resultCount').textContent = 'Catalog unavailable';
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
