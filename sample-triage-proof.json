@@ -1,20 +1,16 @@
 {
-  "schema_version": 2,
-  "artifact": "SampleNext retrospective assay-budget explorer",
-  "evidence_date": "2026-08-24",
-  "public_status": "GATED / WALKED-BACK \u2014 retrospective research evidence only",
+  "schema_version": 3,
+  "artifact": "SampleNext microscope-count assay-priority tool",
+  "evidence_date": "2026-08-27",
+  "public_status": "RETROSPECTIVE DECISION SUPPORT \u2014 not a toxin test or prospective validation",
   "release_ready": false,
   "release_blockers": [
-    "gradient-boosting planted-signal control failed the recorded minimum; both model types were required to pass",
-    "pre-result experiment contract is missing",
-    "experiment-admission receipt is missing",
-    "input-availability proof is missing",
-    "key-shuffle proof is missing",
-    "full-refit permutation proof is missing",
-    "execution-completion proof is missing",
+    "the count-based recommendation has not been prospectively validated on future assay batches",
+    "the fitted model did not beat the raw microscope-count rule on both pre-registered model checks in the chronological batch replay",
+    "the historical fitted model's gradient-boosting planted-signal control failed its recorded minimum",
     "source has not cleared the Lab's source review",
     "historical hypotheses attempted are not reported",
-    "same-sample decision timing and assay budget have not been validated prospectively"
+    "the output is a relative assay-queue aid, not a calibrated toxin probability or a safety determination"
   ],
   "release_grade_status": "NEEDS-DATA",
   "scope": {
@@ -62,6 +58,397 @@
       "candidate_ece": 0.0196,
       "baseline_ece": 0.0197,
       "note": "Expected calibration error was computed, but the release evidence does not establish the model scores as trustworthy probabilities; this artifact uses ranking only."
+    }
+  },
+  "recommendation_contract": {
+    "required_inputs": [
+      "sample label",
+      "location",
+      "sample date",
+      "sea-surface temperature in degrees Celsius",
+      "at least one of the two Pseudo-nitzschia microscope-count groups in cells per litre"
+    ],
+    "optional_inputs": [
+      "chlorophyll in milligrams per cubic metre"
+    ],
+    "primary_score": "reported Pseudo-nitzschia group sum, descending",
+    "priority_rule": "The user chooses the number of expedited slots; the samples with the highest reported-group sums fill those slots, with entry order breaking exact ties.",
+    "single_sample_rule": "The page compares one sample with historical pooled and location-specific count bands; final batch priority still depends on the other samples in the current queue.",
+    "sea_surface_temperature_role": "required context field; summarized against the historical range but does not change the current count-based priority",
+    "chlorophyll_role": "optional context field; summarized when supplied but does not change the current count-based priority",
+    "why_environment_does_not_change_priority": "The chronological batch replay did not establish that the fitted model using temperature, chlorophyll, season, prior toxin history, and counts consistently beat the raw count rule on both required estimator checks.",
+    "not_a_probability": true,
+    "not_a_safety_determination": true,
+    "browser_only": "Entered samples stay in the current browser tab and are not transmitted or stored by this static page."
+  },
+  "calculator_reference": {
+    "reference_population": "5,328 eligible historical samples from seven California piers",
+    "count_unit": "cells per litre",
+    "count_definition": "sum of the reported delicatissima- and seriata-group counts; when one group is blank, the reported group alone is used and the value is not a true total",
+    "pooled_count_quantiles": {
+      "0.5": 2600.0,
+      "0.75": 15019.0,
+      "0.9": 61095.30000000004,
+      "0.95": 131186.0,
+      "0.99": 460099.8863999949
+    },
+    "priority_bands": [
+      {
+        "id": "routine",
+        "label": "Routine queue by microscope count",
+        "lower_inclusive": null,
+        "upper_exclusive": 15019.0,
+        "rows": 3995,
+        "strict_elevated_rows": 10,
+        "strict_elevated_rate": 0.0025031289111389237
+      },
+      {
+        "id": "review",
+        "label": "Review if expedited capacity remains",
+        "lower_inclusive": 15019.0,
+        "upper_exclusive": 61095.30000000004,
+        "rows": 800,
+        "strict_elevated_rows": 45,
+        "strict_elevated_rate": 0.05625
+      },
+      {
+        "id": "expedite",
+        "label": "Expedite candidate",
+        "lower_inclusive": 61095.30000000004,
+        "upper_exclusive": 131186.0,
+        "rows": 266,
+        "strict_elevated_rows": 47,
+        "strict_elevated_rate": 0.17669172932330826
+      },
+      {
+        "id": "expedite_highest",
+        "label": "Expedite candidate \u2014 highest count band",
+        "lower_inclusive": 131186.0,
+        "upper_exclusive": null,
+        "rows": 267,
+        "strict_elevated_rows": 78,
+        "strict_elevated_rate": 0.29213483146067415
+      }
+    ],
+    "by_station": {
+      "CalPolyPier": {
+        "rows": 844,
+        "strict_elevated_rows": 22,
+        "count_quantiles": {
+          "0.5": 1599.2302,
+          "0.75": 12527.303175,
+          "0.9": 57252.43910000005,
+          "0.95": 167682.16444999987,
+          "0.99": 810761.7149999945
+        }
+      },
+      "MontereyWharf": {
+        "rows": 276,
+        "strict_elevated_rows": 49,
+        "count_quantiles": {
+          "0.5": 11330.5,
+          "0.75": 73774.25,
+          "0.9": 176677.5,
+          "0.95": 276238.0,
+          "0.99": 583221.5
+        }
+      },
+      "NewportBeachPier": {
+        "rows": 867,
+        "strict_elevated_rows": 12,
+        "count_quantiles": {
+          "0.5": 5198.0,
+          "0.75": 22094.0,
+          "0.9": 70196.0,
+          "0.95": 133592.79999999964,
+          "0.99": 516589.3200000004
+        }
+      },
+      "SantaCruzWharf": {
+        "rows": 656,
+        "strict_elevated_rows": 46,
+        "count_quantiles": {
+          "0.5": 0.0,
+          "0.75": 750.0,
+          "0.9": 18000.0,
+          "0.95": 53625.0,
+          "0.99": 201915.0000000004
+        }
+      },
+      "SantaMonicaPier": {
+        "rows": 905,
+        "strict_elevated_rows": 14,
+        "count_quantiles": {
+          "0.5": 748.0,
+          "0.75": 4114.0,
+          "0.9": 23464.000000000007,
+          "0.95": 58228.39999999999,
+          "0.99": 414701.80000000005
+        }
+      },
+      "ScrippsPier": {
+        "rows": 897,
+        "strict_elevated_rows": 10,
+        "count_quantiles": {
+          "0.5": 7612.0,
+          "0.75": 20513.0,
+          "0.9": 63443.59999999996,
+          "0.95": 123733.79999999984,
+          "0.99": 360661.7599999996
+        }
+      },
+      "StearnsWharf": {
+        "rows": 883,
+        "strict_elevated_rows": 27,
+        "count_quantiles": {
+          "0.5": 5210.0,
+          "0.75": 17652.0,
+          "0.9": 63480.00000000001,
+          "0.95": 120213.69999999998,
+          "0.99": 344941.01999999804
+        }
+      }
+    },
+    "sea_surface_temperature": {
+      "n": 5193,
+      "unit": "degrees Celsius",
+      "min": 8.8,
+      "p05": 12.0,
+      "median": 15.9,
+      "p95": 21.6,
+      "max": 25.5
+    },
+    "chlorophyll": {
+      "n": 5202,
+      "unit": "milligrams per cubic metre",
+      "min": 0.0,
+      "p05": 0.54,
+      "median": 2.55,
+      "p95": 17.318999999999996,
+      "max": 467.66
+    },
+    "association_warning": "Band rates are same-sample historical descriptions, not a calibrated probability for a new sample."
+  },
+  "operational_replay": {
+    "status": "NULL FOR MODEL ADVANTAGE \u2014 raw microscope-count ranking is the defensible 10% rule in this replay",
+    "workflow": "chronological monthly batches pooled across seven piers; 10% quota rounded per batch; selected assays return after 14 days; unselected samples are never assayed in the rationing arm",
+    "rows": 5328,
+    "strict_elevated_rows": 180,
+    "recorded_episodes": 102,
+    "raw_count": {
+      "assays": 512,
+      "assay_fraction": 0.0961,
+      "elevated_captured": 66,
+      "episodes_captured": 48,
+      "first_positive_captured": 39,
+      "episodes_detected_by_returned_assay": 48,
+      "detection_delay_days_median": 30.24826388888889,
+      "detection_delay_days_iqr": [
+        24.28975694444444,
+        38.606770833333336
+      ],
+      "n_fallback_batches": 0,
+      "fallback_batches_first_last": []
+    },
+    "candidate_gradient_boosting": {
+      "assays": 512,
+      "assay_fraction": 0.0961,
+      "elevated_captured": 78,
+      "episodes_captured": 51,
+      "first_positive_captured": 45,
+      "episodes_detected_by_returned_assay": 51,
+      "detection_delay_days_median": 28.364583333333332,
+      "detection_delay_days_iqr": [
+        24.802083333333332,
+        35.295138888888886
+      ],
+      "n_fallback_batches": 10,
+      "fallback_batches_first_last": [
+        "2008-06",
+        "2009-03"
+      ]
+    },
+    "candidate_logistic": {
+      "assays": 512,
+      "assay_fraction": 0.0961,
+      "elevated_captured": 81,
+      "episodes_captured": 53,
+      "first_positive_captured": 43,
+      "episodes_detected_by_returned_assay": 53,
+      "detection_delay_days_median": 28.375,
+      "detection_delay_days_iqr": [
+        24.159027777777776,
+        35.375
+      ],
+      "n_fallback_batches": 10,
+      "fallback_batches_first_last": [
+        "2008-06",
+        "2009-03"
+      ]
+    },
+    "random_floor": {
+      "assays": 512,
+      "assay_fraction": 0.0961,
+      "elevated_captured": 20,
+      "episodes_captured": 20,
+      "first_positive_captured": 13,
+      "episodes_detected_by_returned_assay": 20,
+      "detection_delay_days_median": 32.73958333333333,
+      "detection_delay_days_iqr": [
+        27.841319444444444,
+        42.078472222222224
+      ],
+      "n_fallback_batches": 0,
+      "fallback_batches_first_last": []
+    },
+    "perfect_foresight_ceiling": {
+      "assays": 512,
+      "assay_fraction": 0.0961,
+      "elevated_captured": 116,
+      "episodes_captured": 85,
+      "first_positive_captured": 80,
+      "episodes_detected_by_returned_assay": 85,
+      "detection_delay_days_median": 31.322916666666668,
+      "detection_delay_days_iqr": [
+        25.305555555555557,
+        40.208333333333336
+      ],
+      "n_fallback_batches": 0,
+      "fallback_batches_first_last": []
+    },
+    "model_edge_gate": {
+      "definition": "RATION arm, main delays, monthly batches: candidate beats raw count by >=10 elevated samples with month-bootstrap CI>0 and beats it on first-positive capture, on BOTH estimator twins.",
+      "per_estimator": {
+        "gbm": {
+          "sample_capture": {
+            "observed_diff": 12,
+            "ci95": [
+              -3.0,
+              28.0
+            ],
+            "n_months": 217,
+            "n_boot": 2000
+          },
+          "first_positive": {
+            "observed_diff": 6,
+            "ci95": [
+              -5.0,
+              17.0
+            ],
+            "n_months": 217,
+            "n_boot": 2000
+          }
+        },
+        "logistic": {
+          "sample_capture": {
+            "observed_diff": 15,
+            "ci95": [
+              3.0,
+              29.0
+            ],
+            "n_months": 217,
+            "n_boot": 2000
+          },
+          "first_positive": {
+            "observed_diff": 4,
+            "ci95": [
+              -5.0,
+              14.0
+            ],
+            "n_months": 217,
+            "n_boot": 2000
+          }
+        }
+      },
+      "floor_met": {
+        "gbm": true,
+        "logistic": true
+      },
+      "ci_excludes_zero": {
+        "gbm": false,
+        "logistic": true
+      },
+      "first_positive_beats": {
+        "gbm": true,
+        "logistic": true
+      },
+      "verdict": "NULL: the raw count is the deployable tool at the 10% budget; the model's edge is retrospective only."
+    },
+    "deployment_ap": {
+      "rows": 5162,
+      "strict_elevated_rows": 179,
+      "prevalence": 0.0347,
+      "candidate": 0.392,
+      "raw_count": 0.2652,
+      "margin": {
+        "margin_ap": 0.1267,
+        "ci95": [
+          0.0182,
+          0.2236
+        ],
+        "n_boot": 1000,
+        "n_groups": 115,
+        "ci_excludes_zero": true,
+        "ci_lower_stable": true
+      },
+      "independent_event_count": 101,
+      "independent_event_unit": "within-pier elevated episode (>21-day gap)",
+      "pier_year_variation": {
+        "candidate_ap": {
+          "n_units_scored": 51,
+          "min": 0.0238,
+          "median": 0.4333,
+          "max": 1.0,
+          "iqr": 0.6302
+        },
+        "baseline_ap": {
+          "n_units_scored": 51,
+          "min": 0.0204,
+          "median": 0.6877,
+          "max": 1.0,
+          "iqr": 0.5773
+        },
+        "units_candidate_beats_baseline": "11/51",
+        "worst_unit": {
+          "unit": "SantaCruzWharf|2022",
+          "candidate_ap": 0.0238
+        },
+        "worst_margin_unit": {
+          "unit": "CalPolyPier|2023",
+          "margin_ap": -0.899,
+          "candidate_ap": 0.101,
+          "baseline_ap": 1.0
+        }
+      },
+      "year_variation": {
+        "candidate_ap": {
+          "n_units_scored": 18,
+          "min": 0.0049,
+          "median": 0.3736,
+          "max": 1.0,
+          "iqr": 0.5219
+        },
+        "baseline_ap": {
+          "n_units_scored": 18,
+          "min": 0.0033,
+          "median": 0.298,
+          "max": 1.0,
+          "iqr": 0.5136
+        },
+        "units_candidate_beats_baseline": "13/18",
+        "worst_unit": {
+          "unit": "2022",
+          "candidate_ap": 0.0049
+        },
+        "worst_margin_unit": {
+          "unit": "2021",
+          "margin_ap": -0.9167,
+          "candidate_ap": 0.0833,
+          "baseline_ap": 1.0
+        }
+      },
+      "hypotheses_attempted": 1,
+      "permutation_null": "NOT RUN"
     }
   },
   "feature_contract": {
@@ -759,6 +1146,8 @@
     "lab_only_result": "reports/hab/da_triage_recreation_20260824/result.json",
     "lab_only_critic": "reports/hab/da_triage_recreation_20260824/CRITIC_RECEIPT.json",
     "lab_only_report": "reports/hab/da_triage_recreation_20260824/REPORT.md",
+    "lab_only_batch_result": "reports/hab/da_triage_batch_replay_20260827/result.json",
+    "lab_only_batch_freeze": "research/hab/da_triage_batch_replay_20260827/FREEZE.md",
     "input_sha256": {
       "result_json": "71325a112e70e5f990bb991d2abe4468f5ba4b41fda183adce236aa0e4a29dd3",
       "claim_card_json": "f8b821f85b33a390b369f49e220f334de3e151d8d7946f2302254f8d10bf46ab",
@@ -767,10 +1156,19 @@
       "scored_rows_logistic": "0066e78ba2d8e800025b5736c54fd4da030779347e0375ff3df82d9dffb5e208",
       "source": "5eb4e85defb0ed68246446fb774fd8f33a4a729648143c77d266813f00f7038e"
     },
+    "batch_input_sha256": {
+      "result_json": "1f05827ac0069cd69f3a969c4dea5927e43d46e30a18758668236765f3916264",
+      "claim_card_json": "9993ddbd017cffc6193d416f976b3c99f42cc2f63dd5b68bd078a36fcf0bb761",
+      "freeze": "ddf27dfc93a0693f73c9828344d03b723acbaf8df855c05faede94a540d97d62"
+    },
     "fidelity_checks": {
       "frozen_hashes_match": true,
       "row_identity_match": true,
-      "pooled_10_percent_matches_banked_result": true
+      "pooled_10_percent_matches_banked_result": true,
+      "monthly_raw_count_capture_reproduced": true,
+      "monthly_raw_count_assays_reproduced": true,
+      "monthly_oracle_capture_reproduced": true,
+      "monthly_oracle_assays_reproduced": true
     }
   }
 }

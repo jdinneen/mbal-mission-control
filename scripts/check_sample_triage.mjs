@@ -20,141 +20,165 @@ const proof = JSON.parse(readFileSync(proofPath, "utf8"));
 const close = (actual, expected, tolerance = 1e-12) =>
   assert.ok(Math.abs(actual - expected) <= tolerance, `${actual} != ${expected}`);
 
-assert.equal(proof.schema_version, 2);
+assert.equal(proof.schema_version, 3);
+assert.equal(proof.artifact, "SampleNext microscope-count assay-priority tool");
 assert.equal(proof.release_ready, false);
 assert.equal(proof.release_grade_status, "NEEDS-DATA");
-assert.match(proof.public_status, /^GATED \/ WALKED-BACK/);
-assert.equal(proof.scope.rows, 5328);
-assert.equal(proof.scope.elevated_rows, 180);
-assert.equal(proof.scope.recorded_elevated_runs, 102);
-assert.equal(proof.scope.gap_separated_positive_clusters, 79);
-assert.match(proof.scope.recorded_run_rule, /intervening non-elevated sample/);
-assert.match(proof.scope.independence_status, /NOT ESTABLISHED/);
-assert.equal(proof.scope.pier_count, 7);
-assert.equal(proof.scope.date_max, "2026-06-22");
-close(proof.scope.prevalence, 180 / 5328);
-assert.match(proof.scope.elevated_definition, /strictly greater than 0\.5/);
-assert.match(proof.scope.official_reference_definition, /at or above 0\.5/);
-assert.equal(proof.scope.eligible_rows_exactly_on_boundary, 4);
-assert.match(proof.scope.boundary_note, /not identical/);
-assert.equal(proof.scope.source_toxin_rows, 5734);
-assert.equal(proof.scope.source_strict_elevated_rows, 206);
-assert.equal(proof.scope.source_toxin_station_count, 10);
-assert.equal(proof.scope.excluded_toxin_rows, 406);
-assert.equal(proof.scope.excluded_strict_elevated_rows, 26);
-assert.deepEqual(proof.scope.excluded_toxin_stations, ["Humboldt", "HumboldtSouthBay", "TrinidadPier"]);
-assert.match(proof.scope.eligibility, /at least 250 eligible rows/);
-assert.match(proof.scope.hypotheses_note, /NOT REPORTED/);
-assert.equal(proof.scope.calibration.status, "NOT VALIDATED FOR PROBABILITY USE");
-close(proof.scope.calibration.candidate_ece, 0.0196);
-close(proof.scope.calibration.baseline_ece, 0.0197);
-assert.match(proof.scope.calibration.note, /ranking only/);
+assert.match(proof.public_status, /^RETROSPECTIVE DECISION SUPPORT/);
 
-assert.match(proof.feature_contract.pn_observed_sum_definition, /not a provider-native total field/);
-assert.match(proof.feature_contract.previous_toxin_definition, /previous eligible panel sample/);
-assert.match(proof.feature_contract.previous_toxin_definition, /not necessarily the immediately previous/);
+const scope = proof.scope;
+assert.equal(scope.rows, 5328);
+assert.equal(scope.elevated_rows, 180);
+close(scope.prevalence, 180 / 5328);
+assert.equal(scope.recorded_elevated_runs, 102);
+assert.equal(scope.pier_count, 7);
+assert.equal(scope.date_min, "2008-06-30");
+assert.equal(scope.date_max, "2026-06-22");
+assert.match(scope.elevated_definition, /strictly greater than 0\.5/);
+assert.match(scope.official_reference_definition, /at or above 0\.5/);
+assert.match(scope.independence_status, /NOT ESTABLISHED/);
 
-const gbm = proof.estimators.gradient_boosting;
-const logistic = proof.estimators.logistic_regression;
-close(gbm.candidate_ap, 0.5420411060484033);
-close(gbm.fortified_baseline_ap, 0.3786775836391107);
-close(gbm.margin_ap, 0.16336352240929258);
-assert.deepEqual(gbm.ci95_pier_year, [0.07296816324862282, 0.2571449865806092]);
-assert.equal(gbm.positive_control_passed, false);
-close(gbm.max_destructive_control_recovery_fraction, 0.10985199350466332);
-close(logistic.candidate_ap, 0.5223421807464577);
-close(logistic.fortified_baseline_ap, 0.2987171032517309);
-close(logistic.margin_ap, 0.22362507749472676);
-assert.deepEqual(logistic.ci95_pier_year, [0.15608829018354395, 0.27492852896613634]);
-assert.equal(logistic.positive_control_passed, true);
-close(logistic.max_destructive_control_recovery_fraction, 0.14444117723912944);
+const contract = proof.recommendation_contract;
+assert.ok(contract.required_inputs.includes("sea-surface temperature in degrees Celsius"));
+assert.ok(contract.required_inputs.some((value) => value.includes("microscope-count groups")));
+assert.deepEqual(contract.optional_inputs, ["chlorophyll in milligrams per cubic metre"]);
+assert.equal(contract.primary_score, "reported Pseudo-nitzschia group sum, descending");
+assert.match(contract.priority_rule, /user chooses the number of expedited slots/);
+assert.match(contract.sea_surface_temperature_role, /^required context field/);
+assert.match(contract.chlorophyll_role, /^optional context field/);
+assert.match(contract.why_environment_does_not_change_priority, /did not establish/);
+assert.equal(contract.not_a_probability, true);
+assert.equal(contract.not_a_safety_determination, true);
+assert.match(contract.browser_only, /not transmitted or stored/);
 
-assert.deepEqual(proof.curves.pooled_archive["10"], {
-  gbm_model: 153,
-  logistic_model: 147,
-  gbm_baseline: 126,
-  logistic_baseline: 110,
-  pn_observed_sum: 125,
-  assays: 533,
+const reference = proof.calculator_reference;
+assert.equal(reference.reference_population, "5,328 eligible historical samples from seven California piers");
+assert.match(reference.count_definition, /not a true total/);
+assert.deepEqual(reference.pooled_count_quantiles, {
+  "0.5": 2600,
+  "0.75": 15019,
+  "0.9": 61095.30000000004,
+  "0.95": 131186,
+  "0.99": 460099.8863999949,
 });
-assert.deepEqual(proof.curves.within_pier_year["10"], {
-  gbm_model: 102,
-  logistic_model: 100,
-  gbm_baseline: 77,
-  logistic_baseline: 77,
-  pn_observed_sum: 97,
-  assays: 595,
+assert.equal(reference.priority_bands.length, 4);
+assert.deepEqual(reference.priority_bands.map(({ id, rows, strict_elevated_rows }) => ({ id, rows, strict_elevated_rows })), [
+  { id: "routine", rows: 3995, strict_elevated_rows: 10 },
+  { id: "review", rows: 800, strict_elevated_rows: 45 },
+  { id: "expedite", rows: 266, strict_elevated_rows: 47 },
+  { id: "expedite_highest", rows: 267, strict_elevated_rows: 78 },
+]);
+close(reference.priority_bands[0].strict_elevated_rate, 10 / 3995);
+close(reference.priority_bands[1].strict_elevated_rate, 45 / 800);
+close(reference.priority_bands[2].strict_elevated_rate, 47 / 266);
+close(reference.priority_bands[3].strict_elevated_rate, 78 / 267);
+assert.equal(Object.keys(reference.by_station).length, 7);
+assert.equal(reference.by_station.MontereyWharf.rows, 276);
+assert.equal(reference.by_station.MontereyWharf.count_quantiles["0.9"], 176677.5);
+assert.deepEqual(reference.sea_surface_temperature, {
+  n: 5193, unit: "degrees Celsius", min: 8.8, p05: 12, median: 15.9, p95: 21.6, max: 25.5,
 });
+assert.deepEqual(reference.chlorophyll, {
+  n: 5202, unit: "milligrams per cubic metre", min: 0, p05: 0.54, median: 2.55,
+  p95: 17.318999999999996, max: 467.66,
+});
+assert.match(reference.association_warning, /not a calibrated probability/);
 
-for (const frameName of ["pooled_archive", "within_pier_year"]) {
-  const frame = proof.curves[frameName];
-  assert.deepEqual(Object.keys(frame), Array.from({ length: 39 }, (_, index) => String(index + 2)));
-  let prior = null;
-  for (let budget = 2; budget <= 40; budget += 1) {
-    const row = frame[String(budget)];
-    for (const key of ["gbm_model", "logistic_model", "gbm_baseline", "logistic_baseline", "pn_observed_sum"]) {
-      assert.ok(Number.isInteger(row[key]) && row[key] >= 0 && row[key] <= proof.scope.elevated_rows);
-      if (prior) assert.ok(row[key] >= prior[key], `${frameName} ${key} must be monotone at ${budget}%`);
-    }
-    assert.ok(Number.isInteger(row.assays) && row.assays > 0 && row.assays <= proof.scope.rows);
-    if (prior) assert.ok(row.assays >= prior.assays, `${frameName} assay count must be monotone at ${budget}%`);
-    prior = row;
+const replay = proof.operational_replay;
+assert.match(replay.status, /^NULL FOR MODEL ADVANTAGE/);
+assert.match(replay.workflow, /chronological monthly batches/);
+assert.match(replay.workflow, /10% quota/);
+assert.equal(replay.rows, 5328);
+assert.equal(replay.strict_elevated_rows, 180);
+assert.equal(replay.recorded_episodes, 102);
+assert.deepEqual(
+  [replay.raw_count.assays, replay.raw_count.elevated_captured, replay.raw_count.episodes_captured, replay.raw_count.first_positive_captured],
+  [512, 66, 48, 39],
+);
+assert.deepEqual(
+  [replay.random_floor.assays, replay.random_floor.elevated_captured],
+  [512, 20],
+);
+assert.deepEqual(
+  [replay.perfect_foresight_ceiling.assays, replay.perfect_foresight_ceiling.elevated_captured],
+  [512, 116],
+);
+assert.equal(replay.candidate_gradient_boosting.elevated_captured, 78);
+assert.equal(replay.candidate_logistic.elevated_captured, 81);
+assert.deepEqual(replay.model_edge_gate.per_estimator.gbm.sample_capture.ci95, [-3, 28]);
+assert.deepEqual(replay.model_edge_gate.per_estimator.logistic.sample_capture.ci95, [3, 29]);
+assert.equal(replay.model_edge_gate.ci_excludes_zero.gbm, false);
+assert.equal(replay.model_edge_gate.ci_excludes_zero.logistic, true);
+assert.match(replay.model_edge_gate.verdict, /^NULL/);
+
+const evaluation = replay.deployment_ap;
+assert.deepEqual(
+  [evaluation.rows, evaluation.strict_elevated_rows, evaluation.prevalence, evaluation.candidate, evaluation.raw_count],
+  [5162, 179, 0.0347, 0.392, 0.2652],
+);
+assert.deepEqual(evaluation.margin.ci95, [0.0182, 0.2236]);
+assert.equal(evaluation.independent_event_count, 101);
+assert.equal(evaluation.pier_year_variation.units_candidate_beats_baseline, "11/51");
+assert.equal(evaluation.year_variation.units_candidate_beats_baseline, "13/18");
+assert.equal(evaluation.hypotheses_attempted, 1);
+assert.equal(evaluation.permutation_null, "NOT RUN");
+
+for (const hashes of [proof.proof.input_sha256, proof.proof.batch_input_sha256]) {
+  for (const [name, digest] of Object.entries(hashes)) {
+    assert.match(digest, /^[0-9a-f]{64}$/, `invalid SHA-256 binding for ${name}`);
   }
-}
-
-for (const [name, digest] of Object.entries(proof.proof.input_sha256)) {
-  assert.match(digest, /^[0-9a-f]{64}$/, `invalid SHA-256 binding for ${name}`);
 }
 assert.deepEqual(proof.proof.fidelity_checks, {
   frozen_hashes_match: true,
   row_identity_match: true,
   pooled_10_percent_matches_banked_result: true,
+  monthly_raw_count_capture_reproduced: true,
+  monthly_raw_count_assays_reproduced: true,
+  monthly_oracle_capture_reproduced: true,
+  monthly_oracle_assays_reproduced: true,
 });
 
 const requiredCopy = [
-  "Retrospective research prototype",
-  "It does not score a new sample",
-  "It does not score a new sample, forecast a harmful algal bloom, or determine whether water or seafood is safe.",
-  "strictly greater than 0.5",
-  "at or above 0.5",
-  "Four otherwise eligible samples",
-  "GATED / WALKED-BACK",
-  "Hypotheses attempted: NOT REPORTED.",
-  "Calibration for probability use: NOT VALIDATED.",
-  "computed as 0.0196",
-  "0.0197 for its baseline",
-  "Planted-signal control: FAIL overall.",
-  "79",
-  "cross-pier independence is not established",
-  "excluded 406 toxin rows",
-  "26 of the 206 rows",
-  "does not verify that every result was available",
-  "Release proof package: MISSING.",
-  "admission receipt",
-  "input-availability proof",
-  "key-shuffle proof",
-  "execution-completion proof",
-  "recovered at most 11.0%",
-  "14.4% of the simpler-model improvement",
-  "previous eligible sample in this analysis panel",
-  "not a source-native “total” field",
-  "Pattern model’s matched baseline",
-  "an effective archive-wide share of ${effectiveShare}%",
+  "Microscope counts in.",
+  "Built for the pier-monitoring workflow",
+  "the algae group that includes domoic-acid-producing species",
+  "Use the microscope counts available within a few days.",
+  "Include sea-surface temperature; add chlorophyll only if it is back.",
+  "At least one microscope-count group is required. Chlorophyll is optional.",
+  "Sea-surface temperature — °C",
+  "Required context. It does not change the count-based queue rank.",
+  "Chlorophyll — mg/m³",
+  "Leave blank if pending",
+  "Optional—leave it blank when it is not available for this decision.",
+  "A blank group is treated as unreported—not zero.",
+  "Expedited slots this batch",
+  "Highest reported-group sum ranks first.",
+  "Entered values stay in this browser tab.",
+  "The simple rule survived the realistic replay.",
+  "Average Precision ranking score (0–1; higher is better)",
+  "The earlier pattern model looked stronger when 18 years were ranked as one giant list.",
+  "No prospective validation.",
+  "No calibrated probability.",
+  "No automatic transfer.",
+  "Normal protocols still apply.",
+  "This is a relative queue suggestion, not a toxin probability or safety determination.",
+  "The tool is unavailable rather than showing an unverified recommendation.",
   "href=\"./sample-triage-proof.json\"",
   "fetch(\"./sample-triage-proof.json\"",
-  "data-proof-status=\"gated\"",
   "https://jdinneen.github.io/mbal-mission-control/sample-triage-og.png",
 ];
 for (const needle of requiredCopy) assert.ok(html.includes(needle), `required page copy missing: ${needle}`);
 
-assert.ok(!/raw\s+<i>Pseudo-nitzschia<\/i>\s+cell count/i.test(html), "derived group sum must not be called a raw total");
-assert.ok(!html.includes("operational \"elevated\" threshold"), "strict comparator must not be equated to the official reference");
-assert.ok(!html.includes("independent elevated episodes"), "gap-separated clusters must not be called independent episodes");
-assert.ok(!html.includes("most informative"), "information gain was not tested");
-assert.ok(!html.includes("Learn more."), "learning or information gain was not tested");
-assert.ok(!html.includes("fitted models remain"), "the recreation did not persist fitted model objects");
-assert.ok(!html.includes("frozen 50%"), "control limits must be described as recorded rules");
-assert.ok(!html.includes("frozen minimum"), "control limits must be described as recorded rules");
-assert.ok(html.includes("The explorer is unavailable rather than showing unverified numbers."), "proof fetch must fail closed");
+const requiredControls = [
+  'id="sample-form"', 'id="sample-label"', 'id="sample-date"', 'id="location"', 'id="pn-del"',
+  'id="pn-ser"', 'id="sst"', 'id="chlorophyll"', 'id="assess-button"', 'id="capacity"',
+  'id="queue-body"', 'id="download-queue"',
+];
+for (const needle of requiredControls) assert.ok(html.includes(needle), `required tool control missing: ${needle}`);
+assert.match(html, /id="sst"[^>]*required/);
+assert.doesNotMatch(html, /id="chlorophyll"[^>]*required/);
+assert.ok(!html.includes("high risk"), "historical bands must not be presented as calibrated risk");
+assert.ok(!html.includes("safe to skip"), "the page must not imply safety from a queue rank");
+assert.ok(!html.includes("forecast a harmful algal bloom"), "the tool must not be framed as the competing bloom forecast discussed in the transcript");
 
-console.log("PASS sample-triage: bound proof, visible claims, slider curves, eligibility, episode wording, and fail-closed behavior verified");
+console.log("PASS sample-triage: input contract, count bands, monthly replay, visible claims, and fail-closed behavior verified");
