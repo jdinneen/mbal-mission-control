@@ -1,0 +1,775 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102a2f">
+  <meta name="description" content="Explore how a retrospective California pier model prioritized collected water samples for particulate domoic-acid testing at different assay budgets.">
+  <meta property="og:title" content="SampleNext | Retrospective assay-priority explorer">
+  <meta property="og:description" content="Move the assay-budget slider and compare a research model with raw cell counts and a strong historical baseline.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://jdinneen.github.io/mbal-mission-control/sample-triage.html">
+  <meta property="og:image" content="https://jdinneen.github.io/mbal-mission-control/sample-triage-og.png">
+  <meta property="og:image:width" content="1536">
+  <meta property="og:image:height" content="1024">
+  <meta property="og:image:alt" content="SampleNext retrospective assay-priority explorer">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SampleNext | Retrospective assay-priority explorer">
+  <meta name="twitter:description" content="An honest, interactive look at historical California pier sample prioritization.">
+  <meta name="twitter:image" content="https://jdinneen.github.io/mbal-mission-control/sample-triage-og.png">
+  <title>SampleNext | Retrospective assay-priority explorer</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #102a2f;
+      --ink-soft: #3c5659;
+      --paper: #fffdf7;
+      --paper-2: #f4f0e5;
+      --foam: #d7f0e8;
+      --lime: #d7ef70;
+      --lime-dark: #77921e;
+      --coral: #ff7b5b;
+      --aqua: #62c6bc;
+      --blue: #4a8fa5;
+      --line: rgba(16, 42, 47, 0.18);
+      --shadow: 0 28px 80px rgba(16, 42, 47, 0.14);
+      --radius-lg: 30px;
+      --radius-md: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      min-width: 320px;
+      background:
+        radial-gradient(circle at 12% 8%, rgba(215, 239, 112, 0.33), transparent 28rem),
+        radial-gradient(circle at 90% 16%, rgba(98, 198, 188, 0.24), transparent 30rem),
+        var(--paper);
+      color: var(--ink);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+
+    button, input { font: inherit; }
+    a { color: inherit; }
+    a:focus-visible, button:focus-visible, input:focus-visible {
+      outline: 3px solid var(--coral);
+      outline-offset: 3px;
+    }
+
+    .shell { width: min(1180px, calc(100% - 40px)); margin: 0 auto; }
+    .site-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      padding: 24px 0;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+      font-weight: 850;
+      letter-spacing: -0.03em;
+    }
+    .brand-mark {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border: 1.5px solid var(--ink);
+      border-radius: 50%;
+      background: var(--lime);
+      font-size: 14px;
+      letter-spacing: 0;
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 8px 13px;
+      background: rgba(255, 253, 247, 0.75);
+      color: var(--ink-soft);
+      font-size: 13px;
+      font-weight: 720;
+      backdrop-filter: blur(8px);
+    }
+    .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--coral); }
+
+    .hero {
+      display: grid;
+      grid-template-columns: minmax(0, 0.88fr) minmax(520px, 1.12fr);
+      align-items: center;
+      gap: clamp(34px, 6vw, 88px);
+      min-height: calc(100vh - 88px);
+      padding: 56px 0 90px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 22px;
+      color: var(--lime-dark);
+      font-size: 13px;
+      font-weight: 850;
+      letter-spacing: 0.11em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { content: ""; width: 30px; height: 2px; background: currentColor; }
+    h1 {
+      max-width: 720px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(52px, 6.4vw, 92px);
+      font-weight: 500;
+      letter-spacing: -0.055em;
+      line-height: 0.96;
+    }
+    h1 em { color: var(--coral); font-style: italic; font-weight: 500; }
+    .hero-copy {
+      max-width: 620px;
+      margin: 28px 0 0;
+      color: var(--ink-soft);
+      font-size: clamp(18px, 2vw, 22px);
+    }
+    .plain-note {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 13px;
+      max-width: 610px;
+      margin-top: 30px;
+      padding: 16px 18px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: rgba(255,255,255,0.46);
+      color: var(--ink-soft);
+      font-size: 14px;
+    }
+    .note-icon {
+      display: grid;
+      width: 26px;
+      height: 26px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--foam);
+      color: var(--ink);
+      font-weight: 900;
+    }
+
+    .lab-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(16, 42, 47, 0.2);
+      border-radius: var(--radius-lg);
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+    .lab-card::before {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 170px;
+      height: 170px;
+      border-radius: 0 0 0 100%;
+      background: linear-gradient(135deg, rgba(215,239,112,0.7), rgba(98,198,188,0.3));
+      content: "";
+      pointer-events: none;
+    }
+    .card-head { position: relative; padding: 26px 28px 22px; border-bottom: 1px solid var(--line); }
+    .kicker { margin: 0 0 4px; color: var(--ink-soft); font-size: 12px; font-weight: 820; letter-spacing: 0.1em; text-transform: uppercase; }
+    h2 { margin: 0; font-size: clamp(25px, 3vw, 34px); letter-spacing: -0.04em; line-height: 1.1; }
+    .card-body { padding: 26px 28px 30px; }
+
+    .frame-switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 26px;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: var(--paper-2);
+    }
+    .frame-switch button {
+      min-height: 44px;
+      border: 0;
+      border-radius: 10px;
+      background: transparent;
+      color: var(--ink-soft);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 780;
+    }
+    .frame-switch button[aria-pressed="true"] {
+      background: var(--ink);
+      color: white;
+      box-shadow: 0 6px 18px rgba(16,42,47,0.18);
+    }
+
+    .budget-line { display: flex; align-items: end; justify-content: space-between; gap: 18px; }
+    .budget-label { font-weight: 810; }
+    .budget-output { color: var(--coral); font-family: Georgia, "Times New Roman", serif; font-size: 36px; line-height: 1; }
+    input[type="range"] {
+      width: 100%;
+      margin: 15px 0 7px;
+      accent-color: var(--coral);
+      cursor: pointer;
+    }
+    .range-ends { display: flex; justify-content: space-between; color: var(--ink-soft); font-size: 11px; }
+    .queue-context {
+      margin: 14px 0 24px;
+      color: var(--ink-soft);
+      font-size: 13px;
+    }
+
+    .score-list { display: grid; gap: 17px; }
+    .score-head { display: flex; align-items: baseline; justify-content: space-between; gap: 18px; margin-bottom: 6px; }
+    .score-name { font-size: 13px; font-weight: 800; }
+    .score-value { font-size: 13px; font-variant-numeric: tabular-nums; }
+    .track { height: 10px; overflow: hidden; border-radius: 999px; background: #e3e1d9; }
+    .fill { width: 0; height: 100%; border-radius: inherit; transition: width 260ms ease; }
+    .fill.model { background: var(--coral); }
+    .fill.twin { background: var(--aqua); }
+    .fill.count { background: var(--lime-dark); }
+    .fill.baseline { background: var(--blue); }
+    .readout {
+      margin: 24px 0 0;
+      padding: 16px 17px;
+      border-radius: 15px;
+      background: var(--ink);
+      color: #f8f8ef;
+      font-size: 14px;
+    }
+    .readout strong { color: var(--lime); }
+    .card-foot {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px 28px;
+      border-top: 1px solid var(--line);
+      background: rgba(244, 240, 229, 0.72);
+      color: var(--ink-soft);
+      font-size: 11px;
+    }
+
+    .loading { color: var(--ink-soft); }
+    .error { color: #9e2f20; font-weight: 750; }
+    .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+
+    .content-section { padding: 104px 0; }
+    .content-section + .content-section { border-top: 1px solid var(--line); }
+    .section-label {
+      margin: 0 0 13px;
+      color: var(--coral);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .section-title {
+      max-width: 820px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(38px, 5vw, 62px);
+      font-weight: 500;
+      letter-spacing: -0.045em;
+      line-height: 1.02;
+    }
+    .section-lede {
+      max-width: 790px;
+      margin: 23px 0 0;
+      color: var(--ink-soft);
+      font-size: clamp(18px, 2.2vw, 23px);
+    }
+
+    .question-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-top: 46px;
+    }
+    .question-card {
+      min-height: 245px;
+      padding: 26px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: rgba(255,255,255,0.58);
+    }
+    .question-number {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      margin-bottom: 44px;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--lime);
+      font-weight: 880;
+    }
+    .question-card h3 { margin: 0 0 9px; font-size: 20px; letter-spacing: -0.025em; }
+    .question-card p { margin: 0; color: var(--ink-soft); font-size: 15px; }
+
+    .definition-note {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+      overflow: hidden;
+      margin-top: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--line);
+    }
+    .definition-note > div { padding: 22px 24px; background: var(--paper); }
+    .definition-note strong { display: block; margin-bottom: 5px; }
+    .definition-note p { margin: 0; color: var(--ink-soft); font-size: 14px; }
+    .eligibility-strip {
+      margin: 18px 0 0;
+      padding: 18px 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: var(--foam);
+      color: var(--ink-soft);
+      font-size: 14px;
+    }
+    .eligibility-strip strong { color: var(--ink); }
+
+    .evidence-section {
+      padding: 104px 0;
+      background:
+        radial-gradient(circle at 90% 10%, rgba(98,198,188,0.2), transparent 30rem),
+        var(--ink);
+      color: #f7f5ec;
+    }
+    .evidence-section .section-label { color: var(--lime); }
+    .evidence-section .section-lede { color: rgba(247,245,236,0.72); }
+    .verdict-box {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: start;
+      margin: 40px 0 28px;
+      padding: 22px 24px;
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: var(--radius-md);
+      background: rgba(255,255,255,0.065);
+    }
+    .verdict-tag {
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: var(--coral);
+      color: var(--ink);
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
+    }
+    .verdict-box p { margin: 0; color: rgba(247,245,236,0.82); }
+    .verdict-box strong { color: white; }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius-md);
+    }
+    .metric-cell { min-height: 155px; padding: 24px; border-right: 1px solid rgba(255,255,255,0.15); }
+    .metric-cell:last-child { border-right: 0; }
+    .metric-value { display: block; color: var(--lime); font-family: Georgia, "Times New Roman", serif; font-size: 38px; line-height: 1; }
+    .metric-label { display: block; margin-top: 12px; color: rgba(247,245,236,0.68); font-size: 13px; }
+
+    .evidence-card {
+      margin-top: 28px;
+      padding: clamp(22px, 4vw, 38px);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius-lg);
+      background: #17373c;
+    }
+    .evidence-card h3 { margin: 0 0 8px; font-size: 25px; letter-spacing: -0.03em; }
+    .evidence-card > p { max-width: 900px; margin: 0; color: rgba(247,245,236,0.72); }
+    .table-wrap { overflow-x: auto; margin-top: 22px; }
+    table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 14px; }
+    th, td { padding: 14px 13px; border-bottom: 1px solid rgba(255,255,255,0.13); text-align: right; }
+    th:first-child, td:first-child { text-align: left; }
+    th { color: rgba(247,245,236,0.6); font-size: 11px; letter-spacing: 0.07em; text-transform: uppercase; }
+    td { font-variant-numeric: tabular-nums; }
+    tbody tr:last-child td { border-bottom: 0; }
+    .table-note { margin-top: 15px !important; font-size: 13px; }
+
+    .evidence-split { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 28px; }
+    .evidence-mini {
+      padding: 26px;
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: var(--radius-md);
+      background: rgba(255,255,255,0.045);
+    }
+    .evidence-mini h3 { margin: 0 0 16px; font-size: 19px; }
+    .evidence-mini ul { display: grid; gap: 12px; margin: 0; padding-left: 19px; color: rgba(247,245,236,0.72); font-size: 14px; }
+    .evidence-mini strong { color: white; }
+
+    .status-grid { display: grid; grid-template-columns: 0.85fr 1.15fr; gap: 38px; margin-top: 42px; }
+    .status-card { padding: 28px; border-radius: var(--radius-md); background: var(--paper-2); }
+    .status-card h3 { margin: 0 0 13px; font-size: 21px; }
+    .status-card p { margin: 0; color: var(--ink-soft); }
+    .limit-list { display: grid; gap: 15px; margin: 0; padding: 0; list-style: none; }
+    .limit-list li { display: grid; grid-template-columns: 28px 1fr; gap: 12px; color: var(--ink-soft); }
+    .limit-list li::before {
+      display: grid;
+      width: 24px;
+      height: 24px;
+      place-items: center;
+      border-radius: 50%;
+      background: #ffe1d8;
+      color: #8b2c1d;
+      content: "!";
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .proof-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-top: 46px;
+      padding: 26px 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: white;
+    }
+    .proof-row h3 { margin: 0 0 5px; font-size: 19px; }
+    .proof-row p { margin: 0; color: var(--ink-soft); font-size: 14px; }
+    .proof-link {
+      flex: 0 0 auto;
+      border-radius: 999px;
+      padding: 12px 17px;
+      background: var(--ink);
+      color: white;
+      font-size: 13px;
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .site-footer { padding: 34px 0 48px; border-top: 1px solid var(--line); color: var(--ink-soft); font-size: 13px; }
+    .footer-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 14px; }
+
+    @media (max-width: 980px) {
+      .hero { grid-template-columns: 1fr; min-height: auto; padding-top: 40px; }
+      .hero-copy { max-width: 740px; }
+      .lab-card { width: min(680px, 100%); }
+      .question-grid { grid-template-columns: 1fr; }
+      .question-card { min-height: auto; }
+      .question-number { margin-bottom: 24px; }
+      .metric-grid { grid-template-columns: 1fr 1fr; }
+      .metric-cell:nth-child(2) { border-right: 0; }
+      .metric-cell:nth-child(-n+2) { border-bottom: 1px solid rgba(255,255,255,0.15); }
+      .status-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 620px) {
+      .shell { width: min(100% - 24px, 1180px); }
+      .site-header { align-items: flex-start; }
+      .status-pill { max-width: 190px; border-radius: 14px; }
+      .hero { padding: 34px 0 64px; }
+      h1 { font-size: clamp(45px, 14vw, 64px); }
+      .card-head, .card-body { padding-left: 20px; padding-right: 20px; }
+      .card-foot { padding-left: 20px; padding-right: 20px; }
+      .frame-switch { grid-template-columns: 1fr; }
+      .content-section, .evidence-section { padding: 76px 0; }
+      .definition-note, .evidence-split { grid-template-columns: 1fr; }
+      .metric-grid { grid-template-columns: 1fr; }
+      .metric-cell { min-height: auto; border-right: 0; border-bottom: 1px solid rgba(255,255,255,0.15); }
+      .metric-cell:last-child { border-bottom: 0; }
+      .verdict-box { grid-template-columns: 1fr; }
+      .verdict-tag { justify-self: start; }
+      .proof-row { align-items: flex-start; flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .fill { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header shell">
+    <a class="brand" href="./index.html" aria-label="MBAL Mission Control home">
+      <span class="brand-mark" aria-hidden="true">MB</span>
+      <span>SampleNext</span>
+    </a>
+    <span class="status-pill"><span class="status-dot" aria-hidden="true"></span>Retrospective research prototype</span>
+  </header>
+
+  <main>
+    <section class="hero shell" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Lab-test queue explorer</p>
+        <h1 id="page-title">Prioritize the queue.<br><em>See the history.</em></h1>
+        <p class="hero-copy">Could routine same-sample measurements move more historically elevated samples to the front of the queue for a laboratory test—an “assay”—for domoic acid, a nerve toxin made during some algal blooms?</p>
+        <div class="plain-note">
+          <span class="note-icon" aria-hidden="true">i</span>
+          <span>This page replays a historical California pier experiment. It does not score a new sample, forecast a harmful algal bloom, or determine whether water or seafood is safe.</span>
+        </div>
+      </div>
+
+      <section class="lab-card" aria-labelledby="explorer-title">
+        <div class="card-head">
+          <p class="kicker">Interactive historical replay</p>
+          <h2 id="explorer-title">Set the assay budget</h2>
+        </div>
+        <div class="card-body">
+          <div class="frame-switch" role="group" aria-label="Historical ranking frame">
+            <button type="button" data-frame="within_pier_year" aria-pressed="true">Inside each pier and year</button>
+            <button type="button" data-frame="pooled_archive" aria-pressed="false">One pooled archive</button>
+          </div>
+
+          <div class="budget-line">
+            <label class="budget-label" id="budget-label" for="budget">Target share inside each pier and year (each group rounded up)</label>
+            <output class="budget-output" id="budget-output" for="budget">10%</output>
+          </div>
+          <input id="budget" type="range" min="2" max="40" step="1" value="10" aria-describedby="queue-context">
+          <div class="range-ends" aria-hidden="true"><span>2%</span><span>40%</span></div>
+          <p class="queue-context loading" id="queue-context">Loading the recorded evidence…</p>
+
+          <div class="score-list" aria-live="polite" aria-label="Elevated historical samples surfaced">
+            <div>
+              <div class="score-head"><span class="score-name">Pattern model (gradient boosting)</span><span class="score-value" id="model-value">—</span></div>
+              <div class="track"><div class="fill model" id="model-bar"></div></div>
+            </div>
+            <div>
+              <div class="score-head"><span class="score-name">Simpler statistical check (logistic regression)</span><span class="score-value" id="twin-value">—</span></div>
+              <div class="track"><div class="fill twin" id="twin-bar"></div></div>
+            </div>
+            <div>
+              <div class="score-head"><span class="score-name">Reported <i>Pseudo-nitzschia</i> group counts</span><span class="score-value" id="count-value">—</span></div>
+              <div class="track"><div class="fill count" id="count-bar"></div></div>
+            </div>
+            <div>
+              <div class="score-head"><span class="score-name">Pattern model’s matched baseline</span><span class="score-value" id="baseline-value">—</span></div>
+              <div class="track"><div class="fill baseline" id="baseline-bar"></div></div>
+            </div>
+          </div>
+
+          <p class="readout" id="readout" aria-live="polite">The historical comparison will appear here.</p>
+        </div>
+        <div class="card-foot">
+          <span>5,328 historical samples</span>
+          <span>180 elevated under the recorded definition</span>
+          <span>7 California piers</span>
+        </div>
+      </section>
+    </section>
+
+    <section class="content-section shell" id="method" aria-labelledby="method-title">
+      <p class="section-label">The research question</p>
+      <h2 class="section-title" id="method-title">A queue question—not a forecast.</h2>
+      <p class="section-lede">Domoic acid is a nerve toxin produced during some coastal algal blooms. Its laboratory test—an “assay”—costs time and money. This experiment asks whether routine measurements could help order already-collected samples for that test.</p>
+
+      <div class="question-grid">
+        <article class="question-card">
+          <span class="question-number">1</span>
+          <h3>Start with measurements in the historical record</h3>
+          <p>The model used season, chlorophyll—the green pigment used as a rough measure of algae—water temperature, the toxin value from the previous eligible panel sample and its age, plus microscope counts for two groups of <i>Pseudo-nitzschia</i>—a genus of microscopic algae that can produce domoic acid. The record shows these values together; it does not verify that every result was available when a real toxin-testing decision would have been made.</p>
+        </article>
+        <article class="question-card">
+          <span class="question-number">2</span>
+          <h3>Hide one entire pier</h3>
+          <p>The model learned from six piers and ranked samples at the seventh. That “whole-pier held-out” test was repeated seven times, so every displayed model score comes from a pier excluded from its own training data.</p>
+        </article>
+        <article class="question-card">
+          <span class="question-number">3</span>
+          <h3>Reveal the historical toxin results</h3>
+          <p>The slider changes the testing budget, then counts how many elevated historical samples each ranking method would have moved into the laboratory queue. It replays known outcomes; it does not predict a new one.</p>
+        </article>
+      </div>
+
+      <div class="definition-note" aria-label="Threshold definitions">
+        <div>
+          <strong>Recorded Lab definition</strong>
+          <p>This analysis calls particulate domoic acid—the amount caught on a filter from seawater—elevated only when it is strictly greater than 0.5 micrograms per litre. It contains 180 such samples.</p>
+        </div>
+        <div>
+          <strong>Official reference definition</strong>
+          <p>The published California Harmful Algae Risk Mapping (“C-HARM”) product says at or above 0.5. Four otherwise eligible samples sit exactly on that boundary, so the two definitions are not identical.</p>
+        </div>
+      </div>
+
+      <p class="eligibility-strip"><strong>Who entered the analysis:</strong> particulate domoic acid measured, at least one of the two microscope groups reported, and at least 250 eligible rows at the pier. That retained 5,328 rows at 7 of 10 toxin-measuring stations and excluded 406 toxin rows—including all three northern stations (Humboldt, Humboldt South Bay, and Trinidad) and 26 of the 206 rows above the strict Lab cutoff.</p>
+    </section>
+
+    <section class="evidence-section" id="evidence" aria-labelledby="evidence-title">
+      <div class="shell">
+        <p class="section-label">Evidence summary with release blockers</p>
+        <h2 class="section-title" id="evidence-title">Promising history. Gated conclusion.</h2>
+        <p class="section-lede">The model ranked historical elevated samples ahead of a strong comparison, but one safeguard failed and several release requirements are missing. The honest verdict is “GATED / WALKED-BACK,” meaning the pattern is worth studying but not cleared for operational use.</p>
+
+        <div class="verdict-box" data-proof-status="gated">
+          <span class="verdict-tag">GATED / WALKED-BACK</span>
+          <p><strong>Retrospective particulate domoic-acid triage versus season, chlorophyll, previous eligible-panel toxin information, and temperature.</strong> Held-out unit: one whole pier at a time. The model trained on the other six and repeated that process for all seven.</p>
+        </div>
+
+        <div class="metric-grid" aria-label="Study scope">
+          <div class="metric-cell"><span class="metric-value">5,328</span><span class="metric-label">historical samples in the scored panel</span></div>
+          <div class="metric-cell"><span class="metric-value">3.38%</span><span class="metric-label">were elevated: 180 of 5,328</span></div>
+          <div class="metric-cell"><span class="metric-value">79</span><span class="metric-label">within-pier positive clusters separated by more than 21 days; cross-pier independence is not established</span></div>
+          <div class="metric-cell"><span class="metric-value">7 / 7</span><span class="metric-label">piers where both model types beat their matched baselines</span></div>
+        </div>
+
+        <article class="evidence-card">
+          <h3>The recorded 10% pooled-archive comparison</h3>
+          <p>Average Precision (“AP”) measures how well a method puts scarce elevated cases near the top; 1 is perfect, and an uninformative ranking here begins near the 0.034 event rate. “Baseline” means the same inputs without the two <i>Pseudo-nitzschia</i> group counts.</p>
+          <div class="table-wrap">
+            <table>
+              <caption class="sr-only">Model and matched-baseline results at the fixed 10 percent pooled budget</caption>
+              <thead>
+                <tr><th>Method</th><th>Model AP</th><th>Matched baseline AP</th><th>Samples tested</th><th>Elevated surfaced</th><th>Baseline surfaced</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Pattern model (gradient boosting)</td><td>0.542</td><td>0.379</td><td>533</td><td>153 of 180</td><td>126 of 180</td></tr>
+                <tr><td>Simpler check (logistic regression)</td><td>0.522</td><td>0.299</td><td>533</td><td>147 of 180</td><td>110 of 180</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="table-note">Ranking only by the two reported microscope-count groups surfaced 125 of 180. That comparison is a derived sum of the reported delicatissima- and seriata-group counts, using the one reported group when the other is missing; it is not a source-native “total” field.</p>
+        </article>
+
+        <div class="evidence-split">
+          <article class="evidence-mini">
+            <h3>Uncertainty and variation</h3>
+            <ul>
+              <li>The pattern model added 0.163 AP over its baseline. Its 95% confidence interval—a resampled range showing uncertainty—was +0.073 to +0.257.</li>
+              <li>The simpler model added 0.224 AP. Its 95% confidence interval was +0.156 to +0.275.</li>
+              <li>Both beat their baselines at all 7 piers and in 11 of 13 scored years. Both were worse than baseline in their weakest year, 2018.</li>
+              <li>The paired score-swap checks were unlikely under random swapping, but the stricter full-refit permutation test—which re-trains the models after shuffling outcomes—was not run.</li>
+              <li>An earlier receipt counted 102 elevated runs by splitting after any intervening non-elevated sample. This page reports the stricter 79 gap-separated clusters and does not claim that clusters at different piers are independent.</li>
+            </ul>
+          </article>
+          <article class="evidence-mini">
+            <h3>Safeguards and missing evidence</h3>
+            <ul>
+              <li><strong>False-feature controls: PASS.</strong> Random or scrambled inputs recovered at most 11.0% of the pattern-model improvement and 14.4% of the simpler-model improvement, below the recorded 50% limit.</li>
+              <li><strong>Planted-signal control: FAIL overall.</strong> The pattern model added 0.0334 Average Precision, below the recorded 0.05 minimum; the simpler model added 0.0551 and passed. Both were required to pass.</li>
+              <li><strong>Hypotheses attempted: NOT REPORTED.</strong> Unknown prior searching raises the chance of a lucky-looking result.</li>
+              <li><strong>Calibration for probability use: NOT VALIDATED.</strong> Expected calibration error—a summary of how numerical predictions align with observed rates—was computed as 0.0196 for the pattern model and 0.0197 for its baseline, but the release evidence does not establish these scores as trustworthy probabilities. This page uses ranking only.</li>
+              <li><strong>Release proof package: MISSING.</strong> There is no pre-result experiment contract, admission receipt, input-availability proof, key-shuffle proof, full-refit permutation proof, or execution-completion proof.</li>
+              <li><strong>Unseen-season forward test and fresh-from-scratch release reproduction: NOT RUN.</strong> The source also has not cleared the Lab’s source review.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section shell" id="status" aria-labelledby="status-title">
+      <p class="section-label">What this page is for</p>
+      <h2 class="section-title" id="status-title">The retrospective tool is the deliverable.</h2>
+      <p class="section-lede">A prospective pilot is not required to make this historical evaluation interactive or to support a carefully scoped research communication. It would be required before presenting the ranking as a real-time decision system.</p>
+
+      <div class="status-grid">
+        <article class="status-card">
+          <h3>Useful now</h3>
+          <p>Explore the tradeoff between laboratory budget and elevated historical samples surfaced; explain the whole-pier evaluation; and show exactly where the evidence is promising, weak, or missing.</p>
+        </article>
+        <ul class="limit-list" aria-label="Operational limits">
+          <li><span><strong>No new-sample score.</strong> The page never asks for a location or measurement and never returns a probability.</span></li>
+          <li><span><strong>No bloom or safety forecast.</strong> It cannot determine whether water, wildlife, or seafood is safe.</span></li>
+          <li><span><strong>Bounded analysis panel.</strong> Three northern toxin-measuring stations and 406 toxin-measured rows did not meet the recorded panel rules; this page does not claim to represent the complete statewide record.</span></li>
+          <li><span><strong>No release claim.</strong> The source has not yet cleared the Lab’s source review, the prior hypothesis count is unknown, the planted-signal safeguard failed, and six required proof artifacts are missing.</span></li>
+          <li><span><strong>No hidden timing assumption.</strong> “Previous toxin” means the previous eligible sample in this analysis panel, not necessarily the immediately previous assay in the full archive.</span></li>
+        </ul>
+      </div>
+
+      <div class="proof-row">
+        <div>
+          <h3>The page has a shared proof file.</h3>
+          <p>It contains aggregate scope, scores, uncertainty, limitations, bound input hashes, and every point behind the slider. Raw monitoring rows and row-level scored predictions remain Lab-only; this recreation did not persist fitted model objects.</p>
+        </div>
+        <a class="proof-link" href="./sample-triage-proof.json">Open shared proof →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-row">
+      <span>SampleNext · MBAL coastal-hazard evidence lab · Evidence dated 24 August 2026</span>
+      <a href="./index.html">Back to Mission Control</a>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const state = { proof: null, frame: "within_pier_year", budget: 10 };
+      const budget = document.querySelector("#budget");
+      const budgetOutput = document.querySelector("#budget-output");
+      const budgetLabel = document.querySelector("#budget-label");
+      const context = document.querySelector("#queue-context");
+      const readout = document.querySelector("#readout");
+      const buttons = [...document.querySelectorAll("[data-frame]")];
+      const views = {
+        model: [document.querySelector("#model-value"), document.querySelector("#model-bar")],
+        twin: [document.querySelector("#twin-value"), document.querySelector("#twin-bar")],
+        count: [document.querySelector("#count-value"), document.querySelector("#count-bar")],
+        baseline: [document.querySelector("#baseline-value"), document.querySelector("#baseline-bar")]
+      };
+
+      const setBar = (view, caught, total) => {
+        view[0].textContent = `${caught} of ${total}`;
+        view[1].style.width = `${(caught / total) * 100}%`;
+      };
+
+      const render = () => {
+        budgetOutput.textContent = `${state.budget}%`;
+        if (!state.proof) return;
+        const row = state.proof.curves[state.frame][String(state.budget)];
+        const total = state.proof.scope.elevated_rows;
+        setBar(views.model, row.gbm_model, total);
+        setBar(views.twin, row.logistic_model, total);
+        setBar(views.count, row.pn_observed_sum, total);
+        setBar(views.baseline, row.gbm_baseline, total);
+
+        const withinPierYear = state.frame === "within_pier_year";
+        const framing = withinPierYear
+          ? "when the target was applied separately inside every pier and calendar year, with each group rounded up"
+          : "when all historical samples were placed in one pooled list";
+        const effectiveShare = ((row.assays / state.proof.scope.rows) * 100).toFixed(2);
+        budgetLabel.textContent = withinPierYear
+          ? "Target share inside each pier and year (each group rounded up)"
+          : "Target share across one pooled archive";
+        context.classList.remove("loading", "error");
+        context.textContent = `${row.assays.toLocaleString()} of ${state.proof.scope.rows.toLocaleString()} samples would be selected ${framing}—an effective archive-wide share of ${effectiveShare}%.`;
+        const vsCount = row.gbm_model - row.pn_observed_sum;
+        const direction = vsCount >= 0 ? "more" : "fewer";
+        readout.innerHTML = `At this budget, the research model surfaced <strong>${row.gbm_model} of ${total}</strong> elevated samples—${Math.abs(vsCount)} ${direction} than ranking by the two reported microscope-count groups alone. This is a retrospective ranking comparison, not a probability for a new sample.`;
+      };
+
+      budget.addEventListener("input", () => {
+        state.budget = Number(budget.value);
+        render();
+      });
+      buttons.forEach((button) => button.addEventListener("click", () => {
+        state.frame = button.dataset.frame;
+        buttons.forEach((candidate) => candidate.setAttribute("aria-pressed", String(candidate === button)));
+        render();
+      }));
+
+      fetch("./sample-triage-proof.json", { cache: "no-store" })
+        .then((response) => {
+          if (!response.ok) throw new Error(`proof request failed (${response.status})`);
+          return response.json();
+        })
+        .then((proof) => {
+          state.proof = proof;
+          render();
+        })
+        .catch(() => {
+          context.classList.remove("loading");
+          context.classList.add("error");
+          context.textContent = "The shared proof file could not be loaded. The explorer is unavailable rather than showing unverified numbers.";
+          readout.textContent = "No result is displayed without its proof.";
+        });
+    })();
+  </script>
+</body>
+</html>

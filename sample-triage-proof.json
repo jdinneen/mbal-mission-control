@@ -1,0 +1,776 @@
+{
+  "schema_version": 2,
+  "artifact": "SampleNext retrospective assay-budget explorer",
+  "evidence_date": "2026-08-24",
+  "public_status": "GATED / WALKED-BACK \u2014 retrospective research evidence only",
+  "release_ready": false,
+  "release_blockers": [
+    "gradient-boosting planted-signal control failed the recorded minimum; both model types were required to pass",
+    "pre-result experiment contract is missing",
+    "experiment-admission receipt is missing",
+    "input-availability proof is missing",
+    "key-shuffle proof is missing",
+    "full-refit permutation proof is missing",
+    "execution-completion proof is missing",
+    "source has not cleared the Lab's source review",
+    "historical hypotheses attempted are not reported",
+    "same-sample decision timing and assay budget have not been validated prospectively"
+  ],
+  "release_grade_status": "NEEDS-DATA",
+  "scope": {
+    "rows": 5328,
+    "elevated_rows": 180,
+    "prevalence": 0.033783783783783786,
+    "recorded_elevated_runs": 102,
+    "recorded_run_rule": "new run after any intervening non-elevated sample or a gap greater than 21 days at the same pier",
+    "gap_separated_positive_clusters": 79,
+    "positive_cluster_rule": "new within-pier cluster only when consecutive elevated samples are more than 21 days apart",
+    "independence_status": "NOT ESTABLISHED \u2014 79 within-pier gap-separated positive clusters are reported without claiming cross-pier independence",
+    "piers": [
+      "CalPolyPier",
+      "MontereyWharf",
+      "NewportBeachPier",
+      "SantaCruzWharf",
+      "SantaMonicaPier",
+      "ScrippsPier",
+      "StearnsWharf"
+    ],
+    "pier_count": 7,
+    "date_min": "2008-06-30",
+    "date_max": "2026-06-22",
+    "elevated_definition": "particulate domoic acid strictly greater than 0.5 micrograms per litre",
+    "official_reference_definition": "C-HARM's published product definition is at or above 0.5 micrograms per litre",
+    "eligible_rows_exactly_on_boundary": 4,
+    "boundary_note": "The recorded Lab analysis used a strict greater-than comparator; it is not identical to the official at-or-above comparator.",
+    "eligibility": "particulate domoic acid measured, at least one of two Pseudo-nitzschia groups reported, and at least 250 eligible rows at the pier",
+    "source_toxin_rows": 5734,
+    "source_strict_elevated_rows": 206,
+    "source_toxin_station_count": 10,
+    "excluded_toxin_rows": 406,
+    "excluded_strict_elevated_rows": 26,
+    "excluded_toxin_stations": [
+      "Humboldt",
+      "HumboldtSouthBay",
+      "TrinidadPier"
+    ],
+    "held_out_unit": "whole pier",
+    "cross_validation": "leave one pier out, train on the other six, repeat for all seven",
+    "hypotheses_attempted": null,
+    "hypotheses_note": "NOT REPORTED \u2014 blocks a positive release verdict",
+    "calibration": {
+      "status": "NOT VALIDATED FOR PROBABILITY USE",
+      "candidate_ece": 0.0196,
+      "baseline_ece": 0.0197,
+      "note": "Expected calibration error was computed, but the release evidence does not establish the model scores as trustworthy probabilities; this artifact uses ranking only."
+    }
+  },
+  "feature_contract": {
+    "candidate": "seasonal encodings, chlorophyll, water temperature, prior eligible-panel particulate domoic-acid value and elapsed days, and three transforms derived from two reported Pseudo-nitzschia morphogroup counts",
+    "baseline": "the same inputs except the Pseudo-nitzschia count transforms",
+    "pn_observed_sum_definition": "sum of the reported delicatissima- and seriata-group counts, using the one reported group when the other is missing; not a provider-native total field",
+    "previous_toxin_definition": "previous eligible panel sample after the panel filters, not necessarily the immediately previous particulate domoic-acid assay in the full archive"
+  },
+  "estimators": {
+    "gradient_boosting": {
+      "candidate_ap": 0.5420411060484033,
+      "fortified_baseline_ap": 0.3786775836391107,
+      "margin_ap": 0.16336352240929258,
+      "ci95_pier_year": [
+        0.07296816324862282,
+        0.2571449865806092
+      ],
+      "score_swap_p": 0.0014992503748125937,
+      "top10_budget_rows": 533,
+      "top10_candidate_capture": 153,
+      "top10_baseline_capture": 126,
+      "top10_observed_group_sum_capture": 125,
+      "piers_scored": 7,
+      "piers_candidate_beats_baseline": 7,
+      "years_scored": 13,
+      "years_candidate_beats_baseline": 11,
+      "worst_year_margin_ap": -0.0538,
+      "positive_control_margin_ap": 0.033383360055479844,
+      "positive_control_passed": false,
+      "max_destructive_control_recovery_fraction": 0.10985199350466332,
+      "passes_recorded_lab_only_gate": false
+    },
+    "logistic_regression": {
+      "candidate_ap": 0.5223421807464577,
+      "fortified_baseline_ap": 0.2987171032517309,
+      "margin_ap": 0.22362507749472676,
+      "ci95_pier_year": [
+        0.15608829018354395,
+        0.27492852896613634
+      ],
+      "score_swap_p": 0.0004997501249375312,
+      "top10_budget_rows": 533,
+      "top10_candidate_capture": 147,
+      "top10_baseline_capture": 110,
+      "top10_observed_group_sum_capture": 125,
+      "piers_scored": 7,
+      "piers_candidate_beats_baseline": 7,
+      "years_scored": 13,
+      "years_candidate_beats_baseline": 11,
+      "worst_year_margin_ap": -0.1718,
+      "positive_control_margin_ap": 0.05513545793956494,
+      "positive_control_passed": true,
+      "max_destructive_control_recovery_fraction": 0.14444117723912944,
+      "passes_recorded_lab_only_gate": true
+    }
+  },
+  "curves": {
+    "pooled_archive": {
+      "2": {
+        "gbm_model": 63,
+        "logistic_model": 64,
+        "gbm_baseline": 48,
+        "logistic_baseline": 52,
+        "pn_observed_sum": 29,
+        "assays": 107
+      },
+      "3": {
+        "gbm_model": 91,
+        "logistic_model": 85,
+        "gbm_baseline": 64,
+        "logistic_baseline": 65,
+        "pn_observed_sum": 46,
+        "assays": 160
+      },
+      "4": {
+        "gbm_model": 111,
+        "logistic_model": 100,
+        "gbm_baseline": 78,
+        "logistic_baseline": 76,
+        "pn_observed_sum": 64,
+        "assays": 214
+      },
+      "5": {
+        "gbm_model": 127,
+        "logistic_model": 115,
+        "gbm_baseline": 93,
+        "logistic_baseline": 82,
+        "pn_observed_sum": 78,
+        "assays": 267
+      },
+      "6": {
+        "gbm_model": 135,
+        "logistic_model": 124,
+        "gbm_baseline": 100,
+        "logistic_baseline": 91,
+        "pn_observed_sum": 96,
+        "assays": 320
+      },
+      "7": {
+        "gbm_model": 140,
+        "logistic_model": 133,
+        "gbm_baseline": 106,
+        "logistic_baseline": 93,
+        "pn_observed_sum": 101,
+        "assays": 373
+      },
+      "8": {
+        "gbm_model": 145,
+        "logistic_model": 139,
+        "gbm_baseline": 113,
+        "logistic_baseline": 98,
+        "pn_observed_sum": 112,
+        "assays": 427
+      },
+      "9": {
+        "gbm_model": 149,
+        "logistic_model": 141,
+        "gbm_baseline": 119,
+        "logistic_baseline": 103,
+        "pn_observed_sum": 118,
+        "assays": 480
+      },
+      "10": {
+        "gbm_model": 153,
+        "logistic_model": 147,
+        "gbm_baseline": 126,
+        "logistic_baseline": 110,
+        "pn_observed_sum": 125,
+        "assays": 533
+      },
+      "11": {
+        "gbm_model": 156,
+        "logistic_model": 150,
+        "gbm_baseline": 128,
+        "logistic_baseline": 114,
+        "pn_observed_sum": 133,
+        "assays": 587
+      },
+      "12": {
+        "gbm_model": 159,
+        "logistic_model": 152,
+        "gbm_baseline": 130,
+        "logistic_baseline": 115,
+        "pn_observed_sum": 140,
+        "assays": 640
+      },
+      "13": {
+        "gbm_model": 160,
+        "logistic_model": 154,
+        "gbm_baseline": 131,
+        "logistic_baseline": 118,
+        "pn_observed_sum": 144,
+        "assays": 693
+      },
+      "14": {
+        "gbm_model": 162,
+        "logistic_model": 156,
+        "gbm_baseline": 137,
+        "logistic_baseline": 123,
+        "pn_observed_sum": 147,
+        "assays": 746
+      },
+      "15": {
+        "gbm_model": 165,
+        "logistic_model": 158,
+        "gbm_baseline": 140,
+        "logistic_baseline": 126,
+        "pn_observed_sum": 151,
+        "assays": 800
+      },
+      "16": {
+        "gbm_model": 165,
+        "logistic_model": 160,
+        "gbm_baseline": 141,
+        "logistic_baseline": 129,
+        "pn_observed_sum": 152,
+        "assays": 853
+      },
+      "17": {
+        "gbm_model": 167,
+        "logistic_model": 160,
+        "gbm_baseline": 142,
+        "logistic_baseline": 130,
+        "pn_observed_sum": 154,
+        "assays": 906
+      },
+      "18": {
+        "gbm_model": 168,
+        "logistic_model": 160,
+        "gbm_baseline": 145,
+        "logistic_baseline": 134,
+        "pn_observed_sum": 159,
+        "assays": 960
+      },
+      "19": {
+        "gbm_model": 168,
+        "logistic_model": 164,
+        "gbm_baseline": 147,
+        "logistic_baseline": 138,
+        "pn_observed_sum": 160,
+        "assays": 1013
+      },
+      "20": {
+        "gbm_model": 169,
+        "logistic_model": 165,
+        "gbm_baseline": 147,
+        "logistic_baseline": 140,
+        "pn_observed_sum": 161,
+        "assays": 1066
+      },
+      "21": {
+        "gbm_model": 169,
+        "logistic_model": 165,
+        "gbm_baseline": 147,
+        "logistic_baseline": 140,
+        "pn_observed_sum": 164,
+        "assays": 1119
+      },
+      "22": {
+        "gbm_model": 170,
+        "logistic_model": 166,
+        "gbm_baseline": 149,
+        "logistic_baseline": 144,
+        "pn_observed_sum": 165,
+        "assays": 1173
+      },
+      "23": {
+        "gbm_model": 170,
+        "logistic_model": 166,
+        "gbm_baseline": 153,
+        "logistic_baseline": 146,
+        "pn_observed_sum": 168,
+        "assays": 1226
+      },
+      "24": {
+        "gbm_model": 170,
+        "logistic_model": 167,
+        "gbm_baseline": 154,
+        "logistic_baseline": 149,
+        "pn_observed_sum": 169,
+        "assays": 1279
+      },
+      "25": {
+        "gbm_model": 171,
+        "logistic_model": 167,
+        "gbm_baseline": 155,
+        "logistic_baseline": 154,
+        "pn_observed_sum": 170,
+        "assays": 1332
+      },
+      "26": {
+        "gbm_model": 171,
+        "logistic_model": 167,
+        "gbm_baseline": 155,
+        "logistic_baseline": 156,
+        "pn_observed_sum": 171,
+        "assays": 1386
+      },
+      "27": {
+        "gbm_model": 171,
+        "logistic_model": 168,
+        "gbm_baseline": 156,
+        "logistic_baseline": 157,
+        "pn_observed_sum": 171,
+        "assays": 1439
+      },
+      "28": {
+        "gbm_model": 172,
+        "logistic_model": 168,
+        "gbm_baseline": 159,
+        "logistic_baseline": 159,
+        "pn_observed_sum": 171,
+        "assays": 1492
+      },
+      "29": {
+        "gbm_model": 172,
+        "logistic_model": 169,
+        "gbm_baseline": 162,
+        "logistic_baseline": 160,
+        "pn_observed_sum": 171,
+        "assays": 1546
+      },
+      "30": {
+        "gbm_model": 172,
+        "logistic_model": 169,
+        "gbm_baseline": 162,
+        "logistic_baseline": 162,
+        "pn_observed_sum": 172,
+        "assays": 1599
+      },
+      "31": {
+        "gbm_model": 173,
+        "logistic_model": 169,
+        "gbm_baseline": 163,
+        "logistic_baseline": 162,
+        "pn_observed_sum": 172,
+        "assays": 1652
+      },
+      "32": {
+        "gbm_model": 173,
+        "logistic_model": 170,
+        "gbm_baseline": 164,
+        "logistic_baseline": 163,
+        "pn_observed_sum": 172,
+        "assays": 1705
+      },
+      "33": {
+        "gbm_model": 173,
+        "logistic_model": 172,
+        "gbm_baseline": 165,
+        "logistic_baseline": 164,
+        "pn_observed_sum": 172,
+        "assays": 1759
+      },
+      "34": {
+        "gbm_model": 173,
+        "logistic_model": 172,
+        "gbm_baseline": 167,
+        "logistic_baseline": 165,
+        "pn_observed_sum": 172,
+        "assays": 1812
+      },
+      "35": {
+        "gbm_model": 173,
+        "logistic_model": 173,
+        "gbm_baseline": 167,
+        "logistic_baseline": 166,
+        "pn_observed_sum": 172,
+        "assays": 1865
+      },
+      "36": {
+        "gbm_model": 173,
+        "logistic_model": 173,
+        "gbm_baseline": 168,
+        "logistic_baseline": 167,
+        "pn_observed_sum": 172,
+        "assays": 1919
+      },
+      "37": {
+        "gbm_model": 173,
+        "logistic_model": 173,
+        "gbm_baseline": 168,
+        "logistic_baseline": 167,
+        "pn_observed_sum": 172,
+        "assays": 1972
+      },
+      "38": {
+        "gbm_model": 173,
+        "logistic_model": 173,
+        "gbm_baseline": 170,
+        "logistic_baseline": 168,
+        "pn_observed_sum": 172,
+        "assays": 2025
+      },
+      "39": {
+        "gbm_model": 173,
+        "logistic_model": 174,
+        "gbm_baseline": 170,
+        "logistic_baseline": 170,
+        "pn_observed_sum": 172,
+        "assays": 2078
+      },
+      "40": {
+        "gbm_model": 173,
+        "logistic_model": 174,
+        "gbm_baseline": 170,
+        "logistic_baseline": 170,
+        "pn_observed_sum": 172,
+        "assays": 2132
+      }
+    },
+    "within_pier_year": {
+      "2": {
+        "gbm_model": 45,
+        "logistic_model": 33,
+        "gbm_baseline": 28,
+        "logistic_baseline": 23,
+        "pn_observed_sum": 40,
+        "assays": 173
+      },
+      "3": {
+        "gbm_model": 55,
+        "logistic_model": 45,
+        "gbm_baseline": 36,
+        "logistic_baseline": 30,
+        "pn_observed_sum": 49,
+        "assays": 219
+      },
+      "4": {
+        "gbm_model": 63,
+        "logistic_model": 55,
+        "gbm_baseline": 43,
+        "logistic_baseline": 39,
+        "pn_observed_sum": 57,
+        "assays": 276
+      },
+      "5": {
+        "gbm_model": 73,
+        "logistic_model": 65,
+        "gbm_baseline": 51,
+        "logistic_baseline": 47,
+        "pn_observed_sum": 66,
+        "assays": 327
+      },
+      "6": {
+        "gbm_model": 79,
+        "logistic_model": 72,
+        "gbm_baseline": 56,
+        "logistic_baseline": 55,
+        "pn_observed_sum": 73,
+        "assays": 386
+      },
+      "7": {
+        "gbm_model": 85,
+        "logistic_model": 77,
+        "gbm_baseline": 63,
+        "logistic_baseline": 60,
+        "pn_observed_sum": 78,
+        "assays": 429
+      },
+      "8": {
+        "gbm_model": 93,
+        "logistic_model": 83,
+        "gbm_baseline": 69,
+        "logistic_baseline": 66,
+        "pn_observed_sum": 87,
+        "assays": 489
+      },
+      "9": {
+        "gbm_model": 99,
+        "logistic_model": 93,
+        "gbm_baseline": 71,
+        "logistic_baseline": 73,
+        "pn_observed_sum": 94,
+        "assays": 534
+      },
+      "10": {
+        "gbm_model": 102,
+        "logistic_model": 100,
+        "gbm_baseline": 77,
+        "logistic_baseline": 77,
+        "pn_observed_sum": 97,
+        "assays": 595
+      },
+      "11": {
+        "gbm_model": 109,
+        "logistic_model": 104,
+        "gbm_baseline": 79,
+        "logistic_baseline": 82,
+        "pn_observed_sum": 104,
+        "assays": 636
+      },
+      "12": {
+        "gbm_model": 114,
+        "logistic_model": 107,
+        "gbm_baseline": 84,
+        "logistic_baseline": 87,
+        "pn_observed_sum": 109,
+        "assays": 702
+      },
+      "13": {
+        "gbm_model": 121,
+        "logistic_model": 113,
+        "gbm_baseline": 91,
+        "logistic_baseline": 90,
+        "pn_observed_sum": 116,
+        "assays": 742
+      },
+      "14": {
+        "gbm_model": 127,
+        "logistic_model": 119,
+        "gbm_baseline": 93,
+        "logistic_baseline": 95,
+        "pn_observed_sum": 120,
+        "assays": 823
+      },
+      "15": {
+        "gbm_model": 132,
+        "logistic_model": 124,
+        "gbm_baseline": 96,
+        "logistic_baseline": 99,
+        "pn_observed_sum": 124,
+        "assays": 848
+      },
+      "16": {
+        "gbm_model": 137,
+        "logistic_model": 128,
+        "gbm_baseline": 99,
+        "logistic_baseline": 105,
+        "pn_observed_sum": 128,
+        "assays": 911
+      },
+      "17": {
+        "gbm_model": 141,
+        "logistic_model": 134,
+        "gbm_baseline": 104,
+        "logistic_baseline": 109,
+        "pn_observed_sum": 135,
+        "assays": 957
+      },
+      "18": {
+        "gbm_model": 144,
+        "logistic_model": 137,
+        "gbm_baseline": 107,
+        "logistic_baseline": 114,
+        "pn_observed_sum": 139,
+        "assays": 1019
+      },
+      "19": {
+        "gbm_model": 148,
+        "logistic_model": 139,
+        "gbm_baseline": 110,
+        "logistic_baseline": 116,
+        "pn_observed_sum": 142,
+        "assays": 1061
+      },
+      "20": {
+        "gbm_model": 148,
+        "logistic_model": 139,
+        "gbm_baseline": 112,
+        "logistic_baseline": 116,
+        "pn_observed_sum": 144,
+        "assays": 1120
+      },
+      "21": {
+        "gbm_model": 150,
+        "logistic_model": 145,
+        "gbm_baseline": 116,
+        "logistic_baseline": 118,
+        "pn_observed_sum": 145,
+        "assays": 1167
+      },
+      "22": {
+        "gbm_model": 150,
+        "logistic_model": 149,
+        "gbm_baseline": 118,
+        "logistic_baseline": 119,
+        "pn_observed_sum": 148,
+        "assays": 1226
+      },
+      "23": {
+        "gbm_model": 153,
+        "logistic_model": 152,
+        "gbm_baseline": 123,
+        "logistic_baseline": 123,
+        "pn_observed_sum": 150,
+        "assays": 1275
+      },
+      "24": {
+        "gbm_model": 154,
+        "logistic_model": 154,
+        "gbm_baseline": 124,
+        "logistic_baseline": 126,
+        "pn_observed_sum": 152,
+        "assays": 1336
+      },
+      "25": {
+        "gbm_model": 156,
+        "logistic_model": 156,
+        "gbm_baseline": 126,
+        "logistic_baseline": 128,
+        "pn_observed_sum": 155,
+        "assays": 1372
+      },
+      "26": {
+        "gbm_model": 158,
+        "logistic_model": 158,
+        "gbm_baseline": 127,
+        "logistic_baseline": 131,
+        "pn_observed_sum": 160,
+        "assays": 1437
+      },
+      "27": {
+        "gbm_model": 160,
+        "logistic_model": 160,
+        "gbm_baseline": 128,
+        "logistic_baseline": 133,
+        "pn_observed_sum": 160,
+        "assays": 1506
+      },
+      "28": {
+        "gbm_model": 161,
+        "logistic_model": 162,
+        "gbm_baseline": 132,
+        "logistic_baseline": 134,
+        "pn_observed_sum": 162,
+        "assays": 1561
+      },
+      "29": {
+        "gbm_model": 162,
+        "logistic_model": 165,
+        "gbm_baseline": 132,
+        "logistic_baseline": 136,
+        "pn_observed_sum": 164,
+        "assays": 1614
+      },
+      "30": {
+        "gbm_model": 162,
+        "logistic_model": 166,
+        "gbm_baseline": 135,
+        "logistic_baseline": 137,
+        "pn_observed_sum": 164,
+        "assays": 1649
+      },
+      "31": {
+        "gbm_model": 164,
+        "logistic_model": 167,
+        "gbm_baseline": 136,
+        "logistic_baseline": 138,
+        "pn_observed_sum": 165,
+        "assays": 1714
+      },
+      "32": {
+        "gbm_model": 164,
+        "logistic_model": 167,
+        "gbm_baseline": 136,
+        "logistic_baseline": 138,
+        "pn_observed_sum": 166,
+        "assays": 1753
+      },
+      "33": {
+        "gbm_model": 165,
+        "logistic_model": 167,
+        "gbm_baseline": 143,
+        "logistic_baseline": 140,
+        "pn_observed_sum": 168,
+        "assays": 1819
+      },
+      "34": {
+        "gbm_model": 165,
+        "logistic_model": 167,
+        "gbm_baseline": 147,
+        "logistic_baseline": 142,
+        "pn_observed_sum": 170,
+        "assays": 1864
+      },
+      "35": {
+        "gbm_model": 166,
+        "logistic_model": 167,
+        "gbm_baseline": 149,
+        "logistic_baseline": 145,
+        "pn_observed_sum": 171,
+        "assays": 1930
+      },
+      "36": {
+        "gbm_model": 167,
+        "logistic_model": 168,
+        "gbm_baseline": 152,
+        "logistic_baseline": 146,
+        "pn_observed_sum": 171,
+        "assays": 1966
+      },
+      "37": {
+        "gbm_model": 168,
+        "logistic_model": 170,
+        "gbm_baseline": 157,
+        "logistic_baseline": 148,
+        "pn_observed_sum": 171,
+        "assays": 2037
+      },
+      "38": {
+        "gbm_model": 168,
+        "logistic_model": 170,
+        "gbm_baseline": 157,
+        "logistic_baseline": 148,
+        "pn_observed_sum": 171,
+        "assays": 2073
+      },
+      "39": {
+        "gbm_model": 169,
+        "logistic_model": 170,
+        "gbm_baseline": 158,
+        "logistic_baseline": 151,
+        "pn_observed_sum": 172,
+        "assays": 2137
+      },
+      "40": {
+        "gbm_model": 170,
+        "logistic_model": 171,
+        "gbm_baseline": 159,
+        "logistic_baseline": 151,
+        "pn_observed_sum": 172,
+        "assays": 2173
+      }
+    }
+  },
+  "curve_definition": {
+    "budgets": "2% through 40%",
+    "selection": "ceil(budget fraction \u00d7 rows), highest score first, stable first-row tie break",
+    "pooled_archive": "one ranking over the full historical archive",
+    "within_pier_year": "the target budget applied separately inside each pier and calendar year, with each group rounded up; the effective archive-wide share can exceed the target"
+  },
+  "proof": {
+    "shared_file": "sample-triage-proof.json",
+    "lab_only_result": "reports/hab/da_triage_recreation_20260824/result.json",
+    "lab_only_critic": "reports/hab/da_triage_recreation_20260824/CRITIC_RECEIPT.json",
+    "lab_only_report": "reports/hab/da_triage_recreation_20260824/REPORT.md",
+    "input_sha256": {
+      "result_json": "71325a112e70e5f990bb991d2abe4468f5ba4b41fda183adce236aa0e4a29dd3",
+      "claim_card_json": "f8b821f85b33a390b369f49e220f334de3e151d8d7946f2302254f8d10bf46ab",
+      "panel": "4ad208ee6f0a6b2022065502d1c1af544e4335a502fdd64f7195d94c80c24762",
+      "scored_rows_gbm": "cab494ffd620518a5e82b62cd279fe8c006dd1070ab2ce2c439c4bede0233f3e",
+      "scored_rows_logistic": "0066e78ba2d8e800025b5736c54fd4da030779347e0375ff3df82d9dffb5e208",
+      "source": "5eb4e85defb0ed68246446fb774fd8f33a4a729648143c77d266813f00f7038e"
+    },
+    "fidelity_checks": {
+      "frozen_hashes_match": true,
+      "row_identity_match": true,
+      "pooled_10_percent_matches_banked_result": true
+    }
+  }
+}

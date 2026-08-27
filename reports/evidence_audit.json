@@ -4230,7 +4230,7 @@
           "metric": "promoted_sources",
           "value": 2,
           "status": "BOUND",
-          "bound_to": "reports/data_fetch/lakehouse_external_curated_promotion.json::[\"integrity_gate\"][\"after\"][\"storage_counts\"][\"FINDING\"]"
+          "bound_to": "reports/data_fetch/recompute_2026_07_15.json::[\"recomputed_promoted_sources_2026_07_15\"]"
         },
         {
           "metric": "active_ready_sources",
